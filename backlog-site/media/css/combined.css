@@ -1,0 +1,820 @@
+/* File contains styles from
+  base.css
+  tabs.css
+  facebox.css
+  annoucements.css
+  accounts.css
+  uni-form.css
+  site.css
+  site_tabs.css
+  tasks.css
+  groups.css
+  topics.css
+ */
+
+
+
+html, body {
+    height: 100%;
+}
+body {
+    background-color: #FFF;
+    margin: 0;
+    color: #333;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 10pt;
+}
+a, a:visited {
+    color: #13C;
+}
+img {
+    border: 0;
+}
+dt {
+    font-weight: bold;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: 0;
+    font-size: inherit;
+}
+td {
+    margin: 0;
+    border: 0;
+    padding: 0;
+}
+h1 {
+    margin: 0;
+}
+
+
+
+#body {
+    clear: both;
+    margin: 0 auto;
+    padding: 10px;
+    width: 800px;
+}
+#footer {
+    color: #999; /* footer text colour */
+    margin: 50px auto;
+    padding: 10px;
+    clear: both;
+    width: 800px;
+}
+#footer a, #footer a:visited {
+    color: #444; /* footer link colour */
+}
+#footer a:hover {
+    color: #777; /* footer link hover colour */
+}
+
+
+/* CLEARS */
+
+.clearboth {
+    clear: both;
+}
+
+/* reference:
+ *   http://www.positioniseverything.net/easyclearing.html
+ *   http://www.zeldman.com/2006/10/27/ie7fixes1/
+ *      comment by michael on 10/28/2006
+ */
+.clearfix {
+    min-height: 1%;
+}
+
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+/* hides from ie5-mac \*/
+* html .clearfix { height: 1%; }
+/* end hide from ie5-mac */
+
+
+/* HEADER */
+
+#tabhead {
+    background: #035 url('../images/heading.png') left top repeat-x;
+    border-bottom: 1px solid #000; /* tab border */
+    position: relative;
+}
+#tabhead .logo {
+    height: 80px;
+    padding-left: 5px;
+    padding-top: 0;
+}
+#tabhead .logo img {
+    width: 190px;
+    height: 79px;
+}
+#tabhead .login {
+    position: absolute;
+    top: 6px;
+    right: 15px;
+    color: #DEF; /* login bar text colour */
+}
+#tabhead .login a, #tabhead .login a:visited {
+    color: #DEF; /* login bar link colour */
+}
+#tabhead .login a:hover {
+    color: #FFF; /* login bar link hover colour */
+}
+
+#locale_switcher {
+    display: inline;
+}
+
+#subnav {
+    margin: 0;
+    padding: 0;
+    background: #DEF; /* tab colour */
+    border-bottom: 1px solid #9BC;
+}
+#subnav ul {
+    float: right;
+    margin: 0 20px;
+    padding: 0;
+}
+#subnav ul li {
+    display: inline;
+    list-style-type: none;
+}
+#subnav ul a:link, #subnav ul a:visited {
+    float: left;
+    font-weight: bold;
+    text-decoration: none;
+    color: #444;
+    padding: 4px 20px;
+}
+#subnav ul a:hover {
+    color: #FFF;
+    background: #9BC;
+}
+
+
+/* FORMS */
+
+form th {
+    text-align : left;
+}
+form.signup input[type="submit"], form.login input[type="submit"] {
+    margin: 20px 0;
+    font-size: 14pt;
+}
+input[type="text"], input[type="password"], textarea {
+    padding: 3px;
+    margin: 3px;
+    border: solid 1px #C6C6C6;
+    border-bottom: solid 1px #E3E3E3;
+    color: #666;
+    font-size: 12pt;
+    background: #F3F3F3 url('../images/form-shadow.png') left top repeat-x;
+}
+ul.errorlist {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: red;
+}
+
+
+/* MESSAGES */
+
+ul#messages {
+    margin: 0 0 10px 0;
+    padding: 0;
+    list-style: none;
+}
+ul#messages li {
+    padding: 5px 10px;
+    background: #EFD;
+    margin: 3px;
+    border: 1px solid #BC9;
+}
+ul#messages li a {
+    float: right;
+    color: #693;
+}
+
+
+/* WHAT NEXT */
+
+dl.what_next {
+    margin: 2em;
+}
+dl.what_next dt {
+    font-size: 120%;
+}
+dl.what_next dd {
+    margin: 0 0 1em 0;
+    font-style: italic;
+}
+p.what_next {
+    font-size: 120%;
+}
+
+
+/* FORM TOGGLE */
+
+.form-toggle p {
+    margin-bottom: 2px;
+}
+
+.form-toggle p span {
+    background: #DEF;
+    padding: 3px 6px;
+    border-top: 1px solid #9BC;
+    border-left: 1px solid #9BC;
+    border-right: 1px solid #9BC;
+    cursor: pointer;
+}
+
+.form-toggle form {
+    padding: 3px 6px;
+    margin: 0;
+    background: #DEF;
+    border: 1px solid #9BC;
+}
+
+
+
+/* EXTRAS TO CLEAN UP */
+
+.warning {
+    color: red;
+    font-weight: bold;
+}
+
+div.profile_info p {
+    margin: 0;
+}
+div.left_panel {
+    width: 550px;
+}
+div.right_panel {
+    margin-top: 20px;
+    width: 200px;
+    float: right;
+    z-index: 999;
+}
+
+
+
+/* @override http://localhost:8000/site_media/static/pinax/css/tabs.css */
+
+/* GENERAL TAB STYLING */
+
+#left_tabs {
+    position: absolute;
+    bottom: -1px; /* must be same thickness as tab border */
+    left: 210px; /* based on width and padding of logo */
+}
+#right_tabs {
+    position: absolute;
+    right: 15px;
+    bottom: -1px; /* must be same thickness as tab border */
+}
+
+ul.tabs a, ul.tabs a:visited {
+    color: #444; /* unselected tab text colour */
+    font-weight: bold;
+    text-decoration: none;
+}
+ul.tabs a:hover {
+    color: #666; /* unselected tab text hover colour */
+}
+ul.tabs li {
+    list-style-type: none;
+    display: inline;
+    background-color: #DDD; /* unselected tab colour */
+    padding: 5px 0 4px;
+    margin: 0 1px; /* to compensate for border */
+}
+ul.tabs li a {
+    padding: 5px 12px;
+}
+ul.tabs {
+    margin: 0 0 5px;
+}
+
+
+/* @override http://localhost:8000/site_media/static/pinax/css/facebox.css */
+
+#facebox .b {
+    background:url('../images/facebox/b.png');
+}
+
+#facebox .tl {
+    background: url('../images/facebox/tl.png');
+}
+
+#facebox .tr {
+    background: url('../images/facebox/tr.png');
+}
+
+#facebox .bl {
+    background: url('../images/facebox/bl.png');
+}
+
+#facebox .br {
+    background: url('../images/facebox/br.png');
+}
+
+#facebox {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    text-align: left;
+}
+
+#facebox .popup {
+    position: relative;
+}
+
+#facebox table {
+    border-collapse: collapse;
+}
+
+#facebox td {
+    border-bottom: 0;
+    padding: 0;
+}
+
+#facebox .body {
+    padding: 10px;
+    background: #fff;
+    width: 370px;
+}
+
+#facebox .loading {
+    text-align: center;
+}
+
+#facebox .image {
+    text-align: center;
+}
+
+#facebox img {
+    border: 0;
+    margin: 0;
+}
+
+#facebox .footer {
+    border-top: 1px solid #DDDDDD;
+    padding-top: 5px;
+    margin-top: 10px;
+    text-align: right;
+}
+
+#facebox .footer img {
+    vertical-align: middle;
+}
+
+#facebox .tl, #facebox .tr, #facebox .bl, #facebox .br {
+    height: 10px;
+    width: 10px;
+    overflow: hidden;
+    padding: 0;
+}
+
+#facebox_overlay {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    height:100%;
+    width:100%;
+}
+
+.facebox_hide {
+    z-index:-100;
+}
+
+.facebox_overlayBG {
+    background-color: #000;
+    z-index: 99;
+}
+
+* html #facebox_overlay { /* ie6 hack */
+    position: absolute;
+    height: expression(document.body.scrollHeight > document.body.offsetHeight ? document.body.scrollHeight : document.body.offsetHeight + 'px');
+}
+
+
+/* @override http://localhost:8000/site_media/static/pinax/css/announcements.css */
+
+/* ANNOUNCEMENTS */
+
+#site_wide_announcements {
+    background: yellow;
+    padding: 10px;
+    text-align: center;
+}
+#site_wide_announcements ul {
+    padding: 0;
+    margin: 0;
+}
+
+/* @override http://localhost:8000/site_media/static/pinax/css/accounts.css */
+
+/** ACCOUNTS **/
+
+/* EMAIL ADDRESS */
+
+.verified {
+    color: green;
+}
+.remove {
+    color: red;
+}
+.unverified {
+    color: gray;
+}
+.primary {
+    font-weight: bold;
+}
+table.email_list td {
+    padding: 5px 10px;
+}
+
+
+/* @override http://localhost:8000/site_media/static/uni_form/uni-form.css */
+
+@import "uni-form-generic.css";
+/* Keep in mind that wherever you see 'Required property' it means that the property must exist */
+
+/* ------------------------------------------------------------------------------ */
+
+  /* Generals */
+  .uniForm fieldset{}
+    .uniForm fieldset legend{ color: #333; font-weight: bold; font-size: 100%; margin: 0; padding: 1.5em 0; }
+    
+    /* This is the main unit that contains our form elements */
+    .uniForm .ctrlHolder{ padding: 7px; border-bottom: 1px solid #dfdfdf; }
+    
+    .uniForm .buttonHolder{ text-align: right; }
+      .uniForm .resetButton{ float: left; }
+      .uniForm .primaryAction{ font-weight: bold; }
+    
+    /* This class gets added to div.ctrlHolder to highlight the row */
+    .uniForm .focused{ background: #fffcdf; }
+      
+      /* .inlineLabel is used for inputs within labels - checkboxes and radio buttons */
+      .uniForm .inlineLabel input,
+      .uniForm .inlineLabels .inlineLabel input,
+      .uniForm .blockLabels .inlineLabel input{ float: left; margin: 0 .4em 0 0; }
+        .uniForm .inlineLabel span{ float: left; width: 90%; }
+        
+/* ------------------------------------------------------------------------------ */
+
+    /* .blockLabels (default style, will be applied even if you don't class the parent element) */
+    .uniForm .blockLabels .ctrlHolder{}
+      
+      .uniForm label,
+      .uniForm .blockLabels label,
+      .uniForm .blockLabels .label{ margin: 0 0 .5em 0; }
+      
+      .uniForm .textInput,
+      .uniForm .blockLabels .textInput,
+      .uniForm .blockLabels .fileUpload{ width: 53%; /* <- Required property */ }
+    
+      .uniForm .selectInput,
+      .uniForm select,
+      .uniForm .blockLabels .selectInput,
+      .uniForm .blockLabels select{ width: 53.5%; /* <- Required property */ }
+      .uniForm textarea,
+      .uniForm .blockLabels textarea{ width: 53%; /* <- Required property */ height: 12em; }
+
+      .uniForm .formHint,
+      .uniForm .blockLabels .formHint{ width: 45%; /* <- Required property */ font-size: .9em; color: #777; position: relative; top: -.5em; }
+      
+      .uniForm .multiField,
+      .uniForm .blockLabels .multiField{ width: 53%; }
+        .uniForm .multiField .inlineLabel,
+        .uniForm .blockLabels .multiField .inlineLabel{ display: block; margin: 0 0 .5em 0; }
+        .uniForm .multiField .blockLabel,
+        .uniForm .blockLabels .multiField .blockLabel{ width: 30%; margin: 0 10px 0 0; }
+        .uniForm .multiField .blockLabel .textInput,
+        .uniForm .multiField .blockLabel .selectInput,
+        .uniForm .multiField .blockLabel select,
+        .uniForm .blockLabels .multiField .blockLabel .textInput,
+        .uniForm .blockLabels .multiField .blockLabel .selectInput,
+        .uniForm .blockLabels .multiField .blockLabel select{ width: 100%; margin: .3em 0 0 0; }
+
+/* ------------------------------------------------------------------------------ */
+
+    /* .inlineLabels */
+    .uniForm .inlineLabels .ctrlHolder{}
+    
+    .uniForm .inlineLabels label,
+    .uniForm .inlineLabels .label{ width: 45%; /* <- Required property */ margin: .3em 2% 0 0; /* <- Required property */ }
+    
+    .uniForm .inlineLabels .textInput,
+    .uniForm .inlineLabels .fileUpload{ width: 45%; /* <- Required property */ }
+    
+    .uniForm .inlineLabels .selectInput,
+    .uniForm .inlineLabels select{ width: 45%; /* <- Required property */ }
+    
+    .uniForm .inlineLabels textarea{  width: 45%; /* <- Required property */ height: 12em; }
+
+    .uniForm .inlineLabels .formHint{ margin-top: 0; margin-left: 47%; font-size: .9em; color: #777; position: static; }
+    
+    .uniForm .inlineLabels .multiField{ width: 45%; /* <- Required property */ margin: 0 0 .3em 0; }
+      .uniForm .inlineLabels .multiField .inlineLabel{ display: block; margin: 0 0 .5em 0; }
+      .uniForm .inlineLabels .multiField .blockLabel{ float: left; width: 26%; margin: 0 3% 0 0; }
+      .uniForm .inlineLabels .multiField .blockLabel .textInput,
+      .uniForm .inlineLabels .multiField .blockLabel .selectInput,
+      .uniForm .inlineLabels .multiField .blockLabel select{ width: 100%; margin: .3em 0 0 0; }
+
+/* Focus pseudoclasses */
+.uniForm .ctrlHolder .textInput:focus{ outline: none; /* Get rid of the 'glow' effect in WebKit, optional */ }
+.uniForm .ctrlHolder textarea:focus{ outline: none; /* Get rid of the 'glow' effect in WebKit, optional */ }
+.uniForm div.focused .formHint{ color: #333; }
+
+/* Columns (they are floated left by default) */
+.uniForm .col{ width: 47.9%; /* <- Required property */ margin: 0 2% 20px 0; }
+/* Use .first and .last classes to control the layout/spacing of your columns */
+.uniForm .col.first{ width: 49%; /* <- Required property */ float: left; clear: none; }
+.uniForm .col.last{ width: 49%; /* <- Required property */ float: right; clear: none; margin-right: 0; }
+
+/* Messages */
+.uniForm #errorMsg{ background: #ffdfdf; border: 1px solid #df7d7d; border-width: 1px 0; margin: 0 0 1.5em 0; padding: 7px; }
+.uniForm .error{ background: #ffdfdf; border: 1px solid #df7d7d; border-width: 1px 0; }
+
+  .uniForm #errorMsg dt, .uniForm #errorMsg h3{ margin: 0 0 .5em 0; font-size: 100%; line-height: 100%; font-weight: bold; }
+  .uniForm #errorMsg dd{ margin: 0; padding: 0; }
+    .uniForm #errorMsg ol{ margin: 0; padding: 0; }
+      .uniForm #errorMsg ol li{ margin: 0; padding: 2px; list-style-position: inside; border-bottom: 1px dotted #df7d7d; position: relative; }
+    .uniForm .errorField{ color: #af4c4c; margin: 0 0 6px 0; padding: 4px; background: #ffbfbf; }
+
+.uniForm #OKMsg{ background: #C8FFBF; border: 1px solid #A2EF95; border-width: 1px 0; margin: 0 0 1.5em 0; padding: 7px; }
+  .uniForm #OKMsg p{ margin: 0; }
+
+/*
+IT IS STRONGLY ADVISED TO MAKE YOUR CHANGES AFTER THIS COMMENT BY REPEATING (COPYING) THE SELECTOR FROM ABOVE, 
+AND MODIFYING IT WITH YOUR OWN PROPERTIES/VALUES. THIS IS RECOMMENDED BECAUSE IF YOU HAPPEN TO RUN INTO TROUBLE, 
+YOU CAN VERY EASILY REVERT TO A GENERIC STYLE OF UNI-FORM. BEST OF LUCK... 
+*/
+
+/* ------------------------------------------------------------------------------ */
+
+/* @override http://localhost:8000/site_media/static/css/site.css */
+
+/* @override http://localhost:8000/site_media/static/css/site.css */
+
+.iterationHeader {
+ 	margin: 0px;
+	font-size: 18px;
+	padding: 2px 2px 2px 9px;
+}
+
+
+/* @override http://localhost:8000/site_media/static/css/site_tabs.css */
+
+
+/* SITE-SPECIFIC TAB STYLING */
+
+body.profile #tab_profile a,
+body.projects #tab_projects a,
+body.notices #tab_notices a
+{
+    color: #000; /* selected tab text colour */
+}
+body.profile #tab_profile,
+body.projects #tab_projects,
+body.notices #tab_notices
+{
+    margin: 0; /* to compensate for border */
+    padding: 5px 0 5px;
+    background-color: #DEF; /* selected tab colour */
+    border-left: 1px solid #000; /* tab border */
+    border-top: 1px solid #000; /* tab border */
+    border-right: 1px solid #000; /* tab border */
+}
+
+
+
+/* @override http://localhost:8000/site_media/static/tasks/css/tasks.css */
+
+form.add-attachment{
+    background-color: #eee;
+    padding: 1em;
+}
+
+form.add-attachment p{
+    margin: 0.3em 0;
+}
+
+.task_list .even {
+    background-color: #EEE;
+}
+.task_list .odd {
+    background-color: #DDD;
+}
+
+tr.task_resolved td, tr.task_closed td {
+    text-decoration: line-through;
+}
+tr.task_closed td {
+    text-decoration: line-through;
+    color: #999;
+}
+tr.task_closed td a {
+    color: #999;
+}
+
+table.task_list td {
+    vertical-align: top;
+    padding: 5px 20px 5px 5px;
+}
+
+table.task_list {
+    width: 100%;
+}
+
+table.task_list th {
+    background: #9BC;
+    text-align: left;
+    color: #FFF;
+    padding: 5px 20px 5px 5px;
+}
+
+tr.task_grouping {
+    background: #DEF;
+    color: #333;
+    border-top: 1px solid #BCD;
+}
+
+tr.task_grouping .toggle {
+    cursor: pointer;
+}
+
+tr.task_grouping .focus {
+    float: right;
+}
+tr.task_grouping .focus a {
+    color: #666;
+}
+
+tr.task_grouping .count {
+    color: #666;
+}
+div.task div.bulk h2 {
+    margin: 0;
+}
+div.task div.bulk {
+    margin-left: 158px;
+    padding: 4px;
+}
+
+div.task-meta {
+    float: left;
+    width: 150px;
+    margin: 0;
+    padding: 4px;
+    font-size: 80%;
+}
+
+div.task-meta2 {
+    color: #666;
+    margin-top: 1em;
+    font-size: 90%;
+}
+
+div.task-meta2 b {
+    color: #000;
+}
+
+h2.task_resolved, h2.task_closed {
+    text-decoration: line-through;
+}
+
+p.expand_collapse_all {
+    margin: 2px;
+    font-size: 8pt;
+}
+
+p.expand_collapse_all a {
+    color: #333;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.task_filter ul {
+    background: #DEF;
+    padding: 5px;
+}
+
+.task_filter li {
+    display: inline;
+}
+
+/* @override http://localhost:8000/site_media/static/pinax/css/groups.css */
+
+/* GROUPS */
+
+div.groups {
+    background: #DEF;
+    padding: 8px;
+    margin-bottom: 20px;
+}
+div.groups h2 {
+    margin: 0 0 5px 0;
+    padding: 0;
+}
+div.members {
+    background: #DEF;
+    padding: 8px;
+    margin-bottom: 20px;
+}
+div.members h2 {
+    margin: 0 0 5px 0;
+    padding: 0;
+}
+div.members .avatar {
+    padding: 0;
+    text-align: center;
+}
+div.members .details {
+    text-align: center;
+    overflow: hidden;
+    width: 60px;
+    margin: 0 0 12px 0;
+}
+
+.stats {
+    color: #999;
+    border-top: 1px solid #CCC;
+    font-size: 90%;
+}
+
+/* @override http://localhost:8000/site_media/static/pinax/css/topics.css */
+
+/* this has some overlap with comments.css and needs review */
+
+table.topic, table.topics {
+    width: 100%;
+}
+table.topic td, table.topics td {
+    vertical-align: top;
+    padding: 5px 20px 5px 5px;
+}
+table.topic td h1, table.topics td h2 {
+    margin: 0;
+    padding: 0;
+}
+.responses .even, .topics .even {
+    background-color: #FAFAFA;
+}
+.responses .odd, .topics .odd {
+    background-color: #F3F3F3;
+}
+.responses {
+    margin-left: 0px;
+    padding-left: 0px;
+}
+.responses li {
+    list-style-type: none;
+}
+td.meta {
+    width: 100px;
+    margin: 4px;
+}
+div.meta {
+    float: left;
+    width: 100px;
+    margin: 4px;
+    padding: 4px;
+}
+div.bulk {
+    margin-left: 120px;
+    padding: 4px;
+}
+.hidden { display: none; }
+.thread-0 { margin-left: 0px; }
+.thread-1 { margin-left: 20px; }
+.thread-2 { margin-left: 40px; }
+.thread-3 { margin-left: 60px; }
+.thread-4 { margin-left: 80px; }
+.thread-5 { margin-left: 100px; }
+.thread-6 { margin-left: 120px; }
+.thread-7 { margin-left: 140px; }
+.thread-8 { margin-left: 160px; }
+
+table.topics .created {
+    color: #999;
+    font-size: 90%;
+}
+table.topics .comment_stats {
+    color: #999;
+    border-top: 1px solid #CCC;
+    font-size: 90%;
+}

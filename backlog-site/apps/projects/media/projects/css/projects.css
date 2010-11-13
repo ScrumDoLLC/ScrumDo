@@ -88,6 +88,16 @@
 	min-height: 33px;
 }
 
+.story_small a {
+	text-decoration: none;
+	color: #222222;
+}
+
+.story_small a:hover {
+	text-decoration: underline;
+	color: #2325a8;
+}
+
 .story_column_header {
 	padding: 5px;
 	background-color: #ffffff;
