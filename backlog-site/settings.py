@@ -84,6 +84,10 @@ TEMPLATE_LOADERS = (
     'django.template.loaders.app_directories.load_template_source',
 )
 
+AVATAR_DEFAULT_URL =  STATIC_URL +'images/defaultAvatar.png'
+AVATAR_GRAVATAR_BACKUP = False
+
+
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

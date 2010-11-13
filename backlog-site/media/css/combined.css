@@ -742,11 +742,12 @@ div.members h2 {
 div.members .avatar {
     padding: 0;
     text-align: center;
+    width: 100%;
 }
 div.members .details {
     text-align: center;
     overflow: hidden;
-    width: 60px;
+    width: 100%;
     margin: 0 0 12px 0;
 }
 
@@ -817,4 +818,8 @@ table.topics .comment_stats {
     color: #999;
     border-top: 1px solid #CCC;
     font-size: 90%;
+}
+
+#id_recipient {
+  width: 90%;
 }

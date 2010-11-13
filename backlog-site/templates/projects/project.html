@@ -31,17 +31,29 @@
             
             <div class="members">
                 <h2>{% trans "Members" %}</h2>
-                <table width="100%">
+                <table width="100%" >
                     {% for member in project.members.all %}
-                        {% if forloop.counter0|divisibleby:"3" %}<tr>{% endif %}
+                        {% if forloop.counter0|divisibleby:"2" %}<tr>{% endif %}
                         <td>
                             <div class="avatar">{% avatar member.user 40 %}</div>
                             <div class="details"><a href="{% url profile_detail member.user.username %}" title="{{ member.user.username }}">{{ member.user.username }}</a></div>
                         </td>
-                        {% if forloop.counter0|add:"1"|divisibleby:"3" %}</tr>{% endif %}
+                        {% if forloop.counter0|add:"1"|divisibleby:"2" %}</tr>{% endif %}
                     {% endfor %}
-                    {% if project.members.all|length|divisibleby:"3" %}{% else %}</tr>{% endif %}
+                    {% if project.members.all|length|divisibleby:"2" %}{% else %}</tr>{% endif %}
+                      
+
                 </table>
+                 {% ifequal user project.creator %}
+                 <hr/>
+                          <form id="add-member" method="POST" action="">
+                                  {{ adduser_form.non_field_errors }}
+                                  {{ adduser_form.recipient }}    {{adduser_form.recipient.errors}}
+                                  <input type="hidden" name="action" value="add" />
+                                  <input type="submit" value="{% trans "Add Member" %}"/>
+                          </form>
+
+                {% endifequal %}
             </div>
             
             {% trans "Slug:" %} <tt>{{ project.slug }}</tt><br />
@@ -85,19 +97,6 @@
                     {% ifequal user project.creator %}
                         <p>You are the creator of this project.</p>
                         
-                        <div class="form-toggle">
-                            <p><span id="add-member-toggle">{% trans "Add new member" %}</span></p>
-                            
-                            <form class="uniForm" id="add-member" method="POST" action="">
-                                <fieldset class="inlineLabels">
-                                    {{ adduser_form|as_uni_form }}
-                                    <div class="form_block">
-                                        <input type="hidden" name="action" value="add" />
-                                        <input type="submit" value="{% trans "add" %}"/>
-                                    </div>
-                                </fieldset>
-                            </form>
-                        </div>
                         
                         <p>{% silk "delete" %} <a href="#" onclick="$('#delete_project_form').toggle(); return false;">{% trans "Delete project" %}</a><p>
                          <form class="delete_form" id="delete_project_form" action="{% url project_delete project.slug %}" method="POST" style="display: none;">
@@ -170,16 +169,8 @@
                 $('#edit-project').show();
                 $('#edit-project .error').autoscroll();
             }
-            $('#add-member').hide();
-            $('#add-member-toggle').click(function() {
-                $('#add-member').toggle();
-                $('#add-member').autoscroll();
-                return false;
-            });
-            if ($('#add-member .error').length) {
-                $('#add-member').show();
-                $('#add-member .error').autoscroll();
-            }
+           
+           
         });
     </script>
     
