@@ -14,16 +14,31 @@
 
 {% block head_title %}{{ project.name }}{% endblock %}
 
-{% block extra_css %}
-#story_form #id_summary {
-	width: 330px;	
-}
-{% endblock %}
+
 
 {% block body %}
     
     {% if user.is_authenticated %}
       {% if is_member %}
+      
+      
+      <div id="story_form" style="margin-bottom: 10px">
+        <form method="POST" action="{% url stories project.slug %}">
+          {{ add_story_form.non_field_errors }}
+          {{add_story_form.summary}}    {{add_story_form.summary.errors}} <INPUT TYPE="image" SRC="/site_media/static/images/addStoryButton.png" >
+           <br/>
+          <div id="story_details">
+            <table>
+              <tr><td>Detail:</td><td>{{add_story_form.detail}}    {{add_story_form.detail.errors}} </td></tr>
+              <tr><td>Tags:</td><td>{{add_story_form.tags}} {{add_story_form.tags.errors}} </td></tr>
+              <tr><td>Points:&nbsp;</td><td>{{add_story_form.points}}  {{add_story_form.points.errors}} </td></tr>
+              <tr><td>Backlog Position:&nbsp;</td><td>{{add_story_form.rank}}  {{add_story_form.rank.errors}} </td></tr>
+             </table>
+          </div>
+        </form>
+       </div>
+      
+      
         <div class="right_panel">
             
      
@@ -48,7 +63,7 @@
               <div class="iterationHeader"><a href="/projects/project/{{project.slug}}/stories/">{{iteration.name}}</a></div>
               {% endfor %}
               <br/><br/>
-              <a href="{% url iteration_create project.slug %}">Add Iteration</a>
+              <a href="{% url iteration_create project.slug %}"><img  id="addIterationButton" src="/site_media/static/images/addIterationButton.png"></a>
             </div>
             
             <div class="members">
@@ -72,7 +87,7 @@
                                   {{ adduser_form.non_field_errors }}
                                   {{ adduser_form.recipient }}    {{adduser_form.recipient.errors}}
                                   <input type="hidden" name="action" value="add" />
-                                  <input type="submit" value="{% trans "Add Member" %}"/>
+                                  <input type="image" src="/site_media/static/images/addMemberButton.png" />
                           </form>
 
                 {% endifequal %}
@@ -117,21 +132,6 @@
             <div>
                 {% if is_member %}
                 
-                <div id="story_form">
-                  <form method="POST" action="{% url stories project.slug %}">
-                    {{ add_story_form.non_field_errors }}
-                    {{add_story_form.summary}}    {{add_story_form.summary.errors}} <INPUT TYPE="image" SRC="/site_media/static/images/addStoryButton.png" >
-                     <br/>
-                    <div id="story_details">
-                      <table>
-                        <tr><td>Detail:</td><td>{{add_story_form.detail}}    {{add_story_form.detail.errors}} </td></tr>
-                        <tr><td>Tags:</td><td>{{add_story_form.tags}} {{add_story_form.tags.errors}} </td></tr>
-                        <tr><td>Points:&nbsp;</td><td>{{add_story_form.points}}  {{add_story_form.points.errors}} </td></tr>
-                        <tr><td>Backlog Position:&nbsp;</td><td>{{add_story_form.rank}}  {{add_story_form.rank.errors}} </td></tr>
-                       </table>
-                    </div>
-                  </form>
-                 </div>
                 
                   <h1>Iteration #1</h1>
                     <img src="/site_media/static/images/burndown.png">                  
