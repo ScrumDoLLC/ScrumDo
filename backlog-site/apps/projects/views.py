@@ -38,18 +38,18 @@ WHERE projects_projectmember.project_id = projects_project.id
 
 
 
-def greet(request):
-  print "GREETING REQUEST!"
-  return render_to_response("greet.html")
+# def greet(request):
+#   print "GREETING REQUEST!"
+#   return render_to_response("greet.html")
 
 
-def rpc_stories(request, group_slug):
-  project = get_object_or_404(Project, slug=group_slug)  
-  backlog = Story.objects.filter(project=project, iteration=project.get_default_iteration() )
- 
-  json_serializer = serializers.get_serializer("json")()
-  backlog_json = json_serializer.serialize(backlog, ensure_ascii=False)
-  return HttpResponse(backlog_json) #, mimetype='application/json'
+# def rpc_stories(request, group_slug):
+#   project = get_object_or_404(Project, slug=group_slug)  
+#   backlog = Story.objects.filter(project=project, iteration=project.get_default_iteration() )
+#  
+#   json_serializer = serializers.get_serializer("json")()
+#   backlog_json = json_serializer.serialize(backlog, ensure_ascii=False)
+#   return HttpResponse(backlog_json) #, mimetype='application/json'
 
 @login_required
 def reorder_story( request, group_slug, story_id):
@@ -72,12 +72,33 @@ def reorder_story( request, group_slug, story_id):
         rank = rank + 1
         
     return HttpResponse("OK")
+  return  HttpResponse("Fail")
+  
+  
+  
+@login_required
+def story( request, group_slug, story_id ):
+  story = get_object_or_404( Story, id=story_id )
+  project = get_object_or_404( Project, slug=group_slug )
+
+  if request.method == 'POST': # If the form has been submitted...
+    form = StoryForm(request.POST) # A form bound to the POST data
+    if form.is_valid(): # All validation rules pass
+      story = form.save( commit=False )
+      story.local_id = project.stories.count() + 1
+      story.project = project
+      story.creator = request.user
+      story.iteration = project.get_default_iteration()
+      story.save()
+      form = StoryForm()
+  else:
+    form = StoryForm( instance=story )
+    
   return   render_to_response("stories/story.html", {
-      "story": story
+      "story": story,
+      "form": form,
+      "project": project
     }, context_instance=RequestContext(request))
-  
-  
-  
   
 @login_required
 def stories_iteration(request, group_slug, iteration_id):
@@ -85,7 +106,8 @@ def stories_iteration(request, group_slug, iteration_id):
   iteration = get_object_or_404(Iteration, id=iteration_id, project=project)  
   stories = Story.objects.filter(project=project, iteration=iteration ).order_by("rank")
   return render_to_response("stories/mini_story_list.html", {
-    "stories": stories
+    "stories": stories,
+    "project":project
   }, context_instance=RequestContext(request))
 
 

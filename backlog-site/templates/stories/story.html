@@ -1,44 +1,54 @@
 {% load i18n %}
+{% load comments_tag %}
 
+<div id="story_area">
 
-<h2><div class="editme">{{story.summary}}</div></h2>
-<div class="editme">{{story.detail}}</div>
+<form id="story_detail_form" method="POST" action="{% url projects.views.story group_slug=project.slug story_id=story.id %}">
+   {{ form.non_field_errors }}
+   
+    <h1>Story #{{story.local_id}}</h1><br/>
+   <div id="story_details">
+     <table>
+       <tr><td>Summary:</td><td>{{form.summary}}    {{form.summary.errors}} </td></tr>
+       <tr><td>Detail:</td><td>{{form.detail}}    {{form.detail.errors}} </td></tr>
+       <tr><td>Tags:</td><td>{{form.tags}} {{form.tags.errors}} </td></tr>
+       <tr><td>Points:&nbsp;</td><td>{{form.points}}  {{form.points.errors}} </td></tr>
+      </table>
+   </div>
+   <br/>
+   <INPUT style="float:right" TYPE="image" SRC="/site_media/static/images/updateStoryButton.png" >
+ </form>
+<br/><br/><br/><br/>
+<h2>Comments</h2>
+<div id="comments_area">
+{% comments story %}
+</div>
 
-<input type="submit" value="Save Changes">
-
+</div>
 
 <script type="text/javascript" charset="utf-8">
-  //When div.edit me is clicked, run this function
-  $(document).ready(function() {
-  	//When div.edit me is clicked, run this function
-  	$("div.editme").click(function() {
-  		//This if statement checks to see if there are 
-  		//and children of div.editme are input boxes. If so,
-  		//we don't want to do anything and allow the user
-  		//to continue typing
-  		if ($(this).children('input').length == 0) {
 
-  			//Create the HTML to insert into the div. Escape any " characters 
-  			var inputbox = "<input type='text' class='inputbox' value=\""+$(this).text()+"\">";
+      $("#story_detail_form").ajaxForm({
+        success: function() { 
+          $(document).trigger('close.facebox');
+        }});
+      
+      // bind 'myForm' and provide a simple callback function 
+      $("#comments_area form").ajaxForm({
+        replaceTarget: true,
+        target: $("#story_area"),
+        success: function() { 
+          
+        },
+        error: function() {
+          
+        },
+        beforeSubmit: function(arr, $form, options) { 
+          $form.hide();
+        }
+        
+      }); 
 
-  			//Insert the HTML into the div
-  			$(this).html(inputbox);
-
-  			//Immediately give the input box focus. The user
-  			//will be expecting to immediately type in the input box,
-  			//and we need to give them that ability
-  			$("input.inputbox").focus();
-
-  			//Once the input box loses focus, we need to replace the
-  			//input box with the current text inside of it.
-  			$("input.inputbox").blur(function() {
-  				var value = $(this).val();
-  				$(".editme").text(value);
-  			});
-  		}
-  	});
-  });	
-  
 </script>
 
 

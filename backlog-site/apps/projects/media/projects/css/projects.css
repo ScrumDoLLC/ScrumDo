@@ -3,8 +3,20 @@
 #body {
 	min-height:  100%;	
 }
+#story_area input[type='text'] {
+	width: 90%;	
+}
 
-
+#story_area textarea {
+	width: 90%;	
+}
+#story_area {
+	max-height: 500px;	
+	width: 550px;
+	overflow: auto;
+	overflow-x: hidden; 
+	padding: 10px;
+}
 
 .tagsBox {
 	background-color: #fffeff;
