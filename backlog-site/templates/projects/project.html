@@ -20,10 +20,24 @@
       {% if is_member %}
         <div class="right_panel">
             
+     
+            
+            <div class="blue_box">
+              <h1>{{ project.name }}</h1>              
+              {{ project.description }}
+              <p>
+                  {% show_tags_for project %}
+              </p>
+            </div>
+            
+           <div class="velocity blue_box">
+              <h1>Velocity: 45</h1>
+            </div>
+            
             <div class="iterations">
               <h1>Iterations</h1>
               {% for iteration in project.iterations.all %}
-              <div class="iterationHeader"><a href="/projects/project/b10/stories/">{{iteration.name}}</a></div>
+              <div class="iterationHeader"><a href="/projects/project/{{project.slug}}/stories/">{{iteration.name}}</a></div>
               {% endfor %}
               <br/><br/>
               <a href="{% url iteration_create project.slug %}">Add Iteration</a>
@@ -89,15 +103,7 @@
     {% endif %}
     
     <div style="width: 550px;">
-        
-        <h1>{% trans "Project" %} {{ project.name }}</h1>
-        
-        <p>
-            <br />
-            {% show_tags_for project %}
-        </p>
-        
-        <p>{{ project.description }}</p>
+
                 
         {% if user.is_authenticated %}
             <div>

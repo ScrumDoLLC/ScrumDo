@@ -155,6 +155,12 @@
 	margin: 1px;
 }
 
+div.blue_box {
+  background-color: #D5E9FF;
+  padding:10px;
+  margin-bottom:15px;  
+}
+
 div.iterations {
   background-color: #D5E9FF;
   padding:10px;
