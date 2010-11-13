@@ -1,0 +1,128 @@
+.. _ref-tabs:
+
+Tab Navigation
+==============
+
+You can completely control the look and feel of your Pinax-based site
+via the templates, so if you don't like the way the tabs are done, you
+can always do it a completely different way.
+
+But this is how tab navigation is done in most of the sample projects.
+
+Quick Start
+-----------
+
+Here is how to add a new tab for your app ``myapp``:
+
+ 1. In ``site_base.html`` add a new ``li`` in the ``right_tabs`` block.
+    Make sure that ``li`` has and ``id`` specific to that to that tab,
+    e.g. ``tab_myapp``
+
+ 2. Create a ``myapps/base.html`` template that all pages under that tab will
+    extend. Make sure it defines a block ``body_class`` with content
+    ``myapp``
+    
+ 3. edit the CSS file (``site_tabs.css`` if it exists) and at the
+    appropriate points add the selectors:
+    
+    * ``body.myapp #tab_myapp``
+    * ``body.myapp #tab_myapp a``
+
+
+Details
+-------
+
+The global ``base.html`` (under ``pinax/templates/default/``) has the following:
+
+::
+    ...
+    <body class="{% block body_class %}{% endblock %}">
+    
+    ...
+    <div id="tabhead">
+        ...
+        <div id="left_tabs" >{% block left_tabs %}{% endblock %}</div>
+        <div id="right_tabs" >{% block right_tabs %}{% endblock %}</div>
+    </div>
+    <div id="subnav" class="clearfix">{% block subnav_base %}{% block subnav %}&nbsp;{% endblock %}{% endblock %}</div>
+
+Note that this defines five blocks:
+
+ * ``body_class``
+ * ``left_tabs``
+ * ``right_tabs``
+ * ``subnav``
+ 
+You shouldn't normally need to change this at all for your site unless
+you want to make a change like move where the subnav goes.
+
+``site_base.html`` in your project's templates then overrides the ``left_tabs``
+and or ``right_tabs`` blocks with the actual site-wide tabs. For example, here is a
+``right_tabs`` with three tabs defined that only show when the user is
+logged in:
+
+::
+    
+    {% block right_tabs %}
+        {% if user.is_authenticated %}
+            <ul class="tabs">{% spaceless %}
+                <li id="tab_profile"><a href="{% url profile_detail user %}">Profile</a></li>
+                <li id="tab_blogs"><a href="{% url blog_list_user %}">Blogs</a></li>
+                <li id="tab_bookmarks"><a href="{% url all_bookmarks %}">Bookmarks</a></li>
+            {% endspaceless %}</ul>
+        {% endif %}
+    {% endblock %}
+
+Note that each ``li`` is given an ``id`` specific to the tab, e.g. ``tab_bookmarks``
+for the bookmarks tab.
+
+Now, any page under the bookmarks tab extends the template
+``bookmarks/base.html`` which looks something like this:
+
+::
+    
+    {% extends "site_base.html" %}
+    
+    {% block body_class %}bookmarks{% endblock %}
+    
+    {% block subnav %}
+        <ul>
+            <li><a href="{% url add_bookmark %}">Add Bookmark</a></li>
+            <li><a href="{% url your_bookmarks %}">Your Bookmarks</a></li>
+            <li><a href="{% url all_bookmarks %}">All Bookmarks</a></li>
+        </ul>
+    {% endblock %}
+
+Notice that this bookmarks-specific base template defines the ``subnav``
+block which provides the subnav for all bookmarks pages.
+
+It also defines the ``body_class`` block we saw used by the global ``base.html``.
+
+Now all that remains is the CSS that ties the ``body`` in ``base.html``
+with ``class="bookmarks``" to the ``li`` in ``site_base.html`` that has
+``id="tab_bookmarks"``.
+
+This is done in CSS.
+::
+    
+    /* SITE-SPECIFIC TAB STYLING */
+    
+    body.profile #tab_profile a,
+    body.blogs #tab_blogs a,
+    body.bookmarks #tab_bookmarks a
+    {
+        color: #000; /* selected tab text colour */
+    }
+    body.profile #tab_profile,
+    body.blogs #tab_blogs,
+    body.bookmarks #tab_bookmarks
+    {
+        margin: 0; /* to compensate for border */
+        padding: 5px 0 5px;
+        background-color: #DEF; /* selected tab colour */
+        border-left: 1px solid #000; /* tab border */
+        border-top: 1px solid #000; /* tab border */
+        border-right: 1px solid #000; /* tab border */
+    }
+
+Notice that the selector ``body.bookmarks #tab_bookmarks`` appears twice.

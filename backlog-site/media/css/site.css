@@ -1,0 +1,7 @@
+/* @override http://localhost:8000/site_media/static/css/site.css */
+
+.iterationHeader {
+ 	margin: 0px;
+	font-size: 18px;
+	padding: 2px 2px 2px 9px;
+}

@@ -1,0 +1,150 @@
+/* @override http://localhost:8000/site_media/static/projects/css/projects.css */
+
+#body {
+	min-height:  100%;	
+}
+
+
+
+.tagsBox {
+	background-color: #fffeff;
+	border-left-style: none;
+	border-top: 1px solid #c0c0c0;
+	padding-left: 5px;
+	padding-right: 5px;
+	margin: 5px -2px -3px;
+}
+.pointsBox {
+	float: right;
+	padding: 3px 3px 5px;
+	background-color: #fef9dd;
+	font-size: 24px;
+	width: 35px;
+	height: 25px;
+	text-align: center;
+	vertical-align: middle;
+	margin-top: -2px;
+	margin-right: -2px;
+	border-left: 1px solid #c8caca;
+	border-bottom: 1px solid #c8caca;
+}
+.backlog {
+	border-left-style: dotted;
+	padding-left: 10px;
+	margin-left: 5px;
+}
+
+#columnContainer {
+	
+	height: 100%;
+}
+.story_column {
+	width: 48%;
+	vertical-align: top;
+	margin-top: 20px;
+	margin-left: 5px;
+	margin-right: 5px;
+	display: inline-block;
+	background-color: #ff965c;
+	}
+.iteration_column {
+
+
+}
+
+.story_list {
+	overflow: auto;
+	height: 600px;
+	padding-left: 0px;
+}
+.story_column  {
+	padding: 0px;	
+	border: 1px solid #d4d4d4;
+	background-color: #f0fcff;
+	height: 100%;
+}
+
+
+
+.story_small {
+	margin: 3px;
+	padding: 3px;
+	border-bottom: 1px solid #ececec;
+	background-color: #eeeeee;
+	list-style-type: none;
+	border: 1px solid #b8b8b8;
+	min-height: 33px;
+}
+
+.story_column_header {
+	padding: 5px;
+	background-color: #ffffff;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	height: 60px;
+}
+.story_column_header select {
+	font-size: 14pt;
+	font-weight: bold;
+	vertical-align: middle;
+	width: 100%;
+}
+.story_column img {
+	vertical-align: middle;
+	float: right;
+	position: relative;
+	bottom: 4px;
+}
+
+.story_small h1 {
+	font-size: 16px;
+}
+
+#story_form {
+	background-color: #f0fcff;
+	padding: 20px;
+	border: 15px solid #aeb7bb;
+}
+
+#story_form input {	
+	vertical-align: middle;
+}
+
+#story_form #story_details {
+	display: none;
+}
+
+#story_form #id_summary {
+	width: 560px;	
+}
+
+#story_details ul {
+  margin: 0px;
+  padding: 0px;
+}
+#story_details li {
+	list-style-type: none;
+	display: inline-block;
+	background-color: #ededed;
+	padding-top: 5px;
+	padding-bottom: 3px;
+	padding-right: 10px;
+	padding-left: 6px;
+	margin: 1px;
+}
+
+div.iterations {
+  background-color: #D5E9FF;
+  padding:10px;
+  margin-bottom:15px;
+}
+
+div.projects {
+    background: #DEF;
+    padding: 8px;
+    margin-bottom: 20px;
+}
+div.projects h2 {
+    margin: 0 0 5px 0;
+    padding: 0;
+}

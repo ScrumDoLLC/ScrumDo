@@ -1,0 +1,187 @@
+{% extends "projects/base.html" %}
+
+{% load i18n %}
+{% load uni_form %}
+{% load avatar_tags %}
+{% load threadedcommentstags %}
+{% load pagination_tags %}
+{% load extra_tagging_tags %}
+{% load projects_tags %}
+{% load group_tags %}
+{% load topics_tags %}
+{% load wiki_tags %}
+{% load theme_tags %}
+
+{% block head_title %}{{ project.name }}{% endblock %}
+
+{% block body %}
+
+ <h1>Stories</h1>
+ 
+ <div id="story_form">
+   <form method="POST" action="">
+     {{ form.non_field_errors }}
+     {{form.summary}}    {{form.summary.errors}} <INPUT TYPE="image" SRC="/site_media/static/images/addStoryButton.png" >
+      <br/>
+     <div id="story_details">
+       <table>
+         <tr><td>Detail:</td><td>{{form.detail}}    {{form.detail.errors}} </td></tr>
+         <tr><td>Tags:</td><td>{{form.tags}} {{form.tags.errors}} </td></tr>
+         <tr><td>Points:&nbsp;</td><td>{{form.points}}  {{form.points.errors}} </td></tr>
+         <tr><td>Backlog Position:&nbsp;</td><td>{{form.rank}}  {{form.rank.errors}} </td></tr>
+        </table>
+     </div>
+   </form>
+  </div>
+  
+  <div id="columnContainer">
+
+    <div class="story_column">
+      <div class="story_column_header">
+          <select id="iterationChooser">
+            <option value="">
+              Choose an iteration...
+            </option>
+            {% for iteration in project.iterations.all %}
+            <option value="{{ iteration.id }}">
+              {{ iteration.name }}
+            </option>
+            {% endfor %}
+          </select>  <br/><br/>
+          <a href="#addIterationDiv" rel="facebox"><img  id="addIterationButton" src="/site_media/static/images/addIterationButton.png"></a>
+          Points: 50 + ( 3 x ? ) + ( 1 x inf )
+      </div>
+      
+      <div id="empty_iteration_column">
+        <br/>
+        <img src="/site_media/static/images/chooseIteration.png">
+        <br/><br/><br/>
+        <br/><br/><br/>
+      </div>
+      <ul style="display:none" class="story_list" id="iteration_column">
+      
+      </ul>
+    </div><!-- End story_column -->
+  
+  
+    <div class="backlog story_column">
+      <div class="story_column_header">
+        <span style="float:right"><a href="#filterDialog" rel="facebox">Filter</a></span>
+        <h1>
+          Backlog
+        </h1>
+        Points: 450 + ( 10 x ? ) + ( 3 x inf )
+      </div>
+      <ul class="story_list" id="backlog_column">
+      
+      </ul>
+    </div> <!-- End backlog story_column -->
+  </div><!-- End columnContainer -->
+  
+  <div id="filterDialog" style="display:none;">
+    Put the filter dialog options here.<br/>
+    Put the filter dialog options here.<br/>    
+    Put the filter dialog options here.<br/>
+    Put the filter dialog options here.<br/>
+    Put the filter dialog options here.<br/>
+    Put the filter dialog options here.<br/>   
+    Put the filter dialog options here.<br/>
+    Put the filter dialog options here.<br/>    
+    Put the filter dialog options here.<br/>
+    Put the filter dialog options here.<br/>
+    Put the filter dialog options here.<br/>
+    Put the filter dialog options here.<br/>             
+  </div>
+  <div id="addIterationDiv" style="display:none;">
+    Put the add iteration form here eventually...<br/>
+    Put the add iteration form here eventually...<br/>
+    Put the add iteration form here eventually...<br/>
+    Put the add iteration form here eventually...<br/>
+    Put the add iteration form here eventually...<br/>
+    Put the add iteration form here eventually...<br/>
+    Put the add iteration form here eventually...<br/>
+    Put the add iteration form here eventually...<br/>
+    Put the add iteration form here eventually...<br/>
+    Put the add iteration form here eventually...<br/>
+    Put the add iteration form here eventually...<br/>
+    Put the add iteration form here eventually...<br/>    
+  </div>
+  
+  <div style="display:none"> 
+ 
+
+<script type="text/javascript" charset="utf-8">
+
+  {# Inject some page values into javascript variables so we know them at runtime. #}  
+  var project_slug = "{{ project.slug }}";
+  var default_iteration = "{{ project.get_default_iteration.id }}";
+  
+  {# loadIteration will call a url like this: /projects/project/b10-24/stories/1 and put its contents inside the <ul id="iteration_column"> area #}     
+  function loadIteration( iterationID )
+  {
+    $.ajax({
+      url: "/projects/project/" + project_slug + "/stories/" + iterationID,
+      success: function(html){
+        $("#iteration_column").html(html);
+        
+      }
+    });
+  }
+  
+  {# This is the method that handles the user-drop event and records that fact on the server. #}
+  function updateStoryPosition(event, ui)
+  {  
+    $.ajax({
+      url: "/projects/project/" + project_slug + "/story/" + $(ui.item).attr("story_id"),
+      data:({ action:"reorder", index:ui.item.index() }),
+      type: "POST"
+    });
+
+  }
+  
+
+
+  {# Set up the drag & drop functionality of our story lists. #}
+  $("ul").sortable({connectWith: "ul", update: updateStoryPosition});
+  $("ul").disableSelection();
+ 
+  {# When the iteration combo box changes, load the correct iteration into the left column (or hide it if there is no iteration) #}
+  $("#iterationChooser").change( function() 
+    {
+      if( $(this).val().length > 0)
+      {
+        $("#empty_iteration_column").hide();
+        $("#iteration_column").show();
+        loadIteration( $(this).val() );
+      }
+      else
+      {
+        $("#empty_iteration_column").show();
+        $("#iteration_column").hide();        
+      }
+    });
+
+    {# Load the intial backlog stories. #}
+    $.ajax({
+      url: "/projects/project/" + project_slug + "/stories/" + default_iteration,
+      success: function(html){
+        $("#backlog_column").append(html);
+      }
+    });
+
+  {# When a user starts to type text into the story, we'll expand that area to show the full add-story form. #}
+  $('#id_summary').keyup( function(self) 
+        { 
+            if( $(this).val().length > 0 )
+            {
+              $("#story_details").show(true);
+            }
+            else
+            {
+              $("#story_details").hide();              
+            }
+        } );
+        
+</script>
+
+</div>{% endblock %}

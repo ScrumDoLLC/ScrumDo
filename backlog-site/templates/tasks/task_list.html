@@ -1,0 +1,29 @@
+{% extends "tasks/base.html" %}
+
+{% load i18n %}
+{% load shorttimesince_tag %}
+{% load order_by %}
+{% load humanize %}
+{% load tasks_tags %}
+{% load tagging_tags %}
+{% load group_tags %}
+
+{#}{% block head_title %}Tasks for {{ project.name }}{% endblock %}#}
+{% block head_title %}Tasks{% endblock %}
+
+{% block body %}
+    {#<h1>{% trans "Tasks for Project" %} <a href="@@@">{{ group.name }}</a></h1> #}
+    <h1>User Stories</h1>
+
+    <div class="iteration_column right_column">
+       <h2>Iteration</h2>
+    </div>
+
+    <div class="iteration_column right_column">
+       <h2>Backlog</h2>
+       {% for task in backlog %}
+         {{task.summary}}
+       {% endfor %}
+    </div>
+    
+{% endblock %}

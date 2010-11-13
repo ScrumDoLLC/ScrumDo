@@ -1,0 +1,22 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+
+{% block body_class %}projects{% endblock %}
+
+
+{% block extra_head %}
+
+
+
+
+{% endblock %}
+
+{% block subnav %}
+    <ul>
+        {% if user.is_authenticated %}
+            <li><a href="{% url your_projects %} ">{% trans "Your Projects" %}</a></li>
+            <li><a href="{% url project_create %}">{% trans "Create a Project" %}</a></li>
+        {% endif %}        
+    </ul>
+{% endblock %}

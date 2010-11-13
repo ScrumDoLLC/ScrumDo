@@ -1,0 +1,29 @@
+docutils==0.5
+
+# vobject depends on dateutil. it requires >=1.1. OS X ships with 1.2 with
+# Python 2.5 and requiring anything newer will break for --development. this
+# is not an issue for the released tarball
+python-dateutil>=1.1
+
+gdata==1.3.3
+Pygments==1.0
+python-openid==2.2.4
+python-twitter==0.6
+python-yadis==1.1.0
+pytz==2009l
+simplejson==2.0.9
+textile==2.1.3
+vobject==0.8.1c
+BeautifulSoup==3.0.7a
+Django==1.0.4
+Markdown==2.0.1
+ybrowserauth==1.2
+geopy==0.93dev-r0
+diff-match-patch==20090804
+django-atomformat==0.1.0dev
+creole==1.0.1
+
+# Python 2.4
+# pysqlite
+# hashlib
+# elementtree==1.2.7-20070827-preview
