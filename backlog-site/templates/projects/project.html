@@ -23,7 +23,7 @@
             <div class="iterations">
               <h1>Iterations</h1>
               {% for iteration in project.iterations.all %}
-              <div class="iterationHeader"><a href="">{{iteration.name}}</a></div>
+              <div class="iterationHeader"><a href="/projects/project/b10/stories/">{{iteration.name}}</a></div>
               {% endfor %}
               <br/><br/>
               <a href="{% url iteration_create project.slug %}">Add Iteration</a>
@@ -59,6 +59,31 @@
             {% trans "Slug:" %} <tt>{{ project.slug }}</tt><br />
             {% trans "Creator:" %} <a href="{% url profile_detail project.creator.username %}">{{ project.creator }}</a><br />
             {% trans "Created:" %} {{ project.created|date }}
+
+            <hr/>
+            {% ifequal user project.creator %}
+              <br/>
+              <a href="#project-details" rel="facebox">{% trans "Project details" %}</a><br/><br/>
+              <div id="project-details" style="display:none">
+              
+                  <form class="uniForm" method="POST" action="">
+                      <fieldset class="inlineLabels">
+                          {{ project_form|as_uni_form }}
+                          <div class="form_block">
+                              <input type="hidden" name="action" value="update" />
+                              <input type="submit" value="{% trans "Update" %}"/>
+                          </div>
+                      </fieldset>
+                  </form>
+              </div>
+            
+              <hr/>
+                <p>{% silk "delete" %} <a href="#" onclick="$('#delete_project_form').toggle(); return false;">{% trans "Delete project" %}</a><p>
+                 <form class="delete_form" id="delete_project_form" action="{% url project_delete project.slug %}" method="POST" style="display: none;">
+                     <input type="submit" value="{% trans "Delete Project" %}" /> (all content will be removed)
+                </form>
+            {% endifequal %}
+            
         </div>
       {% endif %}
     {% endif %}
@@ -73,38 +98,15 @@
         </p>
         
         <p>{{ project.description }}</p>
-        
-        {% ifequal user project.creator %}
-            <div class="form-toggle">
-                <p><span id="edit-project-toggle">{% trans "Edit details" %}</span></p>
                 
-                <form class="uniForm" id="edit-project" method="POST" action="">
-                    <fieldset class="inlineLabels">
-                        {{ project_form|as_uni_form }}
-                        <div class="form_block">
-                            <input type="hidden" name="action" value="update" />
-                            <input type="submit" value="{% trans "updated" %}"/>
-                        </div>
-                    </fieldset>
-                </form>
-            </div>
-            
-        {% endifequal %}
-        
         {% if user.is_authenticated %}
             <div>
                 {% if is_member %}
-                    {% ifequal user project.creator %}
-                        <p>You are the creator of this project.</p>
-                        
-                        
-                        <p>{% silk "delete" %} <a href="#" onclick="$('#delete_project_form').toggle(); return false;">{% trans "Delete project" %}</a><p>
-                         <form class="delete_form" id="delete_project_form" action="{% url project_delete project.slug %}" method="POST" style="display: none;">
-                             <input type="submit" value="{% trans "Delete Project" %}" /> (all content will be removed)
-                        </form>
-                    {% else %}
-                        <p>You are member of this project.</p>
-                    {% endifequal %}
+                  <h1>Iteration #1</h1>
+                    <img src="/site_media/static/images/burndown.png">                  
+                  <h1>Overall Project</h1>
+                    <img src="/site_media/static/images/burndown.png">
+                    
                 {% else %}
                     <p>It is up to the creator of this project (<a href="{% url profile_detail project.creator.username %}">{{ project.creator }}</a>) to add you.</p>
                 {% endif %}
