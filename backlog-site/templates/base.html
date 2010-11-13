@@ -38,9 +38,17 @@
             }
         </style>
         {% endif %}
+        
+
+        
         {% block extra_head_base %}
             {% block extra_head %}{% endblock %}
         {% endblock %}
+        
+        <style type="text/css" media="screen">
+          {% block extra_css %}
+          {% endblock %}
+        </style>
     </head>
     
     <body class="{% block body_class %}{% endblock %}">

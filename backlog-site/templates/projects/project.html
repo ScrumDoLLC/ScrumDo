@@ -14,6 +14,12 @@
 
 {% block head_title %}{{ project.name }}{% endblock %}
 
+{% block extra_css %}
+#story_form #id_summary {
+	width: 330px;	
+}
+{% endblock %}
+
 {% block body %}
     
     {% if user.is_authenticated %}
@@ -30,8 +36,10 @@
               </p>
             </div>
             
-           <div class="velocity blue_box">
-              <h1>Velocity: 45</h1>
+           <div class="project_stats blue_box">
+              <h1>Stats</h1>
+              Velocity: 45 <br/>
+              Stories: {{ project.stories.count }} 
             </div>
             
             <div class="iterations">
@@ -108,6 +116,23 @@
         {% if user.is_authenticated %}
             <div>
                 {% if is_member %}
+                
+                <div id="story_form">
+                  <form method="POST" action="{% url stories project.slug %}">
+                    {{ add_story_form.non_field_errors }}
+                    {{add_story_form.summary}}    {{add_story_form.summary.errors}} <INPUT TYPE="image" SRC="/site_media/static/images/addStoryButton.png" >
+                     <br/>
+                    <div id="story_details">
+                      <table>
+                        <tr><td>Detail:</td><td>{{add_story_form.detail}}    {{add_story_form.detail.errors}} </td></tr>
+                        <tr><td>Tags:</td><td>{{add_story_form.tags}} {{add_story_form.tags.errors}} </td></tr>
+                        <tr><td>Points:&nbsp;</td><td>{{add_story_form.points}}  {{add_story_form.points.errors}} </td></tr>
+                        <tr><td>Backlog Position:&nbsp;</td><td>{{add_story_form.rank}}  {{add_story_form.rank.errors}} </td></tr>
+                       </table>
+                    </div>
+                  </form>
+                 </div>
+                
                   <h1>Iteration #1</h1>
                     <img src="/site_media/static/images/burndown.png">                  
                   <h1>Overall Project</h1>
@@ -167,16 +192,18 @@
 {% block extra_body %}
     <script type="text/javascript">
         $(document).ready(function() {
-            $('#edit-project').hide();
-            $('#edit-project-toggle').click(function() {
-                $('#edit-project').toggle();
-                $('#edit-project').autoscroll();
-                return false;
-            });
-            if ($('#edit-project .error').length) {
-                $('#edit-project').show();
-                $('#edit-project .error').autoscroll();
-            }
+
+          $('#id_summary').keyup( function(self) 
+                { 
+                    if( $(this).val().length > 0 )
+                    {
+                      $("#story_details").show(true);
+                    }
+                    else
+                    {
+                      $("#story_details").hide();              
+                    }
+                } );
            
            
         });

@@ -155,6 +155,14 @@
 	margin: 1px;
 }
 
+
+div.project_stats {
+  font-size: 14pt;
+}
+
+div.project_stats h1 {
+  font-size: 18pt;
+}
 div.blue_box {
   background-color: #D5E9FF;
   padding:10px;

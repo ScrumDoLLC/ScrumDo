@@ -245,9 +245,12 @@ def project(request, group_slug=None, form_class=ProjectUpdateForm, adduser_form
     else:
         adduser_form = adduser_form_class(project=project)
     
+    add_story_form = StoryForm()
+    
     return render_to_response(template_name, {
         "project_form": project_form,
         "adduser_form": adduser_form,
+        "add_story_form": add_story_form,
         "project": project,
         "group": project, # @@@ this should be the only context var for the project
         "is_member": is_member,
