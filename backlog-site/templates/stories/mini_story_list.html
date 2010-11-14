@@ -1,17 +1,9 @@
 {% load i18n %}
 
+{# This template gets rendered when we're filling in the columns on the story_list page through javascript #}
 
 {% for story in stories %}
-  <li class="story_small" story_id="{{story.id}}" id="story_{{story.id}}" rank="{{ story.rank }}" points="{{story.points}}">
-    <div class="pointsBox">{{ story.points }}</div>
-    <h1><a onclick="jQuery.facebox({ ajax: '/projects/project/{{ story.project.slug }}/story/{{ story.id }}'}); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}">{{ story.summary }}</a></h1>
-
-    {% filter truncatewords:"10" %}
-      {{ story.detail }}
-    {% endfilter %}
-    
-    {% if story.tags %}
-      <div class="tagsBox">Tags: <a href="#">{{ story.tags }}</a></div>
-    {% endif %}
+  <li class="story_small" story_id="{{story.id}}" id="story_{{story.id}}" rank="{{ story.rank }}" >
+    {% include "stories/single_mini_story.html" %}
   </li>
-{% endfor %}
+{% endfor %} 

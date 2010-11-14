@@ -34,8 +34,9 @@ class StoryForm( forms.ModelForm ):
       ('0', 'Top'), 
       ('1', 'Middle'),
       ('2', 'Bottom') )
+      
   tags = TagField(required=False, widget=TagAutoCompleteInput(app_label='stories', model='story'))
-  rank = forms.CharField( widget=forms.RadioSelect(choices=RANK_CHOICES), initial=2)
+  general_rank = forms.CharField( required=False, widget=forms.RadioSelect(choices=RANK_CHOICES), initial=2)
   
   def __init__(self,  *args, **kwargs):    
     super(StoryForm, self).__init__(*args, **kwargs)

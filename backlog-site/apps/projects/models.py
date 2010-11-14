@@ -77,6 +77,10 @@ class Story( models.Model ):
       ('40', '40'), 
       ('100', '100'), 
       ('Inf', 'Infinite')  )
+  STATUS_CHOICES = (
+      (1, "TODO"),
+      (2, "In Progress"),
+      (3, "Done")   )
   
   rank = models.IntegerField() 
   summary = models.CharField( "name" , max_length=255)
@@ -90,6 +94,7 @@ class Story( models.Model ):
   points = models.CharField('points', max_length=3, default="?", choices=POINT_CHOICES ,blank=True)
   iteration = models.ForeignKey( Iteration , related_name="stories")
   project = models.ForeignKey( Project , related_name="stories")
+  status = models.IntegerField( max_length=2, choices=STATUS_CHOICES, default=1 )
   
 
   

@@ -1,0 +1,11 @@
+{% load i18n %}
+
+
+  <div class="pointsBox">{{ story.points }}</div>
+  <h1><a onclick="jQuery.facebox({ ajax: '/projects/project/{{ story.project.slug }}/story/{{ story.id }}'}); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}">{{ story.summary }}</a></h1>
+  {% filter truncatewords:"10" %}
+    {{ story.detail }}
+  {% endfilter %}    
+  {% if story.tags %}
+    <div class="tagsBox">Tags: <a href="#">{{ story.tags }}</a></div>
+  {% endif %}

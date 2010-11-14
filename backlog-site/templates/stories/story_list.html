@@ -128,12 +128,12 @@
     question = 0;
     $(iteration_list).children("li").each(function(index)
       {
-        points = $(this).attr("points");
+        points = $(this).children("div.pointsBox").text();
         if( points == "?")
         {
           question++;
         }
-        else if( points == "inf")
+        else if( points == "Inf")
         {
           inf++;
         }

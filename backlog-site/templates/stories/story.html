@@ -16,6 +16,8 @@
       </table>
    </div>
    <br/>
+   <input type="hidden" name="return_type" value="mini">
+   <input type="hidden" name="rank" value="{{ story.rank }}">
    <INPUT style="float:right" TYPE="image" SRC="/site_media/static/images/updateStoryButton.png" >
  </form>
 <br/><br/><br/><br/>
@@ -29,8 +31,10 @@
 <script type="text/javascript" charset="utf-8">
 
       $("#story_detail_form").ajaxForm({
+        target:"#story_{{story.id}}",
         success: function() { 
-          $(document).trigger('close.facebox');
+          calculateBothPoints();
+          $(document).trigger('close.facebox');   
         }});
       
       // bind 'myForm' and provide a simple callback function 

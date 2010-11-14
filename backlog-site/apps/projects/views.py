@@ -51,6 +51,9 @@ WHERE projects_projectmember.project_id = projects_project.id
 #   backlog_json = json_serializer.serialize(backlog, ensure_ascii=False)
 #   return HttpResponse(backlog_json) #, mimetype='application/json'
 
+
+# This is the request handler that gets called from the story_list page when the user drags & drops a story to a
+# new ranking or a new iteration.  It should have two post variables, index and iteration
 @login_required
 def reorder_story( request, group_slug, story_id):
   story = get_object_or_404( Story, id=story_id )
@@ -79,7 +82,13 @@ def reorder_story( request, group_slug, story_id):
     return HttpResponse("OK")
   return  HttpResponse("Fail")
   
-  
+
+@login_required
+def mini_story( request, group_slug, story_id):
+  story = get_object_or_404( Story, id=story_id )
+  return render_to_response("stories/single_mini_story.html", {
+      "story": story,
+    }, context_instance=RequestContext(request))
   
 @login_required
 def story( request, group_slug, story_id ):
@@ -87,15 +96,17 @@ def story( request, group_slug, story_id ):
   project = get_object_or_404( Project, slug=group_slug )
 
   if request.method == 'POST': # If the form has been submitted...
-    form = StoryForm(request.POST) # A form bound to the POST data
-    if form.is_valid(): # All validation rules pass
+    form = StoryForm( request.POST, instance=story) # A form bound to the POST data    
+    if form.is_valid(): # All validation rules pass      
       story = form.save( commit=False )
       story.local_id = project.stories.count() + 1
       story.project = project
       story.creator = request.user
-      story.iteration = project.get_default_iteration()
-      story.save()
-      form = StoryForm()
+      story.save()            
+    if( request.POST['return_type'] == 'mini'):
+      return render_to_response("stories/single_mini_story.html", {
+          "story": story,         
+        }, context_instance=RequestContext(request))
   else:
     form = StoryForm( instance=story )
     
