@@ -58,11 +58,16 @@ def reorder_story( request, group_slug, story_id):
   if request.method == 'POST':
     rank = 0
     target_rank = int(request.POST["index"])
+    target_iteration = request.POST["iteration"]
+    iteration = get_object_or_404( Iteration, id=target_iteration )
     story.rank = target_rank;
+    story.iteration = iteration;
     story.save()
     
+    stories = project.stories.all().filter(iteration=iteration).order_by("rank")
+    
     # For now, a stupid reorder everything algorithm
-    for otherStory in project.stories.all().order_by("rank"):
+    for otherStory in stories:
       if rank == target_rank:
         rank+=1
         
@@ -162,6 +167,23 @@ def create(request, form_class=ProjectForm, template_name="projects/create.html"
         "project_form": project_form,
     }, context_instance=RequestContext(request))
 
+
+@login_required
+def test_data(request, group_slug, count):
+  project = get_object_or_404(Project, slug=group_slug) 
+  count = int(count)
+  story_count = project.stories.all().count()
+  for i in range(count) :
+    story = Story( rank=i + story_count, 
+                   summary="Test story #" + str(story_count+i), 
+                   local_id=i + story_count,
+                   detail="Test story detail data",
+                   creator=request.user,
+                   points=5,
+                   iteration=project.get_default_iteration(),
+                   project=project);
+    story.save();
+  return HttpResponse("OK")
 
 @login_required
 def iteration_create(request, group_slug=None):

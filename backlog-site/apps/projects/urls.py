@@ -22,6 +22,9 @@ urlpatterns = patterns('projects.views',
     url(r'^project/(?P<group_slug>[-\w]+)/story/(?P<story_id>[-\w]+)/reorder', 'reorder_story'),
     url(r'^project/(?P<group_slug>[-\w]+)/story/(?P<story_id>[-\w]+)', 'story'),
     
+    
+    url(r'^project/(?P<group_slug>[-\w]+)/test_data/(?P<count>[0-9]+)', 'test_data'),
+    
     # url(r'^rpc/project/(?P<group_slug>[-\w]+)/stories/$', 'rpc_stories'),
     # url(r'^rpc/greet$', 'greet'),
 )

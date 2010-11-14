@@ -39,13 +39,15 @@
     <div class="story_column">
       <div class="story_column_header">
           <select id="iterationChooser">
-            <option value="">
+            <option value="">              
               Choose an iteration...
             </option>
             {% for iteration in project.iterations.all %}
-            <option value="{{ iteration.id }}">
-              {{ iteration.name }}
-            </option>
+              {% ifnotequal iteration project.get_default_iteration %}
+                <option value="{{ iteration.id }}">
+                  {{ iteration.name }}
+                </option>
+              {% endifnotequal %}
             {% endfor %}
           </select>  <br/><br/>
           <a href="#addIterationDiv" rel="facebox"><img  id="addIterationButton" src="/site_media/static/images/addIterationButton.png"></a>
@@ -58,7 +60,7 @@
         <br/><br/><br/>
         <br/><br/><br/>
       </div>
-      <ul style="display:none" class="story_list" id="iteration_column">
+      <ul style="display:none" class="story_list" id="iteration_column" iteration_id="">
       
       </ul>
     </div><!-- End story_column -->
@@ -72,7 +74,7 @@
         </h1>
         Points: 450 + ( 10 x ? ) + ( 3 x inf )
       </div>
-      <ul class="story_list" id="backlog_column">
+      <ul class="story_list" id="backlog_column" iteration_id="{{ project.get_default_iteration.id }}">
       
       </ul>
     </div> <!-- End backlog story_column -->
@@ -116,14 +118,16 @@
   var project_slug = "{{ project.slug }}";
   var default_iteration = "{{ project.get_default_iteration.id }}";
   
+  
+  
   {# loadIteration will call a url like this: /projects/project/b10-24/stories/1 and put its contents inside the <ul id="iteration_column"> area #}     
   function loadIteration( iterationID )
   {
     $.ajax({
       url: "/projects/project/" + project_slug + "/stories/" + iterationID,
       success: function(html){
-        $("#iteration_column").html(html);
-        
+        $("#iteration_column").html(html);  
+        $("#iteration_column").attr("iteration_id", iterationID);      
       }
     });
   }
@@ -131,9 +135,10 @@
   {# This is the method that handles the user-drop event and records that fact on the server. #}
   function updateStoryPosition(event, ui)
   {  
+    iterationId = $(ui.item).parent().attr("iteration_id");
     $.ajax({
-      url: "/projects/project/" + project_slug + "/story/" + $(ui.item).attr("story_id"),
-      data:({ action:"reorder", index:ui.item.index() }),
+      url: "/projects/project/" + project_slug + "/story/" + $(ui.item).attr("story_id") + "/reorder",
+      data:({ action:"reorder", index:ui.item.index(), iteration:iterationId }),
       type: "POST"
     });
 
@@ -146,19 +151,24 @@
   $("ul").disableSelection();
  
   {# When the iteration combo box changes, load the correct iteration into the left column (or hide it if there is no iteration) #}
+  function loadIterationFromChooser()
+  {
+    if( $("#iterationChooser").val().length > 0)
+    {
+      $("#empty_iteration_column").hide();
+      $("#iteration_column").show();
+      loadIteration( $("#iterationChooser").val() );
+    }
+    else
+    {
+      $("#empty_iteration_column").show();
+      $("#iteration_column").hide();        
+    }
+  }
+  
   $("#iterationChooser").change( function() 
     {
-      if( $(this).val().length > 0)
-      {
-        $("#empty_iteration_column").hide();
-        $("#iteration_column").show();
-        loadIteration( $(this).val() );
-      }
-      else
-      {
-        $("#empty_iteration_column").show();
-        $("#iteration_column").hide();        
-      }
+       loadIterationFromChooser();
     });
 
     {# Load the intial backlog stories. #}
@@ -169,7 +179,7 @@
       }
     });
 
-  {# When a user starts to type text into the story, we'll expand that area to show the full add-story form. #}
+  {# When a user starts to type text into the story, we will expand that area to show the full add-story form. #}
   $('#id_summary').keyup( function(self) 
         { 
             if( $(this).val().length > 0 )
@@ -181,7 +191,8 @@
               $("#story_details").hide();              
             }
         } );
-        
+       
+  $(document).ready( function() {loadIterationFromChooser();} ); 
 </script>
 
 </div>{% endblock %}
