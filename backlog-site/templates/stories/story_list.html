@@ -16,6 +16,7 @@
 
 {% block body %}
 
+ <img style="float:right" src="/site_media/static/images/ajax-loader.gif" id="loadingIcon">
  <h1>Stories</h1>
  
  <div id="story_form">
@@ -162,12 +163,14 @@
   {# loadIteration will call a url like this: /projects/project/b10-24/stories/1 and put its contents inside the <ul id="iteration_column"> area #}     
   function loadIteration( iterationID )
   {
+    $("#loadingIcon").show();
     $.ajax({
       url: "/projects/project/" + project_slug + "/stories/" + iterationID,
       success: function(html){
         $("#iteration_column").html(html);  
         $("#iteration_column").attr("iteration_id", iterationID);      
         calculatePoints("#iteration_column","#iteration_points");
+        $("#loadingIcon").hide();
       }
     });
   }
@@ -176,12 +179,14 @@
   function updateStoryPosition(event, ui)
   {  
     iterationId = $(ui.item).parent().attr("iteration_id");
+    $("#loadingIcon").show();
     $.ajax({
       url: "/projects/project/" + project_slug + "/story/" + $(ui.item).attr("story_id") + "/reorder",
       data:({ action:"reorder", index:ui.item.index(), iteration:iterationId }),
       type: "POST",
       success: function() {
         calculateBothPoints();
+        $("#loadingIcon").hide();
       }
     });
 
@@ -243,7 +248,7 @@
             }
         } );
        
-  $(document).ready( function() {loadIterationFromChooser();} ); 
+  $(document).ready( function() {loadIterationFromChooser(); $("#loadingIcon").hide();} ); 
 </script>
 
 </div>{% endblock %}
