@@ -51,7 +51,7 @@
             {% endfor %}
           </select>  <br/><br/>
           <a href="#addIterationDiv" rel="facebox"><img  id="addIterationButton" src="/site_media/static/images/addIterationButton.png"></a>
-          Points: 50 + ( 3 x ? ) + ( 1 x inf )
+          <span id="iteration_points"></span>
       </div>
       
       <div id="empty_iteration_column">
@@ -72,7 +72,7 @@
         <h1>
           Backlog
         </h1>
-        Points: 450 + ( 10 x ? ) + ( 3 x inf )
+        <span id="backlog_points"></span>
       </div>
       <ul class="story_list" id="backlog_column" iteration_id="{{ project.get_default_iteration.id }}">
       
@@ -119,6 +119,45 @@
   var default_iteration = "{{ project.get_default_iteration.id }}";
   
   
+  {# Method to calculate the number of points in an iteration #}
+  function calculatePoints( iteration_list, iteration_points)
+  {
+    iter_points = 0;
+    inf = 0;
+    question = 0;
+    $(iteration_list).children("li").each(function(index)
+      {
+        points = $(this).attr("points");
+        if( points == "?")
+        {
+          question++;
+        }
+        else if( points == "inf")
+        {
+          inf++;
+        }
+        else
+        {
+          iter_points += parseInt( points) ;
+        }
+      });
+      
+      var result = "Points: " + iter_points;
+      if( inf > 0)
+      {
+        result = result + " + (<b>inf</b> x " + inf + ") ";
+      }
+      if( question > 0)
+      {
+        result = result + " ( <b>?</b> x " + question + ")";
+      }
+      
+        
+      $(iteration_points).html(result);
+    
+  }
+  
+  
   
   {# loadIteration will call a url like this: /projects/project/b10-24/stories/1 and put its contents inside the <ul id="iteration_column"> area #}     
   function loadIteration( iterationID )
@@ -128,6 +167,7 @@
       success: function(html){
         $("#iteration_column").html(html);  
         $("#iteration_column").attr("iteration_id", iterationID);      
+        calculatePoints("#iteration_column","#iteration_points");
       }
     });
   }
@@ -139,10 +179,20 @@
     $.ajax({
       url: "/projects/project/" + project_slug + "/story/" + $(ui.item).attr("story_id") + "/reorder",
       data:({ action:"reorder", index:ui.item.index(), iteration:iterationId }),
-      type: "POST"
+      type: "POST",
+      success: function() {
+        calculateBothPoints();
+      }
     });
 
   }
+  
+  function calculateBothPoints()
+  {
+     calculatePoints("#iteration_column","#iteration_points");
+     calculatePoints("#backlog_column","#backlog_points");
+  }
+  
   
 
 
@@ -176,6 +226,7 @@
       url: "/projects/project/" + project_slug + "/stories/" + default_iteration,
       success: function(html){
         $("#backlog_column").append(html);
+        calculatePoints("#backlog_column","#backlog_points");
       }
     });
 

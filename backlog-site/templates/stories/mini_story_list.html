@@ -2,7 +2,7 @@
 
 
 {% for story in stories %}
-  <li class="story_small" story_id="{{story.id}}" id="story_{{story.id}}" rank="{{ story.rank }}">
+  <li class="story_small" story_id="{{story.id}}" id="story_{{story.id}}" rank="{{ story.rank }}" points="{{story.points}}">
     <div class="pointsBox">{{ story.points }}</div>
     <h1><a onclick="jQuery.facebox({ ajax: '/projects/project/{{ story.project.slug }}/story/{{ story.id }}'}); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}">{{ story.summary }}</a></h1>
 
