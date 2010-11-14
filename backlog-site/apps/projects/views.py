@@ -113,7 +113,6 @@ def story( request, group_slug, story_id ):
       story.local_id = project.stories.count() + 1
       story.project = project
       story.creator = request.user
-      story.rank = calculate_rank( project, int(form.cleaned_data['general_rank']) )
       story.save()            
     if( request.POST['return_type'] == 'mini'):
       return render_to_response("stories/single_mini_story.html", {

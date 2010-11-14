@@ -3,7 +3,5 @@
 {# This template gets rendered when we're filling in the columns on the story_list page through javascript #}
 
 {% for story in stories %}
-  <li class="story_small" story_id="{{story.id}}" id="story_{{story.id}}" rank="{{ story.rank }}" >
     {% include "stories/single_mini_story.html" %}
-  </li>
 {% endfor %} 

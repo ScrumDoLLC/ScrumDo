@@ -85,7 +85,18 @@
 	background-color: #eeeeee;
 	list-style-type: none;
 	border: 1px solid #b8b8b8;
-	min-height: 33px;
+	min-height: 33px;	
+	padding-left: 22px;
+}
+
+.gripper_todo {	
+	background: #fefefe url(/site_media/static/images/gripper_todo.png) repeat-y;
+}
+.gripper_doing {	
+	background: #fefefe url(/site_media/static/images/gripper_doing.png) repeat-y;
+}
+.gripper_done {	
+	background: #fefefe url(/site_media/static/images/gripper_done.png) repeat-y;
 }
 
 .story_small a {

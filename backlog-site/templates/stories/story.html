@@ -30,9 +30,9 @@
 
 <script type="text/javascript" charset="utf-8">
 
-      $("#story_detail_form").ajaxForm({
-        target:"#story_{{story.id}}",
-        success: function() { 
+      $("#story_detail_form").ajaxForm({        
+        success: function(responseText) { 
+          $("#story_{{story.id}}").replaceWith(responseText);
           calculateBothPoints();
           $(document).trigger('close.facebox');   
         }});
