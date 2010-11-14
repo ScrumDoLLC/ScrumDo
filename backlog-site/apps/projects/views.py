@@ -89,7 +89,18 @@ def mini_story( request, group_slug, story_id):
   return render_to_response("stories/single_mini_story.html", {
       "story": story,
     }, context_instance=RequestContext(request))
+
+
+def calculate_rank( project, general_rank ):
+  if( general_rank == 0):
+    return 0
+  if( general_rank == 1):
+    return round( project.stories.all().count() / 2)
+  return project.stories.all().count()+1
   
+
+
+
 @login_required
 def story( request, group_slug, story_id ):
   story = get_object_or_404( Story, id=story_id )
@@ -102,6 +113,7 @@ def story( request, group_slug, story_id ):
       story.local_id = project.stories.count() + 1
       story.project = project
       story.creator = request.user
+      story.rank = calculate_rank( project, int(form.cleaned_data['general_rank']) )
       story.save()            
     if( request.POST['return_type'] == 'mini'):
       return render_to_response("stories/single_mini_story.html", {
@@ -135,10 +147,11 @@ def stories(request, group_slug):
     form = StoryForm(request.POST) # A form bound to the POST data
     if form.is_valid(): # All validation rules pass
       story = form.save( commit=False )
-      story.local_id = project.stories.count() + 1
+      story.local_id = project.stories.all().count() + 1
       story.project = project
       story.creator = request.user
       story.iteration = project.get_default_iteration()
+      story.rank = calculate_rank( project, int(form.cleaned_data['general_rank']) )
       story.save()
       form = StoryForm()
   else:

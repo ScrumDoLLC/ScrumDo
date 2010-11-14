@@ -83,7 +83,7 @@ class Story( models.Model ):
       (3, "Done")   )
   
   rank = models.IntegerField() 
-  summary = models.CharField( "name" , max_length=255)
+  summary = models.TextField( )
   local_id = models.IntegerField()
   detail = models.TextField( blank=True )
   creator = models.ForeignKey(User, related_name="created_stories", verbose_name=_('creator'))

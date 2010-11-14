@@ -42,11 +42,12 @@ class StoryForm( forms.ModelForm ):
     super(StoryForm, self).__init__(*args, **kwargs)
     self.fields["points"].choices = self.instance.POINT_CHOICES
     self.fields["points"].widget = forms.RadioSelect(choices=self.instance.POINT_CHOICES)
+    self.fields["summary"].widget = forms.TextInput()
     self.fields["summary"].widget.size = 200
   
   class Meta:
       model = Story
-      fields = ('summary', 'detail', 'tags', 'points' , 'rank')
+      fields = ('summary', 'detail', 'tags', 'points' )
 
 
 class ProjectForm(forms.ModelForm):
