@@ -52,6 +52,16 @@ WHERE projects_projectmember.project_id = projects_project.id
 #   return HttpResponse(backlog_json) #, mimetype='application/json'
 
 
+
+@login_required
+def set_story_status( request, group_slug, story_id, status):
+  story = get_object_or_404( Story, id=story_id )
+  story.status = status;
+  story.save();
+  return render_to_response("stories/single_mini_story.html", {
+      "story": story,
+    }, context_instance=RequestContext(request))
+
 # This is the request handler that gets called from the story_list page when the user drags & drops a story to a
 # new ranking or a new iteration.  It should have two post variables, index and iteration
 @login_required

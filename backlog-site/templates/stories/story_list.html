@@ -248,6 +248,45 @@
             }
         } );
        
+  
+  function setStatusTodo( storyID )
+  {
+    $(".todoButtons").hide();
+    $.ajax({
+      url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_todo",      
+      type: "POST",
+      success: function(responseText) {        
+        $("#story_" + storyID).replaceWith(responseText);
+      }
+    });
+  }     
+  
+  
+  function setStatusDoing( storyID )
+  {
+    $(".todoButtons").hide();    
+    $.ajax({
+      url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_doing",      
+      type: "POST",
+      success: function(responseText) {        
+        $("#story_" + storyID).replaceWith(responseText);
+      }
+    });
+  }
+  
+  
+  function setStatusDone( storyID )
+  {
+    $(".todoButtons").hide();    
+    $.ajax({
+      url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_done",      
+      type: "POST",
+      success: function(responseText) {        
+        $("#story_" + storyID).replaceWith(responseText);
+      }
+    });
+  }    
+  
   $(document).ready( function() {loadIterationFromChooser(); $("#loadingIcon").hide();} ); 
 </script>
 

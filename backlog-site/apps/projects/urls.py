@@ -19,6 +19,10 @@ urlpatterns = patterns('projects.views',
     url(r'^project/(?P<group_slug>[-\w]+)/stories/$', 'stories', name="stories"),
     url(r'^project/(?P<group_slug>[-\w]+)/stories/(?P<iteration_id>[-\w]+)$', 'stories_iteration', name="stories_iteration"),
 
+    url(r'^project/(?P<group_slug>[-\w]+)/story/(?P<story_id>[-\w]+)/set_todo', 'set_story_status', {'status':1}),
+    url(r'^project/(?P<group_slug>[-\w]+)/story/(?P<story_id>[-\w]+)/set_doing', 'set_story_status', {'status':2}),
+    url(r'^project/(?P<group_slug>[-\w]+)/story/(?P<story_id>[-\w]+)/set_done', 'set_story_status', {'status':3}),
+
     url(r'^project/(?P<group_slug>[-\w]+)/story/(?P<story_id>[-\w]+)/reorder', 'reorder_story'),
     url(r'^project/(?P<group_slug>[-\w]+)/story/(?P<story_id>[-\w]+)', 'story'),
     url(r'^project/(?P<group_slug>[-\w]+)/mini_story/(?P<story_id>[-\w]+)', 'mini_story'),
