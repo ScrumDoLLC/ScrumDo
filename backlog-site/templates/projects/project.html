@@ -134,10 +134,12 @@
                 {% if is_member %}
                 
                 
-                  <h1>Iteration #1</h1>
-                    <img src="/site_media/static/images/burndown.png">                  
+                  <h1>{{ project.get_current_iteration.name }}</h1>
+  <!--                  <img src="/site_media/static/images/burndown.png">                 -->
+                    <div id="iterationBurndown" style="width:540px;height:300px;"></div>  
                   <h1>Overall Project</h1>
-                    <img src="/site_media/static/images/burndown.png">
+                    <!-- <img src="/site_media/static/images/burndown.png"> -->
+                    <div id="overallBurndown" style="width:540px;height:300px;"></div>
                     
                 {% else %}
                     <p>It is up to the creator of this project (<a href="{% url profile_detail project.creator.username %}">{{ project.creator }}</a>) to add you.</p>
@@ -192,6 +194,28 @@
 
 {% block extra_body %}
     <script type="text/javascript">
+      
+      
+    
+    function weekendAreas(axes) {
+        var markings = [];
+        var d = new Date(axes.xaxis.min);
+        // go to the first Saturday
+        d.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 1) % 7))
+        d.setUTCSeconds(0);
+        d.setUTCMinutes(0);
+        d.setUTCHours(0);
+        var i = d.getTime();
+        do {
+            // when we don't set yaxis, the rectangle automatically
+            // extends to infinity upwards and downwards
+            markings.push({ xaxis: { from: i, to: i + 2 * 24 * 60 * 60 * 1000 } });
+            i += 7 * 24 * 60 * 60 * 1000;
+        } while (i < axes.xaxis.max);
+
+        return markings;
+    }
+    
         $(document).ready(function() {
 
           $('#id_summary').keyup( function(self) 
@@ -205,8 +229,24 @@
                       $("#story_details").hide();              
                     }
                 } );
-           
-           
+                
+                
+                var options = {
+                   xaxis: { mode: "time", timeformat: "%m/%d/%y" },
+                   grid: { markings: weekendAreas } ,
+                   series: { lines: { show: true }, points: { show: true, fill: false }   }                   
+                };
+
+
+         
+                var backlog_data_total = [{% for log in project.points_log.all %} [{{log.timestamp}},{{log.points_total}}], {% endfor %}];
+                var backlog_data_claimed = [{% for log in project.points_log.all %} [{{log.timestamp}},{{log.points_claimed}}], {% endfor %}];                 
+                $.plot($("#overallBurndown"), [backlog_data_total,backlog_data_claimed], options);
+
+                var iteration_data_total = [{% for log in project.get_current_iteration.points_log.all %} [{{log.timestamp}},{{log.points_total}}], {% endfor %}];
+                var iteration_data_claimed = [{% for log in project.get_current_iteration.points_log.all %} [{{log.timestamp}},{{log.points_claimed}}], {% endfor %}];                 
+                $.plot($("#iterationBurndown"), [iteration_data_total,iteration_data_claimed], options);
+                
         });
     </script>
     

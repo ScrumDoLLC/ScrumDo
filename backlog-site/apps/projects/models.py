@@ -1,5 +1,5 @@
 from datetime import datetime
-
+import time
 from tagging.fields import TagField
 from tagging.models import Tag
 from django.core.urlresolvers import reverse
@@ -18,6 +18,9 @@ class PointsLog( models.Model ):
   content_type = models.ForeignKey(ContentType)
   object_id = models.PositiveIntegerField()
   related_object = generic.GenericForeignKey('content_type', 'object_id')
+  def timestamp(self):
+    return int(time.mktime(self.date.timetuple())*1000)
+  
   
 class Project(Group):
     
@@ -27,10 +30,18 @@ class Project(Group):
     private = models.BooleanField(_('private'), default=False)
     points_log = generic.GenericRelation( PointsLog )
     
+      
     def get_default_iteration( self ):
       iterations = Iteration.objects.filter( project=self, default_iteration=True)
       return iterations[0]
-    
+      
+    # TODO - this method isnt' really implemented yet!!!
+    def get_current_iteration(self):
+      for iteration in self.iterations.all():
+        if iteration != self.get_default_iteration():
+          return iteration
+      return None
+      
     def get_absolute_url(self):
         return reverse('project_detail', kwargs={'group_slug': self.slug})
     
@@ -64,6 +75,10 @@ class Iteration( models.Model):
 
 
 class Story( models.Model ):
+  STATUS_TODO = 1;
+  STATUS_DOING = 2;
+  STATUS_DONE = 3;
+  
   POINT_CHOICES = (
       ('?', '?'), 
       ('0', '0'),
