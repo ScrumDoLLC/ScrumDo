@@ -236,15 +236,24 @@
     });
 
   {# When a user starts to type text into the story, we will expand that area to show the full add-story form. #}
+  story_form_expanded = false;
   $('#id_summary').keyup( function(self) 
         { 
             if( $(this).val().length > 0 )
             {
-              $("#story_details").show(true);
+              if( ! story_form_expanded )
+              {
+                $("#story_details").show(true);
+              }
+              story_form_expanded = true;
             }
             else
             {
-              $("#story_details").hide();              
+              if( story_form_expanded )
+              {
+                $("#story_details").hide();              
+              }
+              story_form_expanded = false;
             }
         } );
        
