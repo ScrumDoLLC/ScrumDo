@@ -19,7 +19,7 @@ class PointsLog( models.Model ):
   object_id = models.PositiveIntegerField()
   related_object = generic.GenericForeignKey('content_type', 'object_id')
   def timestamp(self):
-    return int(time.mktime(self.date.timetuple())*1000)
+    return int((time.mktime(self.date.timetuple()) - time.timezone)*1000)
   
   
 class Project(Group):

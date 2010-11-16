@@ -243,9 +243,12 @@
                 
                 
                 var options = {
-                   xaxis: { mode: "time", timeformat: "%m/%d/%y" },
+                   colors: ["#2292ff", "#ADD75C"],
+                   xaxis: { minTickSize: [1, "day"] , mode: "time", timeformat: "%m/%d/%y" },
                    grid: { markings: weekendAreas } ,
-                   series: { lines: { show: true }, points: { show: true, fill: false }   }                   
+                   series: { lines: {   show: true , fill:true  }, 
+                             points: { radius:5, show: true, fill: true} 
+                               }                   
                 };
 
        
@@ -253,13 +256,13 @@
          
                 var backlog_data_total = [{% for log in project.points_log.all %} [{{log.timestamp}},{{log.points_total}}], {% endfor %}];
                 var backlog_data_claimed = [{% for log in project.points_log.all %} [{{log.timestamp}},{{log.points_claimed}}], {% endfor %}];                 
-                $.plot($("#overallBurndown"), [backlog_data_total,backlog_data_claimed], options);
+                $.plot($("#overallBurndown"), [{label:" Total Points", data:backlog_data_total},{label:" Claimed Points",data:backlog_data_claimed}], options);
 
                {% for iteration in project.get_current_iterations %}
                  {% if iteration.points_log.count %}
                   var iteration_data_total = [{% for log in iteration.points_log.all %} [{{log.timestamp}},{{log.points_total}}], {% endfor %}];
                   var iteration_data_claimed = [{% for log in iteration.points_log.all %} [{{log.timestamp}},{{log.points_claimed}}], {% endfor %}];                 
-                  $.plot($("#iterationBurndown_{{iteration.id}}"), [iteration_data_total,iteration_data_claimed], options);
+                  $.plot($("#iterationBurndown_{{iteration.id}}"), [{label:" Total Points", data:iteration_data_total},{label:" Claimed Points",data:iteration_data_claimed}], options);
                  {% endif %}
                {% endfor %}
         });
