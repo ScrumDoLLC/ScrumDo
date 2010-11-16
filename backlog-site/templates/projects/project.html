@@ -134,13 +134,15 @@
                 {% if is_member %}
                 
                 
-                  <h1>{{ project.get_current_iteration.name }}</h1>
-
-                    {% if project.get_current_iteration.points_log.count %}
-                      <div id="iterationBurndown" style="width:540px;height:300px;"></div>  
+                  {% for iteration in project.get_current_iterations %}
+                    <h1>{{ iteration.name }}</h1>
+                    {% if iteration.points_log.count %}
+                      <div id="iterationBurndown_{{iteration.id}}" style="width:540px;height:300px;"></div>  
                     {% else %}
                       <img src="/site_media/static/images/burndown.png">
                     {% endif %}
+                  {% endfor %}
+                    
                   <h1>Overall Project</h1>
                    
                   {% if project.points_log.count %}
@@ -246,16 +248,20 @@
                    series: { lines: { show: true }, points: { show: true, fill: false }   }                   
                 };
 
+       
 
          
                 var backlog_data_total = [{% for log in project.points_log.all %} [{{log.timestamp}},{{log.points_total}}], {% endfor %}];
                 var backlog_data_claimed = [{% for log in project.points_log.all %} [{{log.timestamp}},{{log.points_claimed}}], {% endfor %}];                 
                 $.plot($("#overallBurndown"), [backlog_data_total,backlog_data_claimed], options);
 
-                var iteration_data_total = [{% for log in project.get_current_iteration.points_log.all %} [{{log.timestamp}},{{log.points_total}}], {% endfor %}];
-                var iteration_data_claimed = [{% for log in project.get_current_iteration.points_log.all %} [{{log.timestamp}},{{log.points_claimed}}], {% endfor %}];                 
-                $.plot($("#iterationBurndown"), [iteration_data_total,iteration_data_claimed], options);
-                
+               {% for iteration in project.get_current_iterations %}
+                 {% if iteration.points_log.count %}
+                  var iteration_data_total = [{% for log in iteration.points_log.all %} [{{log.timestamp}},{{log.points_total}}], {% endfor %}];
+                  var iteration_data_claimed = [{% for log in iteration.points_log.all %} [{{log.timestamp}},{{log.points_claimed}}], {% endfor %}];                 
+                  $.plot($("#iterationBurndown_{{iteration.id}}"), [iteration_data_total,iteration_data_claimed], options);
+                 {% endif %}
+               {% endfor %}
         });
     </script>
     

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 import time
 from tagging.fields import TagField
 from tagging.models import Tag
@@ -36,11 +36,9 @@ class Project(Group):
       return iterations[0]
       
     # TODO - this method isnt' really implemented yet!!!
-    def get_current_iteration(self):
-      for iteration in self.iterations.all():
-        if iteration != self.get_default_iteration():
-          return iteration
-      return None
+    def get_current_iterations(self):
+      today = date.today
+      return self.iterations.filter( start_date__lte=today, end_date__gte=today)
       
     def get_absolute_url(self):
         return reverse('project_detail', kwargs={'group_slug': self.slug})

@@ -9,10 +9,17 @@
 
 
 
+.small_project_list hr {
+	border: 1px solid #aaa;
+	margin-left: -10px;
+	width: 197px;
+	border-top-style: none;
+}
 .small_project_list a,img{
 	text-decoration: none;
 	vertical-align: middle;
 	margin-bottom: 5px;
+	margin-right: 5px;
 }
 
 #story_area textarea {
