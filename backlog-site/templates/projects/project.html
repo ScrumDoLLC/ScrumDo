@@ -32,7 +32,7 @@
               <tr><td>Detail:</td><td>{{add_story_form.detail}}    {{add_story_form.detail.errors}} </td></tr>
               <tr><td>Tags:</td><td>{{add_story_form.tags}} {{add_story_form.tags.errors}} </td></tr>
               <tr><td>Points:&nbsp;</td><td>{{add_story_form.points}}  {{add_story_form.points.errors}} </td></tr>
-              <tr><td>Backlog Position:&nbsp;</td><td>{{add_story_form.rank}}  {{add_story_form.rank.errors}} </td></tr>
+              <tr><td>Backlog Position:&nbsp;</td><td>{{add_story_form.general_rank}}  {{add_story_form.general_rank.errors}} </td></tr>
              </table>
           </div>
         </form>
@@ -64,7 +64,7 @@
               <div class="iterationHeader"><a href="/projects/project/{{project.slug}}/stories/">{{iteration.name}}</a></div>
               {% endfor %}
               <br/><br/>
-              <a href="{% url iteration_create project.slug %}"><img  id="addIterationButton" src="/site_media/static/images/addIterationButton.png"></a>
+              <a href="{% url iteration_create project.slug %}"><img  src="/site_media/static/images/addIterationButton.png"></a>
             </div>
             
             <div class="members">
