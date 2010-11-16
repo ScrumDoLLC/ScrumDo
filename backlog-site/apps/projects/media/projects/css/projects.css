@@ -105,6 +105,21 @@
 	padding-left: 22px;
 }
 
+.story_block {
+	margin: 3px;
+	padding: 3px;
+	border-bottom: 1px solid #ececec;
+	background-color: #eeeeee;
+	list-style-type: none;
+	border: 1px solid #b8b8b8;
+	min-height: 33px;	
+	padding-left: 22px;
+	width: 300px;
+	float: left;
+
+}
+
+
 .gripper_todo {	
 	background: #fefefe url(/site_media/static/images/gripper_todo.png) repeat-y;
 }
@@ -170,6 +185,9 @@
 	margin-right: 5px;	
 }
 
+.story_block h1 {
+	font-size: 16px;
+}
 .story_small h1 {
 	font-size: 16px;
 }

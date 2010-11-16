@@ -82,6 +82,19 @@ def set_story_status( request, group_slug, story_id, status):
       "story": story,
     }, context_instance=RequestContext(request))
 
+@login_required
+def iteration(request, group_slug, iteration_id):
+   project = get_object_or_404( Project, slug=group_slug )
+   iteration = get_object_or_404( Iteration, id=iteration_id )
+   return render_to_response("projects/iteration.html", {
+       "iteration": iteration,
+     }, context_instance=RequestContext(request))
+     
+     
+     
+     
+     
+     
 # This is the request handler that gets called from the story_list page when the user drags & drops a story to a
 # new ranking or a new iteration.  It should have two post variables, index and iteration
 @login_required
@@ -161,7 +174,7 @@ def story( request, group_slug, story_id ):
 def stories_iteration(request, group_slug, iteration_id):
   project = get_object_or_404(Project, slug=group_slug)  
   iteration = get_object_or_404(Iteration, id=iteration_id, project=project)  
-  stories = StoryForms.filter(project=project, iteration=iteration ).order_by("rank")
+  stories = iteration.stories.filter(project=project, iteration=iteration ).order_by("rank")
   return render_to_response("stories/mini_story_list.html", {
     "stories": stories,
     "project":project
@@ -256,7 +269,7 @@ def iteration_create(request, group_slug=None):
   else:
     form = IterationForm() # An unbound form
 
-  return render_to_response('projects/iteration.html', { 'form': form,  }, context_instance=RequestContext(request))
+  return render_to_response('projects/new_iteration.html', { 'form': form,  }, context_instance=RequestContext(request))
 
 
 

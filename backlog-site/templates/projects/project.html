@@ -61,10 +61,10 @@
             <div class="iterations">
               <h1>Iterations</h1>
               {% for iteration in project.iterations.all %}
-              <div class="iterationHeader"><a href="/projects/project/{{project.slug}}/stories/">{{iteration.name}}</a></div>
+              <div class="iterationHeader"><a href="{% url iteration project.slug iteration.id %}">{{iteration.name}}</a></div>
               {% endfor %}
               <br/><br/>
-              <a href="{% url iteration_create project.slug %}"><img  src="/site_media/static/images/addIterationButton.png"></a>
+              <a href="{% url iteration_create project.slug %}"><img  src="/site_media/static/images/adduser_formtton.png"></a>
             </div>
             
             <div class="members">
