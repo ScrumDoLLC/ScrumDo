@@ -53,6 +53,26 @@ WHERE projects_projectmember.project_id = projects_project.id
 
 
 
+def home( request ):
+  my_projects = [];
+  member_projects = [];
+  if request.user.is_authenticated():
+    memberships = ProjectMember.objects.filter( user=request.user )
+    for membership in memberships:
+      try:
+        if( membership.project.creator == request.user):
+          member_projects.append(membership.project)
+        else:
+          my_projects.append( membership.project )
+      except:
+        pass
+    
+    
+  return render_to_response("homepage.html", {
+       "my_projects":my_projects,
+       "member_projects":member_projects
+    }, context_instance=RequestContext(request))
+
 @login_required
 def set_story_status( request, group_slug, story_id, status):
   story = get_object_or_404( Story, id=story_id )
@@ -141,7 +161,7 @@ def story( request, group_slug, story_id ):
 def stories_iteration(request, group_slug, iteration_id):
   project = get_object_or_404(Project, slug=group_slug)  
   iteration = get_object_or_404(Iteration, id=iteration_id, project=project)  
-  stories = Story.objects.filter(project=project, iteration=iteration ).order_by("rank")
+  stories = StoryForms.filter(project=project, iteration=iteration ).order_by("rank")
   return render_to_response("stories/mini_story_list.html", {
     "stories": stories,
     "project":project

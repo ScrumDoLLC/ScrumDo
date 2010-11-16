@@ -7,6 +7,14 @@
 	width: 90%;	
 }
 
+
+
+.small_project_list a,img{
+	text-decoration: none;
+	vertical-align: middle;
+	margin-bottom: 5px;
+}
+
 #story_area textarea {
 	width: 90%;	
 }

@@ -1,0 +1,27 @@
+{% load theme_tags %}
+
+
+<div class="right_panel">
+    
+
+    
+    <div class="blue_box small_project_list">
+      <h1>Your Projects</h1>
+      <br/>
+      {% for project in my_projects %}  
+        {{project.name}}
+      {% endfor %}
+      {% for project in member_projects %}  
+        {% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a><br/>
+        <hr/>
+      {% endfor %}
+      
+    </div>
+
+    
+</div>
+
+
+
+
+ACTIVITY FEED SHOULD GO HERE...

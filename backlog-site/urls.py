@@ -16,9 +16,7 @@ else:
 
 
 urlpatterns = patterns('',
-    url(r'^$', direct_to_template, {
-        "template": "homepage.html",
-    }, name="home"),
+    url(r'^$', "projects.views.home" , name="home"),
     
     
     

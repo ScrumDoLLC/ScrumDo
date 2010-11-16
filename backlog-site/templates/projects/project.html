@@ -135,11 +135,20 @@
                 
                 
                   <h1>{{ project.get_current_iteration.name }}</h1>
-  <!--                  <img src="/site_media/static/images/burndown.png">                 -->
-                    <div id="iterationBurndown" style="width:540px;height:300px;"></div>  
+
+                    {% if project.get_current_iteration.points_log.count %}
+                      <div id="iterationBurndown" style="width:540px;height:300px;"></div>  
+                    {% else %}
+                      <img src="/site_media/static/images/burndown.png">
+                    {% endif %}
                   <h1>Overall Project</h1>
-                    <!-- <img src="/site_media/static/images/burndown.png"> -->
-                    <div id="overallBurndown" style="width:540px;height:300px;"></div>
+                   
+                  {% if project.points_log.count %}
+                     <div id="overallBurndown" style="width:540px;height:300px;"></div>
+                  {% else %}
+                    <img src="/site_media/static/images/burndown.png">
+                  {% endif %}
+                   
                     
                 {% else %}
                     <p>It is up to the creator of this project (<a href="{% url profile_detail project.creator.username %}">{{ project.creator }}</a>) to add you.</p>
