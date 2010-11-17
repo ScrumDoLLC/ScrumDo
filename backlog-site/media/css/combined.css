@@ -70,7 +70,11 @@ h1 {
     color: #777; /* footer link hover colour */
 }
 
-
+.alpha_warning {
+	padding: 5px;
+	background-color: #fefdde;
+	text-align: center;
+}
 .ie6_warning a {
 	color: white;
 }
