@@ -12,7 +12,7 @@
     
     <p>
         {% blocktrans %}
-        <b>Rogue Planning</b> is a story management site for agile scrum teams.
+        <b>ScrumDoo</b> is a story management site for agile scrum teams.
         {% endblocktrans %}
     </p>
     <hr />
@@ -21,6 +21,7 @@
     {% if user.is_authenticated %}
       {% include "user_homepage.html" %}
     {% else %}
+    <img style="float:right" src="{{STATIC_URL}}images/homepagePreview.png">
       <h2>Early Alpha</h2>
       We're in pretty early stages of development, not everything works, you might lose data, yadda yadda yadda...
         {% url acct_login as login_url %}
@@ -30,6 +31,8 @@
         {% else %}
             <p>{% blocktrans %}You can <a href="{{ login_url }}">Log in</a> to try out the site.{% endblocktrans %}</p>
         {% endifsetting %}
+        
+        
     {% endif %}
     
 {% endblock %}
