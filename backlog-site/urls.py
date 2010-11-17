@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 from django.conf import settings
-
+import views
 
 
 from django.views.generic.simple import direct_to_template
@@ -21,7 +21,7 @@ urlpatterns = patterns('',
     url(r'^$', "projects.views.home" , name="home"),
     
     url(r'^stats$', direct_to_template, {'template': 'site_stats.html'}),    
-    url(r'^stats_data$', "views.stats_data" ),
+    url(r'^stats_data$', views.stats_data ),
     
     url(r'^admin/invite_user/$', 'signup_codes.views.admin_invite_user', name="admin_invite_user"),
     url(r'^account/signup/$', signup_view, name="acct_signup"),
