@@ -1,0 +1,47 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load ifsetting_tag %}
+
+{% block head_title %}{% trans "Welcome" %}{% endblock %}
+
+
+{% block body %}
+    
+   
+    <div id="statGraph" style="width:740px;height:600px;"></div>
+
+        
+        <script>
+        // then fetch the data with jQuery
+               function onDataReceived(series) {
+                   // extract the first coordinate pair so you can see that
+                   // data is now an ordinary Javascript object
+                   var options = {
+                      colors: ["#2292ff", "#ADD75C"],
+                      xaxis: { minTickSize: [1, "day"] , mode: "time", timeformat: "%m/%d/%y" },
+                      legend: {    position: "nw" },
+                      yaxis: {minTickSize:1},
+                      series: { lines: {   show: true }, 
+                                points: { radius:1, show: true, fill: true} 
+                                  }                   
+                   };
+                   // and plot all we got
+                   $.plot($("#statGraph"), series, options);
+
+                }
+
+               $.ajax({
+                   url: "/stats_data",
+                   method: 'GET',
+                   dataType: 'json',
+                   success: onDataReceived
+               });
+        </script>
+        
+        
+
+    
+{% endblock %}
+
+

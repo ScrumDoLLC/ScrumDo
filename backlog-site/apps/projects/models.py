@@ -11,6 +11,14 @@ from groups.base import Group
 from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
   
+  
+  
+class SiteStats( models.Model ):
+  user_count = models.IntegerField();
+  project_count = models.IntegerField();
+  story_count = models.IntegerField();    
+  date = models.DateField( auto_now=True );
+  
 class PointsLog( models.Model ):
   date = models.DateField( auto_now=True );
   points_claimed = models.IntegerField();
