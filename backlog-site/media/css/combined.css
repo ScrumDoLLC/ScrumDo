@@ -102,27 +102,23 @@ h1 {
 /* HEADER */
 
 #tabhead {
-    background: #035 url('/site_media/static/pinax/images/heading.png') left top repeat-x;
-    border-bottom: 1px solid #000; /* tab border */
+    background: #035 url('/site_media/static/images/header.png') left top repeat-x;
     position: relative;
 }
 #tabhead .logo {
-    height: 80px;
-    padding-left: 5px;
+    height: 107px;
+    padding-left: 35px;
     padding-top: 0;
 }
-#tabhead .logo img {
-    width: 190px;
-    height: 79px;
-}
+
 #tabhead .login {
     position: absolute;
     top: 6px;
     right: 15px;
-    color: #DEF; /* login bar text colour */
+    color: #fff; /* login bar text colour */
 }
 #tabhead .login a, #tabhead .login a:visited {
-    color: #DEF; /* login bar link colour */
+    color: #fff; /* login bar link colour */
 }
 #tabhead .login a:hover {
     color: #FFF; /* login bar link hover colour */
@@ -134,13 +130,13 @@ h1 {
 
 #subnav {
     margin: 0;
-    padding: 0;
-    background: #DEF; /* tab colour */
+    min-height: 45px;
     border-bottom: 1px solid #9BC;
+	background: #d7e695 url(/site_media/static/images/header.png/header_lower.pngl) repeat-x;
 }
 #subnav ul {
     float: right;
-    margin: 0 20px;
+    margin: 5px 20px 0;
     padding: 0;
 }
 #subnav ul li {
@@ -151,8 +147,10 @@ h1 {
     float: left;
     font-weight: bold;
     text-decoration: none;
-    color: #444;
-    padding: 4px 20px;
+    color: #fff;
+    font-size: 16px;
+    padding: 5px 20px 4px;
+	text-shadow: #868888 1px 1px 2px;
 }
 #subnav ul a:hover {
     color: #FFF;
@@ -266,9 +264,27 @@ div.right_panel {
     z-index: 999;
 }
 
+div.big_right_panel {
+    margin-top: 20px;
+    width: 400px;
+    float: right;
+    z-index: 999;
+}
 
-
-/* @override http://localhost:8000/site_media/static/pinax/css/tabs.css */
+/* @override 
+	http://localhost:8000/site_media/static/pinax/css/tabs.css
+	http://localhost:8000/site_media/static/pinax/css/facebox.css
+	http://localhost:8000/site_media/static/pinax/css/announcements.css
+	http://localhost:8000/site_media/static/pinax/css/accounts.css
+	http://localhost:8000/site_media/static/uni_form/uni-form.css
+	http://localhost:8000/site_media/static/css/site.css
+	http://localhost:8000/site_media/static/css/site.css
+	http://localhost:8000/site_media/static/css/site_tabs.css
+	http://localhost:8000/site_media/static/tasks/css/tasks.css
+	http://localhost:8000/site_media/static/pinax/css/groups.css
+	http://localhost:8000/site_media/static/pinax/css/topics.css
+	http://localhost:8000/site_media/static/css/combined.css
+*/
 
 /* GENERAL TAB STYLING */
 
@@ -284,9 +300,10 @@ div.right_panel {
 }
 
 ul.tabs a, ul.tabs a:visited {
-    color: #444; /* unselected tab text colour */
+    color: #fff; /* unselected tab text colour */
     font-weight: bold;
     text-decoration: none;
+	text-shadow: #7b7c7c 1px 1px 1px;
 }
 ul.tabs a:hover {
     color: #666; /* unselected tab text hover colour */
@@ -294,7 +311,7 @@ ul.tabs a:hover {
 ul.tabs li {
     list-style-type: none;
     display: inline;
-    background-color: #DDD; /* unselected tab colour */
+    background-color: #a5be52; /* unselected tab colour */
     padding: 5px 0 4px;
     margin: 0 1px; /* to compensate for border */
 }
@@ -304,9 +321,6 @@ ul.tabs li a {
 ul.tabs {
     margin: 0 0 5px;
 }
-
-
-/* @override http://localhost:8000/site_media/static/pinax/css/facebox.css */
 
 #facebox .b {
     background:url('/site_media/static/pinax/images/facebox/b.png');
@@ -408,9 +422,6 @@ ul.tabs {
     height: expression(document.body.scrollHeight > document.body.offsetHeight ? document.body.scrollHeight : document.body.offsetHeight + 'px');
 }
 
-
-/* @override http://localhost:8000/site_media/static/pinax/css/announcements.css */
-
 /* ANNOUNCEMENTS */
 
 #site_wide_announcements {
@@ -422,8 +433,6 @@ ul.tabs {
     padding: 0;
     margin: 0;
 }
-
-/* @override http://localhost:8000/site_media/static/pinax/css/accounts.css */
 
 /** ACCOUNTS **/
 
@@ -444,9 +453,6 @@ ul.tabs {
 table.email_list td {
     padding: 5px 10px;
 }
-
-
-/* @override http://localhost:8000/site_media/static/uni_form/uni-form.css */
 
 @import "uni-form-generic.css";
 /* Keep in mind that wherever you see 'Required property' it means that the property must exist */
@@ -566,18 +572,11 @@ YOU CAN VERY EASILY REVERT TO A GENERIC STYLE OF UNI-FORM. BEST OF LUCK...
 
 /* ------------------------------------------------------------------------------ */
 
-/* @override http://localhost:8000/site_media/static/css/site.css */
-
-/* @override http://localhost:8000/site_media/static/css/site.css */
-
 .iterationHeader {
  	margin: 0px;
 	font-size: 18px;
 	padding: 2px 2px 2px 9px;
 }
-
-
-/* @override http://localhost:8000/site_media/static/css/site_tabs.css */
 
 
 /* SITE-SPECIFIC TAB STYLING */
@@ -594,15 +593,14 @@ body.notices #tab_notices
 {
     margin: 0; /* to compensate for border */
     padding: 5px 0 5px;
-    background-color: #DEF; /* selected tab colour */
+    background-color: #d7e695; /* selected tab colour */
+    
     border-left: 1px solid #000; /* tab border */
     border-top: 1px solid #000; /* tab border */
-    border-right: 1px solid #000; /* tab border */
+    border-right: 1px solid #000;
+
+	
 }
-
-
-
-/* @override http://localhost:8000/site_media/static/tasks/css/tasks.css */
 
 form.add-attachment{
     background-color: #eee;
@@ -717,8 +715,6 @@ p.expand_collapse_all a {
     display: inline;
 }
 
-/* @override http://localhost:8000/site_media/static/pinax/css/groups.css */
-
 /* GROUPS */
 
 div.groups {
@@ -756,8 +752,6 @@ div.members .details {
     border-top: 1px solid #CCC;
     font-size: 90%;
 }
-
-/* @override http://localhost:8000/site_media/static/pinax/css/topics.css */
 
 /* this has some overlap with comments.css and needs review */
 

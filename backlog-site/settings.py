@@ -190,7 +190,7 @@ ACCOUNT_EMAIL_VERIFICATION = False
 EMAIL_CONFIRMATION_DAYS = 2
 EMAIL_DEBUG = DEBUG
 CONTACT_EMAIL = "rogueplanning@rogue-development.com"
-SITE_NAME = "Rogue Planning"
+SITE_NAME = "ScrumDoo"
 LOGIN_URL = "/account/login/"
 LOGIN_REDIRECT_URLNAME = "projects.views.your_projects"
 
