@@ -26,7 +26,7 @@
               <h1>Actions</h1>
               <br/>              
               <a href="#iterationDetails" rel="facebox">Edit Details</a><br/>
-              <a href="{% url stories iteration.project.slug  %}">Add Stories From Backlog</a><br/>
+              <a href="{% url stories iteration.project.slug  %}?iteration={{iteration.id}}">Add Stories From Backlog</a><br/>
               Planning Poker<br/>
             </div>
         </div>
@@ -96,12 +96,16 @@
                    colors: ["#2292ff", "#ADD75C"],
                    xaxis: { minTickSize: [1, "day"] , mode: "time", timeformat: "%m/%d/%y" },
                    grid: { markings: weekendAreas } ,
+                   legend: {    position: "nw" },
                    series: { lines: {   show: true , fill:true  }, 
                              points: { radius:5, show: true, fill: true} 
                                }                   
                 };
 
-       
+
+                
+                
+                
 
          
                 

@@ -43,9 +43,10 @@
             <option value="">              
               Choose an iteration...
             </option>
+           
             {% for iteration in project.iterations.all %}
               {% ifnotequal iteration project.get_default_iteration %}
-                <option value="{{ iteration.id }}">
+                <option value="{{ iteration.id }}" {% ifequal iteration.id default_iteration_id %}selected="selected"{% endifequal %}>
                   {{ iteration.name }}
                 </option>
               {% endifnotequal %}
@@ -295,8 +296,14 @@
       }
     });
   }    
-  
-  $(document).ready( function() {loadIterationFromChooser(); $("#loadingIcon").hide();} ); 
+
+       
+  $(document).ready( function() 
+  {
+    loadIterationFromChooser(); 
+    $("#loadingIcon").hide();
+    
+  } ); 
 </script>
 
 </div>{% endblock %}

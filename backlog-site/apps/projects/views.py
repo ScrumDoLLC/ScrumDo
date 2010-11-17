@@ -217,6 +217,7 @@ def stories(request, group_slug):
   return render_to_response("stories/story_list.html", {
       "form": form,
       "project": project,
+      "default_iteration_id": int(request.GET.get("iteration","-1"))
  
   }, context_instance=RequestContext(request))
 

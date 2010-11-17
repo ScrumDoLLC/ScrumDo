@@ -37,15 +37,20 @@ class Project(Group):
     # private means only members can see the project
     private = models.BooleanField(_('private'), default=False)
     points_log = generic.GenericRelation( PointsLog )
-    
+    current_iterations = None
+    default_iteration = None
       
     def get_default_iteration( self ):
-      iterations = Iteration.objects.filter( project=self, default_iteration=True)
-      return iterations[0]
+      if self.default_iteration == None:
+        iterations = Iteration.objects.filter( project=self, default_iteration=True)
+        self.default_iteration = iterations[0]
+      return self.default_iteration
       
     def get_current_iterations(self):
-      today = date.today
-      return self.iterations.filter( start_date__lte=today, end_date__gte=today)
+      if self.current_iterations == None:
+        today = date.today
+        self.current_iterations = self.iterations.filter( start_date__lte=today, end_date__gte=today)
+      return self.current_iterations
       
     def get_absolute_url(self):
         return reverse('project_detail', kwargs={'group_slug': self.slug})

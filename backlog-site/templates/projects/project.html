@@ -61,7 +61,11 @@
             <div class="iterations">
               <h1>Iterations</h1>
               {% for iteration in project.iterations.all %}
-              <div class="iterationHeader"><a href="{% url iteration project.slug iteration.id %}">{{iteration.name}}</a></div>
+                {% ifequal iteration project.get_default_iteration %}
+                  <div class="iterationHeader"><a href="{% url stories project.slug %}">{{iteration.name}}</a></div> 
+                {% else %}
+                  <div class="iterationHeader"><a href="{% url iteration project.slug iteration.id %}">{{iteration.name}}</a></div>
+                {% endifequal %}
               {% endfor %}
               <br/><br/>
               <a href="{% url iteration_create project.slug %}"><img  src="/site_media/static/images/addIterationButton.png"></a>
@@ -193,10 +197,7 @@
             {#       </p> #}
             {#   {% endif %} #}
             
-              <h2>{% trans "User Stories" %}</h2>
-            
-
-              <p>More here soon but, in the meantime, here's a link to the <a href="{% url stories project.slug %}">story list</a>.</p>
+             
             {% endif %}     
         {% endif %}
     </div>
@@ -246,6 +247,7 @@
                    colors: ["#2292ff", "#ADD75C"],
                    xaxis: { minTickSize: [1, "day"] , mode: "time", timeformat: "%m/%d/%y" },
                    grid: { markings: weekendAreas } ,
+                   legend: {    position: "nw" },
                    series: { lines: {   show: true , fill:true  }, 
                              points: { radius:5, show: true, fill: true} 
                                }                   
