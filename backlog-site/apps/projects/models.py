@@ -35,7 +35,6 @@ class Project(Group):
       iterations = Iteration.objects.filter( project=self, default_iteration=True)
       return iterations[0]
       
-    # TODO - this method isnt' really implemented yet!!!
     def get_current_iterations(self):
       today = date.today
       return self.iterations.filter( start_date__lte=today, end_date__gte=today)

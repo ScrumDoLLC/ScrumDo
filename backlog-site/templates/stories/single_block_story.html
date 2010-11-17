@@ -10,7 +10,7 @@
     <a onclick=" setStatusDone({{story.id}}) ; return false;" href="#"><img alt="Done" src="/site_media/static/images/doneButton.png" /></a>
   </div>
   <span class="storyIcons">
-    <a onclick="jQuery('#todoButtons_{{story.id}}').show(); return false;" href="#"><img title="Change Status" src="/site_media/static/pinax/images/silk/icons/control_play_blue.png" /></a><a onclick="jQuery.facebox({ ajax: '/projects/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=block'}); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=block"><img title="Story Details" src="/site_media/static/pinax/images/silk/icons/magnifier.png" /></a></span>
+    <a onclick="jQuery('#todoButtons_{{story.id}}').show(); return false;" href="#"><img title="Change Status" src="/site_media/static/pinax/images/silk/icons/control_play_blue.png" /></a><a onclick="jQuery.facebox({ ajax: '/projects/project/{{ project.slug }}/story/{{ story.id }}?return_type=block'}); return false;" href="/project/{{ project.slug }}/story/{{ story.id }}?return_type=block"><img title="Story Details" src="/site_media/static/pinax/images/silk/icons/magnifier.png" /></a></span>
   <h1>{{ story.summary }}</h1>
 
 

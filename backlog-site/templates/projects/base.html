@@ -15,8 +15,18 @@
 {% block subnav %}
     <ul>
         {% if user.is_authenticated %}
-            <li><a href="{% url your_projects %} ">{% trans "Your Projects" %}</a></li>
-            <li><a href="{% url project_create %}">{% trans "Create a Project" %}</a></li>
-        {% endif %}        
+          {% if project %}
+            <li><a href="{% url project_detail project.slug %} ">{{project.name}}</a></li>
+            <li><a href="{% url stories project.slug %} ">Backlog</a></li>
+            {% for current_iteration in project.get_current_iterations %}
+
+              <li><a href="{% url iteration project.slug current_iteration.id %} ">{{current_iteration.name}}</a></li>
+
+            {% endfor %}
+          {% else %}
+              <li><a href="{% url your_projects %} ">{% trans "Your Projects" %}</a></li>
+              <li><a href="{% url project_create %}">{% trans "Create a Project" %}</a></li>
+          {% endif %}        
+        {% endif %}
     </ul>
 {% endblock %}

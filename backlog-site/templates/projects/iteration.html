@@ -25,7 +25,7 @@
             <div class="blue_box small_project_list">
               <h1>Actions</h1>
               <br/>              
-              Edit Details<br/>
+              <a href="#iterationDetails" rel="facebox">Edit Details</a><br/>
               <a href="{% url stories iteration.project.slug  %}">Add Stories From Backlog</a><br/>
               Planning Poker<br/>
             </div>
@@ -45,6 +45,10 @@
       
       
     {% endif %}
+    </div>
+    
+    <div id="iterationDetails" style="display:none">
+      ITERATION DETAILS
     </div>
 
 {% endblock %}

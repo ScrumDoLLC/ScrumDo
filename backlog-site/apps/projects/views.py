@@ -93,6 +93,7 @@ def iteration(request, group_slug, iteration_id):
    iteration = get_object_or_404( Iteration, id=iteration_id )
    return render_to_response("projects/iteration.html", {
        "iteration": iteration,
+       "project" : project
      }, context_instance=RequestContext(request))
      
      
@@ -232,7 +233,7 @@ def create(request, form_class=ProjectForm, template_name="projects/create.html"
         project.members.add(project_member)
         project_member.save()        
         
-        default_iteration = Iteration( name='Backlog', detail='', default_iteration=True)
+        default_iteration = Iteration( name='Backlog', detail='', default_iteration=True, project=project)
         project.iterations.add(default_iteration)
         default_iteration.save()        
         if notification:

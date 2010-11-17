@@ -1,5 +1,6 @@
 {% load i18n %}
 {% load comments_tag %}
+{% load theme_tags %}
 
 <div id="story_area">
 
@@ -23,7 +24,7 @@
    <INPUT style="float:right" TYPE="image" SRC="/site_media/static/images/updateStoryButton.png" >
  </form>
 <br/><br/><br/><br/>
-<h2>Comments</h2>
+<h2>Comments {% silk "comments" %}</h2>
 <div style="comments_area">
 {% comments story %}
 </div>
