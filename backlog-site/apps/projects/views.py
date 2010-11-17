@@ -78,9 +78,14 @@ def set_story_status( request, group_slug, story_id, status):
   story = get_object_or_404( Story, id=story_id )
   story.status = status;
   story.save();
-  return render_to_response("stories/single_mini_story.html", {
+  if( request.POST.get("return_type","mini") == "mini"):
+    return render_to_response("stories/single_mini_story.html", {
+        "story": story,
+      }, context_instance=RequestContext(request))
+  return render_to_response("stories/single_block_story.html", {
       "story": story,
     }, context_instance=RequestContext(request))
+
 
 @login_required
 def iteration(request, group_slug, iteration_id):
@@ -148,6 +153,7 @@ def calculate_rank( project, general_rank ):
 def story( request, group_slug, story_id ):
   story = get_object_or_404( Story, id=story_id )
   project = get_object_or_404( Project, slug=group_slug )
+  return_type = request.GET.get("return_type","mini")
 
   if request.method == 'POST': # If the form has been submitted...
     form = StoryForm( request.POST, instance=story) # A form bound to the POST data    
@@ -161,13 +167,19 @@ def story( request, group_slug, story_id ):
       return render_to_response("stories/single_mini_story.html", {
           "story": story,         
         }, context_instance=RequestContext(request))
+    if( request.POST['return_type'] == 'block'):
+      return render_to_response("stories/single_block_story.html", {
+          "story": story,         
+        }, context_instance=RequestContext(request))
+    
   else:
     form = StoryForm( instance=story )
     
   return   render_to_response("stories/story.html", {
       "story": story,
       "form": form,
-      "project": project
+      "project": project,
+      "return_type": return_type
     }, context_instance=RequestContext(request))
   
 @login_required

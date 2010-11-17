@@ -51,9 +51,14 @@
 
 {% block extra_body %}
     <script type="text/javascript">
-      
-      
     
+    var project_slug = "{{ iteration.project.slug }}";
+
+      
+    function calculateBothPoints()
+    {
+      
+    }
     function weekendAreas(axes) {
         var markings = [];
         var d = new Date(axes.xaxis.min);
@@ -76,6 +81,12 @@
         $(document).ready(function() {
 
        
+                $(".commentLink").click( function() 
+                  {
+                      $(this).parent().children(".commentForm").show();
+                      $(this).hide();
+                      return false;
+                  } );
                 
                 var options = {
                    colors: ["#2292ff", "#ADD75C"],
@@ -99,6 +110,48 @@
                  {% endif %}
                
         });
+        
+        
+        function setStatusTodo( storyID )
+        {
+          $(".todoButtons").hide();
+          $.ajax({
+            url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_todo",      
+            type: "POST",
+            data: ({return_type : "block"}),            
+            success: function(responseText) {        
+              $("#story_" + storyID).replaceWith(responseText);
+            }
+          });
+        }     
+
+
+        function setStatusDoing( storyID )
+        {
+          $(".todoButtons").hide();    
+          $.ajax({
+            url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_doing",      
+            type: "POST",
+            data: ({return_type : "block"}),                        
+            success: function(responseText) {        
+              $("#story_" + storyID).replaceWith(responseText);
+            }
+          });
+        }
+
+
+        function setStatusDone( storyID )
+        {
+          $(".todoButtons").hide();    
+          $.ajax({
+            url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_done",      
+            type: "POST",
+            data: ({return_type : "block"}),                        
+            success: function(responseText) {        
+              $("#story_" + storyID).replaceWith(responseText);
+            }
+          });
+        }
     </script>
     
 {% endblock %}

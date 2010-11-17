@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import sys
+from datetime import date
 
 from os.path import abspath, dirname, join
 
@@ -47,7 +48,8 @@ def calculateProject( project ):
   log = PointsLog( points_claimed=points[1], points_total=points[0], related_object=project)
   print "%d / %d / %s " % (log.points_total, log.points_claimed, project.name );
   log.save();
-  for iteration in project.iterations.all():
+  today = date.today
+  for iteration in project.iterations.filter( start_date__lte=today, end_date__gte=today):
     if( iteration != project.get_default_iteration() ):    
       points = calculatePoints( iteration.stories.all() );
       log = PointsLog( points_claimed=points[1], points_total=points[0], related_object=iteration)

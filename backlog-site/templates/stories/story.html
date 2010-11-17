@@ -16,13 +16,15 @@
       </table>
    </div>
    <br/>
-   <input type="hidden" name="return_type" value="mini">
+   
+   <input type="hidden" name="return_type" value="{{return_type}}">
+   
    <input type="hidden" name="rank" value="{{ story.rank }}">
    <INPUT style="float:right" TYPE="image" SRC="/site_media/static/images/updateStoryButton.png" >
  </form>
 <br/><br/><br/><br/>
 <h2>Comments</h2>
-<div id="comments_area">
+<div style="comments_area">
 {% comments story %}
 </div>
 
@@ -30,6 +32,8 @@
 
 <script type="text/javascript" charset="utf-8">
 
+      $("#story_area .commentForm").show();
+      
       $("#story_detail_form").ajaxForm({        
         success: function(responseText) { 
           $("#story_{{story.id}}").replaceWith(responseText);
@@ -38,7 +42,7 @@
         }});
       
       // bind 'myForm' and provide a simple callback function 
-      $("#comments_area form").ajaxForm({
+      $(".comments_area form").ajaxForm({
         replaceTarget: true,
         target: $("#story_area"),
         success: function() { 

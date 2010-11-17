@@ -114,8 +114,8 @@
 	border: 1px solid #b8b8b8;
 	min-height: 33px;	
 	padding-left: 22px;
-	width: 300px;
-	float: left;
+	width: 100%;
+
 
 }
 
@@ -129,15 +129,29 @@
 .gripper_done {	
 	background: #fefefe url(/site_media/static/images/gripper_done.png) repeat-y;
 }
-.todoButtons{
+
+.todoButtons_block {
 	background-color: #e5e4e6;
 	border-style: outset;
 	border-width: 1px;
 	padding: 7px 5px 5px;	
-	width: 220px;
-	z-index: 6;
-	position: fixed;
-	margin-left: 120px;
+	width: 23	0px;
+	z-index: 50;
+	position: absolute;
+	margin-left: 520px;
+	margin-top: -5px;
+	display: none;
+}
+
+.todoButtons_mini {
+	background-color: #e5e4e6;
+	border-style: outset;
+	border-width: 1px;
+	padding: 7px 5px 5px;	
+	width: 23	0px;
+	z-index: 50;
+	position: absolute;
+	margin-left: 150px;
 	margin-top: -5px;
 	display: none;
 }
