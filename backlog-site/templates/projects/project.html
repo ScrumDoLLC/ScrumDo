@@ -110,19 +110,8 @@
             <hr/>
             {% ifequal user project.creator %}
               <br/>
-              <a href="#project-details" rel="facebox">{% trans "Project details" %}</a><br/><br/>
-              <div id="project-details" style="display:none">
-              
-                  <form class="uniForm" method="POST" action="">
-                      <fieldset class="inlineLabels">
-                          {{ project_form|as_uni_form }}
-                          <div class="form_block">
-                              <input type="hidden" name="action" value="update" />
-                              <input type="submit" value="{% trans "Update" %}"/>
-                          </div>
-                      </fieldset>
-                  </form>
-              </div>
+              <a href="{% url project_admin project.slug %}" >{% trans "Project Admin" %}</a><br/><br/>
+             
             
               <hr/>
                 <p>{% silk "delete" %} <a href="#" onclick="$('#delete_project_form').toggle(); return false;">{% trans "Delete project" %}</a><p>

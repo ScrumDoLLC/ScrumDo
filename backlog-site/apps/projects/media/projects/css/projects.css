@@ -7,7 +7,18 @@
 	width: 90%;	
 }
 
+.projectOptionsForm tr {
+  height: 32px;
+}
 
+
+.projectOptionsForm tr td:first-child {
+  width: 200px;
+}
+
+.projectOptionsForm td {
+  padding-left:10px;
+}
 
 .small_project_list hr {
 	border: 1px solid #aaa;

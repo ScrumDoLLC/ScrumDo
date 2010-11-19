@@ -20,7 +20,7 @@ else:
     notification = None
 
 from projects.models import Project, ProjectMember, Iteration, Story
-from projects.forms import ProjectForm, ProjectUpdateForm, AddUserForm, IterationForm, StoryForm, ImportForm
+from projects.forms import *
 
 TOPIC_COUNT_SQL = """
 SELECT COUNT(*)
@@ -74,6 +74,18 @@ def home( request ):
        "member_projects":member_projects
     }, context_instance=RequestContext(request))
 
+@login_required
+def project_admin( request, group_slug ):
+  project = get_object_or_404( Project, slug=group_slug )
+  form = ProjectOptionsForm(instance=project)
+  return render_to_response("projects/project_admin.html", {
+      "project": project,
+      "form": form
+    }, context_instance=RequestContext(request))
+    
+    
+    
+    
 @login_required
 def set_story_status( request, group_slug, story_id, status):
   story = get_object_or_404( Story, id=story_id )
