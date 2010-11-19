@@ -19,21 +19,7 @@
  <img style="float:right" src="/site_media/static/images/ajax-loader.gif" id="loadingIcon">
  <h1>Stories</h1>
  
- <div id="story_form">
-   <form method="POST" action="">
-     {{ form.non_field_errors }}
-     {{form.summary}}    {{form.summary.errors}} <INPUT TYPE="image" SRC="/site_media/static/images/addStoryButton.png" >
-      <br/>
-     <div id="story_details">
-       <table>
-         <tr><td>Detail:</td><td>{{form.detail}}    {{form.detail.errors}} </td></tr>
-         <tr><td>Tags:</td><td>{{form.tags}} {{form.tags.errors}} </td></tr>
-         <tr><td>Points:&nbsp;</td><td>{{form.points}}  {{form.points.errors}} </td></tr>
-         <tr><td>Backlog Position:&nbsp;</td><td>{{form.general_rank}}  {{form.general_rank.errors}} </td></tr>
-        </table>
-     </div>
-   </form>
-  </div>
+  {% include "stories/add_story_form.html" %}
   
   <div id="columnContainer">
 

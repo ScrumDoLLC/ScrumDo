@@ -21,22 +21,8 @@
     {% if user.is_authenticated %}
       {% if is_member %}
       
-      
-      <div id="story_form" style="margin-bottom: 10px">
-        <form method="POST" action="{% url stories project.slug %}">
-          {{ add_story_form.non_field_errors }}
-          {{add_story_form.summary}}    {{add_story_form.summary.errors}} <INPUT TYPE="image" SRC="/site_media/static/images/addStoryButton.png" >
-           <br/>
-          <div id="story_details">
-            <table>
-              <tr><td>Detail:</td><td>{{add_story_form.detail}}    {{add_story_form.detail.errors}} </td></tr>
-              <tr><td>Tags:</td><td>{{add_story_form.tags}} {{add_story_form.tags.errors}} </td></tr>
-              <tr><td>Points:&nbsp;</td><td>{{add_story_form.points}}  {{add_story_form.points.errors}} </td></tr>
-              <tr><td>Backlog Position:&nbsp;</td><td>{{add_story_form.general_rank}}  {{add_story_form.general_rank.errors}} </td></tr>
-             </table>
-          </div>
-        </form>
-       </div>
+      {% include "stories/add_story_form.html" %}
+
       
       
         <div class="right_panel">
@@ -99,8 +85,15 @@
             </div>
             
             <div class="blue_box">
-              <h1>Options</h1>              
-              <a href="{% url import_file project.slug %}">Import Stories</a>
+              <h1>Options</h1>              <br/>
+              <div class="iterationHeader"><a href="{% url import_file project.slug %}">Import Stories</a></div>
+               {% ifequal user project.creator %}
+                  <br/>
+                  <div class="iterationHeader"><a href="{% url project_admin project.slug %}" >{% trans "Project Admin" %}</a></div>
+
+
+               
+                {% endifequal %}
             </div>
             
             {% trans "Slug:" %} <tt>{{ project.slug }}</tt><br />
@@ -108,17 +101,7 @@
             {% trans "Created:" %} {{ project.created|date }}
 
             <hr/>
-            {% ifequal user project.creator %}
-              <br/>
-              <a href="{% url project_admin project.slug %}" >{% trans "Project Admin" %}</a><br/><br/>
-             
-            
-              <hr/>
-                <p>{% silk "delete" %} <a href="#" onclick="$('#delete_project_form').toggle(); return false;">{% trans "Delete project" %}</a><p>
-                 <form class="delete_form" id="delete_project_form" action="{% url project_delete project.slug %}" method="POST" style="display: none;">
-                     <input type="submit" value="{% trans "Delete Project" %}" /> (all content will be removed)
-                </form>
-            {% endifequal %}
+           
             
         </div>
       {% endif %}

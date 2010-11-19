@@ -1,6 +1,6 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -78,6 +78,22 @@ def home( request ):
 def project_admin( request, group_slug ):
   project = get_object_or_404( Project, slug=group_slug )
   form = ProjectOptionsForm(instance=project)
+  
+  if request.user != project.creator:
+    return HttpResponseForbidden()
+  
+  if request.method == 'POST': # If the form has been submitted...
+    form = ProjectOptionsForm( request.POST, instance=project)
+    if form.is_valid(): # All validation rules pass      
+      story = form.save( commit=False )
+      story.local_id = project.stories.count() + 1
+      story.project = project
+      story.creator = request.user
+      story.save()     
+      request.user.message_set.create(message="Options Saved.")               
+  else:
+    form = ProjectOptionsForm( instance=project )
+  
   return render_to_response("projects/project_admin.html", {
       "project": project,
       "form": form
@@ -170,13 +186,11 @@ def story( request, group_slug, story_id ):
   return_type = request.GET.get("return_type","mini")
 
   if request.method == 'POST': # If the form has been submitted...
-    form = StoryForm( request.POST, instance=story) # A form bound to the POST data    
+    form = StoryForm( project, request.POST, project, instance=story) # A form bound to the POST data    
+
     if form.is_valid(): # All validation rules pass      
-      story = form.save( commit=False )
-      story.local_id = project.stories.count() + 1
-      story.project = project
-      story.creator = request.user
-      story.save()            
+      story = form.save(  )      
+
     if( request.POST['return_type'] == 'mini'):
       return render_to_response("stories/single_mini_story.html", {
           "story": story,         
@@ -187,7 +201,7 @@ def story( request, group_slug, story_id ):
         }, context_instance=RequestContext(request))
     
   else:
-    form = StoryForm( instance=story )
+    form = StoryForm(project, instance=story )
     
   return   render_to_response("stories/story.html", {
       "story": story,
@@ -212,7 +226,7 @@ def stories(request, group_slug):
   project = get_object_or_404(Project, slug=group_slug)  
   
   if request.method == 'POST': # If the form has been submitted...
-    form = StoryForm(request.POST) # A form bound to the POST data
+    form = StoryForm(project, request.POST) # A form bound to the POST data
     if form.is_valid(): # All validation rules pass
       story = form.save( commit=False )
       story.local_id = project.stories.all().count() + 1
@@ -221,14 +235,15 @@ def stories(request, group_slug):
       story.iteration = project.get_default_iteration()
       story.rank = calculate_rank( project, int(form.cleaned_data['general_rank']) )
       story.save()
-      form = StoryForm()
+      request.user.message_set.create(message="New story created.")
+      form = StoryForm(project)
   else:
-    form = StoryForm()
+    form = StoryForm(project)
   
  
   
   return render_to_response("stories/story_list.html", {
-      "form": form,
+      "add_story_form": form,
       "project": project,
       "default_iteration_id": int(request.GET.get("iteration","-1"))
  
@@ -250,6 +265,7 @@ def create(request, form_class=ProjectForm, template_name="projects/create.html"
         default_iteration = Iteration( name='Backlog', detail='', default_iteration=True, project=project)
         project.iterations.add(default_iteration)
         default_iteration.save()        
+        request.user.message_set.create(message="Project Created")
         if notification:
             # @@@ might be worth having a shortcut for sending to all users
             notification.send(User.objects.all(), "projects_new_project",
@@ -291,7 +307,8 @@ def iteration_create(request, group_slug=None):
     if form.is_valid(): 
       iteration = form.save(commit=False)
       iteration.project = project
-      iteration.save()      
+      iteration.save()     
+      request.user.message_set.create(message="Iteration created.") 
       return HttpResponseRedirect( reverse('project_detail', kwargs={'group_slug':project.slug}) ) # Redirect after POST
   else:
     form = IterationForm() # An unbound form
@@ -353,9 +370,11 @@ def import_file(request, group_slug):
 def processImport( project, file , user):
   workbook = open_workbook(file_contents=file.read())
   sheet = workbook.sheets()[0];
+  count = 0
   for row in range(sheet.nrows-1):    
     summary = sheet.cell(row+1,0).value
     detail = sheet.cell(row+1,1).value
+    count = count + 1
     try:
       points = int(sheet.cell(row+1,2).value)
     except:
@@ -363,6 +382,7 @@ def processImport( project, file , user):
     print summary
     story = Story( project=project, summary=summary, detail=detail, rank=0, local_id=project.stories.count(), creator=user, points=points, iteration=project.get_default_iteration())
     story.save()
+  user.message_set.create(message=("%d stories imported" % count))
 
 @login_required
 def project(request, group_slug=None, form_class=ProjectUpdateForm, adduser_form_class=AddUserForm,
@@ -389,7 +409,7 @@ def project(request, group_slug=None, form_class=ProjectUpdateForm, adduser_form
     else:
         adduser_form = adduser_form_class(project=project)
     
-    add_story_form = StoryForm()
+    add_story_form = StoryForm(project)
     
     return render_to_response(template_name, {
         "project_form": project_form,

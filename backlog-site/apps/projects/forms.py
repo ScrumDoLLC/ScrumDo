@@ -40,20 +40,29 @@ class StoryForm( forms.ModelForm ):
       ('0', 'Top'), 
       ('1', 'Middle'),
       ('2', 'Bottom') )
-      
+  project = None      
   tags = TagField(required=False, widget=TagAutoCompleteInput(app_label='stories', model='story'))
   general_rank = forms.CharField( required=False, widget=forms.RadioSelect(choices=RANK_CHOICES), initial=2)
   
-  def __init__(self,  *args, **kwargs):    
-    super(StoryForm, self).__init__(*args, **kwargs)
-    self.fields["points"].choices = self.instance.POINT_CHOICES
+  def __init__(self, project, *args, **kwargs):    
+    super(StoryForm, self).__init__(*args, **kwargs)      
+    self.fields["points"].choices = self.instance.POINT_CHOICES    
     self.fields["points"].widget = forms.RadioSelect(choices=self.instance.POINT_CHOICES)
     self.fields["summary"].widget = forms.TextInput()
     self.fields["summary"].widget.size = 200
+    self.fields["assignee"].queryset = project.member_queryset().order_by("username")    
+    self.fields["extra_1"].widget = forms.widgets.Textarea(attrs={'rows':3, 'cols':50}) 
+    self.fields["extra_2"].widget = forms.widgets.Textarea(attrs={'rows':3, 'cols':50}) 
+    self.fields["extra_3"].widget = forms.widgets.Textarea(attrs={'rows':3, 'cols':50})         
+    self.fields["assignee"].required = False
+    self.fields["extra_1"].required = False
+    self.fields["extra_2"].required = False
+    self.fields["extra_3"].required = False     
+    
   
   class Meta:
       model = Story
-      fields = ('summary', 'detail', 'tags', 'points' )
+      fields = ('summary', 'detail', 'tags', 'points' , 'extra_1','extra_2','extra_3','assignee')
 
 
 class ProjectForm(forms.ModelForm):
