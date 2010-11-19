@@ -18,8 +18,9 @@
             {% if user.password and request.openids %}
             <li><a href="{% url acct_passwd_delete %}">{% trans "Delete Password" %}</a></li>
             {% endif %}
-            <li><a href="{% url acct_language_change %}">{% trans "Language" %}</a></li>
-            <li><a href="{% url acct_timezone_change %}">{% trans "Timezone" %}</a></li>
+            
+            <li><a href="{% url avatar_change %}">{% trans "Avatar" %}</a></li>            
+            <!--<li><a href="{% url acct_timezone_change %}">{% trans "Timezone" %}</a></li> -->
         </ul>
     {% else %}
         &nbsp; {# need this to give subnav some height when empty #}

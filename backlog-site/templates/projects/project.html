@@ -98,6 +98,11 @@
                 {% endifequal %}
             </div>
             
+            <div class="blue_box">
+              <h1>Options</h1>              
+              <a href="{% url import_file project.slug %}">Import Stories</a>
+            </div>
+            
             {% trans "Slug:" %} <tt>{{ project.slug }}</tt><br />
             {% trans "Creator:" %} <a href="{% url profile_detail project.creator.username %}">{{ project.creator }}</a><br />
             {% trans "Created:" %} {{ project.created|date }}

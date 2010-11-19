@@ -39,6 +39,15 @@ class Project(Group):
     points_log = generic.GenericRelation( PointsLog )
     current_iterations = None
     default_iteration = None
+    # 
+    # use_assignee = models.BooleanField( default=False )
+    # use_acceptance = models.BooleanField( default=False )
+    # use_extra_1 = models.BooleanField( default=False )    
+    # use_extra_2 = models.BooleanField( default=False )    
+    # use_extra_3 = models.BooleanField( default=False )    
+    # extra_1_label = models.CharField(  max_length=25)
+    # extra_2_label = models.CharField(  max_length=25)    
+    # extra_3_label = models.CharField(  max_length=25)    
       
     def get_default_iteration( self ):
       if self.default_iteration == None:
@@ -120,6 +129,9 @@ class Story( models.Model ):
   iteration = models.ForeignKey( Iteration , related_name="stories")
   project = models.ForeignKey( Project , related_name="stories")
   status = models.IntegerField( max_length=2, choices=STATUS_CHOICES, default=1 )
+  # extra_1 = models.TextField( blank=True )
+  # extra_2 = models.TextField( blank=True )
+  # extra_3 = models.TextField( blank=True )    
   
 
   

@@ -87,7 +87,9 @@ class ProjectUpdateForm(forms.ModelForm):
         model = Project
         fields = ('name', 'description')
 
-
+class ImportForm(forms.Form):
+  file  = forms.FileField()
+  
 class AddUserForm(forms.Form):
     
     recipient = forms.CharField(label=_(u"User"))

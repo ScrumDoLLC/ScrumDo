@@ -10,6 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponse
 from django.core import serializers
 
+from xlrd import open_workbook
 
 from django.conf import settings
 
@@ -19,7 +20,7 @@ else:
     notification = None
 
 from projects.models import Project, ProjectMember, Iteration, Story
-from projects.forms import ProjectForm, ProjectUpdateForm, AddUserForm, IterationForm, StoryForm
+from projects.forms import ProjectForm, ProjectUpdateForm, AddUserForm, IterationForm, StoryForm, ImportForm
 
 TOPIC_COUNT_SQL = """
 SELECT COUNT(*)
@@ -322,7 +323,36 @@ def your_projects(request, template_name="projects/your_projects.html"):
         "projects": projects,
     }, context_instance=RequestContext(request))
 
+@login_required
+def import_file(request, group_slug):
+  project = get_object_or_404(Project, slug=group_slug)
+  
+  if request.method == 'POST':     
+      processImport(project, request.FILES['import_file'], request.user);
+      return HttpResponseRedirect(reverse('project_detail', kwargs={'group_slug':project.slug}) )
+  else:
+      form = ImportForm()
+      
+  return render_to_response("projects/import.html", {
+           "form":form,
+        }, context_instance=RequestContext(request))
+  
 
+def processImport( project, file , user):
+  workbook = open_workbook(file_contents=file.read())
+  sheet = workbook.sheets()[0];
+  for row in range(sheet.nrows-1):    
+    summary = sheet.cell(row+1,0).value
+    detail = sheet.cell(row+1,1).value
+    try:
+      points = int(sheet.cell(row+1,2).value)
+    except:
+      points = "?"
+    print summary
+    story = Story( project=project, summary=summary, detail=detail, rank=0, local_id=project.stories.count(), creator=user, points=points, iteration=project.get_default_iteration())
+    story.save()
+
+@login_required
 def project(request, group_slug=None, form_class=ProjectUpdateForm, adduser_form_class=AddUserForm,
         template_name="projects/project.html"):        
     project = get_object_or_404(Project, slug=group_slug)
