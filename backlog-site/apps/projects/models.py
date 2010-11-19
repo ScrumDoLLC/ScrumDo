@@ -2,6 +2,8 @@ from datetime import datetime, date
 import time
 from tagging.fields import TagField
 from tagging.models import Tag
+import tagging
+
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import  User
 from django.utils.translation import ugettext_lazy as _
@@ -134,7 +136,10 @@ class Story( models.Model ):
   extra_3 = models.TextField( blank=True , null=True)    
   
 
-  
+
+
+
+
 class ProjectMember(models.Model):
     project = models.ForeignKey(Project, related_name="members", verbose_name=_('project'))
     user = models.ForeignKey(User, related_name="projects", verbose_name=_('user'))

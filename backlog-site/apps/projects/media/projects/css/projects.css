@@ -38,7 +38,7 @@
 }
 #story_area {
 	max-height: 500px;	
-	width: 550px;
+	width: 100%px;
 	overflow: auto;
 	overflow-x: hidden; 
 	padding: 10px;
@@ -217,6 +217,7 @@
 	font-size: 16px;
 }
 
+
 #story_form {
 	background-color: #f0fcff;
 	padding: 20px;
@@ -233,6 +234,11 @@
 
 #story_form #id_summary {
 	width: 560px;	
+}
+
+#story_details table tr td {
+	padding-bottom: 3px;
+
 }
 
 #story_details ul {

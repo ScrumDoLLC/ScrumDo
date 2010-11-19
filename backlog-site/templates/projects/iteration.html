@@ -82,6 +82,9 @@
         return markings;
     }
     
+    $(document).bind('beforeReveal.facebox', function() {
+        $('#facebox .body').width('880px');
+    });
         $(document).ready(function() {
 
        
