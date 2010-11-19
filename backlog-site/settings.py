@@ -164,7 +164,8 @@ INSTALLED_APPS = (
     'groups',
     'projects',
     'topics',
-    'django_extensions'
+    'django_extensions',
+    'django_evolution'
 )
 
 ABSOLUTE_URL_OVERRIDES = {
