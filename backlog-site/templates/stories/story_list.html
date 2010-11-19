@@ -270,6 +270,17 @@
     });
   }
   
+  function setStatusReviewing( storyID )
+  {
+    $(".todoButtons").hide();    
+    $.ajax({
+      url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_reviewing",      
+      type: "POST",
+      success: function(responseText) {        
+        $("#story_" + storyID).replaceWith(responseText);
+      }
+    });
+  }
   
   function setStatusDone( storyID )
   {

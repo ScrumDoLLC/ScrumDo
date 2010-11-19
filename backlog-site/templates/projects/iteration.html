@@ -123,6 +123,18 @@
         });
         
         
+        function setStatusReviewing( storyID )
+        {
+          $(".todoButtons").hide();
+          $.ajax({
+            url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_reviewing",      
+            type: "POST",
+            data: ({return_type : "block"}),            
+            success: function(responseText) {        
+              $("#story_" + storyID).replaceWith(responseText);
+            }
+          });
+        }
         function setStatusTodo( storyID )
         {
           $(".todoButtons").hide();

@@ -131,6 +131,9 @@
 }
 
 
+.gripper_reviewing {	
+	background: #fefefe url(/site_media/static/images/gripper_reviewing.png) repeat-y;
+}
 .gripper_todo {	
 	background: #fefefe url(/site_media/static/images/gripper_todo.png) repeat-y;
 }

@@ -32,8 +32,7 @@ class PointsLog( models.Model ):
     return int((time.mktime(self.date.timetuple()) - time.timezone)*1000)
   
   
-class Project(Group):
-    
+class Project(Group):    
     member_users = models.ManyToManyField(User, through="ProjectMember", verbose_name=_('members'))
     
     # private means only members can see the project
@@ -41,7 +40,7 @@ class Project(Group):
     points_log = generic.GenericRelation( PointsLog )
     current_iterations = None
     default_iteration = None
-    # 
+    
     use_assignee = models.BooleanField( default=False )
     use_acceptance = models.BooleanField( default=False )
     use_extra_1 = models.BooleanField( default=False )    
