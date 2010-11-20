@@ -191,6 +191,15 @@ SITE_NAME = "ScrumDoo"
 LOGIN_URL = "/account/login/"
 LOGIN_REDIRECT_URLNAME = "projects.views.your_projects"
 
+
+EMAIL_HOST='localhost' 
+EMAIL_HOST_USER=''                  
+EMAIL_HOST_PASSWORD=''        
+EMAIL_PORT='25'
+DEFAULT_FROM_EMAIL = 'scrumdoo@scrumdoo.com'   
+SERVER_EMAIL = 'scrumdoo@scrumdoo.com'
+
+
 # local_settings.py can be used to override environment-specific settings
 # like database and email that differ between development and production.
 try:
