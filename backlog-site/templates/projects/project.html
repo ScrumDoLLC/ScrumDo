@@ -48,9 +48,9 @@
               <h1>Iterations</h1>
               {% for iteration in project.iterations.all %}
                 {% ifequal iteration project.get_default_iteration %}
-                  <div class="iterationHeader"><a href="{% url stories project.slug %}">{{iteration.name}}</a></div> 
+                  <div class="iterationHeader"><a href="{% url stories project.slug %}">{{iteration.name}}</a> </div> 
                 {% else %}
-                  <div class="iterationHeader"><a href="{% url iteration project.slug iteration.id %}">{{iteration.name}}</a></div>
+                  <div class="iterationHeader"><a href="{% url iteration project.slug iteration.id %}">{{iteration.name}}</a> </div>
                 {% endifequal %}
               {% endfor %}
               <br/><br/>
@@ -116,9 +116,10 @@
                 
                 
                   {% for iteration in project.get_current_iterations %}
-                    <h1>{{ iteration.name }}</h1>
+                    <h1>{{ iteration.name }} </h1> 
+                    <i>{{iteration.start_date|date:"M d, Y"}} - {{iteration.end_date|date:"M d, Y"}}</i>
                     {% if iteration.points_log.count %}
-                      <div id="iterationBurndown_{{iteration.id}}" style="width:540px;height:300px;"></div>  
+                      <div id="iterationHeaderwn_{{iteration.id}}" style="width:540px;height:300px;"></div>  
                     {% else %}
                       <img src="/site_media/static/images/burndown.png">
                     {% endif %}

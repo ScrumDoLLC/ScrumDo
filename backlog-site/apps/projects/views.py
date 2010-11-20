@@ -9,6 +9,7 @@ from django.utils.datastructures import SortedDict
 from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponse
 from django.core import serializers
+import datetime
 
 from xlrd import open_workbook
 
@@ -108,9 +109,29 @@ def project_admin( request, group_slug ):
 def iteration(request, group_slug, iteration_id):
    project = get_object_or_404( Project, slug=group_slug )
    iteration = get_object_or_404( Iteration, id=iteration_id )
+
+   
+   if request.method == 'POST': # If the form has been submitted...
+     form = IterationForm( request.POST, instance=iteration)
+     if form.is_valid(): # All validation rules pass      
+       iteration = form.save(  )
+       request.user.message_set.create(message="Iteration Details Saved.")               
+   else:
+     form = IterationForm( instance=iteration )
+
+   today = datetime.date.today()
+   daysLeft = None
+   try:
+     if iteration.start_date <= today and iteration.end_date >= today:
+       daysLeft = (iteration.end_date - today).days
+   except:
+    pass
+   
    return render_to_response("projects/iteration.html", {
        "iteration": iteration,
-       "project" : project
+       "project" : project,
+       "iteration_form": form,
+       'daysLeft': daysLeft
      }, context_instance=RequestContext(request))
      
      

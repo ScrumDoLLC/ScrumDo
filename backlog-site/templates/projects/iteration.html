@@ -19,9 +19,17 @@
 {% block body %}
     
     {% if user.is_authenticated %}
-      
+       
+       
       
         <div class="right_panel">
+          {% if daysLeft %}
+            <div class="blue_box small_project_list">
+              <div class="daysLeft">{{ daysLeft }} Day{{ daysLeft|pluralize }} Left</div>
+            </div>
+
+          {% endif %}
+          
             <div class="blue_box small_project_list">
               <h1>Actions</h1>
               <br/>              
@@ -34,9 +42,14 @@
       
       
         <h1>{{ iteration.name }}</h1>
+        {% if iteration.start_date %}<i>{{iteration.start_date|date:"M d, Y"}} - {{iteration.end_date|date:"M d, Y"}}</i>{% endif %}
+        
         {% if iteration.points_log.count %}
           <div id="iterationBurndown" style="width:540px;height:200px;"></div>  
+        {% else %}
+          <img src="/site_media/static/images/burndown.png">
         {% endif %}
+        
         <div style="clear:both;">&nbsp;</div>
         <h1>Stories</h1>
         {% for story in iteration.stories.all %}
@@ -48,7 +61,10 @@
     </div>
     
     <div id="iterationDetails" style="display:none">
-      ITERATION DETAILS
+      <form method="POST" action="">
+        {{ iteration_form|as_uni_form }}
+        <input type="submit" value="Save">
+      </form>
     </div>
 
 {% endblock %}
@@ -84,10 +100,24 @@
     
     $(document).bind('beforeReveal.facebox', function() {
         $('#facebox .body').width('880px');
+        
     });
+    
+    $(document).bind('afterReveal.facebox', function() {
+        $("#id_start_date-2").datepicker({dateFormat: 'yy-mm-dd' });
+        $("#id_end_date-2").datepicker({dateFormat: 'yy-mm-dd' });
+    });
+    
+    $(document).bind('reveal.facebox', function() {
+      $('#facebox input').each( function(intIndex){
+        $(this).attr('id',jQuery(this).attr('id') + '-2')
+      });
+    });
+
         $(document).ready(function() {
 
-       
+                
+
                 $(".commentLink").click( function() 
                   {
                       $(this).parent().children(".commentForm").show();
