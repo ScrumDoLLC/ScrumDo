@@ -119,7 +119,7 @@
                     <h1>{{ iteration.name }} </h1> 
                     <i>{{iteration.start_date|date:"M d, Y"}} - {{iteration.end_date|date:"M d, Y"}}</i>
                     {% if iteration.points_log.count %}
-                      <div id="iterationHeaderwn_{{iteration.id}}" style="width:540px;height:300px;"></div>  
+                      <div id="iterationBurndown_{{iteration.id}}" style="width:540px;height:300px;"></div>  
                     {% else %}
                       <img src="/site_media/static/images/burndown.png">
                     {% endif %}
