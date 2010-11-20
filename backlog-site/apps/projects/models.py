@@ -92,6 +92,8 @@ class Iteration( models.Model):
   default_iteration = models.BooleanField( default=False )
   points_log = generic.GenericRelation( PointsLog )
   
+  class Meta:
+    ordering = ["-default_iteration", "end_date"];
   
   def __str__(self):
     return self.name
