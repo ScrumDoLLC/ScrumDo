@@ -14,9 +14,12 @@ urlpatterns = patterns('projects.views',
     url(r'^project/(?P<group_slug>[-\w]+)/$', 'project', name="project_detail"),
     url(r'^project/(?P<group_slug>[-\w]+)/delete/$', 'delete', name="project_delete"),
     url(r'^project/(?P<group_slug>[-\w]+)/admin$', 'project_admin', name="project_admin"),
+    url(r'^project/(?P<group_slug>[-\w]+)/test_data/(?P<count>[0-9]+)', 'test_data'),    
+)
+
+urlpatterns += patterns('projects.iteration_views',
     url(r'^project/(?P<group_slug>[-\w]+)/iteration_create$', 'iteration_create', name="iteration_create"),
     url(r'^project/(?P<group_slug>[-\w]+)/iteration/(?P<iteration_id>[-\w]+)$', 'iteration', name="iteration"),
-    url(r'^project/(?P<group_slug>[-\w]+)/test_data/(?P<count>[0-9]+)', 'test_data'),    
 )
 
 

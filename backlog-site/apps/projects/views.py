@@ -37,24 +37,6 @@ WHERE projects_projectmember.project_id = projects_project.id
 """
 
 
-
-
-
-# def greet(request):
-#   print "GREETING REQUEST!"
-#   return render_to_response("greet.html")
-
-
-# def rpc_stories(request, group_slug):
-#   project = get_object_or_404(Project, slug=group_slug)  
-#   backlog = Story.objects.filter(project=project, iteration=project.get_default_iteration() )
-#  
-#   json_serializer = serializers.get_serializer("json")()
-#   backlog_json = json_serializer.serialize(backlog, ensure_ascii=False)
-#   return HttpResponse(backlog_json) #, mimetype='application/json'
-
-
-
 def home( request ):
   my_projects = [];
   member_projects = [];
@@ -101,9 +83,6 @@ def project_admin( request, group_slug ):
     }, context_instance=RequestContext(request))
     
     
-    
-    
-
 
 @login_required
 def iteration(request, group_slug, iteration_id):
