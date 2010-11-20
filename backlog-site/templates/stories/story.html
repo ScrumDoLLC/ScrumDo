@@ -38,7 +38,7 @@
  </form>
 <br/><br/><br/><br/>
 <h2>Comments {% silk "comments" %}</h2>
-<div style="comments_area">
+<div class="comments_area">
 {% comments story %}
 </div>
 
@@ -47,9 +47,6 @@
 <script type="text/javascript" charset="utf-8">
 
       $("#story_area .commentForm").show();
-      
-
-
       
       $("#story_detail_form").ajaxForm({        
         success: function(responseText) { 
@@ -62,12 +59,6 @@
       $(".comments_area form").ajaxForm({
         replaceTarget: true,
         target: $("#story_area"),
-        success: function() { 
-          
-        },
-        error: function() {
-          
-        },
         beforeSubmit: function(arr, $form, options) { 
           $form.hide();
         }

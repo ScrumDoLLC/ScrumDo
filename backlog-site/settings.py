@@ -113,6 +113,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
     "django.core.context_processors.request",  
+    "projects.context_processors.projects_constants",
     "pinax.core.context_processors.pinax_settings",
     "announcements.context_processors.site_wide_announcements",
     "account.context_processors.openid",
@@ -199,6 +200,8 @@ EMAIL_PORT='25'
 DEFAULT_FROM_EMAIL = 'scrumdoo@scrumdoo.com'   
 SERVER_EMAIL = 'scrumdoo@scrumdoo.com'
 
+GOOGLE_ANALYTICS = False
+GOOGLE_ANALYTICS_ACCOUNT = ""
 
 # local_settings.py can be used to override environment-specific settings
 # like database and email that differ between development and production.

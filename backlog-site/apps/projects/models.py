@@ -100,7 +100,8 @@ class Iteration( models.Model):
 class Story( models.Model ):
   STATUS_TODO = 1;
   STATUS_DOING = 2;
-  STATUS_DONE = 3;
+  STATUS_REVIEWING = 3;
+  STATUS_DONE = 4;
   
   POINT_CHOICES = (
       ('?', '?'), 
@@ -118,6 +119,7 @@ class Story( models.Model ):
   STATUS_CHOICES = (
       (1, "TODO"),
       (2, "In Progress"),
+      (2, "Reviewing"),
       (3, "Done")   )
   
   rank = models.IntegerField() 
