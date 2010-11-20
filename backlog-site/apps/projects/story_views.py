@@ -38,7 +38,19 @@ def set_story_status( request, group_slug, story_id, status):
     }, context_instance=RequestContext(request))
 
 
-    
+  
+@login_required
+def delete_story( request, group_slug, story_id ):
+  if request.method == "POST":
+    story = get_object_or_404( Story, id=story_id )  
+    story.delete()     
+    redirTo = request.GET.get("redirectTo", "")
+    if redirTo:
+      return HttpResponseRedirect(redirTo );
+    else:
+      return HttpResponse("OK");
+  else:
+    return HttpResponse("FAIL");
      
 # This is the request handler that gets called from the story_list page when the user drags & drops a story to a
 # new ranking or a new iteration.  It should have two post variables, index and iteration

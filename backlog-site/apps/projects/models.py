@@ -52,6 +52,9 @@ class Project(Group):
     extra_1_label = models.CharField(  max_length=25, blank=True, null=True)
     extra_2_label = models.CharField(  max_length=25, blank=True, null=True)    
     extra_3_label = models.CharField(  max_length=25, blank=True, null=True)    
+    
+    velocity = models.PositiveIntegerField( null=True )
+    velocity_iteration_span = models.PositiveIntegerField( null=True ) 
       
     def get_default_iteration( self ):
       if self.default_iteration == None:

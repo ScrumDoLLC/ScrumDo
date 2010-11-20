@@ -44,6 +44,22 @@
 #story_area textarea {
 	width: 90%;	
 }
+
+.iteration_header_list {
+	max-height: 500px;	
+	width: 100%px;
+	overflow: auto;
+	overflow-x: hidden; 
+	padding: 10px;
+}
+.iteration_header_list_detail b {
+	margin-right: 20px;
+}
+.iteration_header_list_detail {
+	float: right;
+	top: 15px;
+	position: relative;
+}
 #story_area {
 	max-height: 500px;	
 	width: 100%px;

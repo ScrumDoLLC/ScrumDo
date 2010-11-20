@@ -61,9 +61,9 @@ class StoryForm( forms.ModelForm ):
     self.fields["tags"].initial = self.instance.tags
 
   
-  def save(self):
+  def save(self,  **kwargs):
     self.instance.tags = self.cleaned_data["tags"]
-    return super(StoryForm, self).save()
+    return super(StoryForm, self).save(**kwargs)
   
   class Meta:
       model = Story

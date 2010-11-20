@@ -28,10 +28,18 @@
     
     
     <div id="iteration_header_list" style="display:none">
+      <div class="iteration_header_list">
       {% for iteration in project.iterations.all %}
+      
+      <div class="iteration_header_list_detail">
+        {% if iteration.stories.count %}<b>{{iteration.stories.count}} Stories</b>{%endif%}
+        {% if iteration.start_date %}<i>{{iteration.start_date|date:"M d, Y"}} - {{iteration.end_date|date:"M d, Y"}}</i>{% endif %}        
+      </div>
       <h2><a href="{% url iteration project.slug iteration.id %}">{{iteration.name}}</a></h2>
-        {% if iteration.start_date %}<i>{{iteration.start_date|date:"M d, Y"}} - {{iteration.end_date|date:"M d, Y"}}</i>{% endif %}
+      
       <hr/>
       {% endfor %}
+      </div>
     </div>
+    
 {% endblock %}

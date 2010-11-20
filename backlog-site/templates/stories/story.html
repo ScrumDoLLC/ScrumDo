@@ -34,8 +34,13 @@
    
    <input type="hidden" name="return_type" value="{{return_type}}">
    <input type="hidden" name="rank" value="{{ story.rank }}">
-   <INPUT style="float:right ; margin-right: 85px" TYPE="image" SRC="/site_media/static/images/updateStoryButton.png" >
+   <INPUT  TYPE="image" SRC="/site_media/static/images/updateStoryButton.png" >
  </form>
+ 
+ <form method="POST" id="deleteForm" action="{% url delete_story project.slug story.id %}">
+   <INPUT style="float:right ; margin-top: -25px; margin-right: 5px" TYPE="image" SRC="/site_media/static/images/deleteButton.png" >
+ </form>
+ 
 <br/><br/><br/><br/>
 <h2>Comments {% silk "comments" %}</h2>
 <div class="comments_area">
@@ -54,6 +59,11 @@
           calculateBothPoints();
           $(document).trigger('close.facebox');   
         }});
+        
+      $("#deleteForm").ajaxForm({
+        beforeSubmit: function(arr, $form, options) { return confirm ("Are you sure you want to delete this story?"); },
+        success: function(responseText) { $("#story_{{story.id}}").hide(); $(document).trigger('close.facebox'); }
+      });
       
       // bind 'myForm' and provide a simple callback function 
       $(".comments_area form").ajaxForm({
