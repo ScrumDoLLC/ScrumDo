@@ -15,9 +15,14 @@
 
   {% filter truncatewords:"20" %}
     {{ story.detail }}
-  {% endfilter %}    
-  {% if story.tags %}
-    <div class="tagsBox">{% silk "tag_blue" %} <a href="#">{{ story.tags }}</a></div>
+  {% endfilter %} 
+     
+  {% if story.story_tags.all %}
+    <div class="tagsBox">{% silk "tag_blue" %}
+    {% for tag in story.story_tags.all %}
+       {{ tag.name }} 
+    {% endfor %}
+    </div>
   {% endif %}
   
 

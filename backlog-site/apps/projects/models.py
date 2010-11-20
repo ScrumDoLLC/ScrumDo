@@ -3,16 +3,19 @@ import time
 from tagging.fields import TagField
 from tagging.models import Tag
 import tagging
+import re
 
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import  User
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from groups.base import Group
-
 from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
-  
+from django.core.exceptions import ObjectDoesNotExist
+
+
+ 
   
   
 class SiteStats( models.Model ):
@@ -125,7 +128,6 @@ class Story( models.Model ):
   created = models.DateTimeField(_('created'), default=datetime.now)
   modified = models.DateTimeField(_('modified'), default=datetime.now) 
   assignee = models.ForeignKey(User, related_name="assigned_stories", verbose_name=_('assignee'), null=True, blank=True)  
-  tags = TagField()
   points = models.CharField('points', max_length=3, default="?", choices=POINT_CHOICES ,blank=True)
   iteration = models.ForeignKey( Iteration , related_name="stories")
   project = models.ForeignKey( Project , related_name="stories")
@@ -133,11 +135,80 @@ class Story( models.Model ):
   extra_1 = models.TextField( blank=True , null=True)
   extra_2 = models.TextField( blank=True , null=True)
   extra_3 = models.TextField( blank=True , null=True)    
+
+  tags_to_delete = []
+  tags_to_add = []
+  
+  @property
+  def tags(self):
+    r = "";
+    for tag in self.story_tags.all():
+      if len(r) > 0:
+        r = r + ", "
+      r = r + tag.name       
+    return r
+
+  @tags.setter
+  def tags(self, value):
+    print "TAGS SET " + value
+    input_tags = re.split('[, ]+', value)
+    self.tags_to_delete = []
+    self.tags_to_add = []
+    # First, find all the tags we need to add.
+    for input_tag in input_tags:
+      found = False
+      for saved_tag in self.story_tags.all():
+        if saved_tag.name == input_tag:
+          found = True
+      if not found :
+        self.tags_to_add.append( input_tag ) 
+    # Next, find the tags we have to delete
+    for saved_tag in self.story_tags.all():
+      found = False
+      for input_tag in input_tags:
+        if saved_tag.name == input_tag:
+          found = True
+      if not found :
+        self.tags_to_delete.append( saved_tag ) 
+    
   
 
 
+        
+  
+def tag_callback(sender, instance, **kwargs):
+
+  for tag_to_delete in instance.tags_to_delete:
+    print "Deleting " + tag_to_delete.name
+    tag_to_delete.delete()
+  for tag_to_add in instance.tags_to_add:
+    tag_to_add = tag_to_add.strip()
+    if len(tag_to_add) == 0:
+      continue
+    try:
+      tag = StoryTag.objects.get( project=instance.project, name=tag_to_add)
+    except ObjectDoesNotExist:
+      tag = StoryTag( project=instance.project, name=tag_to_add)
+      tag.save()
+    tagging = StoryTagging( tag=tag, story=instance)  
+    tagging.save()    
+  instance.tags_to_delete = []
+  instance.tags_to_add = []
+
+models.signals.post_save.connect(tag_callback, sender=Story)
 
 
+
+class StoryTag( models.Model ):
+  project = models.ForeignKey( Project , related_name="tags")
+  name = models.CharField('name', max_length=32 )
+
+class StoryTagging( models.Model ):
+  tag = models.ForeignKey( StoryTag , related_name="stories")
+  story = models.ForeignKey( Story , related_name="story_tags")
+  @property
+  def name(self):
+    return self.tag.name
 
 class ProjectMember(models.Model):
     project = models.ForeignKey(Project, related_name="members", verbose_name=_('project'))

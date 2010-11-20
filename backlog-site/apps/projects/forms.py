@@ -6,8 +6,8 @@ from django.utils.translation import ugettext_lazy as _
 from projects.models import Project, ProjectMember, Iteration, Story
 from django.forms.extras.widgets import SelectDateWidget
 
-from tagging_utils.widgets import TagAutoCompleteInput
-from tagging.forms import TagField
+
+
 
 if "notification" in settings.INSTALLED_APPS:
     from notification import models as notification
@@ -41,7 +41,7 @@ class StoryForm( forms.ModelForm ):
       ('1', 'Middle'),
       ('2', 'Bottom') )
   project = None      
-  tags = TagField(required=False, widget=TagAutoCompleteInput(app_label='stories', model='story'))
+  tags = forms.CharField( required=False )
   general_rank = forms.CharField( required=False, widget=forms.RadioSelect(choices=RANK_CHOICES), initial=2)
   
   def __init__(self, project, *args, **kwargs):    
@@ -57,8 +57,13 @@ class StoryForm( forms.ModelForm ):
     self.fields["assignee"].required = False
     self.fields["extra_1"].required = False
     self.fields["extra_2"].required = False
-    self.fields["extra_3"].required = False     
-    
+    self.fields["extra_3"].required = False
+    self.fields["tags"].initial = self.instance.tags
+
+  
+  def save(self):
+    self.instance.tags = self.cleaned_data["tags"]
+    return super(StoryForm, self).save()
   
   class Meta:
       model = Story
