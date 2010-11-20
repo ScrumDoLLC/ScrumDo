@@ -112,11 +112,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.debug",
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
-    "django.core.context_processors.request",
-    
+    "django.core.context_processors.request",  
     "pinax.core.context_processors.pinax_settings",
-    
-    "notification.context_processors.notification",
     "announcements.context_processors.site_wide_announcements",
     "account.context_processors.openid",
     "account.context_processors.account",
@@ -134,7 +131,6 @@ INSTALLED_APPS = (
     'pinax.templatetags',
     
     # external
-    'notification', # must be first
     'django_openid',
     'emailconfirmation',
     'mailer',
@@ -190,7 +186,7 @@ ACCOUNT_EMAIL_VERIFICATION = False
 
 EMAIL_CONFIRMATION_DAYS = 2
 EMAIL_DEBUG = DEBUG
-CONTACT_EMAIL = "rogueplanning@rogue-development.com"
+CONTACT_EMAIL = "scrumdoo@scrumdoo.com"
 SITE_NAME = "ScrumDoo"
 LOGIN_URL = "/account/login/"
 LOGIN_REDIRECT_URLNAME = "projects.views.your_projects"
