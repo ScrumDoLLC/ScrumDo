@@ -42,6 +42,7 @@
       
       
         <h1>{{ iteration.name }}</h1>
+
         {% if iteration.start_date %}<i>{{iteration.start_date|date:"M d, Y"}} - {{iteration.end_date|date:"M d, Y"}}</i>{% endif %}
         
         {% if iteration.points_log.count %}
@@ -52,9 +53,33 @@
         
         <div style="clear:both;">&nbsp;</div>
         <h1>Stories</h1>
-        {% for story in iteration.stories.all %}
-          {% include "stories/single_block_story.html" %}
-        {% endfor %}
+                <a class="showFilter" href="#filterDialog">Filter</a>
+               
+                <div id="filterDialog" style="display:none">
+                  <a name="filterDialog" />
+                  <form class="filterForm" action="{% url stories_iteration project.slug iteration.id %}" method="GET">
+                    <table>
+                      <tr><td>Search Text:</td><td><input type="text" name="search"></tr>
+                      <tr><td>Tags:</td><td><input type="text" name="tags"></tr>
+                      <tr><td>Order By:</td><td>
+                            <input type="radio" name="order_by" value="rank" checked> Rank <br/>
+                            <input type="radio" name="order_by" value="local_id" > Story Number <br/>
+                            <input type="radio" name="order_by" value="points" > Points <br/>                                
+                            <input type="radio" name="order_by" value="created" > Created Date <br/>                
+                            <input type="radio" name="order_by" value="modified" > Last Modified <br/>                
+                            <input type="radio" name="order_by" value="status" > Status <br/>                
+                        </tr>
+                    </table>
+                    <input type="hidden" name="display_type" value="block">
+                    <input type="submit" value="Filter">
+                  </form>
+                </div>
+                
+        <div id="story_list">
+          {# {% for story in iteration.stories.all %} #}
+          {#            {% include "stories/single_block_story.html" %} #}
+          {#          {% endfor %} #}
+        </div>
       
       
     {% endif %}
@@ -66,7 +91,8 @@
         <input type="submit" value="Save">
       </form>
     </div>
-
+    
+    
 {% endblock %}
 
 {% block extra_body %}
@@ -74,7 +100,33 @@
     
     var project_slug = "{{ iteration.project.slug }}";
 
-      
+    function loadIteration( iterationID , tags, search)
+    {
+      $("#loadingIcon").show();
+      $.ajax({
+        url: "/projects/project/" + project_slug + "/stories/" + iterationID,
+        data:{display_type:"block",
+              tags:tags,
+              search:search},
+        success: function(html){
+          $("#story_list").html(html);  
+          $("#story_list").attr("iteration_id", iterationID);      
+        }
+      });
+    }
+    
+    $(".showFilter").click( function() { $("#filterDialog").show(); return false;} );
+    $(".filterForm").ajaxForm(
+        {
+          success: function(html)
+          {
+            $("#story_list").html(html);  
+            $(document).trigger('close.facebox');   
+          }
+        });
+    
+    loadIteration( "{{ iteration.id }}","","")  ;
+    
     function calculateBothPoints()
     {
       

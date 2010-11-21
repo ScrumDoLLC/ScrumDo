@@ -14,6 +14,8 @@ from xlrd import open_workbook
 
 from django.conf import settings
 
+import re
+
 if "notification" in settings.INSTALLED_APPS:
     from notification import models as notification
 else:
@@ -140,8 +142,16 @@ def stories_iteration(request, group_slug, iteration_id):
   order_by = request.GET.get("order_by","rank");
   display_type = request.GET.get("display_type","mini")
   text_search = request.GET.get("search","")
-  
-  if text_search:
+  tags_search = request.GET.get("tags","")
+
+  tags_list = re.split('[, ]+', tags_search)
+
+  # There's probably a better way to set up these filters...
+  if text_search and tags_search:
+    stories = iteration.stories.filter(story_tags__tag__name__in=tags_list).extra( where = ["MATCH(summary, detail, extra_1, extra_2, extra_3) AGAINST (%s IN BOOLEAN MODE)"], params=[text_search]).distinct().order_by(order_by)
+  elif tags_search:
+    stories = iteration.stories.filter(story_tags__tag__name__in=tags_list).distinct().order_by(order_by)
+  elif text_search:
     stories = iteration.stories.extra( where = ["MATCH(summary, detail, extra_1, extra_2, extra_3) AGAINST (%s IN BOOLEAN MODE)"], params=[text_search]).order_by(order_by)
   else:
     stories = iteration.stories.order_by(order_by)
