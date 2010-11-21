@@ -1,0 +1,22 @@
+<a class="showFilter" href="#filterDialog">Filter</a>               
+<div id="filterDialog" style="display:none">
+  <a name="filterDialog"></a>
+  <form class="filterForm" action="{% url stories_iteration project.slug iteration.id %}" method="GET">
+    <table width="100%">
+      <tr><td>Search Text:</td><td><input type="text" name="search"><td>Order By</td><td rowspan="2"><input type="radio" name="order_by" value="rank" checked> Rank <br/>
+      <input type="radio" name="order_by" value="local_id" > Story Number <br/>
+      <input type="radio" name="order_by" value="points" > Points <br/>                                
+      <input type="radio" name="order_by" value="created" > Created Date <br/>                
+      <!-- <input type="radio" name="order_by" value="modified" > Last Modified <br/>                 -->
+      <input type="radio" name="order_by" value="status" > Status <br/></td></tr>
+      <tr><td>Tags:</td><td><input type="text" name="tags" id="tags_input"></tr>
+     
+    </table>
+    <input type="hidden" name="display_type" value="block">
+    <input type="submit" value="Filter" id="filter_button">
+    <input type="reset" value="Clear Filter" id="clear_filter_button">
+  </form>
+  <br/>
+  <i>Note: You can't drag stories to rank them when a filter is applied.</i>
+</div>
+

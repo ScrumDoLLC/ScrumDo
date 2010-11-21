@@ -28,6 +28,14 @@
   padding-left:10px;
 }
 
+#filterDialog {
+	background-color: #f2f2f7;
+	padding: 15px;
+	margin: 5px;
+	border: 8px solid #ddd;
+	opacity: 1;
+}
+
 .small_project_list hr {
 	border: 1px solid #aaa;
 	margin-left: -10px;

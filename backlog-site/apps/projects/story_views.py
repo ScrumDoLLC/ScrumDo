@@ -148,7 +148,7 @@ def stories_iteration(request, group_slug, iteration_id):
 
   # There's probably a better way to set up these filters...
   if text_search and tags_search:
-    stories = iteration.stories.filter(story_tags__tag__name__in=tags_list).extra( where = ["MATCH(summary, detail, extra_1, extra_2, extra_3) AGAINST (%s IN BOOLEAN MODE)"], params=[text_search]).distinct().order_by(order_by)
+    stories = iteration.stories.filter(story_tags__tag__name__in=tags_list).extra( where = ["MATCH(summary, detail, extra_1, extra_2, extra_3) AGAINST (%s IN BOOLEAN MODE)"], params=[text_search]).distinct()
   elif tags_search:
     stories = iteration.stories.filter(story_tags__tag__name__in=tags_list).distinct().order_by(order_by)
   elif text_search:
