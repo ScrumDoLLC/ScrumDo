@@ -35,11 +35,14 @@ def iteration(request, group_slug, iteration_id):
    except:
     pass
    
+   add_story_form = StoryForm(project)
+   
    return render_to_response("projects/iteration.html", {
        "iteration": iteration,
        "project" : project,
        "iteration_form": form,
-       'daysLeft': daysLeft
+       'daysLeft': daysLeft,
+       'add_story_form': add_story_form
      }, context_instance=RequestContext(request))
 
 

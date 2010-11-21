@@ -162,8 +162,6 @@ def stories(request, group_slug):
   else:
     form = StoryForm(project)
 
-
-
   return render_to_response("stories/story_list.html", {
     "add_story_form": form,
     "project": project,

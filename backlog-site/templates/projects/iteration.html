@@ -20,6 +20,7 @@
     
     {% if user.is_authenticated %}
        
+       {% include "stories/add_story_form.html" %}
        
       
         <div class="right_panel">
@@ -98,8 +99,7 @@
     }
     
     $(document).bind('beforeReveal.facebox', function() {
-        $('#facebox .body').width('880px');
-        
+        $('#facebox .body').width('880px');        
     });
     
     $(document).bind('afterReveal.facebox', function() {

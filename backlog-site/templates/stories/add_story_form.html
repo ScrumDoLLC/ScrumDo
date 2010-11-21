@@ -24,5 +24,36 @@
         {% endif %}
        </table>
     </div>
+    
+    {% if iteration %}
+      <input type="hidden" name="iteration" value="{{ iteration.id }}" />
+    {% endif %}
+    
   </form>
  </div>
+ 
+<script type="text/javascript" charset="utf-8">
+  
+    story_form_expanded = false;
+    $(document).ready(function() {
+      $('#id_summary').keyup( function(self) 
+            { 
+                if( $(this).val().length > 0 )
+                {
+                  if( ! story_form_expanded )
+                  {
+                    $("#story_details").show(true);
+                  }
+                  story_form_expanded = true;
+                }
+                else
+                {
+                  if( story_form_expanded )
+                  {
+                    $("#story_details").hide();              
+                  }
+                  story_form_expanded = false;
+                }
+            } );
+      });
+</script>
