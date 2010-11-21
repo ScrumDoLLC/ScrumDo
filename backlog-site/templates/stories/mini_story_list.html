@@ -3,5 +3,9 @@
 {# This template gets rendered when we're filling in the columns on the story_list page through javascript #}
 
 {% for story in stories %}
+  {% ifequal display_type "block" %}
+    {% include "stories/single_block_story.html" %}  
+  {% else %}
     {% include "stories/single_mini_story.html" %}
+  {% endifequal %}
 {% endfor %} 

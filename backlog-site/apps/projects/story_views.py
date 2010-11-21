@@ -136,10 +136,20 @@ def story( request, group_slug, story_id ):
 def stories_iteration(request, group_slug, iteration_id):
   project = get_object_or_404(Project, slug=group_slug)  
   iteration = get_object_or_404(Iteration, id=iteration_id, project=project)  
-  stories = iteration.stories.filter(project=project, iteration=iteration ).order_by("rank")
+  
+  order_by = request.GET.get("order_by","rank");
+  display_type = request.GET.get("display_type","mini")
+  text_search = request.GET.get("search","")
+  
+  if text_search:
+    stories = iteration.stories.extra( where = ["MATCH(summary, detail, extra_1, extra_2, extra_3) AGAINST (%s IN BOOLEAN MODE)"], params=[text_search]).order_by(order_by)
+  else:
+    stories = iteration.stories.order_by(order_by)
+
   return render_to_response("stories/mini_story_list.html", {
     "stories": stories,
-    "project":project
+    "project":project,
+    "display_type": display_type
   }, context_instance=RequestContext(request))
 
 
