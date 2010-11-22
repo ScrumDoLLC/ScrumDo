@@ -56,45 +56,42 @@
   
     <div class="backlog story_column">
       <div class="story_column_header">
-        <span style="float:right"><a href="#filterDialog" rel="facebox">Filter</a></span>
+        <span style="float:right">
         <h1>
           Backlog
         </h1>
         <span id="backlog_points"></span>
       </div>
+      
+      <a class="showFilter" href="#">Filter</a>              
+      <div id="filterDialog" style="display:none">
+        <a name="filterDialog"></a>
+        <form class="filterForm" action="{% url stories_iteration project.slug project.get_default_iteration.id %}" method="GET">
+          <table width="100%">
+            <tr><td>Search Text:</td><td><input type="text" name="search"></tr>
+            <tr><td>Tags:</td><td><input type="text" name="tags" id="tags_input"></tr>
+
+          </table>
+          <input type="hidden" name="display_type" value="mini">
+          <input type="submit" value="Filter" id="filter_button">
+          <input type="reset" value="Clear Filter" id="clear_filter_button">
+        </form>
+      
+      </div>
+      
+      
+      
+
+      
       <ul class="story_list" id="backlog_column" iteration_id="{{ project.get_default_iteration.id }}">
       
       </ul>
     </div> <!-- End backlog story_column -->
   </div><!-- End columnContainer -->
   
-  <div id="filterDialog" style="display:none;">
-    Put the filter dialog options here.<br/>
-    Put the filter dialog options here.<br/>    
-    Put the filter dialog options here.<br/>
-    Put the filter dialog options here.<br/>
-    Put the filter dialog options here.<br/>
-    Put the filter dialog options here.<br/>   
-    Put the filter dialog options here.<br/>
-    Put the filter dialog options here.<br/>    
-    Put the filter dialog options here.<br/>
-    Put the filter dialog options here.<br/>
-    Put the filter dialog options here.<br/>
-    Put the filter dialog options here.<br/>             
-  </div>
-  <div id="addIterationDiv" style="display:none;">
-    Put the add iteration form here eventually...<br/>
-    Put the add iteration form here eventually...<br/>
-    Put the add iteration form here eventually...<br/>
-    Put the add iteration form here eventually...<br/>
-    Put the add iteration form here eventually...<br/>
-    Put the add iteration form here eventually...<br/>
-    Put the add iteration form here eventually...<br/>
-    Put the add iteration form here eventually...<br/>
-    Put the add iteration form here eventually...<br/>
-    Put the add iteration form here eventually...<br/>
-    Put the add iteration form here eventually...<br/>
-    Put the add iteration form here eventually...<br/>    
+
+  
+  <div id="addIterationDiv" style="display:none;">   
   </div>
   
   <div style="display:none"> 
@@ -179,14 +176,12 @@
 
   }
   
+  {# Calculates the points that go into the column headers. #}
   function calculateBothPoints()
   {
      calculatePoints("#iteration_column","#iteration_points");
      calculatePoints("#backlog_column","#backlog_points");
   }
-  
-  
-
 
   {# Set up the drag & drop functionality of our story lists. #}
   $("ul").sortable({connectWith: "ul", update: updateStoryPosition});
@@ -208,6 +203,21 @@
     }
   }
   
+  {# The filter form ajax stuff... #}
+  $(".showFilter").click( function() { $("#filterDialog").toggle(); return false;} );
+  $(".filterForm").ajaxForm(
+      {
+        beforeSend: function() { $("#loadingIcon").show();},
+        success: function(html)
+        {
+          $("#backlog_column").html(html);  
+          $(document).trigger('close.facebox');   
+          $("#loadingIcon").hide();            
+        }
+      });
+  
+  
+  {# When the tieration drop down is changed, load that iteration. #}
   $("#iterationChooser").change( function() 
     {
        loadIterationFromChooser();

@@ -56,7 +56,11 @@
         <img style="float:right" src="/site_media/static/images/ajax-loader.gif" id="loadingIcon">
         <h1>Stories</h1>
 
-        {% include "stories/filter_form.html" %}
+        {% with iteration.id as iteration_id %}
+            {% include "stories/filter_form.html" %}
+        {% endwith %}
+        
+        
                 
         <div id="story_list">
           {# {% for story in iteration.stories.all %} #}
