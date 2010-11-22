@@ -84,7 +84,7 @@
 
 {% block extra_body %}
     <script type="text/javascript">
-    
+
     var project_slug = "{{ iteration.project.slug }}";
 
     function loadIteration( iterationID , tags, search)
@@ -99,6 +99,7 @@
           $("#story_list").html(html);  
           $("#story_list").attr("iteration_id", iterationID);      
           $("#loadingIcon").hide();
+          setUpCommentLinks();
         }
       });
     }
@@ -112,7 +113,8 @@
           {
             $("#story_list").html(html);  
             $(document).trigger('close.facebox');   
-            $("#loadingIcon").hide();            
+            $("#loadingIcon").hide();   
+            setUpCommentLinks();         
           }
         });
     
@@ -163,39 +165,44 @@
       });
     });
 
+    function setUpCommentLinks() 
+    {
+
+      $(".commentLink").click( function() 
+        {                    
+            $(this).parent().children(".commentForm").show();
+            $(this).hide();
+            return false;
+        } );
+
+        $(".commentForm form").ajaxForm(
+           {          
+            success: function(responseText, statusText, xhr, obj) { $("#filter_button").submit();  }
+          });
+          
+        $(".responses form  ").ajaxForm(
+             {          
+              success: function(responseText, statusText, xhr, obj) { $("#filter_button").submit();  }
+            });
+
+    }
+
+
         $(document).ready(function() {
-
-   
-                $(".commentLink").click( function() 
-                  {
-                      $(this).parent().children(".commentForm").show();
-                      $(this).hide();
-                      return false;
-                  } );
-                
-                var options = {
-                   colors: ["#2292ff", "#ADD75C"],
-                   xaxis: { minTickSize: [1, "day"] , mode: "time", timeformat: "%m/%d/%y" },
-                   grid: { markings: weekendAreas } ,
-                   legend: {    position: "nw" },
-                   series: { lines: {   show: true , fill:true  }, 
-                             points: { radius:5, show: true, fill: true} 
-                               }                   
-                };
-
-
-                
-                
-                
-
-         
-                
-
-               
+                {# Draw the graph... #}
                  {% if iteration.points_log.count %}
-                  var iteration_data_total = [{% for log in iteration.points_log.all %} [{{log.timestamp}},{{log.points_total}}], {% endfor %}];
-                  var iteration_data_claimed = [{% for log in iteration.points_log.all %} [{{log.timestamp}},{{log.points_claimed}}], {% endfor %}];                 
-                  $.plot($("#iterationBurndown"), [{label:" Total Points", data:iteration_data_total},{label:" Claimed Points",data:iteration_data_claimed}], options);
+                   var options = {
+                      colors: ["#2292ff", "#ADD75C"],
+                      xaxis: { minTickSize: [1, "day"] , mode: "time", timeformat: "%m/%d/%y" },
+                      grid: { markings: weekendAreas } ,
+                      legend: {    position: "nw" },
+                      series: { lines: {   show: true , fill:true  }, 
+                                points: { radius:5, show: true, fill: true} 
+                                  }                   
+                   };                 
+                   var iteration_data_total = [{% for log in iteration.points_log.all %} [{{log.timestamp}},{{log.points_total}}], {% endfor %}];
+                   var iteration_data_claimed = [{% for log in iteration.points_log.all %} [{{log.timestamp}},{{log.points_claimed}}], {% endfor %}];                 
+                   $.plot($("#iterationBurndown"), [{label:" Total Points", data:iteration_data_total},{label:" Claimed Points",data:iteration_data_claimed}], options);
                  {% endif %}
                
         });

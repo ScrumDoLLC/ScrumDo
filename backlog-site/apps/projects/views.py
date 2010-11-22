@@ -172,22 +172,6 @@ def your_projects(request, template_name="projects/your_projects.html"):
 
 
 
-def processImport( project, file , user):
-  workbook = open_workbook(file_contents=file.read())
-  sheet = workbook.sheets()[0];
-  count = 0
-  for row in range(sheet.nrows-1):    
-    summary = sheet.cell(row+1,0).value
-    detail = sheet.cell(row+1,1).value
-    count = count + 1
-    try:
-      points = int(sheet.cell(row+1,2).value)
-    except:
-      points = "?"
-    print summary
-    story = Story( project=project, summary=summary, detail=detail, rank=0, local_id=project.stories.count(), creator=user, points=points, iteration=project.get_default_iteration())
-    story.save()
-  user.message_set.create(message=("%d stories imported" % count))
 
 @login_required
 def project(request, group_slug=None, form_class=ProjectUpdateForm, adduser_form_class=AddUserForm,
