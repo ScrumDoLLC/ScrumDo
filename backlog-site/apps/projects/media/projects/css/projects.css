@@ -20,6 +20,14 @@
 	font-weight: bold;
 }
 
+.noData {
+  text-align:center;  
+  vertical-align: middle;
+	border-style: dotted;
+	border-color: #e3e3e3;
+	font-size: 16px;
+	color: #e3e3e3;
+}
 .projectOptionsForm tr td:first-child {
   width: 200px;
 }

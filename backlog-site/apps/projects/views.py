@@ -9,6 +9,8 @@ from django.utils.datastructures import SortedDict
 from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponse
 from django.core import serializers
+from django.core import serializers
+import json
 import datetime
 
 from xlrd import open_workbook
@@ -82,10 +84,47 @@ def project_admin( request, group_slug ):
       "form": form
     }, context_instance=RequestContext(request))
     
-    
+def iteration_burndown(request, group_slug, iteration_id):
+  project = get_object_or_404( Project, slug=group_slug )
+  iteration = get_object_or_404( Iteration, id=iteration_id )
+  total_points = [];
+  claimed_points = [];
+  total_stats = { "label":"Total Points", "data":total_points}
+  claimed_stats = { "label":"Claimed Points", "data":claimed_points}
 
+  for log in iteration.points_log.all():
+    total_points.append( [log.timestamp(), log.points_total] );
+    claimed_points.append( [log.timestamp(), log.points_claimed] );
+
+  json_serializer = serializers.get_serializer("json")()
+  result = json.dumps([total_stats,claimed_stats])
+  return HttpResponse(result) #, mimetype='application/json'
+  
+  
+@login_required
+def project_burndown(request, group_slug):
+  project = get_object_or_404( Project, slug=group_slug )
+  total_points = [];
+  claimed_points = [];
+  total_stats = { "label":"Total Points", "data":total_points}
+  claimed_stats = { "label":"Claimed Points", "data":claimed_points}
+
+  for log in project.points_log.all():
+    total_points.append( [log.timestamp(), log.points_total] );
+    claimed_points.append( [log.timestamp(), log.points_claimed] );
+
+  json_serializer = serializers.get_serializer("json")()
+  result = json.dumps([total_stats,claimed_stats])
+  return HttpResponse(result) #, mimetype='application/json'
+  
      
-     
+@login_required
+def project_history( request, group_slug ):
+  project = get_object_or_404( Project, slug=group_slug )
+ 
+  return render_to_response("projects/project_history.html", {
+      "project": project,
+    }, context_instance=RequestContext(request))   
      
      
 @login_required

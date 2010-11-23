@@ -86,13 +86,10 @@
             
             <div class="blue_box">
               <h1>Options</h1>              <br/>
-              <div class="iterationHeader"><a href="{% url import_file project.slug %}">Import Stories</a></div>
-               {% ifequal user project.creator %}
-                  <br/>
+               <div class="iterationHeader"><a href="{% url import_file project.slug %}">Import Stories</a></div>
+               <div class="iterationHeader"><a href="{% url project_history project.slug %}">Project History</a></div>
+               {% ifequal user project.creator %}                  
                   <div class="iterationHeader"><a href="{% url project_admin project.slug %}" >{% trans "Project Admin" %}</a></div>
-
-
-               
                 {% endifequal %}
             </div>
             
@@ -149,24 +146,7 @@
       
       
     
-    function weekendAreas(axes) {
-        var markings = [];
-        var d = new Date(axes.xaxis.min);
-        // go to the first Saturday
-        d.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 1) % 7))
-        d.setUTCSeconds(0);
-        d.setUTCMinutes(0);
-        d.setUTCHours(0);
-        var i = d.getTime();
-        do {
-            // when we don't set yaxis, the rectangle automatically
-            // extends to infinity upwards and downwards
-            markings.push({ xaxis: { from: i, to: i + 2 * 24 * 60 * 60 * 1000 } });
-            i += 7 * 24 * 60 * 60 * 1000;
-        } while (i < axes.xaxis.max);
 
-        return markings;
-    }
     
     
         $(document).ready(function() {
@@ -182,18 +162,15 @@
                 };
 
        
-
+                generateBurnDown( "#overallBurndown", "{{project.slug}}" , null , 0);
+                
          
-                var backlog_data_total = [{% for log in project.points_log.all %} [{{log.timestamp}},{{log.points_total}}], {% endfor %}];
-                var backlog_data_claimed = [{% for log in project.points_log.all %} [{{log.timestamp}},{{log.points_claimed}}], {% endfor %}];                 
-                $.plot($("#overallBurndown"), [{label:" Total Points", data:backlog_data_total},{label:" Claimed Points",data:backlog_data_claimed}], options);
-
+                // var backlog_data_total = [{% for log in project.points_log.all %} [{{log.timestamp}},{{log.points_total}}], {% endfor %}];
+                //                   var backlog_data_claimed = [{% for log in project.points_log.all %} [{{log.timestamp}},{{log.points_claimed}}], {% endfor %}];                 
+                //                   $.plot($("#overallBurndown"), [{label:" Total Points", data:backlog_data_total},{label:" Claimed Points",data:backlog_data_claimed}], options);
+                //   
                {% for iteration in project.get_current_iterations %}
-                 {% if iteration.points_log.count %}
-                  var iteration_data_total = [{% for log in iteration.points_log.all %} [{{log.timestamp}},{{log.points_total}}], {% endfor %}];
-                  var iteration_data_claimed = [{% for log in iteration.points_log.all %} [{{log.timestamp}},{{log.points_claimed}}], {% endfor %}];                 
-                  $.plot($("#iterationBurndown_{{iteration.id}}"), [{label:" Total Points", data:iteration_data_total},{label:" Claimed Points",data:iteration_data_claimed}], options);
-                 {% endif %}
+                 generateBurnDown( "#iterationBurndown_{{iteration.id}}", "{{project.slug}}" , "{{iteration.id}}" , 0.25);
                {% endfor %}
         });
     </script>

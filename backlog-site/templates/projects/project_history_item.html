@@ -1,0 +1,24 @@
+
+<h1>{{ project.name }}</h1>
+
+  <div id="projectBurndown_{{project.id}}" style="width:540px;height:150px;"></div>  
+
+  {% for iteration in project.iterations.all %}
+    {% if not iteration.default_iteration %}
+    <h2>{{iteration.name}}</h2>
+
+    
+    {% if iteration.start_date %}<i>{{iteration.start_date|date:"M d, Y"}} - {{iteration.end_date|date:"M d, Y"}}</i>{% endif %}        
+    <div id="iterationBurndown_{{iteration.id}}" style="width:540px;height:120px;"></div>  
+    {% endif %}
+  {% endfor %}
+
+<script type="text/javascript" charset="utf-8">  
+  generateBurnDown( "#projectBurndown_{{project.id}}", "{{project.slug}}" , null , graph_count);
+  graph_count++;
+  
+  {% for iteration in project.iterations.all %}
+    generateBurnDown( "#iterationBurndown_{{iteration.id}}", "{{project.slug}}" , "{{iteration.id}}" , graph_count / 4);
+    graph_count++;
+  {% endfor %}
+</script>

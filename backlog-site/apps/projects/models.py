@@ -98,6 +98,14 @@ class Iteration( models.Model):
   default_iteration = models.BooleanField( default=False )
   points_log = generic.GenericRelation( PointsLog )
   
+  def stats():
+    points = 0
+    stories = 0
+    for story in stories:
+      stories += 1
+      points += story.points
+    return (stories, points)
+  
   class Meta:
     ordering = ["-default_iteration", "end_date"];
   

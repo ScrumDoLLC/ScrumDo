@@ -2,10 +2,10 @@ from django.conf.urls.defaults import *
 
 from projects.models import Project
 
-from groups.bridge import ContentBridge
-
-
-bridge = ContentBridge(Project, 'projects')
+# from groups.bridge import ContentBridge
+# 
+# 
+# bridge = ContentBridge(Project, 'projects')
 
 urlpatterns = patterns('projects.views',
     url(r'^$', 'projects', name="project_list"),
@@ -14,7 +14,12 @@ urlpatterns = patterns('projects.views',
     url(r'^project/(?P<group_slug>[-\w]+)/$', 'project', name="project_detail"),
     url(r'^project/(?P<group_slug>[-\w]+)/delete/$', 'delete', name="project_delete"),
     url(r'^project/(?P<group_slug>[-\w]+)/admin$', 'project_admin', name="project_admin"),
+    url(r'^project/(?P<group_slug>[-\w]+)/history$', 'project_history', name="project_history"),    
     url(r'^project/(?P<group_slug>[-\w]+)/test_data/(?P<count>[0-9]+)', 'test_data'),    
+    
+    url(r'^project/(?P<group_slug>[-\w]+)/(?P<iteration_id>[-\w]+)/burndown$', 'iteration_burndown'),    
+    url(r'^project/(?P<group_slug>[-\w]+)/burndown$', 'project_burndown'),    
+    
 )
 
 urlpatterns += patterns('projects.iteration_views',
