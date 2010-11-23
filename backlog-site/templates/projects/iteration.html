@@ -62,11 +62,11 @@
         
         
                 
-        <div id="story_list">
+        <ul id="story_list">
           {# {% for story in iteration.stories.all %} #}
           {#            {% include "stories/single_block_story.html" %} #}
           {#          {% endfor %} #}
-        </div>
+        </ul>
       
       
     {% endif %}
@@ -114,12 +114,33 @@
             $("#story_list").html(html);  
             $(document).trigger('close.facebox');   
             $("#loadingIcon").hide();   
-            setUpCommentLinks();         
+            setUpCommentLinks();        
+            $("ul").sortable("disable");
           }
         });
     
     loadIteration( "{{ iteration.id }}","","")  ;
-    
+    $("ul").sortable({ update: updateStoryPosition});
+    $("ul").disableSelection();
+
+
+    {# This is the method that handles the user-drop event and records that fact on the server. #}
+    function updateStoryPosition(event, ui)
+    {  
+      iterationId = "{{ iteration.id }}";
+      $("#loadingIcon").show();
+      $.ajax({
+        url: "/projects/project/" + project_slug + "/story/" + $(ui.item).attr("story_id") + "/reorder",
+        data:({ action:"reorder", index:ui.item.index(), iteration:iterationId }),
+        type: "POST",
+        success: function() {
+          calculateBothPoints();
+          $("#loadingIcon").hide();
+        }
+      });
+
+    }
+        
     function filterByTag( tag )
     {
       $("#filterDialog").show();
@@ -188,7 +209,10 @@
     }
 
 
+    
         $(document).ready(function() {
+          
+
                 {# Draw the graph... #}
                  {% if iteration.points_log.count %}
                    var options = {
@@ -204,6 +228,8 @@
                    var iteration_data_claimed = [{% for log in iteration.points_log.all %} [{{log.timestamp}},{{log.points_claimed}}], {% endfor %}];                 
                    $.plot($("#iterationBurndown"), [{label:" Total Points", data:iteration_data_total},{label:" Claimed Points",data:iteration_data_claimed}], options);
                  {% endif %}
+                 
+
                
         });
         
