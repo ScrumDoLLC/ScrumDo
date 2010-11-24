@@ -178,6 +178,17 @@ def test_data(request, group_slug, count):
 def projects(request, template_name="projects/projects.html"):
     return your_projects(request, template_name)
 
+@login_required
+def fix_local_id(request, group_slug=None):
+  project = get_object_or_404(Project, slug=group_slug)
+  id = 1
+  for story in project.stories.all().order_by("local_id"):
+    story.local_id = id
+    story.save()
+    id = id + 1
+  return HttpResponse("OK")
+
+@login_required
 def delete(request, group_slug=None, redirect_url=None):
     project = get_object_or_404(Project, slug=group_slug)
     if not redirect_url:

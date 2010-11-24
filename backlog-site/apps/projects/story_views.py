@@ -61,25 +61,30 @@ def reorder_story( request, group_slug, story_id):
   story = get_object_or_404( Story, id=story_id )
   project = get_object_or_404( Project, slug=group_slug )
   if request.method == 'POST':
-    rank = 0
-    target_rank = int(request.POST["index"])
+    rank = 0      
     target_iteration = request.POST["iteration"]
     iteration = get_object_or_404( Iteration, id=target_iteration )
-    story.rank = target_rank;
+    
+    if request.POST.get("action","") == "reorder" :
+      # Sometimes, we're just moving iterations...
+      target_rank = int(request.POST["index"])
+      story.rank = target_rank;    
+      
     story.iteration = iteration;
     story.save()
     
     stories = project.stories.all().filter(iteration=iteration).order_by("rank")
     
-    # For now, a stupid reorder everything algorithm
-    for otherStory in stories:
-      if rank == target_rank:
-        rank+=1
+    if request.POST.get("action","") == "reorder" :
+      # For now, a stupid reorder everything algorithm
+      for otherStory in stories:
+        if rank == target_rank:
+          rank+=1
         
-      if otherStory != story:        
-        otherStory.rank = rank
-        otherStory.save()      
-        rank = rank + 1
+        if otherStory != story:        
+          otherStory.rank = rank
+          otherStory.save()      
+          rank = rank + 1
         
     return HttpResponse("OK")
   return  HttpResponse("Fail")
@@ -219,6 +224,6 @@ def processImport( project, file , user):
     except:
       points = "?"
     print summary
-    story = Story( project=project, summary=summary, detail=detail, rank=0, local_id=project.stories.count(), creator=user, points=points, iteration=project.get_default_iteration())
+    story = Story( project=project, summary=summary, detail=detail, rank=0, local_id=project.stories.count()+1, creator=user, points=points, iteration=project.get_default_iteration())
     story.save()
   user.message_set.create(message=("%d stories imported" % count))

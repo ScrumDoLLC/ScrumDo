@@ -1,0 +1,13 @@
+User-agent: *
+Disallow: /projects/
+Disallow: /admin/
+Disallow: /site_media/
+Disallow: /attachments/
+Disallow: /tagging_utils/
+Disallow: /avatar/
+Disallow: /account/
+Disallow: /stats
+Disallow: /stats_data
+Disallow: /openid/
+Crawl-delay: 10
+

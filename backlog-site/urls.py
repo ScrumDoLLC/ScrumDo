@@ -20,6 +20,8 @@ else:
 urlpatterns = patterns('',
     url(r'^$', "projects.views.home" , name="home"),
     
+    url(r'^robots.txt$', direct_to_template, {'template': 'robots.txt'}),    
+    
     url(r'^stats$', direct_to_template, {'template': 'site_stats.html'}),    
     url(r'^stats_data$', views.stats_data ),
     

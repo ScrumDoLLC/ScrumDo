@@ -14,6 +14,7 @@ urlpatterns = patterns('projects.views',
     url(r'^project/(?P<group_slug>[-\w]+)/$', 'project', name="project_detail"),
     url(r'^project/(?P<group_slug>[-\w]+)/delete/$', 'delete', name="project_delete"),
     url(r'^project/(?P<group_slug>[-\w]+)/admin$', 'project_admin', name="project_admin"),
+    url(r'^project/(?P<group_slug>[-\w]+)/fix_local_id$', 'fix_local_id', name="fix_local_id"),
     url(r'^project/(?P<group_slug>[-\w]+)/history$', 'project_history', name="project_history"),    
     url(r'^project/(?P<group_slug>[-\w]+)/test_data/(?P<count>[0-9]+)', 'test_data'),    
     

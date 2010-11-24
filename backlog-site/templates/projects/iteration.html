@@ -18,11 +18,9 @@
 
 {% block body %}
     
-    {% if user.is_authenticated %}
+    
        
        {% include "stories/add_story_form.html" %}
-       
-      
         <div class="right_panel">
           {% if daysLeft %}
             <div class="blue_box small_project_list">
@@ -39,16 +37,18 @@
             </div>
         </div>
       
-      
-      
         <h1>{{ iteration.name }}</h1>
 
         {% if iteration.start_date %}<i>{{iteration.start_date|date:"M d, Y"}} - {{iteration.end_date|date:"M d, Y"}}</i>{% endif %}
         
-        {% if iteration.points_log.count %}
-          <div id="iterationBurndown" style="width:540px;height:200px;"></div>  
+        {% if not iteration.default_iteration %}
+          {% if iteration.points_log.count %}
+            <div id="iterationBurndown" style="width:540px;height:200px;"></div>  
+          {% else %}
+            <img src="/site_media/static/images/burndown.png">
+          {% endif %}
         {% else %}
-          <img src="/site_media/static/images/burndown.png">
+          Put backlog information here.
         {% endif %}
         
         <div style="clear:both;">&nbsp;</div>
@@ -59,18 +59,23 @@
         {% with iteration.id as iteration_id %}
             {% include "stories/filter_form.html" %}
         {% endwith %}
-        
-        
                 
         <ul id="story_list">
           {# {% for story in iteration.stories.all %} #}
           {#            {% include "stories/single_block_story.html" %} #}
           {#          {% endfor %} #}
         </ul>
-      
-      
-    {% endif %}
     </div>
+    
+    {% if iteration.default_iteration %}
+      <div id="subIterationList">
+        {% for subiteration in project.iterations.all %}
+          {% ifnotequal subiteration iteration %}
+            <div class="subIteration" iteration_id="{{subiteration.id}}">{{subiteration.name}}</div>
+          {% endifnotequal %}
+        {% endfor %}
+      </div>
+    {% endif %}
     
     <div id="iterationDetails" style="display:none">
       <form method="POST" action="">
@@ -121,13 +126,60 @@
         });
     
     loadIteration( "{{ iteration.id }}","","")  ;
-    $("ul").sortable({ update: updateStoryPosition, placeholder: "ui-state-highlight" });
-    $("ul").disableSelection();
+    
+    {% if iteration.default_iteration %}
+    $(".subIteration").droppable({
+            accept: "#story_list li",
+            tolerance: 'pointer',
+           hoverClass: "ui-state-hover",
+           over: function(event, ui) { 
+             
+           },
+           drop: function( event, ui ) {
+                  ui.draggable.hide();  
+                  $(ui.draggable).attr("draggedOffScreen","1");       
+                  iteration_id = $(this).attr("iteration_id");
+                  story_id = $(ui.draggable).attr("story_id");
+                  moveStoryToIteration( story_id, iteration_id );
+           }
+         });
+    {% endif %}
+    
+    $("#story_list").sortable({ 
+      update: updateStoryPosition, 
+      tolerance: 'pointer', 
+      opacity:0.6, 
+      placeholder: "ui-state-highlight" 
+      });
+      
+    $("#story_list").disableSelection();
+    
 
+    
+
+    {# This method takes a story in the current iteration, and moves it to another. #}
+    function moveStoryToIteration( story_id, iteration_id )
+    {
+      $("#loadingIcon").show();
+      $.ajax({
+        url: "/projects/project/" + project_slug + "/story/" + story_id + "/reorder",
+        data:({ action:"change_iteration",  iteration:iteration_id }),
+        type: "POST",
+        success: function() {
+          calculateBothPoints();
+          $("#loadingIcon").hide();
+        }
+      });
+    }
 
     {# This is the method that handles the user-drop event and records that fact on the server. #}
     function updateStoryPosition(event, ui)
-    {  
+    {        
+      if( $(ui.item).attr("draggedOffScreen") == "1" )
+      {
+        // We were getting double sort/drag events sometimes when dragging to a different iteration.
+        return;
+      }
       iterationId = "{{ iteration.id }}";
       $("#loadingIcon").show();
       $.ajax({

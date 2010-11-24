@@ -32,6 +32,31 @@
   width: 200px;
 }
 
+#subIterationList {
+	background-color: #f5f5f5;
+	width: 300px;
+	position: fixed;
+	bottom: 20px;
+	right: 0px;
+	border-style: solid;
+	border-width: 1px;
+	
+	max-height: 300px;	
+	overflow: auto;
+	overflow-x: hidden; 
+
+
+}
+
+#subIterationList div {
+	font-size: 18px;
+	width: 100%;
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+	padding: 8px 0 8px 15px;
+	
+}
+
 .projectOptionsForm td {
   padding-left:10px;
 }
