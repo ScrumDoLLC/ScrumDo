@@ -39,7 +39,9 @@
             
            <div class="project_stats blue_box">
               <h1>Stats <a href="#statsHelp" rel="facebox">{% silk "help" %}</a></h1>
+              {% if project.velocity %}
               Velocity: <b>{{project.velocity}}</b> <br/>
+              {% endif %}
               Stories: <b>{{ project.stories.count }}</b> <br/>
               {% if project.iterations_left %}
               Iterations Left: <b>{{ project.iterations_left }}</b><br/>
