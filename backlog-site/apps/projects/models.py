@@ -101,6 +101,8 @@ class Iteration( models.Model):
   default_iteration = models.BooleanField( default=False )
   points_log = generic.GenericRelation( PointsLog )
   
+  include_in_velocity = models.BooleanField(_('include_in_velocity'), default=True)
+  
   def isCurrent(self):
     today = date.today()
     return self.start_date <= today and self.end_date >= today

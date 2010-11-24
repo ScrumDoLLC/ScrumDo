@@ -20,12 +20,12 @@ class IterationForm(forms.ModelForm):
   def __init__(self,  *args, **kwargs):
     super(IterationForm, self).__init__(*args, **kwargs)
     
-    # self.fields['start_date'].widget = SelectDateWidget()
+    self.fields['include_in_velocity'].label = "Include In Velocity Calculations"
     # self.fields['end_date'].widget = SelectDateWidget()
     
   class Meta:
       model = Iteration
-      fields = ('name', 'detail', 'start_date', 'end_date')
+      fields = ('name', 'detail', 'start_date', 'end_date', 'include_in_velocity')
 
 
 
