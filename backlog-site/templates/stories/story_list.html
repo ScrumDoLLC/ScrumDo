@@ -184,7 +184,7 @@
   }
 
   {# Set up the drag & drop functionality of our story lists. #}
-  $("ul").sortable({connectWith: "ul", update: updateStoryPosition});
+  $("ul").sortable({connectWith: "ul", update: updateStoryPosition , placeholder: "ui-state-highlight"});
   $("ul").disableSelection();
  
   {# When the iteration combo box changes, load the correct iteration into the left column (or hide it if there is no iteration) #}

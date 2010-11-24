@@ -84,6 +84,9 @@
 	padding: 10px;
 }
 
+.ui-state-highlight { height: 1.5em; line-height: 1.2em; }
+
+
 .tagsBox {
 	background-color: #fffeff;
 	border-left-style: none;

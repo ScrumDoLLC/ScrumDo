@@ -38,7 +38,7 @@
             </div>
             
            <div class="project_stats blue_box">
-              <h1>Stats</h1>
+              <h1>Stats <a href="#statsHelp" rel="facebox">{% silk "help" %}</a></h1>
               Velocity: <b>45</b> <br/>
               Stories: <b>{{ project.stories.count }}</b> <br/>
               Iterations Left: <b>8</b><br/>
@@ -140,6 +140,20 @@
 
     </div>
 
+
+    <div style="display:none" id="statsHelp">
+      <h2>Velocity</h2>
+      Velocity is calculated on a nightly basis.  It represents how many points per iteration your team has completed.  It's averaged over the past
+      several iterations.  You can change how this stat is calculated on the <a href="{% url project_admin project.slug %}" >project admin</a> page.
+      <h2>Stories</h2>
+      The total number of strories in this project.
+      <h2>Iterations Left</h2>
+      If you continue working at the stated velocity, and you complete all of the stories in the project not yet marked as done, it will take you this many
+      iterations to complete the project.
+      <br/><br/>
+      
+    </div>
+    
 {% endblock %}
 
 {% block extra_body %}

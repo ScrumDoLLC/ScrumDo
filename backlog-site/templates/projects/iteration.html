@@ -120,7 +120,7 @@
         });
     
     loadIteration( "{{ iteration.id }}","","")  ;
-    $("ul").sortable({ update: updateStoryPosition});
+    $("ul").sortable({ update: updateStoryPosition, placeholder: "ui-state-highlight" });
     $("ul").disableSelection();
 
 

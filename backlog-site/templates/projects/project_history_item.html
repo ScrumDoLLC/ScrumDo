@@ -11,6 +11,8 @@
     {% if iteration.start_date %}<i>{{iteration.start_date|date:"M d, Y"}} - {{iteration.end_date|date:"M d, Y"}}</i>{% endif %}        
     <div id="iterationBurndown_{{iteration.id}}" style="width:540px;height:120px;"></div>  
     {% endif %}
+    
+    
   {% endfor %}
 
 <script type="text/javascript" charset="utf-8">  
