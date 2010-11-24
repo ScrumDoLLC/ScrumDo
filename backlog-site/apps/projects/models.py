@@ -58,6 +58,9 @@ class Project(Group):
     
     velocity = models.PositiveIntegerField( null=True )
     velocity_iteration_span = models.PositiveIntegerField( null=True ) 
+    
+    iterations_left = models.PositiveIntegerField( null=True )
+    
       
     def get_default_iteration( self ):
       if self.default_iteration == None:

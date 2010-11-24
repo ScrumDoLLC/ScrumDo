@@ -45,12 +45,37 @@ def calculatePoints( stories ):
 def calculateProject( project ):
   stories = project.stories.all();
   points = calculatePoints( stories )
+  total_project_points = points[0]
   log = PointsLog( points_claimed=points[1], points_total=points[0], related_object=project)
-  print "%d / %d / %s " % (log.points_total, log.points_claimed, project.name );
+  
   log.save();
   today = date.today()
   yesterday = today - timedelta( days=1 )
-  tomorrow = today +  timedelta( days=1 )
+  tomorrow = today +  timedelta( days=1 )  
+  points_total = 0
+  iterations_total = 0  
+  for iteration in project.iterations.filter( end_date__lte=today):
+    if not iteration.default_iteration:
+      iterations_total += 1
+      for story in iteration.stories.all():
+        if story.status == Story.STATUS_DONE:
+          try:
+            points_total += int(story.points)
+          except ValueError:
+            pass # probably ? or infinity
+  
+  if iterations_total > 0:
+    project.velocity = int(points_total / iterations_total)
+    if project.velocity > 0:
+      project.iterations_left = int( total_project_points / project.velocity)
+  else:
+    project.velocity = 0
+    project.iterations_left = None;
+  
+  project.save();
+      
+  print "%d / %d / %d / %s " % (project.velocity, log.points_total, log.points_claimed, project.name );
+  
   for iteration in project.iterations.filter( start_date__lte=yesterday, end_date__gte=tomorrow):
     if( iteration != project.get_default_iteration() ):    
       points = calculatePoints( iteration.stories.all() );
