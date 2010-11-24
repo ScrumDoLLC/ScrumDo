@@ -48,9 +48,10 @@
               <h1>Iterations</h1>
               {% for iteration in project.iterations.all %}
                 {% ifequal iteration project.get_default_iteration %}
-                  <div class="iterationHeader"><a href="{% url stories project.slug %}">{{iteration.name}}</a> </div> 
+                  <div class="iterationHeader">{% silk "page_world" %}<a href="{% url stories project.slug %}">{{iteration.name}}</a> </div> 
                 {% else %}
-                  <div class="iterationHeader"><a href="{% url iteration project.slug iteration.id %}">{{iteration.name}}</a> </div>
+                
+                  <div class="iterationHeader">{% if iteration.isCurrent %}{% silk "page" %}{% else %}{% silk "page_white" %}{% endif%}<a href="{% url iteration project.slug iteration.id %}">{{iteration.name}}</a> </div>
                 {% endifequal %}
               {% endfor %}
               <br/><br/>

@@ -1,5 +1,5 @@
 {% extends "site_base.html" %}
-
+{% load theme_tags %}
 {% load i18n %}
 
 {% block body_class %}projects{% endblock %}
@@ -34,8 +34,16 @@
         {% if iteration.stories.count %}<b>{{iteration.stories.count}} Stories</b>{%endif%}
         {% if iteration.start_date %}<i>{{iteration.start_date|date:"M d, Y"}} - {{iteration.end_date|date:"M d, Y"}}</i>{% endif %}        
       </div>
-      <h2><a href="{% url iteration project.slug iteration.id %}">{{iteration.name}}</a></h2>
-      
+      <h2>
+          {% if iteration.default_iteration %}
+            {% silk "page_world" %}
+          {% else %}
+            {% if iteration.isCurrent %}
+              {% silk "page" %}
+            {% else %}          
+               {% silk "page_white" %}
+            {% endif%} 
+          {% endif %} <a href="{% url iteration project.slug iteration.id %}">{{iteration.name}}</a></h2>
       <hr/>
       {% endfor %}
       </div>

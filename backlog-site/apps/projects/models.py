@@ -98,6 +98,11 @@ class Iteration( models.Model):
   default_iteration = models.BooleanField( default=False )
   points_log = generic.GenericRelation( PointsLog )
   
+  def isCurrent(self):
+    today = date.today()
+    return self.start_date <= today and self.end_date >= today
+      
+  
   def stats():
     points = 0
     stories = 0
