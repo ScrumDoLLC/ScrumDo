@@ -33,7 +33,7 @@
               <br/>              
               <a href="#iterationDetails" rel="facebox">Edit Details</a><br/>
               <a href="{% url stories iteration.project.slug  %}?iteration={{iteration.id}}">Add Stories From Backlog</a><br/>
-              Planning Poker<br/>
+
             </div>
         </div>
       
@@ -71,6 +71,7 @@
       <div id="subIterationList" style="display:none">
         {% for subiteration in project.iterations.all %}
           {% ifnotequal subiteration iteration %}
+          
             <div class="subIteration" iteration_id="{{subiteration.id}}">{{subiteration.name}}</div>
           {% endifnotequal %}
         {% endfor %}

@@ -1,14 +1,12 @@
 {% extends "site_base.html" %}
-{% load theme_tags %}
+
+{% load iteration_tags %}
 {% load i18n %}
 
 {% block body_class %}projects{% endblock %}
 
-
 {% block extra_head %}
-
   <script src="{{ STATIC_URL }}js/burndown.js" type="text/javascript"></script>  
-  
 {% endblock %}
 
 {% block subnav %}
@@ -18,6 +16,7 @@
             <li><a href="{% url project_detail project.slug %} ">{{project.name}}</a></li>
             <li><a href="{% url iteration project.slug project.get_default_iteration.id %} ">Backlog</a></li>
             <li><a href="#iteration_header_list" rel="facebox">Iterations</a></li>
+            <li><a href="#tools_list" rel="facebox">Tools</a></li>
           {% else %}
               <li><a href="{% url your_projects %} ">{% trans "Your Projects" %}</a></li>
               <li><a href="{% url project_create %}">{% trans "Create a Project" %}</a></li>
@@ -25,6 +24,25 @@
         {% endif %}
     </ul>
     
+    <div id="tools_list" style="display:none">
+      <ul class="toolsList">
+        <li>
+            <img src="{{ STATIC_URL }}images/iteration_planning.png">
+            <a href="{% url stories project.slug %}">Iteration Planning</a><br/>
+            Easily rank your stories and move them into an iteration.
+        </li>
+        <li>
+            <img src="{{ STATIC_URL }}images/project_history.png">
+            <a href="{% url project_history project.slug %}">Project History</a><br/>
+            See how much you've completed in past iterations.
+        </li>                
+        <li>
+            <img src="{{ STATIC_URL }}images/comingSoon.png">
+            <a href="#">Sizing</a><br/>
+            Coming Soon: Easily size stories.
+        </li>        
+      </ul>
+    </div>
     
     <div id="iteration_header_list" style="display:none">
       <div class="iteration_header_list">
@@ -34,16 +52,7 @@
         {% if iteration.stories.count %}<b>{{iteration.stories.count}} Stories</b>{%endif%}
         {% if iteration.start_date %}<i>{{iteration.start_date|date:"M d, Y"}} - {{iteration.end_date|date:"M d, Y"}}</i>{% endif %}        
       </div>
-      <h2>
-          {% if iteration.default_iteration %}
-            {% silk "page_world" %}
-          {% else %}
-            {% if iteration.isCurrent %}
-              {% silk "page" %}
-            {% else %}          
-               {% silk "page_white" %}
-            {% endif%} 
-          {% endif %} <a href="{% url iteration project.slug iteration.id %}">{{iteration.name}}</a></h2>
+      <h2>{% iteration_name iteration %}</h2>
       <hr/>
       {% endfor %}
       </div>

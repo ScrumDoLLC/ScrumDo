@@ -28,6 +28,34 @@
 	font-size: 16px;
 	color: #e3e3e3;
 }
+
+.toolsList {
+	list-style-type: none;
+	max-height: 500px;
+	overflow: auto;		
+}
+
+.toolsList img {
+	float: left;
+	padding-right: 10px;
+}
+
+.toolsList li {
+	clear: none;
+	
+	background-color: #f1f1f1;
+	margin: 5px;
+	padding: 5px;
+	width: 450px;
+	height: 107px;
+	display: block;
+	float: left;
+}
+
+.toolsList a {
+	font-size: 18px;
+}
+
 .projectOptionsForm tr td:first-child {
   width: 200px;
 }
