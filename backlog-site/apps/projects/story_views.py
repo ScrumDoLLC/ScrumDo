@@ -54,7 +54,7 @@ def delete_story( request, group_slug, story_id ):
   else:
     return HttpResponse("FAIL");
      
-# This is the request handler that gets called from the story_list page when the user drags & drops a story to a
+# This is the request handler that gets called from the story_list and iteraqtion pages when the user drags & drops a story to a
 # new ranking or a new iteration.  It should have two post variables, index and iteration
 @login_required
 def reorder_story( request, group_slug, story_id):

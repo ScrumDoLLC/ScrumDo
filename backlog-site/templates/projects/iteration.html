@@ -92,6 +92,7 @@
     <script type="text/javascript">
 
     var project_slug = "{{ iteration.project.slug }}";
+    var current_story_popup = "";
 
     function loadIteration( iterationID , tags, search)
     {
@@ -105,7 +106,7 @@
           $("#story_list").html(html);  
           $("#story_list").attr("iteration_id", iterationID);      
           $("#loadingIcon").hide();
-          setUpCommentLinks();
+          setUpStoryLinks();
         }
       });
     }
@@ -122,57 +123,15 @@
             $("#story_list").html(html);  
             $(document).trigger('close.facebox');   
             $("#loadingIcon").hide();   
-            setUpCommentLinks();        
+            setUpStoryLinks();        
             $("ul").sortable("disable");
           }
         });
     
-    loadIteration( "{{ iteration.id }}","","")  ;
-    
-    // {% if iteration.default_iteration %}
-    // $(".subIteration").droppable({
-    //         accept: "#story_list li",
-    //         tolerance: 'pointer',
-    //        hoverClass: "ui-state-hover",
-    //        over: function(event, ui) { 
-    //          
-    //        },
-    //        drop: function( event, ui ) {
-    //               ui.draggable.hide();  
-    //               $(ui.draggable).attr("draggedOffScreen","1");       
-    //               iteration_id = $(this).attr("iteration_id");
-    //               story_id = $(ui.draggable).attr("story_id");
-    //               moveStoryToIteration( story_id, iteration_id );
-    //        }
-    //      });
-    // {% endif %}
-    
-    $("#story_list").sortable({ 
-      update: updateStoryPosition, 
-      tolerance: 'pointer', 
-      opacity:0.6, 
-      placeholder: "ui-state-highlight" 
-      });
-      
-    $("#story_list").disableSelection();
+
     
 
     
-    // 
-    // {# This method takes a story in the current iteration, and moves it to another. #}
-    // function moveStoryToIteration( story_id, iteration_id )
-    // {
-    //   $("#loadingIcon").show();
-    //   $.ajax({
-    //     url: "/projects/project/" + project_slug + "/story/" + story_id + "/reorder",
-    //     data:({ action:"change_iteration",  iteration:iteration_id }),
-    //     type: "POST",
-    //     success: function() {
-    //       calculateBothPoints();
-    //       $("#loadingIcon").hide();
-    //     }
-    //   });
-    // }
 
     {# This is the method that handles the user-drop event and records that fact on the server. #}
     function updateStoryPosition(event, ui)
@@ -222,8 +181,10 @@
         $(this).attr('id',jQuery(this).attr('id') + '-2')
       });
     });
+    
+    
 
-    function setUpCommentLinks() 
+    function setUpStoryLinks() 
     {
 
       $(".commentLink").click( function() 
@@ -245,47 +206,64 @@
         
         $(".moveIterationIcon").click( function(event)
         {
-         
-          
           var pos = $(this).offset();  
           var width = $(this).width();
             
           //show the menu directly over the placeholder
           $("#subIterationList").css( { "left": (pos.left + width) + "px", "top":pos.top + "px" } );
-          $("#subIterationList").show();
+          $("#subIterationList").fadeIn(100);
+          
+          current_story_popup = $(this).attr("story_id");
+          
+          $('body').one("click",function() {
+              $("#subIterationList").fadeOut(100);
+          });
+           
           return false;
         });
-        
-        $(".subIteration").click( function() 
-        {
-          
-        } );
-
     }
 
 
     
         $(document).ready(function() {
-          
+             
+              $(".subIteration").click( function() 
+              {
+                iteration_id = $(this).attr("iteration_id");
+                moveCurrentlyOpenStoryToIteration(iteration_id);
+              } );
 
-                {# Draw the graph... #}
-                 {% if iteration.points_log.count %}
-                   var options = {
-                      colors: ["#2292ff", "#ADD75C"],
-                      xaxis: { minTickSize: [1, "day"] , mode: "time", timeformat: "%m/%d/%y" },
-                      grid: { markings: weekendAreas } ,
-                      legend: {    position: "nw" },
-                      series: { lines: {   show: true , fill:true  }, 
-                                points: { radius:5, show: true, fill: true} 
-                                  }                   
-                   };        
-                   generateBurnDown( "#iterationBurndown", "{{project.slug}}" , "{{iteration.id}}" , 0);         
-                 {% endif %}
-                 
+              loadIteration( "{{ iteration.id }}","","")  ;
 
-               
+              $("#story_list").sortable({ 
+                update: updateStoryPosition, 
+                tolerance: 'pointer', 
+                opacity:0.6, 
+                placeholder: "ui-state-highlight" 
+                });
+
+              $("#story_list").disableSelection();
+              
+              {# Draw the graph... #}
+               {% if iteration.points_log.count %}      
+                 generateBurnDown( "#iterationBurndown", "{{project.slug}}" , "{{iteration.id}}" , 0);         
+               {% endif %}
         });
         
+        function moveCurrentlyOpenStoryToIteration( iteration_id )
+        {
+          $("#loadingIcon").show();
+          $.ajax({
+            url: "/projects/project/" + project_slug + "/story/" + current_story_popup + "/reorder",
+            data:({ action:"move_iteration", iteration:iteration_id }),
+            type: "POST",
+            success: function() {
+              $("#loadingIcon").hide();
+              $("#story_" + current_story_popup).hide(true);
+            }
+          });
+          
+        }
         
         function setStatusReviewing( storyID )
         {
