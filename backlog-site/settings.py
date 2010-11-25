@@ -187,8 +187,8 @@ ACCOUNT_EMAIL_VERIFICATION = False
 
 EMAIL_CONFIRMATION_DAYS = 2
 EMAIL_DEBUG = DEBUG
-CONTACT_EMAIL = "scrumdoo@scrumdoo.com"
-SITE_NAME = "ScrumDoo"
+CONTACT_EMAIL = "scrumdo@scrumdo.com"
+SITE_NAME = "ScrumDo"
 LOGIN_URL = "/account/login/"
 LOGIN_REDIRECT_URLNAME = "projects.views.your_projects"
 
@@ -197,8 +197,8 @@ EMAIL_HOST='localhost'
 EMAIL_HOST_USER=''                  
 EMAIL_HOST_PASSWORD=''        
 EMAIL_PORT='25'
-DEFAULT_FROM_EMAIL = 'scrumdoo@scrumdoo.com'   
-SERVER_EMAIL = 'scrumdoo@scrumdoo.com'
+DEFAULT_FROM_EMAIL = 'scrumdo@scrumdo.com'   
+SERVER_EMAIL = 'scrumdo@scrumdo.com'
 
 GOOGLE_ANALYTICS = False
 GOOGLE_ANALYTICS_ACCOUNT = ""

@@ -67,15 +67,15 @@
         </ul>
     </div>
     
-    {% if iteration.default_iteration %}
-      <div id="subIterationList">
+
+      <div id="subIterationList" style="display:none">
         {% for subiteration in project.iterations.all %}
           {% ifnotequal subiteration iteration %}
             <div class="subIteration" iteration_id="{{subiteration.id}}">{{subiteration.name}}</div>
           {% endifnotequal %}
         {% endfor %}
       </div>
-    {% endif %}
+
     
     <div id="iterationDetails" style="display:none">
       <form method="POST" action="">
@@ -110,6 +110,8 @@
       });
     }
     
+
+        
         
     $(".showFilter").click( function() { $("#filterDialog").toggle(); return false;} );
     $(".filterForm").ajaxForm(
@@ -127,23 +129,23 @@
     
     loadIteration( "{{ iteration.id }}","","")  ;
     
-    {% if iteration.default_iteration %}
-    $(".subIteration").droppable({
-            accept: "#story_list li",
-            tolerance: 'pointer',
-           hoverClass: "ui-state-hover",
-           over: function(event, ui) { 
-             
-           },
-           drop: function( event, ui ) {
-                  ui.draggable.hide();  
-                  $(ui.draggable).attr("draggedOffScreen","1");       
-                  iteration_id = $(this).attr("iteration_id");
-                  story_id = $(ui.draggable).attr("story_id");
-                  moveStoryToIteration( story_id, iteration_id );
-           }
-         });
-    {% endif %}
+    // {% if iteration.default_iteration %}
+    // $(".subIteration").droppable({
+    //         accept: "#story_list li",
+    //         tolerance: 'pointer',
+    //        hoverClass: "ui-state-hover",
+    //        over: function(event, ui) { 
+    //          
+    //        },
+    //        drop: function( event, ui ) {
+    //               ui.draggable.hide();  
+    //               $(ui.draggable).attr("draggedOffScreen","1");       
+    //               iteration_id = $(this).attr("iteration_id");
+    //               story_id = $(ui.draggable).attr("story_id");
+    //               moveStoryToIteration( story_id, iteration_id );
+    //        }
+    //      });
+    // {% endif %}
     
     $("#story_list").sortable({ 
       update: updateStoryPosition, 
@@ -156,21 +158,21 @@
     
 
     
-
-    {# This method takes a story in the current iteration, and moves it to another. #}
-    function moveStoryToIteration( story_id, iteration_id )
-    {
-      $("#loadingIcon").show();
-      $.ajax({
-        url: "/projects/project/" + project_slug + "/story/" + story_id + "/reorder",
-        data:({ action:"change_iteration",  iteration:iteration_id }),
-        type: "POST",
-        success: function() {
-          calculateBothPoints();
-          $("#loadingIcon").hide();
-        }
-      });
-    }
+    // 
+    // {# This method takes a story in the current iteration, and moves it to another. #}
+    // function moveStoryToIteration( story_id, iteration_id )
+    // {
+    //   $("#loadingIcon").show();
+    //   $.ajax({
+    //     url: "/projects/project/" + project_slug + "/story/" + story_id + "/reorder",
+    //     data:({ action:"change_iteration",  iteration:iteration_id }),
+    //     type: "POST",
+    //     success: function() {
+    //       calculateBothPoints();
+    //       $("#loadingIcon").hide();
+    //     }
+    //   });
+    // }
 
     {# This is the method that handles the user-drop event and records that fact on the server. #}
     function updateStoryPosition(event, ui)
@@ -239,7 +241,25 @@
         $(".responses form  ").ajaxForm(
              {          
               success: function(responseText, statusText, xhr, obj) { $("#filter_button").submit();  }
-            });
+        });
+        
+        $(".moveIterationIcon").click( function(event)
+        {
+         
+          
+          var pos = $(this).offset();  
+          var width = $(this).width();
+            
+          //show the menu directly over the placeholder
+          $("#subIterationList").css( { "left": (pos.left + width) + "px", "top":pos.top + "px" } );
+          $("#subIterationList").show();
+          return false;
+        });
+        
+        $(".subIteration").click( function() 
+        {
+          
+        } );
 
     }
 
