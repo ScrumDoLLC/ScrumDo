@@ -16,7 +16,7 @@
         {% if user.is_authenticated %}
           {% if project %}
             <li><a href="{% url project_detail project.slug %} ">{{project.name}}</a></li>
-            <li><a href="{% url stories project.slug %} ">Backlog</a></li>
+            <li><a href="{% url iteration project.slug project.get_default_iteration.id %} ">Backlog</a></li>
             <li><a href="#iteration_header_list" rel="facebox">Iterations</a></li>
           {% else %}
               <li><a href="{% url your_projects %} ">{% trans "Your Projects" %}</a></li>
