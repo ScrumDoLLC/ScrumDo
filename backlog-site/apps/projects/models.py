@@ -117,7 +117,7 @@ class Iteration( models.Model):
     return (stories, points)
   
   class Meta:
-    ordering = ["-default_iteration", "end_date"];
+    ordering = ["-default_iteration","end_date"];
   
   def __str__(self):
     return self.name

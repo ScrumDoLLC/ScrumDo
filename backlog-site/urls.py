@@ -5,7 +5,7 @@ import views
 
 from django.views.generic.simple import direct_to_template
 
-from django.contrib import admin
+from django.conf import admin
 admin.autodiscover()
 
 from account.openid_consumer import PinaxConsumer
@@ -38,6 +38,7 @@ urlpatterns = patterns('',
     (r'^tagging_utils/', include('tagging_utils.urls')),
     (r'^attachments/', include('attachments.urls')),
     (r'^projects/', include('projects.urls')),    
+
 
     
     (r'^admin/(.*)', admin.site.root),

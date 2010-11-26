@@ -8,4 +8,9 @@ register = template.Library()
 def iteration_name(context, iteration):
     return {'iteration': iteration, 'request': context['request']}
     
+
+# Spits out the iteration icon 
+@register.inclusion_tag('projects/iteration_icon.html', takes_context=True)
+def iteration_icon(context, iteration):
+    return {'iteration': iteration, 'request': context['request']}
     

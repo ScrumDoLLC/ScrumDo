@@ -1,0 +1,13 @@
+{% load theme_tags %}
+
+{% spaceless %}
+
+{% if iteration.default_iteration %}
+  {% silk "page_world" %}
+{% else %}
+  {% if iteration.isCurrent %}
+    {% silk "page" %}
+  {% else %}    
+     {% silk "page_white" %}
+  {% endif%} 
+{% endif %}{% endspaceless %}
