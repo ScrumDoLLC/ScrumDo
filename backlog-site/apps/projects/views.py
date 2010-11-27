@@ -9,7 +9,6 @@ from django.utils.datastructures import SortedDict
 from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponse
 from django.core import serializers
-from django.core import serializers
 import json
 import datetime
 
@@ -24,6 +23,7 @@ else:
 
 from projects.models import Project, ProjectMember, Iteration, Story
 from projects.forms import *
+from organizations.models import Organization
 
 TOPIC_COUNT_SQL = """
 SELECT COUNT(*)
@@ -43,6 +43,7 @@ def home( request ):
   my_projects = [];
   member_projects = [];
   if request.user.is_authenticated():
+    organizations = Organization.getOrganizationsForUser(request.user)
     memberships = ProjectMember.objects.filter( user=request.user )
     for membership in memberships:
       try:
@@ -56,6 +57,7 @@ def home( request ):
     
   return render_to_response("homepage.html", {
        "my_projects":my_projects,
+       "my_organizations": organizations,
        "member_projects":member_projects
     }, context_instance=RequestContext(request))
 

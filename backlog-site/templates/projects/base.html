@@ -24,38 +24,41 @@
         {% endif %}
     </ul>
     
-    <div id="tools_list" style="display:none">
-      <ul class="toolsList">
-        <li>
-            <img src="{{ STATIC_URL }}images/iteration_planning.png">
-            <a href="{% url stories project.slug %}">Iteration Planning</a><br/>
-            Easily rank your stories and move them into an iteration.
-        </li>
-        <li>
-            <img src="{{ STATIC_URL }}images/project_history.png">
-            <a href="{% url project_history project.slug %}">Project History</a><br/>
-            See how much you've completed in past iterations.
-        </li>                
-        <li>
-            <img src="{{ STATIC_URL }}images/comingSoon.png">
-            <a href="#">Sizing</a><br/>
-            Coming Soon: Easily size stories.
-        </li>        
-      </ul>
-    </div>
+    {% if project %}
+      <div id="tools_list" style="display:none">
+        <ul class="toolsList">
+          <li>
+              <img src="{{ STATIC_URL }}images/iteration_planning.png">
+              <a href="{% url stories project.slug %}">Iteration Planning</a><br/>
+              Easily rank your stories and move them into an iteration.
+          </li>
+          <li>
+              <img src="{{ STATIC_URL }}images/project_history.png">
+              <a href="{% url project_history project.slug %}">Project History</a><br/>
+              See how much you've completed in past iterations.
+          </li>                
+          <li>
+              <img src="{{ STATIC_URL }}images/comingSoon.png">
+              <a href="#">Sizing</a><br/>
+              Coming Soon: Easily size stories.
+          </li>        
+        </ul>
+      </div>
     
-    <div id="iteration_header_list" style="display:none">
-      <div class="iteration_header_list">
-      {% for iteration in project.iterations.all %}
+    
+      <div id="iteration_header_list" style="display:none">
+        <div class="iteration_header_list">
+        {% for iteration in project.iterations.all %}
       
-      <div class="iteration_header_list_detail">
-        {% if iteration.stories.count %}<b>{{iteration.stories.count}} Stories</b>{%endif%}
-        {% if iteration.start_date %}<i>{{iteration.start_date|date:"M d, Y"}} - {{iteration.end_date|date:"M d, Y"}}</i>{% endif %}        
+        <div class="iteration_header_list_detail">
+          {% if iteration.stories.count %}<b>{{iteration.stories.count}} Stories</b>{%endif%}
+          {% if iteration.start_date %}<i>{{iteration.start_date|date:"M d, Y"}} - {{iteration.end_date|date:"M d, Y"}}</i>{% endif %}        
+        </div>
+        <h2>{% iteration_name iteration %}</h2>
+        <hr/>
+        {% endfor %}
+        </div>
       </div>
-      <h2>{% iteration_name iteration %}</h2>
-      <hr/>
-      {% endfor %}
-      </div>
-    </div>
+    {% endif %}
     
 {% endblock %}

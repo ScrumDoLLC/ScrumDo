@@ -1,0 +1,56 @@
+{% extends "organizations/base.html" %}
+
+{% load i18n %}
+
+{% load theme_tags %}
+
+
+{% block head_title %}Your Organizations{% endblock %}
+
+{% block body %}
+    
+    
+      <div class="right_panel">
+          <div class="blue_box">
+            <h1>Organizations</h1>                          
+            <p>Organizations let you group projects and teams.  Often times, they're used
+               to represent a company.</p>           
+            <p>The organizations you belong to are listed to the left.</p>
+            <p>To join an organization, ask the owner of that organization to add your ScrumDo username.</p>
+          </div>
+      </div>
+      
+    <div style="width: 550px;">
+      <ul class="organizationList">
+        {% for organization in organizations %}
+        <li class="organizationItem">
+          <div class="organizationListOptionButtons">
+          <a href="#"><img src="/site_media/static/images/settingsButton.png"></a>
+          <a href="#leaveOrganization" rel="facebox"><img src="/site_media/static/images/leaveButton.png"></a>
+          </div>
+          {% silk "building" %}
+          <a href="{% url organization_detail organization.slug %}">{{ organization.name}}</a><br/>
+          {{organization.description}}
+          <hr />          
+        </li>
+        {% endfor %}
+        
+        {% if not organizations%}
+          No organizations
+        {% endif %}
+        
+        <li class="organizationItem">
+          <a href="{% url organization_create %}">Create New Organization</a>
+        </li>
+      </ul>
+      
+      
+      
+    </div>
+    
+    
+    <div style="display:none" id="leaveOrganization">
+      <h2>Leave Organization</h2>
+      <p>Are you sure you want to leave this organization?</p>
+    </div>
+{% endblock %}

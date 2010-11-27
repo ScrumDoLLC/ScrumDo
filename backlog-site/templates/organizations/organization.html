@@ -1,0 +1,43 @@
+{% extends "organizations/base.html" %}
+
+{% load i18n %}
+
+{% load humanize %}
+{% load theme_tags %}
+{% load extra_tagging_tags %}
+
+
+{% block head_title %}{{organization.name}}{% endblock %}
+
+{% block body %}
+
+    
+      <div class="right_panel">
+          <div class="blue_box">
+            <h1>{{ organization.name }}</h1>              
+            {{ organization.description }}           
+          </div>
+      </div>
+      
+    <div style="width: 550px;">
+
+        <h1>Teams</h1>
+        <ul>
+        {% for team in organization.teams.all %}
+          <li>
+            <form method="POST" id="deleteForm" action="">
+              <INPUT style="float:right ; margin-right: 5px" TYPE="image" SRC="/site_media/static/images/deleteButton.png" >
+            </form>
+            <h2>{% silk "group" %}<a href="{% url team_detail organization.slug team.id %}">{{team.name}}</a></h2>
+            {{ team.members.count }} member{{ team.members.count|pluralize }}
+            <hr/>
+          </li>
+        {% endfor %}        
+          <li>
+            <a href="">Create New Team</a>
+          </li>
+        </ul>
+
+    </div>
+    
+{% endblock %}

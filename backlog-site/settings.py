@@ -160,6 +160,7 @@ INSTALLED_APPS = (
     'threadedcomments_extras',
     'groups',
     'projects',
+    'organizations',
     'topics',
     'django_extensions',
     'django_evolution'

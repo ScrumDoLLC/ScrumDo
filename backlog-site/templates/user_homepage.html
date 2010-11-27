@@ -8,15 +8,27 @@
     <div class="blue_box small_project_list">
       <h1>Your Projects</h1>
       <br/>
-      {% for project in my_projects %}  
-        {{project.name}}
-      {% endfor %}
+
       {% for project in member_projects %}  
         {% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a><br/>
         <hr/>
       {% endfor %}
-      
+
+       {% silk "database_add" %} <a href="{% url project_create %}">Create New Project</a>
+
     </div>
+    
+    <div class="blue_box small_project_list">
+      <h1>Your Organizations</h1>
+      <br/>
+    
+      {% for org in my_organizations %}  
+        {% silk "building" %} <a href="{% url organization_detail org.slug %}">{{org.name}}</a><br/>
+        <hr/>
+      {% endfor %}
+      {% silk "building_add" %} <a href="{% url organization_create %}">Create New Organization</a>
+    </div>
+
 
     
 </div>

@@ -11,6 +11,28 @@
   height: 32px;
 }
 
+.organizationList {
+	list-style-type: none;
+}
+
+.organizationItem {
+	color: #999;
+	padding: 5px 5px 0;
+	margin: 0px;
+}
+
+.organizationListOptionButtons {
+	float: right;
+	top: 8px;
+	position: relative;
+}
+
+
+.organizationItem a {
+	font-size: 18px;
+	text-decoration: none;	
+}
+
 .daysLeft {
 	width: 100%;
 	text-align: center;

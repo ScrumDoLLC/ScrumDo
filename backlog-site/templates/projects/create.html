@@ -13,14 +13,14 @@
 {% block body %}
     <h1>{% trans "Create Project" %}</h1>
     
-    <p>{% trans "A <b>project</b> is a group of people working together on a common set of tasks." %}</p>
+    <p>{% trans "A <b>project</b> is a collection of user stories." %}</p>
     {% if user.is_authenticated %}
         <form class="uniForm" id="project_form" method="POST" action="">
             <fieldset class="inlineLabels">
                 {{ project_form|as_uni_form }}
                 <div class="form_block">
                     <input type="hidden" name="action" value="create" />
-                    <input type="submit" value="{% trans 'create' %}"/>
+                    <div class="buttonHolder"><button class="primaryAction" type="submit" >Create Project</button></div>
                 </div>
             </fieldset>
         </form>
