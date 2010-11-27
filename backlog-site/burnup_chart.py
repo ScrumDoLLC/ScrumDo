@@ -76,7 +76,7 @@ def calculateProject( project ):
       
   print "%d / %d / %d / %s " % (project.velocity, log.points_total, log.points_claimed, project.name );
   
-  for iteration in project.iterations.filter( start_date__lte=yesterday, end_date__gte=tomorrow):
+  for iteration in project.iterations.filter( start_date__lte=tomorrow, end_date__gte=yesterday):
     if( iteration != project.get_default_iteration() ):    
       points = calculatePoints( iteration.stories.all() );
       if points[0] > 0:  # only logging active iterations with stuff in them
