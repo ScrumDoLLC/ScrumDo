@@ -23,12 +23,14 @@ else:
 
 from projects.models import Project, ProjectMember, Iteration, Story
 from projects.forms import *
+from projects.access import *
 
 
 
 @login_required
 def set_story_status( request, group_slug, story_id, status):
   story = get_object_or_404( Story, id=story_id )
+  write_access_or_403(story.project,request.user)
   story.status = status;
   story.save();
   if( request.POST.get("return_type","mini") == "mini"):
@@ -45,6 +47,7 @@ def set_story_status( request, group_slug, story_id, status):
 def delete_story( request, group_slug, story_id ):
   if request.method == "POST":
     story = get_object_or_404( Story, id=story_id )  
+    write_access_or_403(story.project,request.user)
     story.delete()     
     redirTo = request.GET.get("redirectTo", "")
     if redirTo:
@@ -60,6 +63,7 @@ def delete_story( request, group_slug, story_id ):
 def reorder_story( request, group_slug, story_id):
   story = get_object_or_404( Story, id=story_id )
   project = get_object_or_404( Project, slug=group_slug )
+  write_access_or_403(project,request.user)
   if request.method == 'POST':
     rank = 0      
     target_iteration = request.POST["iteration"]
@@ -93,19 +97,20 @@ def reorder_story( request, group_slug, story_id):
 @login_required
 def mini_story( request, group_slug, story_id):
   story = get_object_or_404( Story, id=story_id )
+  read_access_or_403(story.project,request.user)
   return render_to_response("stories/single_mini_story.html", {
       "story": story,
     }, context_instance=RequestContext(request))
 
 
+# calculates the tank a new story should have for a give project for 3 general rankings.
+# 0=top, 1=middle, 2=bottom
 def calculate_rank( project, general_rank ):
   if( general_rank == 0):
     return 0
   if( general_rank == 1):
     return round( project.stories.all().count() / 2)
   return project.stories.all().count()+1
-
-
 
 
 @login_required
@@ -115,6 +120,7 @@ def story( request, group_slug, story_id ):
   return_type = request.GET.get("return_type","mini")
 
   if request.method == 'POST': # If the form has been submitted...
+    write_access_or_403(project,request.user)
     form = StoryForm( project, request.POST, project, instance=story) # A form bound to the POST data    
 
     if form.is_valid(): # All validation rules pass      
@@ -130,6 +136,7 @@ def story( request, group_slug, story_id ):
         }, context_instance=RequestContext(request))
   
   else:
+    read_access_or_403(project,request.user)
     form = StoryForm(project, instance=story )
   
   return   render_to_response("stories/story.html", {
@@ -142,6 +149,7 @@ def story( request, group_slug, story_id ):
 @login_required
 def stories_iteration(request, group_slug, iteration_id):
   project = get_object_or_404(Project, slug=group_slug)  
+  read_access_or_403(project,request.user)
   iteration = get_object_or_404(Iteration, id=iteration_id, project=project)  
   
   order_by = request.GET.get("order_by","rank");
@@ -171,8 +179,9 @@ def stories_iteration(request, group_slug, iteration_id):
 @login_required
 def stories(request, group_slug):
   project = get_object_or_404(Project, slug=group_slug)  
-
+  
   if request.method == 'POST': # If the form has been submitted...
+    write_access_or_403(project,request.user)
     form = StoryForm(project, request.POST) # A form bound to the POST data
     if form.is_valid(): # All validation rules pass
       story = form.save( commit=False )
@@ -185,6 +194,7 @@ def stories(request, group_slug):
       request.user.message_set.create(message="New story created.")
       form = StoryForm(project)
   else:
+    read_access_or_403(project,request.user)
     form = StoryForm(project)
 
   return render_to_response("stories/story_list.html", {
@@ -199,7 +209,7 @@ def stories(request, group_slug):
 @login_required
 def import_file(request, group_slug):
   project = get_object_or_404(Project, slug=group_slug)
-  
+  write_access_or_403(project,request.user)
   if request.method == 'POST':     
       processImport(project, request.FILES['import_file'], request.user);
       return HttpResponseRedirect(reverse('project_detail', kwargs={'group_slug':project.slug}) )
