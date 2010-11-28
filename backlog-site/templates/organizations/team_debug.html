@@ -1,0 +1,24 @@
+{% extends "organizations/base.html" %}
+
+{% load i18n %}
+
+{% load humanize %}
+{% load theme_tags %}
+{% load extra_tagging_tags %}
+{% load avatar_tags %}
+
+{% block head_title %}{{organization.name}}{% endblock %}
+
+{% block body %}
+
+  <h1>Admin Organizations</h1>
+  {% for org in admin_orgs %}
+    {{org.name}}<br/>
+  {% endfor %}
+  
+  <h1>Read Organizations</h1>
+  {% for org in read_orgs %}
+    {{org.name}}<br/>
+  {% endfor %}  
+    
+{% endblock %}

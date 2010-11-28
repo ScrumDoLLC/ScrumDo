@@ -19,22 +19,24 @@ class Organization(models.Model):
   description = models.TextField(_('description'))
   
   def getDefaultTeam():
-    return Organization.objects.filter( teams__access_type="admin", teams__members__user__id = user.id ).order_by("name")
+    return Organization.objects.filter( teams__access_type="admin", teams__members__user__id = user.id ).order_by("name")[0]
   
   # Returns all organizations
   @staticmethod
   def getOrganizationsForUser( user ):
-    return Organization.objects.filter( teams__members = user ).order_by("name")
+    return Organization.objects.filter( teams__members = user ).distinct().order_by("name")
 
   # Returns all organizations the user has admin rights to.
   @staticmethod
   def getAdminOrganizationsForUser( user ):
-    return Organization.objects.filter( teams__access_type="admin", teams__members__user__id = user.id ).order_by("name")
+    return Organization.objects.filter( teams__access_type="admin", teams__members = user ).distinct().order_by("name")
+
 
   # returns all organizations the user has read/write access to
-  @staticmethod
-  def getReadWriteOrganizationsForUser( user ):
-    return Organization.objects.filter( teams__access_type__ne="read", teams__members__user__id = user.id ).order_by("name")
+  # @staticmethod
+  # def getReadWriteOrganizationsForUser( user ):
+  #   return Organization.objects.filter( teams__members = user ).exclude(teams__access_type = "read").distinct().order_by("name")
+
 
     
   def get_url_kwargs(self):

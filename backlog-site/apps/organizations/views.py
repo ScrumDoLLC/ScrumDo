@@ -56,3 +56,14 @@ def your_organizations(request):
       "organizations": organizations
     }, context_instance=RequestContext(request))
 
+
+
+@login_required
+def team_debug(request):
+  read_orgs = Organization.getOrganizationsForUser(request.user)
+  admin_orgs = Organization.getAdminOrganizationsForUser(request.user)
+  # write_orgs = Organization.getReadWriteOrganizationsForUser(request.user)
+  return render_to_response("organizations/team_debug.html", {    
+      "read_orgs":read_orgs,
+      "admin_orgs":admin_orgs
+    }, context_instance=RequestContext(request))
