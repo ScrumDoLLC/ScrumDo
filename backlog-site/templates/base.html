@@ -90,14 +90,10 @@
       
         {% if site_wide_announcements %}
             <div id="site_wide_announcements">
-                <ul>
                     {% for announcement in site_wide_announcements %}
-                    <li>
                         <a href="{{ announcement.get_absolute_url }}">{{ announcement }}</a> -
-                        <a href="{% url announcement_hide announcement.pk %}?next={{ request.path }}">{% trans "Hide announcement" %}</a>
-                    </li>
+                        <a href="{% url announcement_hide announcement.pk %}?next={{ request.path }}">{% trans "Hide announcement" %}</a></br>
                     {% endfor %}
-                </ul>
             </div>
         {% endif %}
         
