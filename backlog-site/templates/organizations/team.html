@@ -1,0 +1,80 @@
+{% extends "organizations/base.html" %}
+
+{% load i18n %}
+
+{% load humanize %}
+{% load theme_tags %}
+{% load extra_tagging_tags %}
+{% load avatar_tags %}
+
+{% block head_title %}{{organization.name}}{% endblock %}
+
+{% block body %}
+
+    
+      <div class="right_panel">
+          <div class="blue_box">
+            <h1>Team: {{ team.name }}</h1>       
+            Grants {{team.access_type}} permissions.
+          </div>
+      </div>
+      
+    <div style="width: 550px;">
+
+
+        <div class="sectionHeader">Projects</div>        
+        <ul class="organizationList">
+        {% for project in team.projects.all %}
+          <li class="organizationItem">
+            <div class="organizationListOptionButtons">
+           
+            </div>
+            {% silk "database_table" %}<a href="{% url project_detail project.slug %}">{{project.name}}</a><br/>
+            {{ project.stories.count }} stor{{ project.stories.count|pluralize:"y,ies" }}, {{ project.iterations.count }} iteration{{ project.iterations.count|pluralize }}
+            <hr/>
+          </li>
+        {% endfor %}        
+          <li class="organizationItem">
+            <select>
+            {% for project in organization.projects.all %}
+              <option>{{project.name}}</option>
+            {% endfor %}
+            </select>
+            <input type="submit" value="Add Project">
+          </li>
+        </ul>
+        
+        <div class="sectionHeader">Members</div>
+        <ul class="organizationList">
+        {% for member in team.members.all %}
+          <li class="organizationItem">            
+            <img class="memberDeleteButton" src="/site_media/static/pinax/images/silk/icons/delete.png" />
+            {% avatar member 40 %} {{member.username}}            
+            {% if member.email %} &lt;{{member.email}}&gt; {% endif %}
+            {% if member.first_name %} {{member.first_name}} {% endif %}
+            {% if member.last_name %} {{member.last_name}} {% endif %}
+            
+            
+          </li>
+        {% endfor %}        
+          <li class="organizationItem">
+            
+            <form id="add-member" method="POST" action="">
+                    {{ adduser_form.non_field_errors }}
+                    {{ adduser_form.recipient }}    {{adduser_form.recipient.errors}}
+                    <input type="hidden" name="action" value="add" />
+                    <input type="image" src="/site_media/static/images/addMemberButton.png" />
+            </form>
+          </li>
+        </ul>
+        
+        
+
+        
+    </div>
+    
+    
+<script type="text/javascript" charset="utf-8">
+  
+</script>
+{% endblock %}

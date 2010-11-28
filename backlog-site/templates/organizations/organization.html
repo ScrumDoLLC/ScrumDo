@@ -21,23 +21,45 @@
       
     <div style="width: 550px;">
 
-        <h1>Teams</h1>
-        <ul>
-        {% for team in organization.teams.all %}
-          <li>
-            <form method="POST" id="deleteForm" action="">
-              <INPUT style="float:right ; margin-right: 5px" TYPE="image" SRC="/site_media/static/images/deleteButton.png" >
-            </form>
-            <h2>{% silk "group" %}<a href="{% url team_detail organization.slug team.id %}">{{team.name}}</a></h2>
-            {{ team.members.count }} member{{ team.members.count|pluralize }}
+
+        <div class="sectionHeader">Projects</div>        
+        <ul class="organizationList">
+        {% for project in organization.projects.all %}
+          <li class="organizationItem">
+            <div class="organizationListOptionButtons">
+           
+            </div>
+            {% silk "database_table" %}<a href="{% url project_detail project.slug %}">{{project.name}}</a><br/>
+            {{ project.stories.count }} stor{{ project.stories.count|pluralize:"y,ies" }}, {{ project.iterations.count }} iteration{{ project.iterations.count|pluralize }}
             <hr/>
           </li>
         {% endfor %}        
-          <li>
-            <a href="">Create New Team</a>
+          <li class="organizationItem">
+            <a href="{% url project_create  %}">{% silk "add" %}Create New Project</a>
           </li>
         </ul>
+        
+        <div class="sectionHeader">Teams</div>
+        <ul class="organizationList">
+        {% for team in organization.teams.all %}
+          <li class="organizationItem">
+            {% silk "group" %}<a href="{% url team_detail organization.slug team.id %}">{{team.name}}</a><br/>
+            Grants {{team.access_type}} access on {{team.projects.count}} project{{team.projects.count|pluralize}} to {{ team.members.count }} member{{ team.members.count|pluralize }}
+            <hr/>
+          </li>
+        {% endfor %}        
+          <li class="organizationItem">
+            <a href="{% url team_create organization.slug %}">{% silk "add" %}Create New Team</a>
+          </li>
+        </ul>
+        
+        
 
+        
     </div>
     
+    
+<script type="text/javascript" charset="utf-8">
+  
+</script>
 {% endblock %}

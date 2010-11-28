@@ -12,9 +12,7 @@ from django.conf import settings
 from organizations.forms import *;
 
 from organizations.models import *;
-
-
-
+from organizations.team_models import *;
   
 
 @login_required
@@ -27,7 +25,6 @@ def organization(request, organization_slug):
 
 @login_required
 def organization_create(request):
-
   if request.method == 'POST': # If the form has been submitted...
     form = OrganizationForm( request.POST)
     if form.is_valid(): # All validation rules pass      
@@ -38,16 +35,16 @@ def organization_create(request):
       default_team = Team(organization = organization, name="Owners", access_type="admin")
       default_team.save()
       
-      default_team_membership = TeamMember( user=request.user, team=default_team)
-      default_team_membership.save()
-         
+      default_team.members.add(request.user)
+      default_team.save()
+      
       request.user.message_set.create(message="Organization Created.")               
       return HttpResponseRedirect(reverse("organization_detail",  kwargs={'organization_slug':organization.slug}))
   else:
     form = OrganizationForm()  
     
   return render_to_response("organizations/create_organization.html", {    
-      "form": form
+      "form": form      
     }, context_instance=RequestContext(request))
 
 

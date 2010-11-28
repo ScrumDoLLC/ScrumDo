@@ -24,12 +24,16 @@
       <ul class="organizationList">
         {% for organization in organizations %}
         <li class="organizationItem">
+          
           <div class="organizationListOptionButtons">
-          <a href="#"><img src="/site_media/static/images/settingsButton.png"></a>
-          <a href="#leaveOrganization" rel="facebox"><img src="/site_media/static/images/leaveButton.png"></a>
+            <a href="{% url organization_detail organization.slug %}"><img src="/site_media/static/images/detailsButton.png"></a>
+<!--            <a href="#"><img src="/site_media/static/images/settingsButton.png"></a>
+            <a href="#leaveOrganization" rel="facebox"><img src="/site_media/static/images/leaveButton.png"></a> -->
           </div>
           {% silk "building" %}
           <a href="{% url organization_detail organization.slug %}">{{ organization.name}}</a><br/>
+          {{organization.projects.count}} Project{{ organization.projects.count|pluralize }}, 
+          {{organization.teams.count}} Team{{ organization.teams.count|pluralize }} -
           {{organization.description}}
           <hr />          
         </li>
@@ -40,7 +44,7 @@
         {% endif %}
         
         <li class="organizationItem">
-          <a href="{% url organization_create %}">Create New Organization</a>
+          {% silk "add" %}<a href="{% url organization_create %}">Create New Organization</a>
         </li>
       </ul>
       
@@ -48,9 +52,5 @@
       
     </div>
     
-    
-    <div style="display:none" id="leaveOrganization">
-      <h2>Leave Organization</h2>
-      <p>Are you sure you want to leave this organization?</p>
-    </div>
+
 {% endblock %}

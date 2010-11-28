@@ -12,16 +12,16 @@
 {% block head_title %}{% blocktrans %}Create Organization{% endblocktrans %}{% endblock %}
 
 {% block body %}
-    <h1>{% trans "Create Organization" %}</h1>
+    <h1>{% trans "Create Team" %}</h1>
     
-    <p>{% trans "An <b>organization</b> is a grouping of projects and teams working on those projects." %}</p>
+    <p>{% trans "A <b>team</b> is a group people that have access to projects." %}</p>
 
-    <form class="uniForm" id="project_form" method="POST" action="">          
+    <form class="uniForm" id="team_form" method="POST" action="">          
         <fieldset class="inlineLabels">
             {{ form|as_uni_form }}
             <div class="form_block">
                 <input type="hidden" name="action" value="create" />
-                <div class="buttonHolder"><button class="primaryAction" type="submit" >Create Organization</button></div>
+                <div class="buttonHolder"><button class="primaryAction" type="submit" >Create Team</button></div>
             </div>
         </fieldset>
     </form>

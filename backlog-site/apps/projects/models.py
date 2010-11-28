@@ -14,10 +14,9 @@ from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 
+from organizations.models import Organization
 
- 
-  
-  
+
 class SiteStats( models.Model ):
   user_count = models.IntegerField();
   project_count = models.IntegerField();
@@ -60,7 +59,26 @@ class Project(Group):
     velocity_iteration_span = models.PositiveIntegerField( null=True ) 
     
     iterations_left = models.PositiveIntegerField( null=True )
-    
+  
+    organization = models.ForeignKey(Organization,related_name="projects", null=True, blank=True)
+
+
+    def hasAdminAccess( self, user):
+      if self.creator == user:
+        return True
+      
+      return Organization.objects.filter( teams__members__user = user , teams__access_type="admin", teams__projects__project=self).count() > 0
+
+    def hasReadAccess( self, user ):
+      if self.creator == user:
+        return True
+      return Organization.objects.filter( teams__members__user = user , teams__access_type="read", teams__projects__project=self).count() > 0
+
+    def hasWriteAccess( self, user ):
+      if self.creator == user:
+        return True
+      return Organization.objects.filter( teams__members__user = user , teams__access_type__ne="read", teams__projects__project=self).count() > 0
+
       
     def get_default_iteration( self ):
       if self.default_iteration == None:
@@ -245,3 +263,6 @@ class ProjectMember(models.Model):
     away = models.BooleanField(_('away'), default=False)
     away_message = models.CharField(_('away_message'), max_length=500)
     away_since = models.DateTimeField(_('away since'), default=datetime.now)
+
+
+from organizations.team_models import *

@@ -1,6 +1,7 @@
 from django.conf.urls.defaults import *
 
-from organizations.models import Organization, Team
+from organizations.models import Organization
+from organizations.team_models import Team
 
 # from groups.bridge import ContentBridge
 # 
@@ -15,5 +16,7 @@ urlpatterns = patterns('organizations.views',
 
 
 urlpatterns += patterns('organizations.team_views',
+   url(r'^(?P<organization_slug>[-\w]+)/team/create$', 'team_create', name="team_create"),
    url(r'^(?P<organization_slug>[-\w]+)/team/(?P<team_id>[-\w]+)$', 'team', name="team_detail"),
+
 )

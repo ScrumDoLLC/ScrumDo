@@ -5,6 +5,7 @@
 {% load humanize %}
 {% load pagination_tags %}
 {% load order_by %}
+{% load theme_tags %}
 {% load extra_tagging_tags %}
 {% load projects_tags %}
 
@@ -17,6 +18,23 @@
     {% if user.is_authenticated %}
         <form class="uniForm" id="project_form" method="POST" action="">
             <fieldset class="inlineLabels">
+              
+              <div id="div_id_org" class="ctrlHolder">
+      	                <label for="id_org">                    
+      	                    Organization
+      	                </label>
+      	          <select style="width:40%" id="id_org" name="organization">
+      	            <option value="none">No Organization</option>
+      	            {% for org in admin_organizations %}
+      	              <option value="{{org.id}}">{{org.name}}</option>
+      	            {% endfor %}
+    	            </select>
+
+                  <p id="hint_id_org" class="formHint">Associate this project with an organization to enable team based functions.  You must be an admin of the organization to create a project for it.<br/><br/>
+                    <a style="text-decoration:none" href="{% url organization_create %}">{% silk "add" %}Create New Organization</a>
+                  </p>
+              </div>
+
                 {{ project_form|as_uni_form }}
                 <div class="form_block">
                     <input type="hidden" name="action" value="create" />

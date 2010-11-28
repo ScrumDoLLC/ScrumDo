@@ -19,7 +19,7 @@
 {% block body %}    
   <h1>{{ project.name }}</h1>
   
-  <form method="POST" action="">
+  <form method="POST" action="" class="uniForm">
        {{ form.non_field_errors }}
          
          <h2>Project Options</h2>
@@ -50,7 +50,12 @@
             
             
       <br/>
-      <input type="Submit" value="Save" >
+      
+      <div class="form_block">
+      
+          <div class="buttonHolder"><button class="primaryAction" type="submit" >Save Project</button></div>
+      </div>
+      
   </form>
   
   <br/><br/>

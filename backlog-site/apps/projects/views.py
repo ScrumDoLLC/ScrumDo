@@ -12,6 +12,11 @@ from django.core import serializers
 import json
 import datetime
 
+import logging
+
+logger = logging.getLogger(__name__)
+
+
 from xlrd import open_workbook
 
 from django.conf import settings
@@ -42,6 +47,7 @@ WHERE projects_projectmember.project_id = projects_project.id
 def home( request ):
   my_projects = [];
   member_projects = [];
+  organizations = [];
   if request.user.is_authenticated():
     organizations = Organization.getOrganizationsForUser(request.user)
     memberships = ProjectMember.objects.filter( user=request.user )
@@ -132,11 +138,19 @@ def project_history( request, group_slug ):
 @login_required
 def create(request, form_class=ProjectForm, template_name="projects/create.html"):
     project_form = form_class(request.POST or None)
+    admin_organizations = Organization.getOrganizationsForUser( request.user )
+    
     
     if project_form.is_valid():
         project = project_form.save(commit=False)
         project.creator = request.user
+        org_id = request.POST.get("organization","none")
+        
         project.save()
+        if org_id != "none":
+          organization = Organization.objects.filter( id=org_id )[0]
+          if organization and organization in admin_organizations:
+            addProjectToOrganization(project, organization)       
         
         project_member = ProjectMember(project=project, user=request.user)
         project.members.add(project_member)
@@ -154,8 +168,22 @@ def create(request, form_class=ProjectForm, template_name="projects/create.html"
     
     return render_to_response(template_name, {
         "project_form": project_form,
+        "admin_organizations":admin_organizations
     }, context_instance=RequestContext(request))
 
+def addProjectToOrganization( project, organization):
+  logger.info("Adding project %s to organization %s" % (project.slug, organization.slug))
+  project.organization = organization
+  project.save()
+  admin_teams = organization.teams.filter(access_type="admin")
+  admin_team = admin_teams[0]
+  if not admin_team:
+    logger.error('Organization %s has no admin team' % organization.slug )
+    return
+  admin_team.projects.add( project )
+  admin_team.save()
+    
+    
 
 @login_required
 def test_data(request, group_slug, count):
