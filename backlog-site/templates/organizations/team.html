@@ -35,11 +35,13 @@
           </li>
         {% endfor %}        
           <li class="organizationItem">
+            <form id="add_project_form" action="" method="POST">
             <select>
             {% for project in organization.projects.all %}
               <option>{{project.name}}</option>
             {% endfor %}
             </select>
+            <input type="hidden" name="action" value="addProject">
             <input type="submit" value="Add Project">
           </li>
         </ul>
@@ -62,7 +64,7 @@
             <form id="add-member" method="POST" action="">
                     {{ adduser_form.non_field_errors }}
                     {{ adduser_form.recipient }}    {{adduser_form.recipient.errors}}
-                    <input type="hidden" name="action" value="add" />
+                    <input type="hidden" name="action" value="addMember" />
                     <input type="image" src="/site_media/static/images/addMemberButton.png" />
             </form>
           </li>

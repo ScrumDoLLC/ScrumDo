@@ -19,11 +19,28 @@ def team(request, organization_slug, team_id):
   organization  = get_object_or_404(Organization, slug=organization_slug)
   team = get_object_or_404(Team, id=team_id)
   adduser_form=AddUserForm(team=team)
+  
+  if request.method == "POST":
+    action = request.POST.get("action")
+    if action == "addMember":
+      adduser_form = AddUserForm(request.POST, team=team)
+      if adduser_form.is_valid():
+        adduser_form.save(request.user)
+        request.user.message_set.create(message="Member added to team.")               
+        adduser_form=AddUserForm(team=team)
+    if action == "addProject":
+      pass
+  
   return render_to_response("organizations/team.html", {    
       "organization": organization,
       "team": team,
       "adduser_form":adduser_form
     }, context_instance=RequestContext(request))
+  
+  
+  
+  
+  
   
 def team_create(request, organization_slug):
   organization = get_object_or_404(Organization, slug=organization_slug)
