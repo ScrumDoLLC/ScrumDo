@@ -63,11 +63,9 @@ class Project(Group):
     organization = models.ForeignKey(Organization,related_name="projects", null=True, blank=True)
 
 
-    def hasAdminAccess( self, user):
-      if self.creator == user:
-        return True
+
       
-      return Organization.objects.filter( teams__members__user = user , teams__access_type="admin", teams__projects__project=self).count() > 0
+    
 
     def hasReadAccess( self, user ):
       if self.creator == user:

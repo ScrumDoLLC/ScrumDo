@@ -1,6 +1,6 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
-from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -26,6 +26,7 @@ if "notification" in settings.INSTALLED_APPS:
 else:
     notification = None
 
+from projects.access import *
 from projects.models import Project, ProjectMember, Iteration, Story
 from projects.forms import *
 from organizations.models import Organization
@@ -67,13 +68,14 @@ def home( request ):
        "member_projects":member_projects
     }, context_instance=RequestContext(request))
 
+
 @login_required
 def project_admin( request, group_slug ):
   project = get_object_or_404( Project, slug=group_slug )
-  form = ProjectOptionsForm(instance=project)
+
+  admin_access_or_403(project, request.user )  
   
-  if request.user != project.creator:
-    return HttpResponseForbidden()
+  form = ProjectOptionsForm(instance=project)
   
   if request.method == 'POST': # If the form has been submitted...
     form = ProjectOptionsForm( request.POST, instance=project)
@@ -92,9 +94,17 @@ def project_admin( request, group_slug ):
       "form": form
     }, context_instance=RequestContext(request))
     
+    
+@login_required
 def iteration_burndown(request, group_slug, iteration_id):
   project = get_object_or_404( Project, slug=group_slug )
+  
+  read_access_or_403(project, request.user )
+  
   iteration = get_object_or_404( Iteration, id=iteration_id )
+  
+  
+  
   total_points = [];
   claimed_points = [];
   total_stats = { "label":"Total Points", "data":total_points}
@@ -112,6 +122,7 @@ def iteration_burndown(request, group_slug, iteration_id):
 @login_required
 def project_burndown(request, group_slug):
   project = get_object_or_404( Project, slug=group_slug )
+  read_access_or_403(project, request.user )
   total_points = [];
   claimed_points = [];
   total_stats = { "label":"Total Points", "data":total_points}
@@ -129,6 +140,7 @@ def project_burndown(request, group_slug):
 @login_required
 def project_history( request, group_slug ):
   project = get_object_or_404( Project, slug=group_slug )
+  read_access_or_403(project, request.user )
  
   return render_to_response("projects/project_history.html", {
       "project": project,
@@ -188,6 +200,7 @@ def addProjectToOrganization( project, organization):
 @login_required
 def test_data(request, group_slug, count):
   project = get_object_or_404(Project, slug=group_slug) 
+  admin_access_or_403(project, request.user )
   count = int(count)
   story_count = project.stories.all().count()
   for i in range(count) :
@@ -211,6 +224,7 @@ def projects(request, template_name="projects/projects.html"):
 @login_required
 def fix_local_id(request, group_slug=None):
   project = get_object_or_404(Project, slug=group_slug)
+  admin_access_or_403(project, request.user )
   id = 1
   for story in project.stories.all().order_by("local_id"):
     story.local_id = id
@@ -221,6 +235,7 @@ def fix_local_id(request, group_slug=None):
 @login_required
 def delete(request, group_slug=None, redirect_url=None):
     project = get_object_or_404(Project, slug=group_slug)
+    admin_access_or_403(project, request.user )
     if not redirect_url:
         redirect_url = reverse('project_list')
     
@@ -236,15 +251,13 @@ def delete(request, group_slug=None, redirect_url=None):
 
 @login_required
 def your_projects(request, template_name="projects/your_projects.html"):
-
     projects = Project.objects.filter(member_users=request.user).order_by("name")
-
     content_type = ContentType.objects.get_for_model(Project)
-
+    
     projects = projects.extra(select=SortedDict([
         ('member_count', MEMBER_COUNT_SQL),
         ('topic_count', TOPIC_COUNT_SQL),
-    ]), select_params=(content_type.id,))
+        ]), select_params=(content_type.id,))
 
     return render_to_response(template_name, {
         "projects": projects,
@@ -257,20 +270,22 @@ def your_projects(request, template_name="projects/your_projects.html"):
 def project(request, group_slug=None, form_class=ProjectUpdateForm, adduser_form_class=AddUserForm,
         template_name="projects/project.html"):        
     project = get_object_or_404(Project, slug=group_slug)
-    
+    read_access_or_403(project, request.user )
     if not request.user.is_authenticated():
         is_member = False
     else:
         is_member = project.user_is_member(request.user)
     
     action = request.POST.get("action")
-    if request.user == project.creator and action == "update":
+    if action == "update":
+        write_access_or_403(project, request.user )
         project_form = form_class(request.POST, instance=project)
         if project_form.is_valid():
             project = project_form.save()
     else:
         project_form = form_class(instance=project)
-    if request.user == project.creator and action == "add":
+    if action == "add":
+        write_access_or_403(project, request.user )
         adduser_form = adduser_form_class(request.POST, project=project)
         if adduser_form.is_valid():
             adduser_form.save(request.user)

@@ -13,13 +13,16 @@ import datetime
 
 from projects.models import Project, ProjectMember, Iteration, Story
 from projects.forms import *
+from projects.access import *
+
 @login_required
 def iteration(request, group_slug, iteration_id):
    project = get_object_or_404( Project, slug=group_slug )
+   read_access_or_403(project,request.user)
    iteration = get_object_or_404( Iteration, id=iteration_id )
-
    
    if request.method == 'POST': # If the form has been submitted...
+     write_access_or_403(project,request.user)
      form = IterationForm( request.POST, instance=iteration)
      if form.is_valid(): # All validation rules pass      
        iteration = form.save(  )
@@ -50,10 +53,8 @@ def iteration(request, group_slug, iteration_id):
 @login_required
 def iteration_create(request, group_slug=None):
  project = get_object_or_404(Project, slug=group_slug)  
+ write_access_or_403(project,request.user)
  is_member = project.user_is_member(request.user)
-
- if not is_member:
-   return HttpResponseForbidden()
 
  if request.method == 'POST': # If the form has been submitted...
    form = IterationForm(request.POST) # A form bound to the POST data
