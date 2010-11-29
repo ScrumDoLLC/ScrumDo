@@ -179,9 +179,13 @@ def create(request, form_class=ProjectForm, template_name="projects/create.html"
                 {"project": project}, queue=True)
         return HttpResponseRedirect(project.get_absolute_url())
     
+    if request.GET.get("org","") != "":
+      default_organization = Organization.objects.filter(id=request.GET.get("org",""))[0]
+    
     return render_to_response(template_name, {
         "project_form": project_form,
-        "admin_organizations":admin_organizations
+        "admin_organizations":admin_organizations,
+        "default_organization":default_organization
     }, context_instance=RequestContext(request))
 
 def addProjectToOrganization( project, organization):

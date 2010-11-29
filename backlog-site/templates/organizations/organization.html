@@ -35,7 +35,7 @@
           </li>
         {% endfor %}        
           <li class="organizationItem">
-            <a href="{% url project_create  %}">{% silk "add" %}Create New Project</a>
+            <a href="{% url project_create  %}?org={{organization.id}}">{% silk "add" %}Create New Project</a>
           </li>
         </ul>
         
