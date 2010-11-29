@@ -1,5 +1,5 @@
 {% extends "site_base.html" %}
-
+{% load projects_tags %}
 {% load iteration_tags %}
 {% load i18n %}
 
@@ -27,21 +27,25 @@
     {% if project %}
       <div id="tools_list" style="display:none">
         <ul class="toolsList">
+          {% canwrite project %}
           <li>
               <img src="{{ STATIC_URL }}images/iteration_planning.png">
               <a href="{% url stories project.slug %}">Iteration Planning</a><br/>
               Easily rank your stories and move them into an iteration.
           </li>
+          {% endcanwrite %}
           <li>
               <img src="{{ STATIC_URL }}images/project_history.png">
               <a href="{% url project_history project.slug %}">Project History</a><br/>
               See how much you've completed in past iterations.
-          </li>                
+          </li>  
+          {% canwrite project %}              
           <li>
               <img src="{{ STATIC_URL }}images/comingSoon.png">
               <a href="#">Sizing</a><br/>
               Coming Soon: Easily size stories.
           </li>        
+          {% endcanwrite %}
         </ul>
       </div>
     

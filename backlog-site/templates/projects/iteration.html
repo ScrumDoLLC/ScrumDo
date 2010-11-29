@@ -20,8 +20,10 @@
 {% block body %}
     
     
+       {% canwrite project %}
+         {% include "stories/add_story_form.html" %}
+       {% endcanwrite %}
        
-       {% include "stories/add_story_form.html" %}
         <div class="right_panel">
           {% if daysLeft %}
             <div class="blue_box small_project_list">
@@ -29,13 +31,14 @@
             </div>
           {% endif %}
           
+          {% canwrite project %}
             <div class="blue_box small_project_list">
               <h1>Actions</h1>
               <br/>              
               <a href="#iterationDetails" rel="facebox">Edit Details</a><br/>
               <a href="{% url stories iteration.project.slug  %}?iteration={{iteration.id}}">Add Stories From Backlog</a><br/>
-
             </div>
+          {% endcanwrite %}
         </div>
       
         <h1>{{ iteration.name }}</h1>

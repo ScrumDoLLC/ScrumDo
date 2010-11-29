@@ -179,9 +179,9 @@ def stories_iteration(request, group_slug, iteration_id):
 @login_required
 def stories(request, group_slug):
   project = get_object_or_404(Project, slug=group_slug)  
-  
+  write_access_or_403(project,request.user)
   if request.method == 'POST': # If the form has been submitted...
-    write_access_or_403(project,request.user)
+    
     form = StoryForm(project, request.POST) # A form bound to the POST data
     if form.is_valid(): # All validation rules pass
       story = form.save( commit=False )
@@ -194,7 +194,6 @@ def stories(request, group_slug):
       request.user.message_set.create(message="New story created.")
       form = StoryForm(project)
   else:
-    read_access_or_403(project,request.user)
     form = StoryForm(project)
 
   return render_to_response("stories/story_list.html", {

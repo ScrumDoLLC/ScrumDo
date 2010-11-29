@@ -204,6 +204,9 @@ SERVER_EMAIL = 'scrumdo@scrumdo.com'
 GOOGLE_ANALYTICS = False
 GOOGLE_ANALYTICS_ACCOUNT = ""
 
+CACHE_BACKEND = 'locmem://'
+
+
 # local_settings.py can be used to override environment-specific settings
 # like database and email that differ between development and production.
 try:

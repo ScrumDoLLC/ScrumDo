@@ -20,16 +20,10 @@
 {% block body %}
     
     {% if user.is_authenticated %}
-      {% if is_member %}
-      
+    {% canwrite project %}
       {% include "stories/add_story_form.html" %}
-
-      
-      
+    {% endcanwrite %}
         <div class="right_panel">
-            
-     
-            
             <div class="blue_box">
               <h1>{{ project.name }}</h1>              
               {{ project.description }}
@@ -53,9 +47,11 @@
               <h1>Iterations</h1>
               {% for iteration in project.iterations.all %}
                   <div class="iterationHeader">{% iteration_name iteration %} </div> 
-              {% endfor %}
+              {% endfor %}              
+              {% canwrite project %}
               <br/><br/>
               <a href="{% url iteration_create project.slug %}"><img  src="/site_media/static/images/addIterationButton.png"></a>
+              {% endcanwrite %}
             </div>
             
             <div class="members">
@@ -73,7 +69,7 @@
                       
 
                 </table>
-                 {% ifequal user project.creator %}
+                 {% isadmin project %} 
                  <hr/>
                           <form id="add-member" method="POST" action="">
                                   {{ adduser_form.non_field_errors }}
@@ -82,16 +78,18 @@
                                   <input type="image" src="/site_media/static/images/addMemberButton.png" />
                           </form>
 
-                {% endifequal %}
+                {% endisadmin %}
             </div>
             
             <div class="blue_box">
               <h1>Options</h1>              <br/>
+              {% canwrite project %}
                <div class="iterationHeader"><a href="{% url import_file project.slug %}">Import Stories</a></div>
+              {% endcanwrite %}
                <div class="iterationHeader"><a href="{% url project_history project.slug %}">Project History</a></div>
-               {% ifequal user project.creator %}                  
+               {% isadmin project %}                  
                   <div class="iterationHeader"><a href="{% url project_admin project.slug %}" >{% trans "Project Admin" %}</a></div>
-                {% endifequal %}
+                {% endisadmin %}
             </div>
             
             {% trans "Slug:" %} <tt>{{ project.slug }}</tt><br />
@@ -102,7 +100,7 @@
            
             
         </div>
-      {% endif %}
+
     {% endif %}
     
     <div style="width: 550px;">
@@ -110,7 +108,7 @@
                 
         {% if user.is_authenticated %}
             <div>
-                {% if is_member %}
+                
                 
                 
                   {% for iteration in project.get_current_iterations %}
@@ -132,9 +130,7 @@
                   {% endif %}
                    
                     
-                {% else %}
-                    <p>It is up to the creator of this project (<a href="{% url profile_detail project.creator.username %}">{{ project.creator }}</a>) to add you.</p>
-                {% endif %}
+   
             </div>
         {% endif %}
 
