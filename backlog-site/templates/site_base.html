@@ -13,7 +13,7 @@
 
 {% block login %}
     {% if user.is_authenticated %}
-        {% openid_icon openid user %}<b>{{ user }}</b> | <a href="/openid/logout/?next={% url acct_logout %}">{% trans "Logout" %}</a> | <a href="{% url acct_email %}">{% trans "Account" %}</a> | {% if user.is_staff %}<a href="/admin/">{% trans "Admin" %}</a> | {% endif %} <a href="{% url your_organizations %}">Organizations</a> | <a style="vertical-align:middle" href="{% url project_list %}"><img src="{{ STATIC_URL }}images/projectsButton.png"></a>
+        {% openid_icon openid user %}<b>{{ user }}</b> | <a href="/openid/logout/?next={% url acct_logout %}">{% trans "Logout" %}</a> | <a href="{% url acct_email %}">{% trans "Account" %}</a> | {% if user.is_staff %}<a href="/admin/">{% trans "Admin" %}</a> | {% endif %} <a href="{% url your_organizations %}">Organizations</a> | <a style="vertical-align:middle" href="{% url home %}"><img src="{{ STATIC_URL }}images/projectsButton.png"></a>
     {% else %}
         <a href="{% url acct_login %}"><img src="{{ STATIC_URL }}images/loginButton.png"></a> {% ifsetting ACCOUNT_OPEN_SIGNUP %} <a href="{% url acct_signup %}"><img src="{{ STATIC_URL }}images/signUpButton.png"></a>{% endifsetting %}
     {% endif %}

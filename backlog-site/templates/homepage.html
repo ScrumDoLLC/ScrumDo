@@ -23,15 +23,12 @@
     {% else %}
     <img style="float:right" src="{{STATIC_URL}}images/homepagePreview.png">
       <h2>Early Alpha</h2>
-      We're in pretty early stages of development, not everything works, you might lose data, yadda yadda yadda...
+      We're in pretty early stages of development, not everything works yet.
         {% url acct_login as login_url %}
-        {% ifsetting ACCOUNT_OPEN_SIGNUP %}
-            {% url acct_signup as signup_url %}
-            <p>{% blocktrans %}You can <a href="{{ signup_url }}">Sign up</a> and <a href="{{ login_url }}">Log in</a> to try out the site.{% endblocktrans %}</p>
-        {% else %}
-            <p>{% blocktrans %}You can <a href="{{ login_url }}">Log in</a> to try out the site.{% endblocktrans %}</p>
-        {% endifsetting %}
-        
+        {% url acct_signup as signup_url %}
+        <p>{% blocktrans %}You can <a href="{{ signup_url }}">Sign up</a> and <a href="{{ login_url }}">Log in</a> to try out the site.{% endblocktrans %}</p>
+        <br/>
+        <a href="http://twitter.com/ScrumDo">Follow Us</a> on Twitter to keep up to date.
         
     {% endif %}
     
