@@ -178,7 +178,7 @@ def create(request, form_class=ProjectForm, template_name="projects/create.html"
             notification.send(User.objects.all(), "projects_new_project",
                 {"project": project}, queue=True)
         return HttpResponseRedirect(project.get_absolute_url())
-    
+    default_organization = None
     if request.GET.get("org","") != "":
       default_organization = Organization.objects.filter(id=request.GET.get("org",""))[0]
     

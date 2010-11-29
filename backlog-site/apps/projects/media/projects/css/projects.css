@@ -421,6 +421,13 @@ div.blue_box {
   background-color: #D5E9FF;
   padding:10px;
   margin-bottom:15px;  
+  
+	border-radius: 4px;
+   -webkit-border-radius: 4px;
+   -moz-border-radius: 4px;
+   -o-border-radius: 4px;
+   -khtml-border-radius: 4px;
+  
 }
 
 div.iterations {
