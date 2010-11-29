@@ -18,7 +18,7 @@
             <li><a href="#iteration_header_list" rel="facebox">Iterations</a></li>
             <li><a href="#tools_list" rel="facebox">Tools</a></li>
           {% else %}
-              <li><a href="{% url your_projects %} ">{% trans "Your Projects" %}</a></li>
+              <li><a href="{% url home %} ">{% trans "Your Projects" %}</a></li>
               <li><a href="{% url project_create %}">{% trans "Create a Project" %}</a></li>
           {% endif %}        
         {% endif %}

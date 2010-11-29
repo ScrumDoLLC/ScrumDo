@@ -49,15 +49,16 @@ def home( request ):
   my_projects = [];
   member_projects = [];
   organizations = [];
+  
   if request.user.is_authenticated():
     organizations = Organization.getOrganizationsForUser(request.user)
     memberships = ProjectMember.objects.filter( user=request.user )
     for membership in memberships:
       try:
         if( membership.project.creator == request.user):
-          member_projects.append(membership.project)
+          my_projects.append(membership.project)
         else:
-          my_projects.append( membership.project )
+          member_projects.append( membership.project )
       except:
         pass
     

@@ -191,7 +191,7 @@ EMAIL_DEBUG = DEBUG
 CONTACT_EMAIL = "scrumdo@scrumdo.com"
 SITE_NAME = "ScrumDo"
 LOGIN_URL = "/account/login/"
-LOGIN_REDIRECT_URLNAME = "projects.views.your_projects"
+LOGIN_REDIRECT_URLNAME = "projects.views.home"
 
 
 EMAIL_HOST='localhost' 

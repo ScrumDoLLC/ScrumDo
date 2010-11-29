@@ -91,7 +91,7 @@
         {% if site_wide_announcements %}
             <div id="site_wide_announcements">
                     {% for announcement in site_wide_announcements %}
-                        <a href="{{ announcement.get_absolute_url }}">{{ announcement }}</a> -
+                        {{ announcement }} - <a href="{{ announcement.get_absolute_url }}">Read More</a> -
                         <a href="{% url announcement_hide announcement.pk %}?next={{ request.path }}">{% trans "Hide announcement" %}</a></br>
                     {% endfor %}
             </div>

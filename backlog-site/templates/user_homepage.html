@@ -1,4 +1,5 @@
 {% load theme_tags %}
+{% load projects_tags %}
 
 
 <div class="big_right_panel">
@@ -7,26 +8,51 @@
     
     <div class="blue_box small_project_list">
       <h1>Your Projects</h1>
-      <br/>
+      <p>Projects that you have created.</p>
 
-      {% for project in member_projects %}  
-        {% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a><br/>
-        <hr/>
+
+      {% for project in my_projects %}  
+        {% ifequal None project.organization %}
+          {% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a><br/>
+          <hr/>
+        {% endifequal %}
       {% endfor %}
 
-       {% silk "database_add" %} <a href="{% url project_create %}">Create New Project</a>
+       {% silk "add" %} <a href="{% url project_create %}">Create New Project</a>
 
     </div>
     
+    {% if member_projects %}
+      <div class="blue_box small_project_list">
+        <h1>Other Projects</h1>
+        <p>Projects that others own, but you have access to.</p>
+
+
+        {% for project in member_projects %}  
+          {% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a><br/>
+          <hr/>
+        {% endfor %}
+
+      </div>
+    {% endif %}
+    
+    
     <div class="blue_box small_project_list">
       <h1>Your Organizations</h1>
-      <br/>
+      <p>Organizations that you are a member of.</p>
     
       {% for org in my_organizations %}  
         {% silk "building" %} <a href="{% url organization_detail org.slug %}">{{org.name}}</a><br/>
+        <ul class="projectSubList">
+          {% for project in org.projects.all %}
+            {% canread project %}
+              <li>{% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a></li>
+            {% endcanread %}
+          {% endfor %}
+        </ul>
         <hr/>
       {% endfor %}
-      {% silk "building_add" %} <a href="{% url organization_create %}">Create New Organization</a>
+      {% silk "add" %} <a href="{% url organization_create %}">Create New Organization</a>
     </div>
 
 

@@ -31,6 +31,13 @@
 	line-height: 42px;
 }
 
+.projectSubList {
+	list-style-type: none;
+	margin-top: 4px;
+	margin-left: 0;
+	padding-left: 26px;
+}
+
 .organizationList {
 	list-style-type: none;
 	padding-left: 0px;

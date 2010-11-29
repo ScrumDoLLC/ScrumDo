@@ -1,6 +1,6 @@
 from django import template
 from projects.forms import ProjectForm
-from projects.access import has_write_access, has_admin_access
+from projects.access import has_write_access, has_admin_access, has_read_access
 register = template.Library()
 
 @register.inclusion_tag("projects/project_item.html", takes_context=True)
@@ -60,6 +60,26 @@ class CanWriteNode(template.Node):
         self.project = project
     def render(self, context):
       if has_write_access(context[self.project], context["request"].user):
+        output = self.nodelist.render(context)
+        return output
+      else:
+        return ""
+
+
+
+@register.tag(name="canread")
+def canread( parser, token):
+    tag_name, project = token.split_contents()
+    nodelist = parser.parse(('endcanread',))
+    parser.delete_first_token()
+    return CanReadNode(nodelist, project)
+
+class CanReadNode(template.Node):
+    def __init__(self, nodelist, project):
+        self.nodelist = nodelist
+        self.project = project
+    def render(self, context):
+      if has_read_access(context[self.project], context["request"].user):
         output = self.nodelist.render(context)
         return output
       else:
