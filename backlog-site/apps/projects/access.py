@@ -50,6 +50,10 @@ def real_has_write_access( project, user ):
     return Organization.objects.filter( teams__members = user , teams__access_type="write", teams__projects=project).count() > 0
   
 def has_read_access( project, user ):
+  if not project.private:
+    # A public project!
+    return True
+    
   key = cache_key(project, user, "read")
   cached_value = cache.get(key)
   if cached_value == None:
