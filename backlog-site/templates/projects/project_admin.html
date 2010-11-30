@@ -63,35 +63,55 @@
   <hr/>
   
      {% if organizations %}
-     <h2>Move to organization</h2>
-     <p>You can move this project into one of your organizations.</p>
-     
-     <form  method="POST" action="" class="uniForm">
-       
-       <fieldset class="inlineLabels">
-               <div class="ctrlHolder">
-       	                <label for="id_organization">                    
-       	                    Organization
-       	                </label>
+         <h2>Move to organization</h2>
+         <p>You can move this project into one of your organizations.</p>     
+         <form  method="POST" action="" class="uniForm">       
+           <fieldset class="inlineLabels">
+                   <div class="ctrlHolder">
+           	                <label for="id_organization">                    
+           	                    Organization
+           	                </label>
 
-       	                <select name="organization_id" id="id_organization">
-                          {% for organization in organizations %}
-                          <option value="{{organization.id}}">{{organization.name}}</option>
-                          {% endfor %}
-                        </select>                    
-               </div>
-       </fieldset>
+           	                <select name="organization_id" id="id_organization">
+                              {% for organization in organizations %}
+                              <option value="{{organization.id}}">{{organization.name}}</option>
+                              {% endfor %}
+                            </select>                    
+                   </div>
+           </fieldset>
        
-      <div class="form_block">     
-         <div class="buttonHolder"><button class="primaryAction" type="submit" >Move Project</button></div>
-      </div>
-      <input type="hidden" name="action" value="moveToOrganization">
-     </form>
-     <br/>
-
-       <hr/>
+          <div class="form_block">     
+             <div class="buttonHolder"><button class="primaryAction" type="submit" >Move Project</button></div>
+          </div>
+          <input type="hidden" name="action" value="moveToOrganization">
+         </form>
+         <br/>
+         <hr/>
      {% endif %}
 
+
+     {% if project.organization %}
+     <h2>Remove from organization</h2>
+      <p>You can move this project out of your organization.</p>     
+      <form  method="POST" action="" class="uniForm">       
+        <fieldset class="inlineLabels">
+                <div class="ctrlHolder">
+        	                <label for="id_organization">                    
+        	                    Remove from organization?
+        	                </label>
+
+        	                <input type="checkbox" name="remove">           
+                </div>
+        </fieldset>
+    
+       <div class="form_block">     
+          <div class="buttonHolder"><button class="primaryAction" type="submit" >Remove From Organization</button></div>
+       </div>
+       <input type="hidden" name="action" value="removeFromOrganization">
+      </form>
+      <br/>
+      <hr/>
+     {% endif %}
 
       <br/>
         <p>{% silk "delete" %} <a href="#" onclick="$('#delete_project_form').toggle(); return false;">{% trans "Delete project" %}</a><p>

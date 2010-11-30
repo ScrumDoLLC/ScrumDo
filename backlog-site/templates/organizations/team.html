@@ -21,47 +21,49 @@
       
     <div style="width: 550px;">
 
-
-        <div class="sectionHeader">Projects</div>        
-        <ul class="organizationList">
-        {% for project in team.projects.all %}
-          <li class="organizationItem">
-            <a href="#removeProject{{project.id}}" rel="facebox"><img class="memberDeleteButton" src="/site_media/static/pinax/images/silk/icons/delete.png" /></a>
+        {% if organization.projects.count %}
+              <div class="sectionHeader">Projects</div>        
+              <ul class="organizationList">
+              {% for project in team.projects.all %}
+                <li class="organizationItem">
+                  <a href="#removeProject{{project.id}}" rel="facebox"><img class="memberDeleteButton" src="/site_media/static/pinax/images/silk/icons/delete.png" /></a>
 
            
-            <div class="organizationListOptionButtons">
+                  <div class="organizationListOptionButtons">
            
-            </div>
-            {% silk "database_table" %}<a href="{% url project_detail project.slug %}">{{project.name}}</a><br/>
-            {{ project.stories.count }} stor{{ project.stories.count|pluralize:"y,ies" }}, {{ project.iterations.count }} iteration{{ project.iterations.count|pluralize }}
-            <hr/>
-             <div style="display:none" id="removeProject{{project.id}}">
-                <h2>Are you sure you want to remove {{project.name}} from this team?</h2><br/>
-                <div style="width:100% ; text-align: center;">
+                  </div>
+                  {% silk "database_table" %}<a href="{% url project_detail project.slug %}">{{project.name}}</a><br/>
+                  {{ project.stories.count }} stor{{ project.stories.count|pluralize:"y,ies" }}, {{ project.iterations.count }} iteration{{ project.iterations.count|pluralize }}
+                  <hr/>
+                   <div style="display:none" id="removeProject{{project.id}}">
+                      <h2>Are you sure you want to remove {{project.name}} from this team?</h2><br/>
+                      <div style="width:100% ; text-align: center;">
 
-                  <form action="" method="POST">
-                    <a onClick="$(document).trigger('close.facebox');return false;" class="cancelDelete" href="#">Cancel</a> -              
-                    <input type="hidden" name="action" value="removeProject">
-                    <input type="hidden" name="project_id" value="{{project.id}}">
-                    <input type="submit" value="Remove Project">
+                        <form action="" method="POST">
+                          <a onClick="$(document).trigger('close.facebox');return false;" class="cancelDelete" href="#">Cancel</a> -              
+                          <input type="hidden" name="action" value="removeProject">
+                          <input type="hidden" name="project_id" value="{{project.id}}">
+                          <input type="submit" value="Remove Project">
+                        </form>
+                      </div>
+                    </div>
+                </li>                    
+              {% endfor %}        
+                <li class="organizationItem">
+                  <form id="add_project_form" action="" method="POST">
+                  <select name="project">
+                  {% for project in organization.projects.all %}
+                    <option value="{{project.id}}">{{project.name}}</option>
+                  {% endfor %}
+                  </select>
+                  <input type="hidden" name="action" value="addProject">
+                  <input type="submit" value="Add Project">
                   </form>
-                </div>
-              </div>
-          </li>                    
-        {% endfor %}        
-          <li class="organizationItem">
-            <form id="add_project_form" action="" method="POST">
-            <select name="project">
-            {% for project in organization.projects.all %}
-              <option value="{{project.id}}">{{project.name}}</option>
-            {% endfor %}
-            </select>
-            <input type="hidden" name="action" value="addProject">
-            <input type="submit" value="Add Project">
-            </form>
-          </li>
-        </ul>
-        
+                </li>
+              </ul>
+        {% else %}
+          <p>This organization doesn't have any projects to add to this team.</p>
+        {% endif %}
         <div class="sectionHeader">Members</div>
         <ul class="organizationList">
         {% for member in team.members.all %}
