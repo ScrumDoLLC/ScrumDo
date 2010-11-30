@@ -81,20 +81,30 @@ def project_admin( request, group_slug ):
   form = ProjectOptionsForm(instance=project)
   
   if request.method == 'POST': # If the form has been submitted...
-    form = ProjectOptionsForm( request.POST, instance=project)
-    if form.is_valid(): # All validation rules pass      
-      story = form.save( commit=False )
-      story.local_id = project.stories.count() + 1
-      story.project = project
-      story.creator = request.user
-      story.save()     
-      request.user.message_set.create(message="Options Saved.")               
+    if request.POST.get("action") == "updateProject":
+      form = ProjectOptionsForm( request.POST, instance=project)
+      if form.is_valid(): # All validation rules pass      
+        story = form.save( commit=False )
+        story.local_id = project.stories.count() + 1
+        story.project = project
+        story.creator = request.user
+        story.save()     
+        request.user.message_set.create(message="Options Saved.")               
+    if request.POST.get("action") == "moveToOrganization":
+      organization = get_object_or_404( Organization, id=request.POST.get("organization_id",""))
+      project.organization = organization
+      project.save()
+      return HttpResponseRedirect(reverse("organization_detail",kwargs={'organization_slug':organization.slug}))
+  
+  if project.organization:
+    organizations = None
   else:
-    form = ProjectOptionsForm( instance=project )
+    organizations = Organization.getAdminOrganizationsForUser(request.user)
   
   return render_to_response("projects/project_admin.html", {
       "project": project,
-      "form": form
+      "form": form,
+      "organizations": organizations
     }, context_instance=RequestContext(request))
     
     

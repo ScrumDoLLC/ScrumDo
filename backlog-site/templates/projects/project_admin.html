@@ -40,6 +40,7 @@
             <!--<tr><td style="font-weight:bold">{{form.use_acceptance}} Acceptance Criteria {{form.use_acceptance.errors}}</td><td><i>Adds a series of fields for storing acceptance criteria in a structured way.</i></td></tr>-->
           </table>
           <input type="hidden" name="use_acceptance" value="">
+          <input type="hidden" name="action" value="updateProject">
           <h2>Custom Fields</h2>
           <p>Custom fields are free-input text boxes that accompany each story.  To use one, turn it on by selecting the checkbox, and give it a name in the text input.</p>
           <table class="projectOptionsForm">
@@ -61,9 +62,40 @@
   <br/><br/>
   <hr/>
   
+     {% if organizations %}
+     <h2>Move to organization</h2>
+     <p>You can move this project into one of your organizations.</p>
+     
+     <form  method="POST" action="" class="uniForm">
+       
+       <fieldset class="inlineLabels">
+               <div class="ctrlHolder">
+       	                <label for="id_organization">                    
+       	                    Organization
+       	                </label>
+
+       	                <select name="organization_id" id="id_organization">
+                          {% for organization in organizations %}
+                          <option value="{{organization.id}}">{{organization.name}}</option>
+                          {% endfor %}
+                        </select>                    
+               </div>
+       </fieldset>
+       
+      <div class="form_block">     
+         <div class="buttonHolder"><button class="primaryAction" type="submit" >Move Project</button></div>
+      </div>
+      <input type="hidden" name="action" value="moveToOrganization">
+     </form>
+     <br/>
+
+       <hr/>
+     {% endif %}
+
 
       <br/>
         <p>{% silk "delete" %} <a href="#" onclick="$('#delete_project_form').toggle(); return false;">{% trans "Delete project" %}</a><p>
+
          <form class="delete_form" id="delete_project_form" action="{% url project_delete project.slug %}" method="POST" style="display: none;">
              <input type="submit" value="{% trans "Delete Project" %}" /><br/> All content will be removed as soon as you push this button.<br/>It's permanent and irreversable.
         </form>
