@@ -54,8 +54,10 @@ def home( request ):
     organizations = Organization.getOrganizationsForUser(request.user)
     memberships = ProjectMember.objects.filter( user=request.user )
     for membership in memberships:
+
       try:
-        if( membership.project.creator == request.user):
+        
+        if( membership.project.creator_id == request.user.id):
           my_projects.append(membership.project)
         else:
           member_projects.append( membership.project )

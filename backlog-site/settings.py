@@ -98,6 +98,7 @@ MIDDLEWARE_CLASSES = (
     'pagination.middleware.PaginationMiddleware',
     'django_sorting.middleware.SortingMiddleware',
     'pinax.middleware.security.HideSensistiveFieldsMiddleware',
+#    'debug_toolbar.middleware.DebugToolbarMiddleware'
 )
 
 ROOT_URLCONF = 'backlog-site.urls'
@@ -163,7 +164,8 @@ INSTALLED_APPS = (
     'organizations',
     'topics',
     'django_extensions',
-    'django_evolution'
+    'django_evolution',
+#    'debug_toolbar'
 )
 
 ABSOLUTE_URL_OVERRIDES = {
@@ -206,6 +208,7 @@ GOOGLE_ANALYTICS_ACCOUNT = ""
 
 CACHE_BACKEND = 'locmem://'
 
+INTERNAL_IPS = ('127.0.0.1',)
 
 # local_settings.py can be used to override environment-specific settings
 # like database and email that differ between development and production.
