@@ -45,6 +45,8 @@ WHERE projects_projectmember.project_id = projects_project.id
 """
 
 
+# The homepage of the site...
+# For logged in users, this includes the list of projects & organizations they are a member of.
 def home( request ):
   my_projects = [];
   member_projects = [];
@@ -72,6 +74,7 @@ def home( request ):
     }, context_instance=RequestContext(request))
 
 
+# The project admin page, this is where you can change the title, description, etc. of a project.
 @login_required
 def project_admin( request, group_slug ):
   project = get_object_or_404( Project, slug=group_slug )
@@ -80,7 +83,7 @@ def project_admin( request, group_slug ):
   
   form = ProjectOptionsForm(instance=project)
   
-  if request.method == 'POST': # If the form has been submitted...
+  if request.method == 'POST': # If one of the three forms on the page has been submitted...
     if request.POST.get("action") == "updateProject":
       form = ProjectOptionsForm( request.POST, instance=project)
       if form.is_valid(): # All validation rules pass      
@@ -117,16 +120,13 @@ def project_admin( request, group_slug ):
     }, context_instance=RequestContext(request))
     
     
+# Returns a JSON feed for a given project/iteration that can be transformed with some javascript
+# into a burn up chart.
 @login_required
 def iteration_burndown(request, group_slug, iteration_id):
-  project = get_object_or_404( Project, slug=group_slug )
-  
-  read_access_or_403(project, request.user )
-  
+  project = get_object_or_404( Project, slug=group_slug )  
+  read_access_or_403(project, request.user )  
   iteration = get_object_or_404( Iteration, id=iteration_id )
-  
-  
-  
   total_points = [];
   claimed_points = [];
   total_stats = { "label":"Total Points", "data":total_points}
@@ -140,7 +140,9 @@ def iteration_burndown(request, group_slug, iteration_id):
   result = json.dumps([total_stats,claimed_stats])
   return HttpResponse(result) #, mimetype='application/json'
   
-  
+
+# Returns a JSON feed for a given project that can be transformed with some javascript
+# into a burn up chart.  
 @login_required
 def project_burndown(request, group_slug):
   project = get_object_or_404( Project, slug=group_slug )
@@ -158,7 +160,8 @@ def project_burndown(request, group_slug):
   result = json.dumps([total_stats,claimed_stats])
   return HttpResponse(result) #, mimetype='application/json'
   
-     
+
+# The project history page, which lets you see a burn up chart for each past iteration.     
 @login_required
 def project_history( request, group_slug ):
   project = get_object_or_404( Project, slug=group_slug )
@@ -168,12 +171,11 @@ def project_history( request, group_slug ):
       "project": project,
     }, context_instance=RequestContext(request))   
      
-     
+# Form and handler for creating a new project.     
 @login_required
 def create(request, form_class=ProjectForm, template_name="projects/create.html"):
     project_form = form_class(request.POST or None)
-    admin_organizations = Organization.getOrganizationsForUser( request.user )
-    
+    admin_organizations = Organization.getOrganizationsForUser( request.user ) # The user can create projects in organizations the user is an admin in.    
     
     if project_form.is_valid():
         project = project_form.save(commit=False)
@@ -183,22 +185,25 @@ def create(request, form_class=ProjectForm, template_name="projects/create.html"
         project.save()
         if org_id != "none":
           organization = Organization.objects.filter( id=org_id )[0]
-          if organization and organization in admin_organizations:
+          if organization and organization in admin_organizations: # make sure the specified organization is in the list of admin orgs, if not silently ignore it.
             addProjectToOrganization(project, organization)       
         
+        # We better make the user a member of their own project.
         project_member = ProjectMember(project=project, user=request.user)
         project.members.add(project_member)
         project_member.save()        
         
+        # And lets make the default backlog iteration with no start/end dates.
         default_iteration = Iteration( name='Backlog', detail='', default_iteration=True, project=project)
         project.iterations.add(default_iteration)
         default_iteration.save()        
+        
         request.user.message_set.create(message="Project Created")
-        if notification:
-            # @@@ might be worth having a shortcut for sending to all users
-            notification.send(User.objects.all(), "projects_new_project",
-                {"project": project}, queue=True)
+        # Finished successfully creating a project, send the user to that page.
         return HttpResponseRedirect(project.get_absolute_url())
+
+    # If they got here from the organziation page, there will be an org get-param set stating what organization it was from.
+    # we need that here so it's pre-selected in the form.
     default_organization = None
     if request.GET.get("org","") != "":
       default_organization = Organization.objects.filter(id=request.GET.get("org",""))[0]
@@ -209,6 +214,7 @@ def create(request, form_class=ProjectForm, template_name="projects/create.html"
         "default_organization":default_organization
     }, context_instance=RequestContext(request))
 
+
 def addProjectToOrganization( project, organization):
   logger.info("Adding project %s to organization %s" % (project.slug, organization.slug))
   project.organization = organization
@@ -216,6 +222,7 @@ def addProjectToOrganization( project, organization):
   admin_teams = organization.teams.filter(access_type="admin")
   admin_team = admin_teams[0]
   if not admin_team:
+    # This really shouldn't happen, there's no way to delete that default admin team.    
     logger.error('Organization %s has no admin team' % organization.slug )
     return
   admin_team.projects.add( project )
@@ -223,6 +230,7 @@ def addProjectToOrganization( project, organization):
     
     
 
+# A debug view to generate test data.  
 @login_required
 def test_data(request, group_slug, count):
   project = get_object_or_404(Project, slug=group_slug) 
@@ -241,12 +249,12 @@ def test_data(request, group_slug, count):
     story.save();
   return HttpResponse("OK")
 
-
-
+# Got rid of this view, just show your_projects now
 @login_required
 def projects(request, template_name="projects/projects.html"):
     return your_projects(request, template_name)
 
+# A debug/tech-support view that re-numbers all of the stories for a project.
 @login_required
 def fix_local_id(request, group_slug=None):
   project = get_object_or_404(Project, slug=group_slug)
@@ -328,30 +336,31 @@ def project(request, group_slug=None, form_class=ProjectUpdateForm, adduser_form
     }, context_instance=RequestContext(request))
 
 
+# Drives the prediction page
+# example: /projects/project/sch-r180-dashboards/project_prediction
 @login_required
 def project_prediction(request, group_slug):
   project = get_object_or_404(Project, slug=group_slug)  
-  read_access_or_403(project, request.user )
+  read_access_or_403(project, request.user )  
+  stories = project.get_default_iteration().stories.exclude(status=Story.STATUS_DONE).order_by("rank")  
   
-  stories = project.stories.exclude(status=Story.STATUS_DONE).order_by("rank")
-  
-  requested_velocity = request.GET.get("velocity","x");
+  # there is a form on the page with velocity, iteration length, and carry over.  
+  # IF they're filled out, we should override the default values.
+  requested_velocity = request.GET.get("velocity","x");  
   if requested_velocity.isdigit():    
     velocity = int( requested_velocity )
   else:
     velocity = project.velocity
-  
   if velocity == 0 or velocity == None:
     # A default velocity just in case this project doesn't have one yet.
-    velocity = 25
-  
+    velocity = 25  
   requested_length = request.GET.get("iteration_length","x")
   if requested_length.isdigit():
     iteration_length = int( requested_length )
   else:
     iteration_length = 14
-
   carry_over = (request.GET.get("carry_over","x") == "on")
+  
     
   points_left = velocity
   temp_stories = []
@@ -359,15 +368,17 @@ def project_prediction(request, group_slug):
   iteration_number = project.iterations.count()
   start_date = datetime.date.today()  
   current_iterations = project.get_current_iterations()
-
-  total_points = 0
-
   unsized_stories = []
+  total_points = 0
   
+  # Find when the last scheduled iteration ends.
   for iteration in current_iterations:
     if iteration.end_date > start_date:
       start_date = iteration.end_date
 
+  
+
+  # loop through the stories, and try to put them into a predicted iteration.
   for story in stories:
     if story.points_value() > points_left:
       record_prediction(predictions,temp_stories,iteration_number,start_date,iteration_length,points_left)
@@ -383,8 +394,6 @@ def project_prediction(request, group_slug):
     points_left -= int(story.points_value())
     total_points += story.points_value()
     temp_stories.append(story)
-    
-      
   
   record_prediction(predictions,temp_stories,iteration_number,start_date,iteration_length,points_left)
   

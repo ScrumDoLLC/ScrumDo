@@ -185,7 +185,7 @@ def stories(request, group_slug):
     form = StoryForm(project, request.POST) # A form bound to the POST data
     if form.is_valid(): # All validation rules pass
       story = form.save( commit=False )
-      story.local_id = project.stories.all().count() + 1
+      story.local_id = getNextId(project)
       story.project = project
       story.creator = request.user
       story.iteration = project.get_default_iteration()
@@ -204,6 +204,11 @@ def stories(request, group_slug):
   }, context_instance=RequestContext(request))
 
 
+# Returns the next appropriate local_id for a given project.
+def getNextId( project ):
+  if project.stories.count() == 0:
+    return 1
+  return project.stories.order_by('-local_id')[0].local_id + 1
 
 @login_required
 def import_file(request, group_slug):
