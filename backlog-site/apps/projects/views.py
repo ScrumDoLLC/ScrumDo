@@ -11,7 +11,7 @@ from django.http import HttpResponse
 from django.core import serializers
 import json
 import datetime
-
+import math
 import logging
 
 logger = logging.getLogger(__name__)
@@ -326,3 +326,86 @@ def project(request, group_slug=None, form_class=ProjectUpdateForm, adduser_form
         "group": project, # @@@ this should be the only context var for the project
         "is_member": is_member,
     }, context_instance=RequestContext(request))
+
+
+@login_required
+def project_prediction(request, group_slug):
+  project = get_object_or_404(Project, slug=group_slug)  
+  read_access_or_403(project, request.user )
+  
+  stories = project.stories.exclude(status=Story.STATUS_DONE).order_by("rank")
+  
+  requested_velocity = request.GET.get("velocity","x");
+  if requested_velocity.isdigit():    
+    velocity = int( requested_velocity )
+  else:
+    velocity = project.velocity
+  
+  if velocity == 0 or velocity == None:
+    # A default velocity just in case this project doesn't have one yet.
+    velocity = 25
+  
+  requested_length = request.GET.get("iteration_length","x")
+  if requested_length.isdigit():
+    iteration_length = int( requested_length )
+  else:
+    iteration_length = 14
+
+  carry_over = (request.GET.get("carry_over","x") == "on")
+    
+  points_left = velocity
+  temp_stories = []
+  predictions = []
+  iteration_number = project.iterations.count()
+  start_date = datetime.date.today()  
+  current_iterations = project.get_current_iterations()
+
+  total_points = 0
+
+  unsized_stories = []
+  
+  for iteration in current_iterations:
+    if iteration.end_date > start_date:
+      start_date = iteration.end_date
+
+  for story in stories:
+    if story.points_value() > points_left:
+      record_prediction(predictions,temp_stories,iteration_number,start_date,iteration_length,points_left)
+      iteration_number += 1
+      if carry_over:
+        points_left += velocity
+      else:
+        points_left = velocity
+      temp_stories = []
+      start_date += datetime.timedelta(days=iteration_length)
+    if not story.points.isdigit():
+      unsized_stories.append(story)
+    points_left -= int(story.points_value())
+    total_points += story.points_value()
+    temp_stories.append(story)
+    
+      
+  
+  record_prediction(predictions,temp_stories,iteration_number,start_date,iteration_length,points_left)
+  
+  return render_to_response("projects/project_prediction.html", {      
+      "project": project,
+      "predictions": predictions,
+      "velocity":velocity,
+      "total_points":total_points,
+      "ideal_iterations":int(math.ceil(total_points/velocity)),
+      "predicted_iterations":len(predictions),
+      "unsized_stories":unsized_stories,
+      "carry_over": carry_over,
+      "iteration_length":iteration_length
+  }, context_instance=RequestContext(request))    
+
+
+def record_prediction(predictions, stories,iteration_number,start_date,iteration_length,points_left):
+  points = 0
+  for story in stories:
+    points += story.points_value()
+  predictions.append( { "carried":points_left, "stories":stories , "points":points, "num":iteration_number, "start":start_date, "end":(start_date +  datetime.timedelta(days=(iteration_length-1))) } )
+  
+  
+

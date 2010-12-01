@@ -183,6 +183,12 @@ class Story( models.Model ):
   tags_to_delete = []
   tags_to_add = []
   
+  def points_value(self):
+    try:
+      return int(self.points)
+    except:
+      return 0
+  
   @property
   def tags(self):
     r = "";

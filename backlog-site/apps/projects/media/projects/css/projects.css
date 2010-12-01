@@ -11,6 +11,43 @@
   height: 32px;
 }
 
+
+
+.predictedPointsBox {
+	display: inline;	
+	padding: 0px 5px;
+	background-color: #fef9dd;
+	text-align: center;
+	vertical-align: middle;
+	border-left: 1px solid #c8caca;
+	border-bottom: 1px solid #c8caca;
+}
+.predictedIteration .storyNumber {
+	color: #aaa;
+}
+
+.predictedIteration .storyNumber a {
+	color: #aaa;
+	text-decoration: none;
+}
+
+.predictedIteration .storyNumber a:hover {
+	color: #7880fe;
+	text-decoration: underline;
+}
+.predictedIteration {	
+	padding: 8px;	
+	background-color: #ededed;
+	margin-bottom: 8px;
+	
+	border-radius: 6px;
+   -webkit-border-radius: 6px;
+   -moz-border-radius: 6px;
+   -o-border-radius: 6px;
+   -khtml-border-radius: 6px;
+   
+	
+}
 .memberDeleteButton {
 	float: right;
 	margin-top: 9px;

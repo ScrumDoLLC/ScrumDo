@@ -86,7 +86,7 @@
               {% canwrite project %}
                <div class="iterationHeader"><a href="{% url import_file project.slug %}">Import Stories</a></div>
               {% endcanwrite %}
-               <div class="iterationHeader"><a href="{% url project_history project.slug %}">Project History</a></div>
+               <div class="iterationHeader"><a href="{% url project_admin project.slug %}">Project History</a></div>
                {% isadmin project %}                  
                   <div class="iterationHeader"><a href="{% url project_admin project.slug %}" >{% trans "Project Admin" %}</a></div>
                 {% endisadmin %}
