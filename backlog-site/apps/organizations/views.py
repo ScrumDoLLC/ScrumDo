@@ -23,6 +23,31 @@ def organization(request, organization_slug):
       "organization": organization
     }, context_instance=RequestContext(request))
 
+
+# This is an ajax popup form for editing details of an organization.
+@login_required
+def organization_edit( request, organization_slug):
+  organization = get_object_or_404(Organization, slug=organization_slug)
+  
+  
+    
+  
+  if request.method == "POST" and organization.creator == request.user:
+    form = UpdateOrganizationForm(request.POST, instance=organization)
+    if form.is_valid():
+      request.user.message_set.create(message="Organization Updated") 
+      form.save()
+    else:
+      request.user.message_set.create(message="Could not update organization.") 
+    
+    return HttpResponseRedirect( reverse("organization_detail",kwargs={"organization_slug":organization.slug}))
+    
+  form = UpdateOrganizationForm(instance=organization)
+  return render_to_response("organizations/organization_form.html", {    
+      "organization": organization,
+      "form":form
+    }, context_instance=RequestContext(request))
+
 @login_required
 def organization_create(request):
   if request.method == 'POST': # If the form has been submitted...

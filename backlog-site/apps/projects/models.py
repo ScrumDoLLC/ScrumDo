@@ -62,8 +62,24 @@ class Project(Group):
   
     organization = models.ForeignKey(Organization,related_name="projects", null=True, blank=True)
 
+    def all_member_choices(self):
+      members = self.all_members()
+      choices = []
+      for member in members:
+        choices.append([member.id, member.username])
+      return choices
+        
 
+    def all_members(self):
+      members = []
+      for membership in self.members.all():
+        members.append( membership.user )
 
+      for team in self.teams.all():
+        for member in team.members.all():
+          if not member in members:
+            members.append(member)
+      return members
       
     
 
@@ -182,6 +198,8 @@ class Story( models.Model ):
 
   tags_to_delete = []
   tags_to_add = []
+  
+
   
   def points_value(self):
     try:

@@ -12,6 +12,15 @@ class TeamForm(forms.ModelForm):
       model = Team
       fields = ('name', 'access_type' )
 
+
+class UpdateOrganizationForm(forms.ModelForm):
+
+  class Meta:
+      model = Organization
+      fields = ('name',  'description' )
+      
+      
+      
 class OrganizationForm(forms.ModelForm):
   slug = forms.SlugField(max_length=20,
       help_text = _("a short version of the name consisting only of letters, numbers, underscores and hyphens."),

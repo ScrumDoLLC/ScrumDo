@@ -50,7 +50,7 @@ class StoryForm( forms.ModelForm ):
     self.fields["points"].widget = forms.RadioSelect(choices=self.instance.POINT_CHOICES)
     self.fields["summary"].widget = forms.TextInput()
     self.fields["summary"].widget.size = 200
-    self.fields["assignee"].queryset = project.member_queryset().order_by("username")    
+    self.fields["assignee"].choices = project.all_member_choices()
     self.fields["extra_1"].widget = forms.widgets.Textarea(attrs={'rows':3, 'cols':50}) 
     self.fields["extra_2"].widget = forms.widgets.Textarea(attrs={'rows':3, 'cols':50}) 
     self.fields["extra_3"].widget = forms.widgets.Textarea(attrs={'rows':3, 'cols':50})         

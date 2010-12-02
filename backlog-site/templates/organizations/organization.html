@@ -17,7 +17,14 @@
             <h1>{{ organization.name }}</h1>              
             {{ organization.description }}           
           </div>
+          
+          <div class="blue_box">
+            <h1>Actions</h1>  
+            <a href="{% url organization_edit organization.slug %}" rel="facebox">Edit Details</a>
+          </div>
       </div>
+      
+      
       
     <div style="width: 550px;">
 

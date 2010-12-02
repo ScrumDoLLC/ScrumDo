@@ -11,6 +11,34 @@
   height: 32px;
 }
 
+.ribbon {
+  background-color: #404ac4;
+  overflow: hidden;
+
+  border: 1px solid #aaf;
+  color: #fff;
+  display: block;
+
+  margin: 0.05em 0;
+  padding: 0.5em 3.5em;
+  text-align: center;
+  text-decoration: none;
+  font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+  font-weight: bold;
+	
+  position: absolute;
+  left: -3em;
+  top: 0em;
+  rotation:-40;
+  -moz-transform: rotate(-40deg);
+  -webkit-transform: rotate(-40deg);  
+  -moz-box-shadow: 0 0 1em #888;
+  -webkit-box-shadow: 0 0 1em #888;
+  text-shadow: 0 0 0.5em #444;
+  z-index: 10;
+
+
+}
 
 
 .predictedPointsBox {

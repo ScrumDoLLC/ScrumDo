@@ -12,7 +12,8 @@ urlpatterns = patterns('organizations.views',
     url(r'^debug/$', "team_debug"),
     url(r'^create/$', 'organization_create', name="organization_create"),
     url(r'^list/$', 'your_organizations', name="your_organizations"),    
-    url(r'^(?P<organization_slug>[-\w]+)/$', 'organization', name="organization_detail")        
+    url(r'^(?P<organization_slug>[-\w]+)/$', 'organization', name="organization_detail")        ,
+    url(r'^(?P<organization_slug>[-\w]+)/edit$', 'organization_edit', name="organization_edit")        
 )
 
 
