@@ -1,0 +1,306 @@
+# Russian translation for django-forum.
+# Copyright (C) 2007, Ross Poulton
+# This file is distributed under the same license as the PACKAGE package.
+# Alcides Fonseca <me@alcidesfonseca.com>, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: django-forum\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-08-04 12:50+0000\n"
+"PO-Revision-Date: 2008-10-28 12:26+0500\n"
+"Last-Translator: Alcides Fonseca <me@alcidesfonseca.com>\n"
+"Language-Team: Alcides Fonseca <me@alcidesfonseca.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: feeds.py:28
+#, python-format
+msgid "%(title)s's Forum: %(forum)s"
+msgstr "Fórum de %(title)s: %(forum)s"
+
+#: feeds.py:32
+#, python-format
+msgid "%(title)s's Forum"
+msgstr "Fórum de %(title)s"
+
+#: feeds.py:38
+msgid "Latest forum posts"
+msgstr "Últimas entradas"
+
+#: forms.py:5 models.py:26 models.py:154
+msgid "Title"
+msgstr "Título"
+
+#: forms.py:6 forms.py:10 models.py:206
+msgid "Body"
+msgstr "Mensagem"
+
+#: forms.py:7 forms.py:11
+msgid "Subscribe via email"
+msgstr "Subscrever por email"
+
+#: models.py:27
+msgid "Slug"
+msgstr "Código"
+
+#: models.py:29
+msgid "Description"
+msgstr "Descrição"
+
+#: models.py:30 models.py:175
+msgid "Threads"
+msgstr "Tópicos"
+
+#: models.py:31 models.py:157 models.py:247
+#: templates/forum/thread_list.html:42
+msgid "Posts"
+msgstr "Entradas"
+
+#: models.py:82
+msgid "Forum parents"
+msgstr "Fóruns anteriores"
+
+#: models.py:112 templates/forum/forum_list.html:8
+#: templates/forum/updatesubs.html:17
+msgid "Forum"
+msgstr "Fórum"
+
+#: models.py:113 templates/forum_base.html:88
+#: templates/forum/forum_list.html:3
+msgid "Forums"
+msgstr "Fóruns"
+
+#: models.py:118
+msgid "You must not save a forum in itself!"
+msgstr "Um fórum não pode estar dentro de si próprio!"
+
+#: models.py:155
+msgid "Sticky?"
+msgstr "Fixo"
+
+#: models.py:156
+msgid "Closed?"
+msgstr "Fechado"
+
+#: models.py:158 templates/forum/thread_list.html:43
+msgid "Views"
+msgstr "Visitas"
+
+#: models.py:159
+msgid "Latest Post Time"
+msgstr "Última Entrada"
+
+#: models.py:174 templates/forum/thread_list.html:41
+#: templates/forum/updatesubs.html:18
+msgid "Thread"
+msgstr "Tópico"
+
+#: models.py:207
+msgid "Time"
+msgstr "Hora"
+
+#: models.py:246 templates/forum/newthread.html:23
+#: templates/forum/reply.html:18 templates/forum/thread_list.html:74
+msgid "Post"
+msgstr "Criar"
+
+#: models.py:264
+msgid "Subscription"
+msgstr "Subscrição"
+
+#: models.py:265
+msgid "Subscriptions"
+msgstr "Subscrições"
+
+#: views.py:223
+msgid "Sorry, you need to login."
+msgstr ""
+
+#: templates/forum_base.html:4
+#, fuzzy
+msgid "All Latest Posts via RSS"
+msgstr "Última Entrada"
+
+#: templates/forum_base.html:5
+#, fuzzy
+msgid "All Latest Posts via ATOM"
+msgstr "Última Entrada"
+
+#: templates/forum_base.html:87
+msgid "Welcome to the Forums"
+msgstr ""
+
+#: templates/forum_base.html:88
+msgid "Home"
+msgstr "Início"
+
+#: templates/forum/forum_list.html:9 templates/forum/thread_list.html:22
+#: templates/forum/thread_list.html:44
+msgid "Last Post"
+msgstr "Última Entrada"
+
+#: templates/forum/forum_list.html:14
+#, python-format
+msgid "%(thread_count)s threads, %(post_count)s posts"
+msgstr "%(thread_count)s tópicos, %(post_count)s entradas"
+
+#: templates/forum/forum_list.html:17 templates/forum/thread_list.html:30
+#: templates/forum/thread_list.html:53
+#, python-format
+msgid "%(time)s ago by %(author)s"
+msgstr ""
+
+#: templates/forum/forum_list.html:17 templates/forum/thread_list.html:30
+#: templates/forum/thread_list.html:53
+msgid "view"
+msgstr "ver"
+
+#: templates/forum/forum_list.html:17 templates/forum/thread_list.html:30
+msgid "No Posts"
+msgstr "Sem Entradas"
+
+#: templates/forum/forum_list.html:22 templates/forum/thread.html:33
+#: templates/forum/updatesubs.html:31
+msgid "Update Subscriptions"
+msgstr "Actualizar subscrições"
+
+#: templates/forum/newthread.html:4 templates/forum/newthread.html.py:11
+#, python-format
+msgid "New Thread in %(title)s"
+msgstr "Novo Tópico em %(title)s"
+
+#: templates/forum/newthread.html:7
+#, python-format
+msgid "%(forum.title)s Posts via RSS"
+msgstr ""
+
+#: templates/forum/newthread.html:8
+#, python-format
+msgid "%(forum.title)s Posts via ATOM"
+msgstr ""
+
+#: templates/forum/newthread.html:13
+msgid "New Thread"
+msgstr "Novo Tópico"
+
+#: templates/forum/newthread.html:18 templates/forum/thread_list.html:69
+msgid "Create a Thread"
+msgstr "Criar um Tópico"
+
+#: templates/forum/newthread.html:21 templates/forum/reply.html:16
+#: templates/forum/thread.html:40 templates/forum/thread_list.html:72
+msgid "Posting As"
+msgstr "Escrevendo como"
+
+#: templates/forum/reply.html:4
+#, fuzzy, python-format
+msgid "Reply to thread  \"%(title)s\""
+msgstr "Responder ao tópico \"%(title)s\""
+
+#: templates/forum/reply.html:6
+#, fuzzy, python-format
+msgid "Reply to Thread \"%(title)s\""
+msgstr "Responder ao tópico \"%(title)s\""
+
+#: templates/forum/reply.html:13
+msgid "Reply to Thread"
+msgstr "Responder ao Tópico"
+
+#: templates/forum/thread.html:8 templates/forum/thread_list.html:13
+#: templates/forum/thread_list.html:27
+#, fuzzy
+msgid "post"
+msgid_plural "posts"
+msgstr[0] "entrada"
+msgstr[1] "entrada"
+
+#: templates/forum/thread.html:16
+#, fuzzy, python-format
+msgid "%(time)s ago"
+msgstr "Fórum de %(title)s"
+
+#: templates/forum/thread.html:17
+msgid "by"
+msgstr "por"
+
+#: templates/forum/thread.html:25 templates/forum/thread_list.html:61
+msgid "First"
+msgstr "Primeira"
+
+#: templates/forum/thread.html:29 templates/forum/thread_list.html:65
+msgid "Last"
+msgstr "Última"
+
+#: templates/forum/thread.html:34
+msgid "Post a Reply"
+msgstr "Responder"
+
+#: templates/forum/thread.html:36
+msgid "Sorry, this thread is closed. No further replies are permitted."
+msgstr "Este tópico está encerrado."
+
+#: templates/forum/thread.html:42
+msgid "Submit"
+msgstr ""
+
+#: templates/forum/thread.html:45
+#, fuzzy
+msgid "Please login to post a reply."
+msgstr "Tem de fazer login para escrever."
+
+#: templates/forum/thread_list.html:7
+#, python-format
+msgid "%(ftitle)s Posts via RSS"
+msgstr ""
+
+#: templates/forum/thread_list.html:8
+#, python-format
+msgid "%(ftitle)s Posts via ATOM"
+msgstr ""
+
+#: templates/forum/thread_list.html:13 templates/forum/thread_list.html:27
+msgid "thread"
+msgstr "tópico"
+
+#: templates/forum/thread_list.html:21
+#, fuzzy
+msgid "Sub-Forum"
+msgstr "Sub-fórum"
+
+#: templates/forum/updatesubs.html:3 templates/forum/updatesubs.html.py:4
+msgid "Update Thread Subscriptions"
+msgstr "Actualizar a subscrição"
+
+#: templates/forum/updatesubs.html:11
+msgid "No subscriptions."
+msgstr "Sem subscrições"
+
+#: templates/forum/updatesubs.html:19
+msgid "Subscribed"
+msgstr "Subscrito"
+
+#: templates/forum/updatesubs.html:25
+msgid "Sticky"
+msgstr "Fixo"
+
+#: templates/forum/updatesubs.html:25
+msgid "(Closed)"
+msgstr "(Fechado)"
+
+#: templates/forum/updatesubs.html:35
+msgid "Please login to update your forum subscriptions."
+msgstr "Faça login para actualizar as subscrições"
+
+#~ msgid "ago by"
+#~ msgstr "atrás por"
+
+#~ msgid "ago"
+#~ msgstr "atrás"
+
+#~ msgid "Posting as"
+#~ msgstr "Escrevendo como"
+
+#~ msgid "Please login to create a thread."
+#~ msgstr "Faça login para criar um tópico"

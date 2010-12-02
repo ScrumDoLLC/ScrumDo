@@ -165,6 +165,7 @@ INSTALLED_APPS = (
     'topics',
     'django_extensions',
     'django_evolution',
+    'forum'
 #    'debug_toolbar'
 )
 

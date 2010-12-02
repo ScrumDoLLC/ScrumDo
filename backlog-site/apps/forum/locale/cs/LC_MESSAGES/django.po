@@ -1,0 +1,296 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Petr Novák <petr.novak@cosmoboy.cz>, 2009.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-12-29 17:03+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Petr Novák <petr.novak@cosmoboy.cz>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: feeds.py:28
+#, python-format
+msgid "%(title)s's Forum: %(forum)s"
+msgstr "Fórum %(title)s: %(forum)s"
+
+#: feeds.py:32
+#, python-format
+msgid "%(title)s's Forum"
+msgstr "Fórum %(title)s"
+
+#: feeds.py:38
+msgid "Latest forum posts"
+msgstr "Nejnovější příspěvky"
+
+#: forms.py:5 models.py:34 models.py:163
+msgid "Title"
+msgstr "Nadpis"
+
+#: forms.py:6 forms.py:10 models.py:215
+msgid "Body"
+msgstr "Text"
+
+#: forms.py:7 forms.py:11
+msgid "Subscribe via email"
+msgstr "Upozorňovat e-mailem"
+
+#: models.py:35
+msgid "Slug"
+msgstr "Slug"
+
+#: models.py:37
+msgid "Description"
+msgstr "Popis"
+
+#: models.py:38 models.py:184
+msgid "Threads"
+msgstr "Témata"
+
+#: models.py:39 models.py:166 models.py:257
+#: templates/forum/thread_list.html:42
+msgid "Posts"
+msgstr "Příspěvky"
+
+#: models.py:40
+msgid "Ordering"
+msgstr "Řazení"
+
+#: models.py:91
+msgid "Forum parents"
+msgstr "Nadřazená fóra"
+
+#: models.py:121 templates/forum/forum_list.html:8
+#: templates/forum/updatesubs.html:17
+msgid "Forum"
+msgstr "Fórum"
+
+#: models.py:122 templates/forum_base.html:88
+#: templates/forum/forum_list.html:3
+msgid "Forums"
+msgstr "Fóra"
+
+#: models.py:127
+msgid "You must not save a forum in itself!"
+msgstr "Fórum nelze vložit do sebe sama!"
+
+#: models.py:164
+msgid "Sticky?"
+msgstr "Na vrchu?"
+
+#: models.py:165
+msgid "Closed?"
+msgstr "Zamčené?"
+
+#: models.py:167 templates/forum/thread_list.html:43
+msgid "Views"
+msgstr "Shlédnutí"
+
+#: models.py:168
+msgid "Latest Post Time"
+msgstr "Nejnovější příspěvek"
+
+#: models.py:183 templates/forum/thread_list.html:41
+#: templates/forum/updatesubs.html:18
+msgid "Thread"
+msgstr "Téma"
+
+#: models.py:217
+msgid "Time"
+msgstr "Čas"
+
+#: models.py:256 templates/forum/newthread.html:23
+#: templates/forum/reply.html:18 templates/forum/thread_list.html:74
+msgid "Post"
+msgstr "Příspěvek"
+
+#: models.py:274
+msgid "Subscription"
+msgstr "Upozornování"
+
+#: models.py:275
+msgid "Subscriptions"
+msgstr "Upozornování"
+
+#: templates/forum_base.html:4
+msgid "All Latest Posts via RSS"
+msgstr "Nejnovější příspěvky jako RSS"
+
+#: templates/forum_base.html:5
+msgid "All Latest Posts via ATOM"
+msgstr "Nejnovější příspěvky jako ATOM"
+
+#: templates/forum_base.html:87
+msgid "Welcome to the Forums"
+msgstr "Vítejte ve fóru"
+
+#: templates/forum_base.html:88
+msgid "Home"
+msgstr "Domů"
+
+#: templates/forum/forum_list.html:9 templates/forum/thread_list.html:22
+#: templates/forum/thread_list.html:44
+msgid "Last Post"
+msgstr "Nejnovější příspěvek"
+
+#: templates/forum/forum_list.html:14
+#, python-format
+msgid "%(thread_count)s threads, %(post_count)s posts"
+msgstr "%(thread_count)s témat, %(post_count)s příspěvků"
+
+#: templates/forum/forum_list.html:17 templates/forum/thread_list.html:30
+#: templates/forum/thread_list.html:53
+#, python-format
+msgid "%(time)s ago by %(author)s"
+msgstr "vložil %(author)s před %(time)s"
+
+#: templates/forum/forum_list.html:17 templates/forum/thread_list.html:30
+#: templates/forum/thread_list.html:53
+msgid "view"
+msgstr "číst"
+
+#: templates/forum/forum_list.html:17 templates/forum/thread_list.html:30
+msgid "No Posts"
+msgstr "Žádné příspěvky"
+
+#: templates/forum/forum_list.html:22 templates/forum/thread.html:33
+#: templates/forum/updatesubs.html:31
+msgid "Update Subscriptions"
+msgstr "Aktualizovat upozorňování"
+
+#: templates/forum/newthread.html:4 templates/forum/newthread.html.py:11
+#, python-format
+msgid "New Thread in %(title)s"
+msgstr "Nové téma v %(title)s"
+
+#: templates/forum/newthread.html:7
+#, python-format
+msgid "%(forum.title)s Posts via RSS"
+msgstr "Příspěvky %(forum.title)s jako RSS"
+
+#: templates/forum/newthread.html:8
+#, python-format
+msgid "%(forum.title)s Posts via ATOM"
+msgstr "Příspěvky %(forum.title)s jako ATOM"
+
+#: templates/forum/newthread.html:13
+msgid "New Thread"
+msgstr "Nové téma"
+
+#: templates/forum/newthread.html:18 templates/forum/thread_list.html:69
+msgid "Create a Thread"
+msgstr "Vytvořit téma"
+
+#: templates/forum/newthread.html:21 templates/forum/reply.html:16
+#: templates/forum/thread.html:40 templates/forum/thread_list.html:72
+msgid "Posting As"
+msgstr "Přihlášen jako"
+
+#: templates/forum/reply.html:4
+#, python-format
+msgid "Reply to thread  \"%(title)s\""
+msgstr "Odpovědět do tématu \"%(title)s\""
+
+#: templates/forum/reply.html:6
+#, python-format
+msgid "Reply to Thread \"%(title)s\""
+msgstr "Odpovědět do tématu \"%(title)s\""
+
+#: templates/forum/reply.html:13
+msgid "Reply to Thread"
+msgstr "Odpovědět do tématu"
+
+#: templates/forum/thread.html:8 templates/forum/thread_list.html:13
+#: templates/forum/thread_list.html:27
+#, fuzzy
+msgid "post"
+msgid_plural "posts"
+msgstr[0] "příspěvek"
+msgstr[1] "příspěvky"
+msgstr[2] "příspěvků"
+
+#: templates/forum/thread.html:16
+#, python-format
+msgid "%(time)s ago"
+msgstr "před %(time)s"
+
+#: templates/forum/thread.html:17
+msgid "by"
+msgstr "author"
+
+#: templates/forum/thread.html:25 templates/forum/thread_list.html:61
+msgid "First"
+msgstr "První"
+
+#: templates/forum/thread.html:29 templates/forum/thread_list.html:65
+msgid "Last"
+msgstr "Poslední"
+
+#: templates/forum/thread.html:34
+msgid "Post a Reply"
+msgstr "Odpovědět"
+
+#: templates/forum/thread.html:36
+msgid "Sorry, this thread is closed. No further replies are permitted."
+msgstr "Toto téma je uzamčeno; žádné další odpovědi nejsou možné."
+
+#: templates/forum/thread.html:42
+msgid "Submit"
+msgstr "Odeslat"
+
+#: templates/forum/thread.html:45
+msgid "Please login to post a reply."
+msgstr "Pro přidání odpovědi se prosím přihlašte."
+
+#: templates/forum/thread_list.html:7
+#, python-format
+msgid "%(ftitle)s Posts via RSS"
+msgstr "Příspěvky z %(ftitle)s jako RSS"
+
+#: templates/forum/thread_list.html:8
+#, python-format
+msgid "%(ftitle)s Posts via ATOM"
+msgstr "Příspěvky z %(ftitle)s jako ATOM"
+
+#: templates/forum/thread_list.html:13 templates/forum/thread_list.html:27
+msgid "thread"
+msgstr "téma"
+
+#: templates/forum/thread_list.html:21
+msgid "Sub-Forum"
+msgstr "podfórum"
+
+#: templates/forum/updatesubs.html:3 templates/forum/updatesubs.html.py:4
+msgid "Update Thread Subscriptions"
+msgstr "Aktualizovat upozorňování"
+
+#: templates/forum/updatesubs.html:11
+msgid "No subscriptions."
+msgstr "Žádná upozornění."
+
+#: templates/forum/updatesubs.html:19
+msgid "Subscribed"
+msgstr "Objednána upozornění"
+
+#: templates/forum/updatesubs.html:25
+msgid "Sticky"
+msgstr "Na vrchu"
+
+#: templates/forum/updatesubs.html:25
+msgid "(Closed)"
+msgstr "(Uzavřeno)"
+
+#: templates/forum/updatesubs.html:37
+msgid "Go back to thread"
+msgstr "Zpět do tématu"
+
+#: templates/forum/updatesubs.html:42
+msgid "Please login to update your forum subscriptions."
+msgstr "K aktualizaci upozornění se prosím přihlašte."

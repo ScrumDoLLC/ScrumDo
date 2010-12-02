@@ -1,0 +1,45 @@
+{% extends "forum_base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Update Thread Subscriptions" %}{% endblock %}
+{% block pagetitle %}{% trans "Update Thread Subscriptions" %}{% endblock %}
+
+
+{% block content %}
+
+{% if user.is_authenticated %}
+{% if not subs %}
+<p>{% trans "No subscriptions." %}</p>
+{% else %}
+<form method='post' action='./'>
+<table id='djangoForumThreadList'>
+
+<tr>
+<th>{% trans "Forum" %}</th>
+<th>{% trans "Thread" %}</th>
+<th>{% trans "Subscribed" %}</th>
+</tr>
+
+{% for s in subs %}
+<tr>
+<td><a href='{{ s.thread.forum.get_absolute_url }}'>{{ s.thread.forum.title }}</a></td>
+<td>{% if s.thread.sticky %}{% trans "Sticky" %} {% endif %}<a href='{{ s.thread.get_absolute_url }}'>{{ s.thread.title|escape }}</a>{% if s.thread.closed %} {% trans "(Closed)" %}{% endif %}</td>
+<td><input type='checkbox' checked='checked' name='{{ s.thread.id }}' /></td>
+</tr>
+{% endfor %}
+</table>
+
+<p><input type='submit' value='{% trans "Update Subscriptions" %}' name="updatesubs" /></p>
+</form>
+{% endif %}
+
+{% if next %}
+<p>
+<a href="{{ next }}">{% trans "Go back to thread" %}</a>
+</p>
+{% endif %}
+
+{% else %}
+<p>{% trans "Please login to update your forum subscriptions." %}</p>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,5 @@
+{% load i18n %}
+{{ body }}
+
+--
+{% blocktrans with site.name as site_name and site.domain as domain and thread.get_absolute_url as url %}You received this message because you subscribed to a forum thread at {{ site_name }}.  Login at this URL to update your subscriptions: http://{{ domain }}{{ url }}{% endblocktrans %}
