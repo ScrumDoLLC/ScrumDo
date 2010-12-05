@@ -1,0 +1,35 @@
+{% extends "projects/base.html" %}
+
+{% load i18n %}
+{% load uni_form %}
+{% load avatar_tags %}
+{% load threadedcommentstags %}
+{% load pagination_tags %}
+{% load extra_tagging_tags %}
+{% load projects_tags %}
+{% load group_tags %}
+{% load topics_tags %}
+{% load wiki_tags %}
+{% load theme_tags %}
+
+{% block head_title %}{{ project.name }}{% endblock %}
+
+
+
+{% block body %}
+    
+    <h2>Open Source Project</h2>
+    Head over to <a href="http://www.scrumdo.org/">ScrumDo.org</a> to learn more about the open source project powering ScrumDo.
+    
+    <h2>Thanks / Credits</h2>
+    We are thankful to the following projects/people:<br/>
+    <ul>
+      <li><a href="http://pinaxproject.com/">Pinax</a> - an amazing starting point for Django applications</li>
+      <li>ScrumDo includes the <a href="http://www.famfamfam.com/lab/icons/silk/">Silk icon set 1.3</a> by Mark James.</li>    
+      <li>The <a href="http://www.djangoproject.com/">Django</a> project</li>
+      <li>Rob Hudson's <a href="http://robhudson.github.com/django-debug-toolbar/">Django Debug Toolbar</a></li>
+      <li>The <a href="http://code.google.com/p/django-evolution/">Django Evolution</a> project</li>
+      <li>Everyone who has <a href="https://github.com/ScrumDo-Dev-Group/ScrumDo/commits/master">commited code</a> to help the project.</a>
+    </ul>
+    
+{% endblock %}

@@ -2,6 +2,7 @@
 
 {% load i18n %}
 {% load ifsetting_tag %}
+{% load theme_tags %}
 
 {% block head_title %}{% trans "Scrumdo - Agile Development Story Management Site" %}{% endblock %}
 
@@ -25,13 +26,23 @@
     
     <hr />
     <img style="float:right" src="{{STATIC_URL}}images/homepagePreview.png">
-      <h2>Early Alpha</h2>
-      We're in pretty early stages of development, not everything works yet.
+        <h2>Overview</h2>
+         You can watch the 8 minute <a href="#overview" rel="facebox">Scrumdo Overview</a> {% silk "film" %} to see some of the key features of this site.
+        <h2>Try It</h2>
+        
         {% url acct_login as login_url %}
         {% url acct_signup as signup_url %}
         <p>{% blocktrans %}You can <a href="{{ signup_url }}">Sign up</a> and <a href="{{ login_url }}">Log in</a> to try out the site.{% endblocktrans %}</p>
-        <br/>
+        <h2>Follow Us</h2>
         <a href="http://twitter.com/ScrumDo">Follow Us</a> on Twitter to keep up to date.
+        <h2>Open Source</h2>
+        Follow the ScrumDo open source project over at <a href="http://www.scrumdo.org">scrumdo.org</a>
+        
+        
+        <div id="overview" style="display:none ; width:898px; height:717px;">
+          <object width="921" height="716"><param name="movie" value="http://www.youtube.com/v/-XfCQhN0QRU?fs=1&amp;hl=en_US&amp;hd=1&amp;color1=0x234900&amp;color2=0x4e9e00"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/-XfCQhN0QRU?fs=1&amp;hl=en_US&amp;hd=1&amp;color1=0x234900&amp;color2=0x4e9e00" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="921" height="716"></embed></object>
+          
+        </div>
         
     {% endif %}
     
