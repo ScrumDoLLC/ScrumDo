@@ -90,6 +90,11 @@
       </form>
     </div>
     
+    <div id="story_hover_window" >
+      <div id="story_hover_content">
+      </div>
+    </div>
+    
     
 {% endblock %}
 
@@ -226,10 +231,36 @@
            
           return false;
         });
+        
+        $(".hoverDetails").hover( displayStoryHover, hideStoryHover );
     }
 
 
+    var popupStatus = 0;  
+    function displayStoryHover()
+    {
+       if(popupStatus==0)
+       { 
+         $("#story_hover_content").html("Loading...");
+         $("#story_hover_window").fadeIn("fast");         
+         $("#story_hover_window").centerInClient();        
+         story_id = $(this).attr("story_id");
+         $.ajax({
+           url: "/projects/project/" + project_slug + "/story/" + story_id + "/pretty",
+           type: "GET",
+           success: function(data) { $("#story_hover_window").html(data);}
+         });
+         popupStatus = 1;           
+       }
+      
+    }
+    function hideStoryHover()
+    {
+      $("#story_hover_window").fadeOut("fast");
+      popupStatus = 0;
+    }
     
+     
         $(document).ready(function() {
              
               $(".subIteration").click( function() 
@@ -239,6 +270,8 @@
               } );
 
               loadIteration( "{{ iteration.id }}","","")  ;
+              
+              
 
               $("#story_list").sortable({ 
                 update: updateStoryPosition, 
@@ -246,8 +279,6 @@
                 opacity:0.6, 
                 placeholder: "ui-state-highlight" 
                 });
-
-//              $("#story_list").disableSelection();
               
               {# Draw the graph... #}
                {% if iteration.points_log.count %}      

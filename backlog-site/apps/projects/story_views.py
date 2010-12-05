@@ -240,3 +240,11 @@ def processImport( project, file , user):
     story = Story( project=project, summary=summary, detail=detail, rank=0, local_id=project.stories.count()+1, creator=user, points=points, iteration=project.get_default_iteration())
     story.save()
   user.message_set.create(message=("%d stories imported" % count))
+
+def pretty_print_story(request, group_slug, story_id):
+  story = get_object_or_404(Story, id=story_id)  
+  read_access_or_403( story.project, request.user )
+
+  return render_to_response("stories/single_story_read_only.html", {      
+      "story": story      
+  }, context_instance=RequestContext(request))

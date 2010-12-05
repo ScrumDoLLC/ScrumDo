@@ -493,3 +493,18 @@ div.projects h2 {
   margin: 0 0 5px 0;
   padding: 0;
 }
+
+#story_hover_window {
+   display:none;  
+   position:fixed;    
+   height:700px;  
+   width:560px;  
+   background:#FFFFFF;  
+   border:2px solid #cecece;  
+   z-index:2;  
+   padding:12px;  
+   font-size:13px;
+   -moz-box-shadow: 0 0 1em #888;
+   -webkit-box-shadow: 0 0 1em #888;
+   overflow: hidden;
+ }
