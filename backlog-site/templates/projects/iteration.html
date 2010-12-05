@@ -116,7 +116,7 @@
           $("#story_list").html(html);  
           $("#story_list").attr("iteration_id", iterationID);      
           $("#loadingIcon").hide();
-          setUpStoryLinks();
+          setUpStoryLinks();          
         }
       });
     }
@@ -159,7 +159,7 @@
         type: "POST",
         success: function() {
           calculateBothPoints();
-          $("#loadingIcon").hide();
+          $("#loadingIcon").hide();          
         }
       });
 
@@ -174,7 +174,7 @@
 
     function calculateBothPoints()
     {
-      
+      setUpStoryLinks();
     }
    
     $(document).bind('beforeReveal.facebox', function() {
@@ -248,7 +248,7 @@
          $.ajax({
            url: "/projects/project/" + project_slug + "/story/" + story_id + "/pretty",
            type: "GET",
-           success: function(data) { $("#story_hover_window").html(data);}
+           success: function(data) { $("#story_hover_window").html(data); }
          });
          popupStatus = 1;           
        }
@@ -295,7 +295,7 @@
             type: "POST",
             success: function() {
               $("#loadingIcon").hide();
-              $("#story_" + current_story_popup).hide(true);
+              $("#story_" + current_story_popup).hide(true);              
             }
           });
           
@@ -310,6 +310,7 @@
             data: ({return_type : "block"}),            
             success: function(responseText) {        
               $("#story_" + storyID).replaceWith(responseText);
+              setUpStoryLinks();
             }
           });
         }
@@ -322,6 +323,7 @@
             data: ({return_type : "block"}),            
             success: function(responseText) {        
               $("#story_" + storyID).replaceWith(responseText);
+              setUpStoryLinks();
             }
           });
         }     
@@ -336,6 +338,7 @@
             data: ({return_type : "block"}),                        
             success: function(responseText) {        
               $("#story_" + storyID).replaceWith(responseText);
+              setUpStoryLinks();
             }
           });
         }
@@ -350,6 +353,7 @@
             data: ({return_type : "block"}),                        
             success: function(responseText) {        
               $("#story_" + storyID).replaceWith(responseText);
+              setUpStoryLinks();
             }
           });
         }
