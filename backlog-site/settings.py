@@ -98,6 +98,7 @@ MIDDLEWARE_CLASSES = (
     'pagination.middleware.PaginationMiddleware',
     'django_sorting.middleware.SortingMiddleware',
     'pinax.middleware.security.HideSensistiveFieldsMiddleware',
+    'extras.middleware.ScrumdoExtrasStartupMiddlware',
 #    'debug_toolbar.middleware.DebugToolbarMiddleware'
 )
 
@@ -165,7 +166,8 @@ INSTALLED_APPS = (
     'topics',
     'django_extensions',
     'django_evolution',
-    'forum'
+    'forum',
+    'extras'
 #    'debug_toolbar'
 )
 
@@ -211,9 +213,15 @@ CACHE_BACKEND = 'locmem://'
 
 INTERNAL_IPS = ('127.0.0.1',)
 
+SCRUMDO_EXTRAS = ("plugins.github-issues.GitHubIssuesExtra",
+                  "plugins.example.ExampleExtra",)
+
 # local_settings.py can be used to override environment-specific settings
 # like database and email that differ between development and production.
 try:
     from local_settings import *
 except ImportError:
     pass
+
+
+
