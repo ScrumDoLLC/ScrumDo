@@ -1,0 +1,39 @@
+{% extends "extras/base.html" %}
+
+{% load group_tags %}
+
+{% block body %}
+  <h1>{{project.name}} Extras</h1>
+  <div id="extrasList">
+    
+    {% for extra in extras %}
+        <div class="single_extra">
+        <img src="{{extra.getLogo}}" style="float:left">
+        
+        <div class="single_extra_text">
+          <b>{{ extra.getName }}</b><br/>{{ extra.getDescription }}<br/>
+        </div>        
+        <div class="single_extra_bottom">
+          {% ifequal extra.getName "GitHub Issues" %}          
+            
+            
+            <form action="{% url disable_extra_url extra.getSlug project.slug %}" method="POST">
+              <a href="{% url configure_extra_url extra.getSlug project.slug %}" class="button blue">Configure</a>
+              <button type="submit" class="button red">Disable</button>
+            </form>
+            
+            
+          {% else %}
+            <form action="{% url enable_extra_url  extra.getSlug project.slug %}" method="POST">
+              <button type="submit" class="button green">Enable</button>
+            </form>
+            
+          {% endifequal %}
+        </div>
+        
+        </div>
+    {% endfor %}
+
+  </div>
+  
+{% endblock %}

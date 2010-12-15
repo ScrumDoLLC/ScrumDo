@@ -17,6 +17,7 @@
             <li><a href="{% url iteration project.slug project.get_default_iteration.id %} ">Backlog</a></li>
             <li><a href="#iteration_header_list" rel="facebox">Iterations</a></li>
             <li><a href="#tools_list" rel="facebox">Tools</a></li>
+            <li><a href="{% url project_extras_url project.slug %}" >Extras</a></li>
           {% else %}
               <li><a href="{% url home %} ">{% trans "Your Projects" %}</a></li>
               <li><a href="{% url project_create %}">{% trans "Create a Project" %}</a></li>

@@ -8,8 +8,13 @@ class ScrumdoExtra:
   # Returns a user-friendly version of the name of this extra.  Generally should be just a couple words long.
   def getName(self):
     raise NotImplementedError("ScrumdoExtra subclasses must implement getName()")
-    
+
+  # Returns a URL to a logo that can be used on the config page.
+  def getLogo(self):
+    raise NotImplementedError("ScrumdoExtra subclasses must implement getLogo()")
+        
   # Returns a version of the name consisting of only letters, numbers, or dashes
+  # Max length, 25 chars
   def getSlug(self):
     raise NotImplementedError("ScrumdoExtra subclasses must implement getSlug()")
       

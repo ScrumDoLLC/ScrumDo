@@ -98,7 +98,6 @@ MIDDLEWARE_CLASSES = (
     'pagination.middleware.PaginationMiddleware',
     'django_sorting.middleware.SortingMiddleware',
     'pinax.middleware.security.HideSensistiveFieldsMiddleware',
-    'extras.middleware.ScrumdoExtrasStartupMiddlware',
 #    'debug_toolbar.middleware.DebugToolbarMiddleware'
 )
 

@@ -1,15 +1,21 @@
+from django.conf import settings
 
-manager = None
+
+
+
 
 class ExtrasManager:
   """
     Small class to manage our list of extras.
   """
   
-  def getExtras():
-    return self.extras.copy()
+  def getProjectConfig( self , project):
+    pass
+  
+  def getExtras(self):
+    return self.extras.values()
     
-  def getExtra( slug ):
+  def getExtra( self, slug ):
     return self.extras[ slug ]
 
   def __init__(self, extras_settings):
@@ -29,4 +35,4 @@ def get_class( kls ):
   return m
     
     
-  
+manager = ExtrasManager( settings.SCRUMDO_EXTRAS )  
