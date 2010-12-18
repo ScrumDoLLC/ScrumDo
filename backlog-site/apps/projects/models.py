@@ -15,7 +15,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 
 from organizations.models import Organization
-
+from activities.models import SubjectActivity
+import django.dispatch
 
 class SiteStats( models.Model ):
   user_count = models.IntegerField();
@@ -133,6 +134,9 @@ class Iteration( models.Model):
   default_iteration = models.BooleanField( default=False )
   points_log = generic.GenericRelation( PointsLog )
   
+  activity_signal = django.dispatch.Signal(providing_args=["news", "user","action","context"])
+  activity_signal.connect(SubjectActivity.activity_handler)
+
   include_in_velocity = models.BooleanField(_('include_in_velocity'), default=True)
   
   def isCurrent(self):
@@ -198,9 +202,11 @@ class Story( models.Model ):
 
   tags_to_delete = []
   tags_to_add = []
-  
+  activity_signal = django.dispatch.Signal(providing_args=["news", "user","action","context"])
+  activity_signal.connect(SubjectActivity.activity_handler)
 
   
+
   def points_value(self):
     try:
       return int(self.points)
@@ -259,7 +265,7 @@ def tag_callback(sender, instance, **kwargs):
       tag = StoryTag( project=instance.project, name=tag_to_add)
       tag.save()
     tagging = StoryTagging( tag=tag, story=instance)  
-    tagging.save()    
+    tagging.save() 
   instance.tags_to_delete = []
   instance.tags_to_add = []
 

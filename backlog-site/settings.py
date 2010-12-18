@@ -165,8 +165,10 @@ INSTALLED_APPS = (
     'topics',
     'django_extensions',
     'django_evolution',
-    'forum'
-#    'debug_toolbar'
+    'forum',
+    'activities'
+#    'debug_toolbar',
+     
 )
 
 ABSOLUTE_URL_OVERRIDES = {

@@ -30,6 +30,8 @@ from projects.access import *
 from projects.models import Project, ProjectMember, Iteration, Story
 from projects.forms import *
 from organizations.models import Organization
+from activities.models import SubjectActivity
+import datetime
 
 TOPIC_COUNT_SQL = """
 SELECT COUNT(*)
@@ -51,9 +53,11 @@ def home( request ):
   my_projects = [];
   member_projects = [];
   organizations = [];
+  activities=[]
   
   if request.user.is_authenticated():
     organizations = Organization.getOrganizationsForUser(request.user)
+    activities = SubjectActivity.getActivitiesForUser(request.user)
     memberships = ProjectMember.objects.filter( user=request.user )
     for membership in memberships:
 
@@ -70,7 +74,9 @@ def home( request ):
   return render_to_response("homepage.html", {
        "my_projects":my_projects,
        "my_organizations": organizations,
-       "member_projects":member_projects
+       "my_activities": activities,
+       "member_projects":member_projects,
+       "now": datetime.datetime.now()
     }, context_instance=RequestContext(request))
 
 

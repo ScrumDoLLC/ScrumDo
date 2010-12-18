@@ -61,9 +61,11 @@ def iteration_create(request, group_slug=None):
    if form.is_valid(): 
      iteration = form.save(commit=False)
      iteration.project = project
-     iteration.save()     
+     iteration.save()
+     iteration.activity_signal.send(sender=Iteration, news=request.user.username + " created\"" +iteration.name + "\" in project\"" +project.name, user=request.user,action="created" ,object=iteration.name, context=project.slug)
      request.user.message_set.create(message="Iteration created.") 
      return HttpResponseRedirect( reverse('project_detail', kwargs={'group_slug':project.slug}) ) # Redirect after POST
+
  else:
    form = IterationForm() # An unbound form
 
