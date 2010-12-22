@@ -35,3 +35,9 @@ class StoryQueue( models.Model ):
   extra_1 = models.TextField( blank=True , null=True)
   extra_2 = models.TextField( blank=True , null=True)
   extra_3 = models.TextField( blank=True , null=True)
+  
+  
+class ExtraConfiguration( models.Model ):
+  extra_slug = models.CharField( "extra_slug" , max_length=25)
+  project_slug = models.CharField( "project_slug" , max_length=55)
+  configuration_pickle = models.TextField( blank=True )

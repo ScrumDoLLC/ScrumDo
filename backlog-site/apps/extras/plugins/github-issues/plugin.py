@@ -35,12 +35,16 @@ class GitHubIssuesExtra( ScrumdoProjectExtra ):
     
   # Should return a django style response that handles any configuration that this extra may need.
   def doProjectConfigration( self, request, project ):
+    configuration = self.getConfiguration( project.slug )
+    
     if request.method == "POST":
       form = forms.GitHubIssuesConfig( request.POST )
       if form.is_valid():
+        configuration = form.cleaned_data
+        self.saveConfiguration( project.slug, configuration )        
         return HttpResponseRedirect(reverse("project_extras_url",kwargs={'project_slug':project.slug}))
     else:  
-      form = forms.GitHubIssuesConfig()
+      form = forms.GitHubIssuesConfig(initial=configuration)
     return render_to_response("extras/github-issues/configure.html", {
         "project":project,
         "extra":self,

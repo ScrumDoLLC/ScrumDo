@@ -1,4 +1,9 @@
 from django.contrib.sites.models import Site
+from django.core.exceptions import ObjectDoesNotExist
+from extras.models import ExtraConfiguration
+import base64
+import pickle
+
 
 
 # Interface that 'Extras' for the scrumdo site must implement.  Extras usually 
@@ -21,7 +26,28 @@ class ScrumdoExtra:
   # Returns a user-friendly description of this extra.  This text will be passed through a Markdown filter when displayed to the user.
   def getDescription(self):
     raise NotImplementedError("ScrumdoExtra subclasses must implement getDescription()")
-  
+    
+  def getConfiguration(self, project_slug ):
+    try:
+      config = ExtraConfiguration.objects.get( extra_slug=self.getSlug(), project_slug=project_slug)
+    except ObjectDoesNotExist:
+      return {}
+    return pickle.loads( base64.decodestring(config.configuration_pickle) )
+    
+  def saveConfiguration(self, project_slug, configuration_object ):
+    try:
+      config = ExtraConfiguration.objects.get( extra_slug=self.getSlug(), project_slug=project_slug)
+    except ObjectDoesNotExist:
+      config = ExtraConfiguration( project_slug=project_slug, extra_slug=self.getSlug() )
+
+    print "PICKLE!"
+    print pickle.dumps( configuration_object )
+
+    config.configuration_pickle = base64.encodestring( pickle.dumps( configuration_object ) )
+    config.save()
+      
+
+
   
     
   
