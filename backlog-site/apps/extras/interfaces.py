@@ -6,28 +6,31 @@ import pickle
 
 
 
-# Interface that 'Extras' for the scrumdo site must implement.  Extras usually 
-# implement a connection to a third party service.
 class ScrumdoExtra:
-    
-  # Returns a user-friendly version of the name of this extra.  Generally should be just a couple words long.
+  """ Interface that 'Extras' for the scrumdo site must implement.  Extras usually 
+      implement a connection to a third party service. """
+  
   def getName(self):
+    "Returns a user-friendly version of the name of this extra.  Generally should be just a couple words long."    
     raise NotImplementedError("ScrumdoExtra subclasses must implement getName()")
 
-  # Returns a URL to a logo that can be used on the config page.
+  
   def getLogo(self):
+    "Returns a URL to a logo that can be used on the config page."
     raise NotImplementedError("ScrumdoExtra subclasses must implement getLogo()")
         
-  # Returns a version of the name consisting of only letters, numbers, or dashes
-  # Max length, 25 chars
   def getSlug(self):
+    """ Returns a version of the name consisting of only letters, numbers, or dashes
+        Max length, 25 chars    """
     raise NotImplementedError("ScrumdoExtra subclasses must implement getSlug()")
       
-  # Returns a user-friendly description of this extra.  This text will be passed through a Markdown filter when displayed to the user.
+  
   def getDescription(self):
+    " Returns a user-friendly description of this extra.  This text will be passed through a Markdown filter when displayed to the user. "
     raise NotImplementedError("ScrumdoExtra subclasses must implement getDescription()")
     
   def getConfiguration(self, project_slug ):
+    """ Gets a configuration object (usually a dictionary) from the ExtraConfiguration table. """
     try:
       config = ExtraConfiguration.objects.get( extra_slug=self.getSlug(), project_slug=project_slug)
     except ObjectDoesNotExist:
@@ -35,69 +38,75 @@ class ScrumdoExtra:
     return pickle.loads( base64.decodestring(config.configuration_pickle) )
     
   def saveConfiguration(self, project_slug, configuration_object ):
+    """ Saves a configuration object (usually a dictionary) to the ExtraConfiguration table. 
+        configuration_object must be pickleable """
+        
     try:
       config = ExtraConfiguration.objects.get( extra_slug=self.getSlug(), project_slug=project_slug)
     except ObjectDoesNotExist:
       config = ExtraConfiguration( project_slug=project_slug, extra_slug=self.getSlug() )
 
-    print "PICKLE!"
-    print pickle.dumps( configuration_object )
-
     config.configuration_pickle = base64.encodestring( pickle.dumps( configuration_object ) )
     config.save()
       
 
+  
 
-  
-    
-  
-# Interface for extras that should be associated with a project.  
 class ScrumdoProjectExtra( ScrumdoExtra ):
+  "Interface for extras that should be associated with a project.  "
 
-  # called when an extra is first associated with a project.
+  
   def associate( self, project):
-    raise NotImplementedError("ScrumdoProjectExtra subclasses must implement associate()")
+    "called when an extra is first associated with a project."
+    pass
 
-  # called when an extra is removed from a project.
+
+  
   def unassociate( self, project):
-    raise NotImplementedError("ScrumdoProjectExtra subclasses must implement unassociate()")
+    "called when an extra is removed from a project."
+    pass
     
     
-  # Should return a string representing the current status that this extra has for a given project.  
-  # Examples: 'Successfully syncronized on 1/1/2010' or 'Syncronization last failed' or 'Everything OK' 
   def getShortStatus( self,  project ):
+    """ Should return a string representing the current status that this extra has for a given project.  
+        Examples: 'Successfully syncronized on 1/1/2010' or 'Syncronization last failed' or 'Everything OK' """
     raise NotImplementedError("ScrumdoProjectExtra subclasses must implement getShortStatus()")
 
-  # Should return a django style response that handles any configuration that this extra may need.
+  
   def doProjectConfigration( self, request, project ):
+    """ Should return a django style response that handles any configuration that this extra may need. """
     raise NotImplementedError("ScrumdoProjectExtra subclasses must implement doProjectConfigration()")
 
   def syncronizeProject( self, project ):
-    """Should cause a full push/pull syncronization of this extra with whatever external source 
-       there is.  This will be called on a scheduled basis for all active projects.  The project 
-       parameter be an apps.projects.models.Project object.    """
+    """ Should cause a full push/pull syncronization of this extra with whatever external source 
+        there is.  This will be called on a scheduled basis for all active projects.  The project 
+        parameter be an apps.projects.models.Project object.    """
     
     pass
 
-  # Every extra gets a URL that external services can POST to.  This should handle those requests.
+  
   def externalHook( self, request ):
+    "Every extra gets a URL that external services can POST to.  This should handle those requests."
     pass
 
-  # Called when a story is updated in a project that this extra is associated with.
+  
   def storyUpdated( self, project, story ):
-    pass
-
-  # Called when a story is deleted in a project that this extra is associated with.
-  def storyDeleted( self, project, story):
-    pass
-
-  # Called when a story is created in a project that this extra is associated with.
-  def storyCreated( self, project, story):
+    "Called when a story is updated in a project that this extra is associated with."
     pass
   
-  # Returns where an external site can post to, to give this extra information.
-  # You probably don't want to change this in subclasses.
+  def storyDeleted( self, project, story):
+    "Called when a story is deleted in a project that this extra is associated with."
+    pass
+
+  
+  def storyCreated( self, project, story):
+    "Called when a story is created in a project that this extra is associated with."
+    pass
+  
   def getExtraHookURL( self, project ):
+    """ Returns where an external site can post to, to give this extra information.
+        You probably don't want to change this in subclasses. """
+    
     current_site = Site.objects.get_current()
     return "http://" + current_site.domain + "/extras/" + self.getSlug() + "/project/" +  project.slug + "/hook"
     
