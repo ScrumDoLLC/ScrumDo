@@ -203,8 +203,8 @@ EMAIL_HOST='localhost'
 EMAIL_HOST_USER=''                  
 EMAIL_HOST_PASSWORD=''        
 EMAIL_PORT='25'
-DEFAULT_FROM_EMAIL = 'scrumdo@scrumdo.com'   
-SERVER_EMAIL = 'scrumdo@scrumdo.com'
+DEFAULT_FROM_EMAIL = 'noreply@scrumdo.com'   
+SERVER_EMAIL = 'noreply@scrumdo.com'
 
 GOOGLE_ANALYTICS = False
 GOOGLE_ANALYTICS_ACCOUNT = ""
