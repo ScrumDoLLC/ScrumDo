@@ -73,9 +73,10 @@ class GitHubIssuesExtra( ScrumdoProjectExtra ):
     
     
   def syncronizeProject( self, project ):
-    configuration = self.getConfiguration( project.slug )    
-    github = Github(username=configuration.username, api_token=configuration.password,requests_per_second=1)
-    issues = github.issues.list(configuration.repository, state="open")
+    configuration = self.getConfiguration( project.slug )   
+
+    github = Github(username=configuration['username'], api_token=configuration['password'],requests_per_second=1)
+    issues = github.issues.list(configuration['repository'], state="open")
     for issue in issues:
       print issue.title
     
