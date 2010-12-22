@@ -13,8 +13,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 class GitHubIssuesExtra( ScrumdoProjectExtra ):
-
-  
   
   def __init__(self):
     print "GitHubIssuesExtra created"
@@ -25,18 +23,24 @@ class GitHubIssuesExtra( ScrumdoProjectExtra ):
   def getLogo(self):
     return settings.STATIC_URL + "extras/github-logo.png"
     
-  # Returns a version of the name consisting of only letters, numbers, or dashes
+  
   def getSlug(self):
+    "Returns a version of the name consisting of only letters, numbers, or dashes"
     return "github-issues"
       
-  # Returns a user-friendly description of this extra.  This text will be passed through a Markdown filter when displayed to the user.
+  
   def getDescription(self):
+    "Returns a user-friendly description of this extra.  This text will be passed through a Markdown filter when displayed to the user."    
     return "Create ScrumdDo stories for any uncompleted GitHub issue.  Push ScrumDo stories to GitHub issues."
     
-  # Should return a django style response that handles any configuration that this extra may need.
   def doProjectConfigration( self, request, project ):
-    configuration = self.getConfiguration( project.slug )
-    
+    """Handles a request to do configuration for the GitHub-issues extra.
+       This displays a form asking for credentials / repository information,
+       then saves that with the saveConfiguration() api in ScrumdoProjectExtra base
+       class.  After a successful configuration, we redirect back to the extras page.
+       (Should each extra be responsible for that?)"""
+       
+    configuration = self.getConfiguration( project.slug )    
     if request.method == "POST":
       form = forms.GitHubIssuesConfig( request.POST )
       if form.is_valid():
@@ -51,10 +55,12 @@ class GitHubIssuesExtra( ScrumdoProjectExtra ):
         "form":form
       }, context_instance=RequestContext(request))
     
-  # called when an extra is first associated with a project.
+
   def associate( self, project):
+    "called when an extra is first associated with a project."
     logger.info("Project associated with GitHubIssuesExtra")
 
-  # called when an extra is removed from a project.
+  
   def unassociate( self, project):
+    "called when an extra is removed from a project."
     logger.info("Project unassociated with GitHubIssuesExtra")

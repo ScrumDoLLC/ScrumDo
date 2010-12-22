@@ -56,7 +56,7 @@ class ScrumdoProjectExtra( ScrumdoExtra ):
 
   # called when an extra is first associated with a project.
   def associate( self, project):
-    raise NotImplementedError("ScrumdoProjectExtra subclasses must implement initialize()")
+    raise NotImplementedError("ScrumdoProjectExtra subclasses must implement associate()")
 
   # called when an extra is removed from a project.
   def unassociate( self, project):

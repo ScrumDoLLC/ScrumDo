@@ -1,5 +1,9 @@
 from extras.interfaces import ScrumdoProjectExtra
 from django.conf import settings
+from django.shortcuts import render_to_response
+from django.template import RequestContext
+
+import logging
 
 class ExampleExtra( ScrumdoProjectExtra ):
   def getName(self):
@@ -18,6 +22,15 @@ class ExampleExtra( ScrumdoProjectExtra ):
     
   # Should return a django style response that handles any configuration that this extra may need.
   def doProjectConfigration( self, request, project ):
-    return 
+    return render_to_response("extras/example/configure.html", {
+        "extra":self,
+      }, context_instance=RequestContext(request)) 
     
   
+
+  def associate( self, project):
+    logging.info("Associated example extra with " + project.slug )
+
+
+  def unassociate( self, project):
+    logging.info("Unassociated example extra with " + project.slug )

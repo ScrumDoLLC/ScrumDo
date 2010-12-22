@@ -32,6 +32,8 @@ class ExtrasManager:
   def enableExtra( self, project, extra_slug ):
     config = ProjectExtraMapping( project=project, extra_slug=extra_slug )
     config.save()
+    extra = self.getExtra(extra_slug)
+    extra.associate( project )
 
   def disableExtra( self, project, extra_slug ):
     mappings = ProjectExtraMapping.objects.filter( project=project, extra_slug=extra_slug)
@@ -41,6 +43,10 @@ class ExtrasManager:
     configs = ExtraConfiguration.objects.filter( extra_slug=extra_slug, project_slug=project.slug)
     for config in configs:
       config.delete()
+      
+    extra = self.getExtra(extra_slug)
+    extra.unassociate( project )
+      
 
   def is_extra_enabled( self, project, extra_slug ):
     return ProjectExtraMapping.objects.filter( project=project, extra_slug=extra_slug).count() > 0
