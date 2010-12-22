@@ -29,6 +29,10 @@ class ExtrasManager:
       rv.append( config )
     return rv
 
+  def syncronizeExtra(self, extra_slug, project ):
+    extra = self.getExtra( extra_slug )
+    extra.syncronizeProject( project )
+
   def enableExtra( self, project, extra_slug ):
     config = ProjectExtraMapping( project=project, extra_slug=extra_slug )
     config.save()

@@ -213,7 +213,7 @@ CACHE_BACKEND = 'locmem://'
 
 INTERNAL_IPS = ('127.0.0.1',)
 
-SCRUMDO_EXTRAS = ("extras.plugins.github-issues.GitHubIssuesExtra",
+SCRUMDO_EXTRAS = ("extras.plugins.github_issues.GitHubIssuesExtra",
                   "extras.plugins.example.ExampleExtra",)
 
 # local_settings.py can be used to override environment-specific settings

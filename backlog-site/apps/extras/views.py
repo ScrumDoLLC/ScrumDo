@@ -1,6 +1,7 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
+from django.http import HttpResponse
 from django.core.urlresolvers import reverse
 from manager import manager
 from projects.access import *
@@ -8,7 +9,12 @@ from projects.access import *
 
 def project_extra_callback(request, extra_slug, project_slug):
   pass
-
+  
+def syncronize_extra(request, project_slug, extra_slug):
+  project = get_object_or_404( Project, slug=project_slug )
+  admin_access_or_403(project, request.user )  
+  manager.syncronizeExtra( extra_slug, project )
+  return HttpResponse("OK")
 
 def enable_extra( request, project_slug, extra_slug):
   project = get_object_or_404( Project, slug=project_slug )

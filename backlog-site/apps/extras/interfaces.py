@@ -72,10 +72,11 @@ class ScrumdoProjectExtra( ScrumdoExtra ):
   def doProjectConfigration( self, request, project ):
     raise NotImplementedError("ScrumdoProjectExtra subclasses must implement doProjectConfigration()")
 
-  # Should cause a full push/pull syncronization of this extra with whatever external source 
-  # there is.  This will be called on a scheduled basis for all active projects.  The project 
-  # parameter be an apps.projects.models.Project object.    
   def syncronizeProject( self, project ):
+    """Should cause a full push/pull syncronization of this extra with whatever external source 
+       there is.  This will be called on a scheduled basis for all active projects.  The project 
+       parameter be an apps.projects.models.Project object.    """
+    
     pass
 
   # Every extra gets a URL that external services can POST to.  This should handle those requests.
