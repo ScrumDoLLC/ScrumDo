@@ -1,4 +1,5 @@
 from django.conf import settings
+from models import ProjectExtraMapping
 
 
 
@@ -17,6 +18,29 @@ class ExtrasManager:
     
   def getExtra( self, slug ):
     return self.extras[ slug ]
+    
+  def getExtraConfigs( self , project):
+    extras = self.extras.values();
+    rv = []
+    for extra in extras:
+      config = {}
+      config["extra"] = extra
+      config["enabled"] = self.is_extra_enabled(project, extra.getSlug() )
+      rv.append( config )
+    return rv
+
+  def enableExtra( self, project, extra_slug ):
+    config = ProjectExtraMapping( project=project, extra_slug=extra_slug )
+    config.save()
+
+  def disableExtra( self, project, extra_slug ):
+    configs = ProjectExtraMapping.objects.filter( project=project, extra_slug=extra_slug)
+    for config in configs:
+      config.delete();
+
+
+  def is_extra_enabled( self, project, extra_slug ):
+    return ProjectExtraMapping.objects.filter( project=project, extra_slug=extra_slug).count() > 0
 
   def __init__(self, extras_settings):
     manager = self

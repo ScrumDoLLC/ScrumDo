@@ -98,6 +98,7 @@ MIDDLEWARE_CLASSES = (
     'pagination.middleware.PaginationMiddleware',
     'django_sorting.middleware.SortingMiddleware',
     'pinax.middleware.security.HideSensistiveFieldsMiddleware',
+    'django.middleware.transaction.TransactionMiddleware',
 #    'debug_toolbar.middleware.DebugToolbarMiddleware'
 )
 
@@ -212,8 +213,8 @@ CACHE_BACKEND = 'locmem://'
 
 INTERNAL_IPS = ('127.0.0.1',)
 
-SCRUMDO_EXTRAS = ("plugins.github-issues.GitHubIssuesExtra",
-                  "plugins.example.ExampleExtra",)
+SCRUMDO_EXTRAS = ("extras.plugins.github-issues.GitHubIssuesExtra",
+                  "extras.plugins.example.ExampleExtra",)
 
 # local_settings.py can be used to override environment-specific settings
 # like database and email that differ between development and production.
