@@ -4,6 +4,9 @@
 import os.path
 import posixpath
 import pinax
+import logging
+
+
 
 PINAX_ROOT = os.path.abspath(os.path.dirname(pinax.__file__))
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
@@ -224,4 +227,8 @@ except ImportError:
     pass
 
 
-
+if DEBUG:
+  logging.basicConfig(
+      level = logging.DEBUG,
+      format = '%(asctime)s %(levelname)s %(message)s',
+  )
