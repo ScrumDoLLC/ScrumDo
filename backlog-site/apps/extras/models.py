@@ -25,6 +25,7 @@ class StoryQueue( models.Model ):
   extra_slug = models.CharField( "extra_slug" , max_length=25)
   
   external_id = models.CharField( max_length=40)
+  external_url = models.CharField( max_length=256, blank=True , null=True)
   imported_on = models.DateTimeField( default=datetime.now)
   modified = models.DateTimeField( default=datetime.now) 
     
@@ -35,7 +36,40 @@ class StoryQueue( models.Model ):
   extra_1 = models.TextField( blank=True , null=True)
   extra_2 = models.TextField( blank=True , null=True)
   extra_3 = models.TextField( blank=True , null=True)
+
+class SyncronizationQueue( models.Model ):
+  ACTION_SYNC_REMOTE = 1
+  ACTION_STORY_UPDATED = 2
+  ACTION_STORY_DELETED = 3
+  ACTION_STORY_CREATED = 4
+  ACTION_PROJECT_UPLOAD = 5
   
+  ACTION_CHOICES = (
+      (1, "SYNC_REMOTE"),
+      (2, "STORY_UPDATED"),
+      (3, "STORY_DELETED"),
+      (4, "STORY_CREATED"),
+      (5, "PROJECT_UPLOAD")   )
+  
+  project = models.ForeignKey(Project)
+  story = models.ForeignKey(Story, null=True)
+  extra_slug = models.CharField(  max_length=25)
+  action = models.IntegerField( max_length=2, choices=ACTION_CHOICES )
+  queue_date = models.DateTimeField( default=datetime.now)
+  
+  
+  
+  
+class ExternalStoryMapping( models.Model ):
+  """ When a story is related to external, third party sites, this gives a way of associating a reference to that other site.
+      For instance, we store the GitHub Issue ID for any story that was imported from GitHub issues, or exported to it.
+      This way, we can map them back and forth for syncronization purposes.
+  """
+  story = models.ForeignKey(Story, related_name="external_links")
+  external_id = models.CharField( max_length=40 )
+  external_url = models.CharField( max_length=256, blank=True , null=True)
+  extra_slug = models.CharField( max_length=20 )
+
   
 class ExtraConfiguration( models.Model ):
   extra_slug = models.CharField( "extra_slug" , max_length=25)

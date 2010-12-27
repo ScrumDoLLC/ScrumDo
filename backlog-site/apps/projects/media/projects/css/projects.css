@@ -521,7 +521,7 @@ div.projects h2 {
 	
 	padding: 8px;
 	background-color: #f3f3f3;
-	min-height: 110px;
+	min-height: 130px;
 	margin-bottom: 10px;
 
 }
@@ -577,6 +577,7 @@ div.projects h2 {
 	padding: 6px 10px 4px;
 }
 
+.button:visited { color:#fff; }
 
 .button.red { background-color: #e50000; }
 .button.purple { background-color: #9400bf; }
@@ -585,6 +586,7 @@ div.projects h2 {
 .button.blue { color:#ffffff; background-color: #2c6da0; }
 .button.black { background-color: #333; }
 .button.white { background-color: #fff; color: #000; text-shadow: 1px 1px #fff; }
+.button.white:visited { color:#000; }
 .button.small { font-size: 75%; padding: 3px 7px; }
 .button.small:active { padding: 4px 7px 2px; background-position: 0 top; }
 .button.large { font-size: 125%; padding: 7px 12px; }

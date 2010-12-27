@@ -29,6 +29,7 @@ class ScrumdoExtra:
     " Returns a user-friendly description of this extra.  This text will be passed through a Markdown filter when displayed to the user. "
     raise NotImplementedError("ScrumdoExtra subclasses must implement getDescription()")
     
+  # TODO (performance) - Probably want to memcache the configurations for a short period of time.
   def getConfiguration(self, project_slug ):
     """ Gets a configuration object (usually a dictionary) from the ExtraConfiguration table. """
     try:
@@ -53,8 +54,8 @@ class ScrumdoExtra:
   
 
 class ScrumdoProjectExtra( ScrumdoExtra ):
-  "Interface for extras that should be associated with a project.  "
-
+  "Base calss for extras that should be associated with a project.  "
+    
   
   def associate( self, project):
     "called when an extra is first associated with a project."
@@ -77,11 +78,18 @@ class ScrumdoProjectExtra( ScrumdoExtra ):
     """ Should return a django style response that handles any configuration that this extra may need. """
     raise NotImplementedError("ScrumdoProjectExtra subclasses must implement doProjectConfigration()")
 
-  def syncronizeProject( self, project ):
-    """ Should cause a full push/pull syncronization of this extra with whatever external source 
+
+  def pushProject( self, project):
+    """ Should cause a full push syncronization of this extra to whatever external source 
+        there is.  This will be only be called on on rare events (such as an initial configuraiton
+        of an extra, or on a forced sync of the extra) """
+    pass
+        
+        
+  def pullProject( self, project ):
+    """ Should cause a full pull syncronization of this extra from whatever external source 
         there is.  This will be called on a scheduled basis for all active projects.  The project 
-        parameter be an apps.projects.models.Project object.    """
-    
+        parameter be an apps.projects.models.Project object.    """    
     pass
 
   

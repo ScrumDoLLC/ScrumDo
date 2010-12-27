@@ -189,8 +189,8 @@ def stories_iteration(request, group_slug, iteration_id):
 
 
 # The iteration planning tool.  It can also handle the add story form.
-# TODO: We should factor out the add story form functionality
-# TODO: We should rename this method, and likely rename the URL that points at it as well.
+# TODO (cleanup): We should factor out the add story form functionality
+# TODO (cleanup): We should rename this method, and likely rename the URL that points at it as well.
 @login_required
 def stories(request, group_slug):
   project = get_object_or_404(Project, slug=group_slug)  
@@ -200,7 +200,7 @@ def stories(request, group_slug):
     form = StoryForm(project, request.POST) # A form bound to the POST data
     if form.is_valid(): # All validation rules pass
       story = form.save( commit=False )
-      story.local_id = getNextId(project)
+      story.local_id = project.getNextId()
       story.project = project
       story.creator = request.user
       story.iteration = project.get_default_iteration()
@@ -219,12 +219,7 @@ def stories(request, group_slug):
   }, context_instance=RequestContext(request))
 
 
-# Returns the next appropriate local_id for a given project.
-# TODO: should this be in the project model?  Or at least somewhere else.
-def getNextId( project ):
-  if project.stories.count() == 0:
-    return 1
-  return project.stories.order_by('-local_id')[0].local_id + 1
+
 
 # Handles the excel import.
 @login_required
@@ -258,9 +253,9 @@ def processImport( project, file , user):
     story.save()
   user.message_set.create(message=("%d stories imported" % count))
 
-# Returns an html snippet that we use for a read-only full view of the story.  Right now, this is used
-# when you mouse-hover over the eye icon for a story on an iteration page.  
 def pretty_print_story(request, group_slug, story_id):
+  """Returns an html snippet that we use for a read-only full view of the story.  Right now, this is used
+     when you mouse-hover over the eye icon for a story on an iteration page.  """
   story = get_object_or_404(Story, id=story_id)  
   read_access_or_403( story.project, request.user )
 

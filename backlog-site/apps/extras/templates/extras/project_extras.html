@@ -22,7 +22,7 @@
               <a href="{% url configure_extra_url config.extra.getSlug project.slug %}" class="button blue">Configure</a>
               <button type="submit" class="button red">Disable</button>
             </form>
-            
+            <i>{{ config.status }}</i>
             
           {% else %}
             <form action="{% url enable_extra_url  config.extra.getSlug project.slug %}" method="POST">

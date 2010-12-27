@@ -227,8 +227,8 @@ except ImportError:
     pass
 
 
-if DEBUG:
+if DEBUG:      
   logging.basicConfig(
       level = logging.DEBUG,
-      format = '%(asctime)s %(levelname)s %(message)s',
+      format = '%(levelname)s \033[35m%(message)s\033[0m (%(filename)s:%(lineno)d)',
   )

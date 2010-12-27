@@ -42,7 +42,16 @@
               Iterations Left: <b>{{ project.iterations_left }}</b><br/>
               {% endif %}
             </div>
-            
+
+            {% canwrite project %}
+             {% if project.story_queue.count %}
+              <div class="blue_box">            
+                <h1>Syncronize</h1>
+                <div class="iterationHeader"><a href="{% url story_queue_url project.slug %}">Import Stories</a> ({{project.story_queue.count}})</div>
+              </div>
+             {% endif %}
+            {% endcanwrite %}
+
             <div class="iterations">
               <h1>Iterations</h1>
               {% for iteration in project.iterations.all %}
@@ -54,14 +63,15 @@
               {% endcanwrite %}
             </div>
             
+            
              <div class="blue_box">
                 <h1>Options</h1>              <br/>
                 {% canwrite project %}
-                 <div class="iterationHeader"><a href="{% url import_file project.slug %}">Import Stories</a></div>
+                 <div class="iterationHeader"><a href="{% url import_file project.slug %}">Import File</a></div>
                 {% endcanwrite %}
                 {% isadmin project %}                  
                     <div class="iterationHeader"><a href="{% url project_admin project.slug %}" >{% trans "Project Admin" %}</a></div>
-                {% endisadmin %}
+                {% endisadmin %}                
               </div>
             
              {% if project.organization %}    

@@ -30,7 +30,9 @@ class ExampleExtra( ScrumdoProjectExtra ):
       }, context_instance=RequestContext(request)) 
     
   
-
+  def getShortStatus(self, project):
+    return "Example status!"
+  
   def associate( self, project):
     logging.info("Associated example extra with " + project.slug )
 

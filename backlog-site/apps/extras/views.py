@@ -3,13 +3,67 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
+from django.core.exceptions import PermissionDenied
 from manager import manager
 from projects.access import *
+from projects.models import Story
+import logging
+
+from models import StoryQueue, ExternalStoryMapping
+logger = logging.getLogger(__name__)
+
+
+
 
 
 def project_extra_callback(request, extra_slug, project_slug):
   pass
   
+  
+
+  
+def import_story(request, project_slug, queue_id):
+  logger.debug("Adding story from StoryQueue")
+  project = get_object_or_404( Project, slug=project_slug )
+  write_access_or_403(project, request.user )  
+  story = StoryQueue.objects.get(id=queue_id)  
+  if story.project != project:
+    # Shenanigans here!
+    raise PermissionDenied()
+  
+  # TODO (Useability):
+  #    What should rank be set at to make the most sense?  
+  new_story = Story(project=project, rank=0, 
+                    local_id=project.getNextId(), 
+                    summary=story.summary,
+                    detail=story.detail,
+                    extra_1=story.extra_1,
+                    extra_2=story.extra_2,
+                    extra_3=story.extra_3,
+                    status=story.status,
+                    points=story.points,
+                    iteration = project.get_default_iteration(),
+                    creator = request.user
+                    )  
+  new_story.save()
+  mapping = ExternalStoryMapping(story=new_story,
+                                 external_id=story.external_id,
+                                 external_url=story.external_url,
+                                 extra_slug=story.extra_slug)
+  mapping.save()
+  request.user.message_set.create(message="Story imported.")
+  
+  story.delete()
+  return story_queue(request,project_slug)
+  
+  
+def story_queue( request, project_slug):
+  project = get_object_or_404( Project, slug=project_slug )
+  write_access_or_403(project, request.user )  
+  return render_to_response("extras/story_queue.html", {
+      "project":project,
+    }, context_instance=RequestContext(request))  
+
 def syncronize_extra(request, project_slug, extra_slug):
   project = get_object_or_404( Project, slug=project_slug )
   admin_access_or_403(project, request.user )  

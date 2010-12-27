@@ -62,6 +62,12 @@ class Project(Group):
   
     organization = models.ForeignKey(Organization,related_name="projects", null=True, blank=True)
 
+
+    def getNextId( self ):
+      if self.stories.count() == 0:
+        return 1
+      return self.stories.order_by('-local_id')[0].local_id + 1
+      
     def all_member_choices(self):
       members = self.all_members()
       choices = []
@@ -156,10 +162,10 @@ class Iteration( models.Model):
 
 
 class Story( models.Model ):
-  STATUS_TODO = 1;
-  STATUS_DOING = 2;
-  STATUS_REVIEWING = 3;
-  STATUS_DONE = 4;
+  STATUS_TODO = 1
+  STATUS_DOING = 2
+  STATUS_REVIEWING = 3
+  STATUS_DONE = 4
   
   POINT_CHOICES = (
       ('?', '?'), 
@@ -177,8 +183,8 @@ class Story( models.Model ):
   STATUS_CHOICES = (
       (1, "TODO"),
       (2, "In Progress"),
-      (2, "Reviewing"),
-      (3, "Done")   )
+      (3, "Reviewing"),
+      (4, "Done")   )
   
   rank = models.IntegerField() 
   summary = models.TextField( )

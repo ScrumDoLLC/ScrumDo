@@ -1,5 +1,5 @@
 from django.conf import settings
-from models import ProjectExtraMapping, ExtraConfiguration
+from models import ProjectExtraMapping, ExtraConfiguration, SyncronizationQueue
 
 
 
@@ -19,6 +19,14 @@ class ExtrasManager:
   def getExtra( self, slug ):
     return self.extras[ slug ]
     
+  # TODO - do some actions invalidate others?  For instance, if we have an ACTION_STORY_UPDATED sitting in the queue, and
+  #        a ACTION_STORY_DELETED action comes through, can we just delete the ACTION_STORY_UPDATED?
+  def queueSyncAction( self, extra_slug, project, action, **kwargs):
+    queueObject = SyncronizationQueue( project=project, extra_slug=extra_slug, action=action)
+    queueObject.story = kwargs.get("story",None)
+    queueObject.save()
+    
+    
   def getExtraConfigs( self , project):
     extras = self.extras.values();
     rv = []
@@ -26,12 +34,13 @@ class ExtrasManager:
       config = {}
       config["extra"] = extra
       config["enabled"] = self.is_extra_enabled(project, extra.getSlug() )
+      config["status"] = extra.getShortStatus( project )
       rv.append( config )
     return rv
 
   def syncronizeExtra(self, extra_slug, project ):
     extra = self.getExtra( extra_slug )
-    extra.syncronizeProject( project )
+    extra.pullProject( project )
 
   def enableExtra( self, project, extra_slug ):
     config = ProjectExtraMapping( project=project, extra_slug=extra_slug )
@@ -61,6 +70,7 @@ class ExtrasManager:
     for extra in extras_settings:      
       extra_class = get_class( extra )
       extra = extra_class()
+      extra.manager = self
       self.extras[ extra.getSlug() ] = extra
       
 def get_class( kls ):
