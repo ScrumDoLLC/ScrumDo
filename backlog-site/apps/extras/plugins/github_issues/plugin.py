@@ -132,9 +132,14 @@ class GitHubIssuesExtra( ScrumdoProjectExtra ):
   
   
   
-  # TODO (both implementation and name?)
+  # TODO (shorter name?)
   def getStoriesInProjectAssociatedWithExtra(self, project):
-    return []
+    rv = []
+    for story in project.stories.all():
+      if self.getExternalLink( story ) != None:
+        rv.append( story )
+      
+    return rv
   
   def storyExsists( self, external_id, queue_stories, project_stories ):
     """ Pass in an external id, list of stories in the queue, and a list of stories in the project, and will return True if the store exists in either list. """
@@ -202,8 +207,8 @@ class GitHubIssuesExtra( ScrumdoProjectExtra ):
   def getStoryFromProject(self, external_id, project_stories ):
     """ Returns the story from the list with the given external ID for this extra. """
     for project_story in project_stories:
-      for link in project_story.external_links:
-        if link.extra_slug == self.getSlug() and link.external_id==external_id:
+      for link in project_story.external_links.all():
+        if link.extra_slug == self.getSlug() and str(link.external_id)==str(external_id):
           return project_story
     return None
       
