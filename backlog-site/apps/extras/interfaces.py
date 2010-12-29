@@ -79,10 +79,10 @@ class ScrumdoProjectExtra( ScrumdoExtra ):
     raise NotImplementedError("ScrumdoProjectExtra subclasses must implement doProjectConfigration()")
 
 
-  def pushProject( self, project):
-    """ Should cause a full push syncronization of this extra to whatever external source 
-        there is.  This will be only be called on on rare events (such as an initial configuraiton
-        of an extra, or on a forced sync of the extra) """
+  def initialSync( self, project):
+    """ Does whatever needs doing for an initial sync of the project. 
+        An extra's configuration should add this event to the queue when
+        it's ready.  """
     pass
         
         
@@ -102,8 +102,9 @@ class ScrumdoProjectExtra( ScrumdoExtra ):
     "Called when a story is updated in a project that this extra is associated with."
     pass
   
-  def storyDeleted( self, project, story):
-    "Called when a story is deleted in a project that this extra is associated with."
+  def storyDeleted( self, project, external_id):
+    """Called when a story is deleted in a project that this extra is associated with.
+       Note: the ScrumDo story has already been deleted by the time this method is called. """
     pass
 
   

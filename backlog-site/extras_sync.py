@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+
+# This script handles running the extra's syncronization logic.
+# You should set this up on some sort of scheduled basis.  The
+# scrumdo.com website runs it once a minute.
+
 import sys
 from datetime import date, timedelta
 
@@ -29,9 +34,21 @@ from apps.projects.models import Project, Iteration, Story, PointsLog
 from apps.extras.models import ProjectExtraMapping, SyncronizationQueue
 from apps.extras.manager import manager
 
+import logging
+import sys, traceback
+
+
+
 
 def main():
+  logger = logging.getLogger(__name__)
   queue = SyncronizationQueue.objects.all()
+  for queueItem in queue:
+    # In case a second invocation of this script occurs while it's running, we don't want
+    # to re-process any items...
+    #queueItem.delete()
+    pass
+    
   for queueItem in queue:
     try:
       project = queueItem.project
@@ -39,21 +56,26 @@ def main():
       action = queueItem.action
       extra_slug = queueItem.extra_slug
       action = queueItem.action
-      queueItem.delete()
+      external_id = queueItem.action
+      
       extra = manager.getExtra( extra_slug )
+      
       if action == SyncronizationQueue.ACTION_SYNC_REMOTE:
         extra.pullProject(project)        
       elif action == SyncronizationQueue.ACTION_STORY_UPDATED:
-      
-      
-      
-      ACTION_SYNC_REMOTE = 1
-      ACTION_STORY_UPDATED = 2
-      ACTION_STORY_DELETED = 3
-      ACTION_STORY_CREATED = 4
-      ACTION_PROJECT_UPLOAD = 5
+        extra.storyUpdated(project,story)
+      elif action == SyncronizationQueue.ACTION_STORY_DELETED:
+        extra.storyDeleted(project,external_id)
+      elif action == SyncronizationQueue.ACTION_STORY_CREATED:
+        extra.storyCreated(project,story)
+      elif action == SyncronizationQueue.ACTION_INITIAL_SYNC:
+        extra.initialSync( project )
+    except RuntimeError:                                                 
+      logger.error("RuntimeError occured while processing a syncronization queue item.")
+      traceback.print_exc(file=sys.stdout)
     except:
-      pass
+      logger.error("Error occured while processing a syncronization queue item.") 
+      traceback.print_exc(file=sys.stdout)
     
     
 
