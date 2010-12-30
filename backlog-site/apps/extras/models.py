@@ -52,7 +52,7 @@ class SyncronizationQueue( models.Model ):
       (5, "INITIAL_SYNC")   )
   
   project = models.ForeignKey(Project)
-  story = models.ForeignKey(Story, null=True)
+  story = models.ForeignKey(Story, null=True, related_name="sync_queue")
   extra_slug = models.CharField(  max_length=25)
   action = models.IntegerField( max_length=2, choices=ACTION_CHOICES )
   queue_date = models.DateTimeField( default=datetime.now)

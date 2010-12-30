@@ -1,5 +1,5 @@
 from django.conf import settings
-from models import ProjectExtraMapping, ExtraConfiguration, SyncronizationQueue
+from models import ProjectExtraMapping, ExtraConfiguration, SyncronizationQueue , ExternalStoryMapping
 
 import projects.signals as project_signals
 
@@ -25,7 +25,12 @@ class ExtrasManager:
   #        a ACTION_STORY_DELETED action comes through, can we just delete the ACTION_STORY_UPDATED?
   def queueSyncAction( self, extra_slug, project, action, **kwargs):
     queueObject = SyncronizationQueue( project=project, extra_slug=extra_slug, action=action)
-    queueObject.story = kwargs.get("story",None)
+    queueObject.story = kwargs.get("story",None)           
+    try:          
+      mapping = ExternalStoryMapping.objects.get(story=queueObject.story,extra_slug=extra_slug)
+      queueObject.external_id = mapping.external_id
+    except:
+      pass      
     queueObject.save()
     
   def queueSyncActions(self, project, action, **kwargs):

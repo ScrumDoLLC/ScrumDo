@@ -54,8 +54,10 @@ def delete_story( request, group_slug, story_id ):
   if request.method == "POST":
     story = get_object_or_404( Story, id=story_id )  
     write_access_or_403(story.project,request.user)
-    story.delete()            
     signals.story_deleted.send( sender=request, story=story, user=request.user )
+    story.sync_queue.clear()
+    story.delete()            
+    
     redirTo = request.GET.get("redirectTo", "")
     if redirTo:
       return HttpResponseRedirect(redirTo );
