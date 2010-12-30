@@ -1,6 +1,7 @@
 from django.conf.urls.defaults import *
 from django.views.generic.simple import direct_to_template
 
+
 urlpatterns = patterns('extras.views',
     url(r'^(?P<extra_slug>[-\w]+)/(?P<project_slug>[-\w]+)/hook$', "project_extra_callback", name="projct_extra_callback_url"),
     url(r'^(?P<extra_slug>[-\w]+)/(?P<project_slug>[-\w]+)/enable$', "enable_extra", name="enable_extra_url"),

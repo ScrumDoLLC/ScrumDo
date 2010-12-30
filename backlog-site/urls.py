@@ -27,6 +27,7 @@ urlpatterns = patterns('',
     
     url(r'^admin/invite_user/$', 'signup_codes.views.admin_invite_user', name="admin_invite_user"),
     url(r'^account/signup/$', signup_view, name="acct_signup"),
+    (r'^extras/', include('extras.urls')),    
     (r'^forum/', include('forum.urls')),
     (r'^about/', include('about.urls')),
     (r'^account/', include('account.urls')),
@@ -38,8 +39,7 @@ urlpatterns = patterns('',
     (r'^tagging_utils/', include('tagging_utils.urls')),
     (r'^attachments/', include('attachments.urls')),
     (r'^projects/', include('projects.urls')),    
-    (r'^organization/', include('organizations.urls')),    
-    (r'^extras/', include('extras.urls')),    
+    (r'^organization/', include('organizations.urls')),        
     (r'^admin/(.*)', admin.site.root),
 )
 

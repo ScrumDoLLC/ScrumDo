@@ -24,7 +24,7 @@ else:
 from projects.models import Project, ProjectMember, Iteration, Story
 from projects.forms import *
 from projects.access import *
-
+import projects.signals as signals
 
 
 # View called via ajax on the iteration or iteration planning pages.  Meant to set the status of 
@@ -34,7 +34,8 @@ def set_story_status( request, group_slug, story_id, status):
   story = get_object_or_404( Story, id=story_id )
   write_access_or_403(story.project,request.user)
   story.status = status;
-  story.save();
+  story.save();         
+  signals.story_status_changed.send( sender=request, story=story, user=request.user )
   if( request.POST.get("return_type","mini") == "mini"):
     return render_to_response("stories/single_mini_story.html", {
         "story": story,
@@ -53,7 +54,8 @@ def delete_story( request, group_slug, story_id ):
   if request.method == "POST":
     story = get_object_or_404( Story, id=story_id )  
     write_access_or_403(story.project,request.user)
-    story.delete()     
+    story.delete()            
+    signals.story_deleted.send( sender=request, story=story, user=request.user )
     redirTo = request.GET.get("redirectTo", "")
     if redirTo:
       return HttpResponseRedirect(redirTo );
@@ -135,6 +137,7 @@ def story( request, group_slug, story_id ):
 
     if form.is_valid(): # All validation rules pass      
       story = form.save(  )      
+      signals.story_updated.send( sender=request, story=story, user=request.user )
 
     if( request.POST['return_type'] == 'mini'):
       return render_to_response("stories/single_mini_story.html", {
@@ -205,7 +208,8 @@ def stories(request, group_slug):
       story.creator = request.user
       story.iteration = project.get_default_iteration()
       story.rank = calculate_rank( project, int(form.cleaned_data['general_rank']) )
-      story.save()
+      story.save()             
+      signals.story_created.send( sender=request, story=story, user=request.user )
       request.user.message_set.create(message="New story created.")
       form = StoryForm(project)
   else:
@@ -250,7 +254,8 @@ def processImport( project, file , user):
     except:
       points = "?"
     story = Story( project=project, summary=summary, detail=detail, rank=0, local_id=project.stories.count()+1, creator=user, points=points, iteration=project.get_default_iteration())
-    story.save()
+    story.save()   
+    signals.story_created.send( sender=request, story=story, user=user )
   user.message_set.create(message=("%d stories imported" % count))
 
 def pretty_print_story(request, group_slug, story_id):
