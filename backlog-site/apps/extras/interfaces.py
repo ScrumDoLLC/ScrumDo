@@ -74,9 +74,9 @@ class ScrumdoProjectExtra( ScrumdoExtra ):
     raise NotImplementedError("ScrumdoProjectExtra subclasses must implement getShortStatus()")
 
   
-  def doProjectConfigration( self, request, project ):
+  def doProjectdoProjectConfiguration( self, request, project ):
     """ Should return a django style response that handles any configuration that this extra may need. """
-    raise NotImplementedError("ScrumdoProjectExtra subclasses must implement doProjectConfigration()")
+    raise NotImplementedError("ScrumdoProjectExtra subclasses must implement doProjectConfiguration()")
 
 
   def initialSync( self, project):

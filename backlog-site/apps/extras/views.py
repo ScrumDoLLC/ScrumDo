@@ -87,7 +87,7 @@ def configure_extra( request, project_slug, extra_slug):
   admin_access_or_403(project, request.user )  
   extra = manager.getExtra( extra_slug )
   if extra != None:
-    return extra.doProjectConfigration(request, project)
+    return extra.doProjectConfiguration(request, project)
   return HttpResponseRedirect(reverse("project_extras_url",kwargs={'project_slug':project_slug}))
 
 def project_extras(request, project_slug):
