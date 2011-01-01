@@ -43,14 +43,19 @@ class GitHubIssuesExtra( ScrumdoProjectExtra ):
        then saves that with the saveConfiguration() api in ScrumdoProjectExtra base
        class.  After a successful configuration, we redirect back to the extras page.
        (Should each extra be responsible for that?)"""
-       
+           
+    # The super class has a helper getConfiguration method that will return a dict of options.
     configuration = self.getConfiguration( project.slug )    
     if request.method == "POST":
       form = forms.GitHubIssuesConfig( request.POST )
       if form.is_valid():
         configuration = form.cleaned_data
         configuration["status"] = "Configuration Saved"
+        
+        # The super class has a helper saveConfiguration method that will save a 
+        # dict of options for later retrieval by getConfiguration
         self.saveConfiguration( project.slug, configuration )        
+        
         if configuration["upload"]:
           # Need to queue an intial action to upload our project.
           self.manager.queueSyncAction(self.getSlug(), project, SyncronizationQueue.ACTION_INITIAL_SYNC)
