@@ -43,13 +43,15 @@ class SyncronizationQueue( models.Model ):
   ACTION_STORY_DELETED = 3
   ACTION_STORY_CREATED = 4
   ACTION_INITIAL_SYNC = 5
+  ACTION_STATUS_CHANGED = 6
   
   ACTION_CHOICES = (
       (1, "SYNC_REMOTE"),
       (2, "STORY_UPDATED"),
       (3, "STORY_DELETED"),
       (4, "STORY_CREATED"),
-      (5, "INITIAL_SYNC")   )
+      (5, "INITIAL_SYNC"),
+      (6, "STATUS_CHANGED")   )
   
   project = models.ForeignKey(Project)
   story = models.ForeignKey(Story, null=True, related_name="sync_queue")

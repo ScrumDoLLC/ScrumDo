@@ -84,7 +84,9 @@ def processQueue():
       elif action == SyncronizationQueue.ACTION_STORY_DELETED:
         extra.storyDeleted(project,external_id)
       elif action == SyncronizationQueue.ACTION_STORY_CREATED:
-        extra.storyCreated(project,story)
+        extra.storyCreated(project,story)    
+      elif action == SyncronizationQueue.ACTION_STATUS_CHANGED:
+        extra.storyStatusChange(project, story)
       elif action == SyncronizationQueue.ACTION_INITIAL_SYNC:
         extra.initialSync( project )
     except RuntimeError:                                                 

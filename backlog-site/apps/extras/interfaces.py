@@ -106,10 +106,13 @@ class ScrumdoProjectExtra( ScrumdoExtra ):
     """Called when a story is deleted in a project that this extra is associated with.
        Note: the ScrumDo story has already been deleted by the time this method is called. """
     pass
-
   
   def storyCreated( self, project, story):
     "Called when a story is created in a project that this extra is associated with."
+    pass
+
+  def storyStatusChange( self, project, story):
+    "Called when a story's status has changed in a project that this extra is associated with."
     pass
   
   def getExtraHookURL( self, project ):

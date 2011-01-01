@@ -14,6 +14,8 @@ import sys, traceback
 
 from extras.models import StoryQueue, SyncronizationQueue, ExternalStoryMapping
 from extras.plugins.github_issues.github2.client import Github
+                      
+from projects.models import Story
 
 logger = logging.getLogger(__name__)
 
@@ -74,6 +76,7 @@ class GitHubIssuesExtra( ScrumdoProjectExtra ):
     logging.debug("Attempting to delete GitHub issue %s" % external_id)   
     github = kwargs.get( "github", Github(username=configuration['username'], api_token=configuration['password'],requests_per_second=1) )
     issue = github.issues.close( repository, external_id )        
+
         
   def storyCreated( self, project, story, **kwargs):
     """ Called when a new ScrumDo story is created. This plugin creates a GitHub issue if the upload option is enabled. """
@@ -90,11 +93,8 @@ class GitHubIssuesExtra( ScrumdoProjectExtra ):
 
     repository = configuration['repository']
     logging.debug("Attempting to create GitHub issue for story %d" % story.id)   
-
     github = kwargs.get( "github", Github(username=configuration['username'], api_token=configuration['password'],requests_per_second=1) )
-
     issue = github.issues.open( repository, story.summary, story.detail )
-
     link = ExternalStoryMapping( story=story,     
                                  extra_slug=self.getSlug(),
                                  external_id=issue.number,
@@ -197,10 +197,32 @@ class GitHubIssuesExtra( ScrumdoProjectExtra ):
     # Grab the github client passed in kwargs, if none, create one.
     github = kwargs.get( "github", Github(username=configuration['username'], api_token=configuration['password'],requests_per_second=1) )                                                                        
     github.issues.edit( configuration['repository'], link.external_id, story.summary, story.detail )
+
+
+  def storyStatusChange( self, project, story, **kwargs):
+    logging.debug("GitHub issues::storyStatusChange")
+    configuration = self.getConfiguration( project.slug )   
+
+    # The configuration view sets a download flag to true/false depending on user input.
+    if not configuration["upload"]:
+      logging.debug("Not set to upload stories, aborting.")
+      return                                  
     
+    link = self._getExternalLink( story )
     
+    if link == None:
+      logging.debug("Story not associated with external story, aborting.")
+      return
+    # Grab the github client passed in kwargs, if none, create one.
+    github = kwargs.get( "github", Github(username=configuration['username'], api_token=configuration['password'],requests_per_second=1) )                                                                        
     
-    
+    if story.status == Story.STATUS_DONE:
+      github.issues.close( configuration['repository'], link.external_id )
+    else:
+      # All other scrumdo statuses map to open on github issues.
+      github.issues.reopen( configuration['repository'], link.external_id )
+      
+
 
   def _createStoryForIssue( self, issue, project , repository):
     logging.debug("Attempting to create new StoryQueue object for issue %d" % issue.number )
@@ -218,7 +240,6 @@ class GitHubIssuesExtra( ScrumdoProjectExtra ):
                        detail=issue.body )
     story.save()
 
-  # TODO (shorter name?)
   def _getStoriesInProjectAssociatedWithExtra(self, project):
     rv = []
     for story in project.stories.all():
@@ -240,6 +261,7 @@ class GitHubIssuesExtra( ScrumdoProjectExtra ):
     for story in project.stories.all():
       self.storyCreated(project, story, github=github)
 
+  # TODO - is this general enough to bump up to the super class?
   def _getExternalLink( self, story ):
     """ Searches for the ExternalStoryMapping that is associated with this extra and returns it.
         returns None if it's not found. """
