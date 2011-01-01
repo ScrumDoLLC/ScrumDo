@@ -1,5 +1,5 @@
 from django.conf import settings
-from models import ProjectExtraMapping, ExtraConfiguration, SyncronizationQueue , ExternalStoryMapping
+from models import ProjectExtraMapping, ExtraConfiguration, SyncronizationQueue , ExternalStoryMapping, StoryQueue
 
 import projects.signals as project_signals
 
@@ -21,7 +21,7 @@ class ExtrasManager:
   # TODO - do some actions invalidate others?  For instance, if we have an ACTION_STORY_UPDATED sitting in the queue, and
   #        a ACTION_STORY_DELETED action comes through, can we delete the ACTION_STORY_UPDATED?
   def queueSyncAction( self, extra_slug, project, action, **kwargs):
-    logger.debug("Queuing a syncronization action %d %s %s" % (action.project.slug,extra_slug))
+    logger.debug("Queuing a syncronization action %d, %s, %s" % (action,project.slug,extra_slug))
     queueObject = SyncronizationQueue( project=project, extra_slug=extra_slug, action=action)
     queueObject.story = kwargs.get("story",None)           
     try:          
@@ -63,7 +63,15 @@ class ExtrasManager:
 
     configs = ExtraConfiguration.objects.filter( extra_slug=extra_slug, project_slug=project.slug)
     for config in configs:
-      config.delete()
+      config.delete()    
+    
+    story_mappings = ExternalStoryMapping.objects.filter( story__project=project, extra_slug=extra_slug )
+    for story_mapping in story_mappings:
+      story_mapping.delete()
+    
+    story_queue = StoryQueue.objects.filter( project=project, extra_slug=extra_slug)
+    for queue_item in story_queue:
+      queue_item.delete()
       
     extra = self.getExtra(extra_slug)
     extra.unassociate( project )
@@ -72,9 +80,9 @@ class ExtrasManager:
   def is_extra_enabled( self, project, extra_slug ):
     return ProjectExtraMapping.objects.filter( project=project, extra_slug=extra_slug).count() > 0
   
-  def onStoryUpdated(self, sender, **kwargs):       
-    logger.debug("extras.ExtrasManager::onStoryUpdated(project=%s, story=%d)" % (project.slug, story.id) )       
+  def onStoryUpdated(self, sender, **kwargs):                                                                    
     story = kwargs["story"]      
+    logger.debug("extras.ExtrasManager::onStoryUpdated(story=%d)" % ( story.id) )           
     self.queueSyncActions( story.project, SyncronizationQueue.ACTION_STORY_UPDATED , story=story)
     
   def onStoryStatusChanged(self, sender, **kwargs):         
@@ -82,9 +90,9 @@ class ExtrasManager:
     story = kwargs["story"]      
     self.queueSyncActions( story.project, SyncronizationQueue.ACTION_STORY_UPDATED , story=story)
 
-  def onStoryDeleted(self, sender, **kwargs):             
-    logger.debug("extras.ExtrasManager::onStoryDeleted(project=%s, story=%d)" % (project.slug, story.id))
+  def onStoryDeleted(self, sender, **kwargs):                                                                  
     story = kwargs["story"]      
+    logger.debug("extras.ExtrasManager::onStoryDeleted(project=%s, story=%d)" % (story.project.slug, story.id))    
     self.queueSyncActions( story.project, SyncronizationQueue.ACTION_STORY_DELETED , story=story)
 
   def onStoryCreated(self, sender, **kwargs):               

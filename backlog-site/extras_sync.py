@@ -36,17 +36,34 @@ from apps.extras.manager import manager
 
 import logging
 import sys, traceback
+import getopt
 
 
+logger = logging.getLogger(__name__)
+
+def main():         
+  options, remainder = getopt.getopt(sys.argv[1:], 'p', ['pull'])
+  for opt, arg in options:
+      if opt in ('-p', '--pull'):
+          setUpPullQueue()
+          return
+  processQueue()
 
 
-def main():
-  logger = logging.getLogger(__name__)
+def setUpPullQueue():
+  logging.info("Setting up queue to pull all projects next time.")
+  mappings = ProjectExtraMapping.objects.all()
+  for mapping in mappings:
+    qItem = SyncronizationQueue(project=mapping.project, extra_slug=mapping.extra_slug, action=SyncronizationQueue.ACTION_SYNC_REMOTE) 
+    qItem.save()
+
+
+def processQueue():    
   queue = SyncronizationQueue.objects.all()
   for queueItem in queue:
     # In case a second invocation of this script occurs while it's running, we don't want
     # to re-process any items...
-    #queueItem.delete()
+    queueItem.delete()
     pass
     
   for queueItem in queue:

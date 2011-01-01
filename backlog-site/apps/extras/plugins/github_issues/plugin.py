@@ -15,15 +15,16 @@ import sys, traceback
 from extras.models import StoryQueue, SyncronizationQueue, ExternalStoryMapping
 from extras.plugins.github_issues.github2.client import Github
 
-
 logger = logging.getLogger(__name__)
 
-class GitHubIssuesExtra( ScrumdoProjectExtra ):
+class GitHubIssuesExtra( ScrumdoProjectExtra ):     
+  """ This Extra allows you to syncronize your GitHub issues with your ScrumDo stories. """
   
-  def getName(self):
+  def getName(self):                                                                    
+    "Friendly name to display in the configuration options to the user."
     return "GitHub Issues"
     
-  def getLogo(self):
+  def getLogo(self):    
     return settings.STATIC_URL + "extras/github-logo.png"
       
   def getSlug(self):
@@ -60,12 +61,50 @@ class GitHubIssuesExtra( ScrumdoProjectExtra ):
         "extra":self,
         "form":form
       }, context_instance=RequestContext(request))
-    
 
+  
+  def storyDeleted( self, project, external_id, **kwargs):
+    """Called when a story is deleted in a project that this extra is associated with.  """
+    configuration = self.getConfiguration( project.slug )  
+
+    if not configuration['delete']:          
+      return # Not configured to delete stories.            
+
+    repository = configuration['repository']
+    logging.debug("Attempting to delete GitHub issue %s" % external_id)   
+    github = kwargs.get( "github", Github(username=configuration['username'], api_token=configuration['password'],requests_per_second=1) )
+    issue = github.issues.close( repository, external_id )        
+        
+  def storyCreated( self, project, story, **kwargs):
+    """ Called when a new ScrumDo story is created. This plugin creates a GitHub issue if the upload option is enabled. """
+
+    if self._getExternalLink( story ) != None:      
+      # Already uploaded 
+      return     
+
+    configuration = self.getConfiguration( project.slug )  
+
+    if not configuration['upload']:    
+      # Not configured to upload new stories.
+      return
+
+    repository = configuration['repository']
+    logging.debug("Attempting to create GitHub issue for story %d" % story.id)   
+
+    github = kwargs.get( "github", Github(username=configuration['username'], api_token=configuration['password'],requests_per_second=1) )
+
+    issue = github.issues.open( repository, story.summary, story.detail )
+
+    link = ExternalStoryMapping( story=story,     
+                                 extra_slug=self.getSlug(),
+                                 external_id=issue.number,
+                                 external_url="https://github.com/%s/issues/#issue/%d" % (repository, issue.number) )
+    link.save()
+    logging.info("GitHub issue #%d created for story %d" % (issue.number, story.id) )          
+    
   def associate( self, project):
     "called when an extra is first associated with a project."
     logger.info("Project associated with GitHubIssuesExtra")
-
   
   def unassociate( self, project):
     "called when an extra is removed from a project."
@@ -80,15 +119,18 @@ class GitHubIssuesExtra( ScrumdoProjectExtra ):
     
     
   def pullProject( self, project ):
+    """ Pulls any new GitHub issues to Scrumdo, updates any existing
+        Scrumdo stories that were associated with GitHub issues. """
     logging.debug("GitHubIssues::pullProject starting up.")
     configuration = self.getConfiguration( project.slug )   
 
+    # The configuration view sets a download flag to true/false depending on user input.
     if not configuration["download"]:
       logging.debug("Not set to download stories, aborting.")
       return
     
     try:
-      logging.debug("Retrieving remote issues");
+      logging.debug("Retrieving remote issues")
       github = Github(username=configuration['username'], api_token=configuration['password'],requests_per_second=1)
       issues = github.issues.list(configuration['repository'], state="open")
     except:
@@ -101,24 +143,70 @@ class GitHubIssuesExtra( ScrumdoProjectExtra ):
     
     queue_stories = StoryQueue.objects.filter( project=project, extra_slug=self.getSlug() )
     logging.debug("%d stories already sitting in the story queue" % len(queue_stories) )
-    project_stories = self.getStoriesInProjectAssociatedWithExtra( project )
+    project_stories = self._getStoriesInProjectAssociatedWithExtra( project )
     logging.debug("%d stories in the project associated with GitHub issues" % len(project_stories) )
     
     for issue in issues:
-      if self.storyExsists( issue.number, queue_stories, project_stories):
-        logging.debug("Issue %d already exists." % issue.number );
-      else:        
-        self.createStoryForIssue( issue, project , configuration['repository'])
+      story = self._getStory( issue.number, queue_stories, project_stories)
+      if story == None:
+        self._createStoryForIssue( issue, project , configuration['repository'])
+      else:                                                      
+        if story.summary != issue.title or story.detail != issue.body :
+          logging.debug("Updating story %d." % story.id )
+          story.summary=issue.title
+          story.detail=issue.body
+          story.save()
+        
+        
     
     configuration["status"] = "Syncronized with GitHub on " + str( datetime.date.today()  )
     logging.debug("pullProject complete, saving configuration.")
-    self.saveConfiguration( project.slug, configuration )      
-  
-  
-  def createStoryForIssue( self, issue, project , repository):
-    logging.debug("Attempting to create new StoryQueue object for issue %d" % issue.number );
-    try:
+    self.saveConfiguration( project.slug, configuration )                        
+
+  def initialSync( self, project):
+    logging.debug("Performing initial GitHub issues syncronization.")
+    configuration = self.getConfiguration( project.slug )   
+    if configuration['upload']:
+      try:
+        self._initialUpload( project, configuration)
+      except:                                                      
+        logging.debug("Failed to upload stories.")
+        traceback.print_exc(file=sys.stdout)
+        configuration["status"] = "Syncronization failed to upload stories to GitHub on " + str( datetime.date.today()  )        
+        self.saveConfiguration( project.slug, configuration )
+        return
+        
+    self.pullProject(project)
+    
+  def storyUpdated( self, project, story , **kwargs):
+    "Called when a story is updated in a project that this extra is associated with."    
+    logging.debug("GitHub issues::storyUpdated")
+    configuration = self.getConfiguration( project.slug )   
+
+    # The configuration view sets a download flag to true/false depending on user input.
+    if not configuration["upload"]:
+      logging.debug("Not set to upload stories, aborting.")
+      return                                  
+    
+    link = self._getExternalLink( story )
+    
+    if link == None:
+      logging.debug("Story not associated with external story, aborting.")
+      return
+    
+    # Grab the github client passed in kwargs, if none, create one.
+    github = kwargs.get( "github", Github(username=configuration['username'], api_token=configuration['password'],requests_per_second=1) )                                                                        
+    github.issues.edit( configuration['repository'], link.external_id, story.summary, story.detail )
+    
+    
+    
+    
+
+  def _createStoryForIssue( self, issue, project , repository):
+    logging.debug("Attempting to create new StoryQueue object for issue %d" % issue.number )
+    try:            
       story = StoryQueue.objects.get( project=project, external_id=issue.number)
+      # Odd, it already exists!
       story.summary=issue.title
       story.detail=issue.body      
     except StoryQueue.DoesNotExist:    
@@ -129,74 +217,30 @@ class GitHubIssuesExtra( ScrumdoProjectExtra ):
                        summary=issue.title,
                        detail=issue.body )
     story.save()
-  
-  
-  
+
   # TODO (shorter name?)
-  def getStoriesInProjectAssociatedWithExtra(self, project):
+  def _getStoriesInProjectAssociatedWithExtra(self, project):
     rv = []
     for story in project.stories.all():
-      if self.getExternalLink( story ) != None:
+      if self._getExternalLink( story ) != None:
         rv.append( story )
-      
-    return rv
-  
-  def storyExsists( self, external_id, queue_stories, project_stories ):
-    """ Pass in an external id, list of stories in the queue, and a list of stories in the project, and will return True if the store exists in either list. """
-    return self.getStoryFromQueue( external_id, queue_stories) or self.getStoryFromProject( external_id, project_stories )
 
-  def initialSync( self, project):
-    logging.debug("Performing initial GitHub issues syncronization.")
-    configuration = self.getConfiguration( project.slug )   
-    if configuration['upload']:
-      try:
-        self.initialUpload( project, configuration)
-      except:                                                      
-        logging.debug("Failed to upload stories.")
-        traceback.print_exc(file=sys.stdout)
-        configuration["status"] = "Syncronization failed to upload stories to GitHub on " + str( datetime.date.today()  )        
-        self.saveConfiguration( project.slug, configuration )
-        return
-        
-    self.pullProject(project)
-      
+    return rv                                                           
+
+  def _getStory( self, external_id, queue_stories, project_stories ):   
+    """ Pass in an external id, list of stories in the queue, and a list of stories in the project, and will return the story if the it exists in either list. """
+    story = self._getStoryFromQueue( external_id, queue_stories)
+    if story != None:
+      return story
+    return self._getStoryFromProject( external_id, project_stories )
     
-
-  def initialUpload(self, project, configuration):
+  def _initialUpload(self, project, configuration):
     configuration = self.getConfiguration( project.slug )
     github = Github(username=configuration['username'], api_token=configuration['password'],requests_per_second=1)
     for story in project.stories.all():
       self.storyCreated(project, story, github=github)
 
-
-  def storyCreated( self, project, story, **kwargs):
-    """ Called when a new ScrumDo story is created. This plugin creates """
-    
-    if self.getExternalLink( story ) != None:      
-      # Already uploaded 
-      return     
-      
-    configuration = self.getConfiguration( project.slug )  
-    
-    if not configuration['upload']:    
-      # Not configured to upload new stories.
-      return
-      
-    repository = configuration['repository']
-    logging.debug("Attempting to create GitHub issue for story %d" % story.id)   
-    
-    github = kwargs.get( "github", Github(username=configuration['username'], api_token=configuration['password'],requests_per_second=1) )
-    
-    issue = github.issues.open( repository, story.summary, story.detail )
-    
-    link = ExternalStoryMapping( story=story,     
-                                 extra_slug=self.getSlug(),
-                                 external_id=issue.number,
-                                 external_url="https://github.com/%s/issues/#issue/%d" % (repository, issue.number) )
-    link.save()
-    logging.info("GitHub issue #%d created for story %d" % (issue.number, story.id) )
-
-  def getExternalLink( self, story ):
+  def _getExternalLink( self, story ):
     """ Searches for the ExternalStoryMapping that is associated with this extra and returns it.
         returns None if it's not found. """
     for link in story.external_links.all():
@@ -204,7 +248,7 @@ class GitHubIssuesExtra( ScrumdoProjectExtra ):
         return link
     return None
     
-  def getStoryFromProject(self, external_id, project_stories ):
+  def _getStoryFromProject(self, external_id, project_stories ):
     """ Returns the story from the list with the given external ID for this extra. """
     for project_story in project_stories:
       for link in project_story.external_links.all():
@@ -212,7 +256,7 @@ class GitHubIssuesExtra( ScrumdoProjectExtra ):
           return project_story
     return None
       
-  def getStoryFromQueue(self, external_id, queue_stories ):                         
+  def _getStoryFromQueue(self, external_id, queue_stories ):                         
     """ Returns the story from the list of StoryQueue objects with the given external id. """
     for queue_story in queue_stories:
       if queue_story.extra_slug == self.getSlug() and int(queue_story.external_id)==external_id:

@@ -92,10 +92,10 @@ class ScrumdoProjectExtra( ScrumdoExtra ):
         parameter be an apps.projects.models.Project object.    """    
     pass
 
-  
-  def externalHook( self, request ):
-    "Every extra gets a URL that external services can POST to.  This should handle those requests."
-    pass
+  # Not yet implemented...  
+  # def externalHook( self, request ):
+  #   "Every extra gets a URL that external services can POST to.  This should handle those requests."
+  #   pass
 
   
   def storyUpdated( self, project, story ):
