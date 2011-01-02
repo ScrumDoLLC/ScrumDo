@@ -36,7 +36,7 @@
               <h1>Actions</h1>
               <br/>              
               <a href="#iterationDetails" rel="facebox">Edit Details</a><br/>
-              <a href="{% url stories iteration.project.slug  %}?iteration={{iteration.id}}">Add Stories From Backlog</a><br/>
+              <a href="{% url stories iteration.project.slug  %}?iteration={{iteration.id}}">Iteration Planning</a><br/>
             </div>
           {% endcanwrite %}
         </div>
@@ -52,7 +52,7 @@
             <img src="/site_media/static/images/burndown.png">
           {% endif %}
         {% else %}
-          Put backlog information here.
+          This is your Backlog, it's where new stories are created.  It represents the total amount of work left to do on the project.
         {% endif %}
         
         <div style="clear:both;">&nbsp;</div>
