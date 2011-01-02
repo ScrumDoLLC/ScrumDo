@@ -95,9 +95,9 @@ class ExtrasManager:
     logger.debug("extras.ExtrasManager::onStoryDeleted(project=%s, story=%d)" % (story.project.slug, story.id))    
     self.queueSyncActions( story.project, SyncronizationQueue.ACTION_STORY_DELETED , story=story)
 
-  def onStoryCreated(self, sender, **kwargs):               
-    logger.debug("extras.ExtrasManager::onStoryCreated(project=%s, story=%d)" % (project.slug, story.id))
+  def onStoryCreated(self, sender, **kwargs):                   
     story = kwargs["story"]      
+    logger.debug("extras.ExtrasManager::onStoryCreated(project=%s, story=%d)" % (story.project.slug, story.id))
     self.queueSyncActions( story.project, SyncronizationQueue.ACTION_STORY_CREATED , story=story)
   
 
