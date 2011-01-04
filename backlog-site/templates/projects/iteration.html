@@ -31,14 +31,18 @@
             </div>
           {% endif %}
           
-          {% canwrite project %}
+          
             <div class="blue_box small_project_list">
               <h1>Actions</h1>
               <br/>              
-              <a href="#iterationDetails" rel="facebox">Edit Details</a><br/>
-              <a href="{% url stories iteration.project.slug  %}?iteration={{iteration.id}}">Iteration Planning</a><br/>
+              {% canwrite project %}
+                <a href="#iterationDetails" rel="facebox">Edit Details</a><br/>
+                <a href="{% url stories iteration.project.slug  %}?iteration={{iteration.id}}">Iteration Planning</a><br/>
+              {% endcanwrite %}
+              <a rel="facebox" href="{% url iteration_export iteration.project.slug iteration.id %}">Export</a>
+              
             </div>
-          {% endcanwrite %}
+          
         </div>
       
         <h1>{{ iteration.name }}</h1>

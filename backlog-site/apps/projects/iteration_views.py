@@ -32,6 +32,7 @@ import datetime
 from projects.models import Project, ProjectMember, Iteration, Story
 from projects.forms import *
 from projects.access import *
+import projects.import_export as import_export
 
 @login_required
 def iteration(request, group_slug, iteration_id):
@@ -88,4 +89,20 @@ def iteration_create(request, group_slug=None):
  return render_to_response('projects/new_iteration.html', { 'project':project, 'form': form,  }, context_instance=RequestContext(request))
 
 
+
+@login_required
+def iteration_export(request, group_slug, iteration_id):
+  project = get_object_or_404(Project, slug=group_slug)  
+  iteration = get_object_or_404(Iteration, id=iteration_id)  
+  write_access_or_403(project,request.user)
+  if request.method == "POST":
+    form = ExportForm(request.POST)
+    form.is_valid()
+    format = form.cleaned_data["format"]
+#    lock = form.cleaned_data["lock_iteration"]
+    return import_export.export_iteration(iteration, format)
+  else:
+    form = ExportForm()
+      
+  return render_to_response('projects/export_options.html', { 'project':project, 'iteration':iteration, 'form': form,  }, context_instance=RequestContext(request))
 

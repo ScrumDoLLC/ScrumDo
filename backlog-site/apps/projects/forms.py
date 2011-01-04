@@ -127,6 +127,11 @@ class ProjectUpdateForm(forms.ModelForm):
 
 class ImportForm(forms.Form):
   file  = forms.FileField()
+
+class ExportForm(forms.Form): 
+  format = forms.ChoiceField(choices=(("xls","Excel"),("csv","Comma Seperated Value (CSV)"),("xml","XML") ) )
+#  lock_iteration = forms.BooleanField( required=False, help_text = _("Locking the iteration prevents anyone from editing any stories in it until the iteration is unlocked.") )
+
   
 class AddUserForm(forms.Form):
     

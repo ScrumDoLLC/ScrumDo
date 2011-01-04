@@ -222,7 +222,6 @@ class Story( models.Model ):
 
   tags_to_delete = []
   tags_to_add = []
-  
 
   
   def points_value(self):
