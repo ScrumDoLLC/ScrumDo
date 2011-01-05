@@ -44,7 +44,7 @@
               {% canwrite project %}
                 {% if iteration.locked %}
                   <br/><a rel="facebox" href="{% url unlock_iteration iteration.project.slug iteration.id %}">Unlock</a><br/>
-                  <a href="{% url iteration_import iteration.project.slug iteration.id}}">Import</a><br/>                  
+                  <a rel="facebox" href="{% url iteration_import iteration.project.slug iteration.id %}">Import</a><br/>                  
                 {% endif %}
               {% endcanwrite %}                
             </div>
@@ -184,10 +184,7 @@
     {
       setUpStoryLinks();
     }
-   
-    $(document).bind('beforeReveal.facebox', function() {
-        $('#facebox .body').width('880px');        
-    });
+  
     
     $(document).bind('afterReveal.facebox', function() {
         $("#id_start_date-2").datepicker({dateFormat: 'yy-mm-dd' });

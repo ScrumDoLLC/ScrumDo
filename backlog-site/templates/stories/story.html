@@ -2,7 +2,7 @@
 {% load comments_tag %}
 {% load theme_tags %}
 
-<div id="story_area">
+<div id="story_area" style="width:950px">
 
 <form id="story_detail_form" method="POST" action="{% url story_form group_slug=project.slug story_id=story.id %}">
    {{ form.non_field_errors }}

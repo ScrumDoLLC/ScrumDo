@@ -109,6 +109,24 @@ def iteration_import(request, group_slug, iteration_id):
   pass
 
 @login_required
+def iteration_import(request, group_slug, iteration_id):
+  project = get_object_or_404(Project, slug=group_slug)  
+  iteration = get_object_or_404(Iteration, id=iteration_id)  
+  write_access_or_403(project,request.user)    
+  if request.method == "POST":
+    form = IterationImportForm(request.POST)
+    form.is_valid()
+    lock = form.cleaned_data["unlock_iteration"]
+    if lock:
+      iteration.locked = True
+      iteration.save()
+    return import_export.export_iteration(iteration, format)
+  else:
+    form = IterationImportForm()
+      
+  return render_to_response('projects/import_options.html', { 'project':project, 'iteration':iteration, 'form': form,  }, context_instance=RequestContext(request))
+
+@login_required
 def iteration_export(request, group_slug, iteration_id):
   project = get_object_or_404(Project, slug=group_slug)  
   iteration = get_object_or_404(Iteration, id=iteration_id)  

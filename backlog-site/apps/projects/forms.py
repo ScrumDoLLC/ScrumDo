@@ -128,6 +128,11 @@ class ProjectUpdateForm(forms.ModelForm):
 class ImportForm(forms.Form):
   file  = forms.FileField()
 
+class IterationImportForm(forms.Form):
+  file  = forms.FileField()
+  unlock_iteration = forms.BooleanField( required=False, help_text = _("Unlocking the iteration allows users with the appropriate access to edit stories in this iteration.") )
+  
+
 class UnlockForm(forms.Form):
   unlock_iteration = forms.BooleanField( required=False, help_text = _("Unlocking the iteration allows users with the appropriate access to edit stories in this iteration.") )
 
