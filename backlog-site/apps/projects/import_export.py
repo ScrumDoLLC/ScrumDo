@@ -1,16 +1,17 @@
 from django.http import HttpResponse
 import StringIO
-import xlrd
+from xlrd import open_workbook
 import xlwt
 from xml.dom.minidom import Document
 import csv
+import re
 
 from projects.models import Story
 
 ezxf = xlwt.easyxf
 
 def export_iteration(iteration, format ):
-  
+  """ Exports an iteration, format should be xls, xml or csv. """
   if format == "xls":
     return export_excel( iteration )
   elif format == "xml":
@@ -20,6 +21,9 @@ def export_iteration(iteration, format ):
 
     
 def get_headers( project ):
+  """Returns an array of tupples with info on columns.
+      (target width, title, function to get the data from a story, excel output format)
+  """
   wrap_xf = ezxf('align: wrap on, vert top')
   numeric_xf = ezxf('align: wrap on, vert top, horiz right')
   return [ (50,"Story ID", lambda story: story.local_id ,numeric_xf),
@@ -35,6 +39,7 @@ def get_headers( project ):
          ]
           
 def export_excel( iteration ):
+  """ Exports the stories in an iteration as an excel sheet. """
   response = HttpResponse( mimetype="Application/vnd.ms-excel")
   response['Content-Disposition'] = 'attachment; filename=iteration.xls'
   stories = iteration.stories.all().order_by("rank")
@@ -59,6 +64,7 @@ def export_excel( iteration ):
 
 
 def export_xml( iteration ):
+  """ Exports the stories in an iteration as XML """  
   stories = iteration.stories.all().order_by("rank")
   doc = Document()  
   iteration_node = doc.createElement("iteration")
@@ -85,6 +91,7 @@ def to_xml_node_name( name ):
   return name.replace(" ","_").lower()
 
 def export_csv( iteration ):
+  """ Exports the stories in an iteration as CSV """
   response =  HttpResponse( mimetype="text/csv") 
   response['Content-Disposition'] = 'attachment; filename=iteration.csv'
   stories = iteration.stories.all().order_by("rank")
@@ -106,4 +113,33 @@ def export_csv( iteration ):
     writer.writerow( row )
 
   return response
+
+def import_iteration(iteration, file ):
+  m = re.search('\.(\S+)', file.name)
+  
+  if m.group(1) == "xml" :
+    return importXMLIteration(iteration, file)
+  elif m.group(1) == "xls" :
+    return importExcelIteration(iteration, file)
+  else:
+    return importCSVIteration(iteration, file)
+    
+def importExcelIteration(iteration, file):
+  stories = []
+  workbook = open_workbook(file_contents=file.read())
+  sheet = workbook.sheets()[0];
+  count = 0
+  headers = get_headers( iteration.project )
+  for row in range(1,sheet.nrows):    
+    for col in range( len(headers)  ):
+      val = sheet.cell(row,col).value
+      print "%s %d,%d = %s" % (headers[col][1],row,col,val)
+    
+
+
+def importXMLIteration(iteration, file):
+  pass
+
+def importCSVIteration(iteration, file):
+  pass
   

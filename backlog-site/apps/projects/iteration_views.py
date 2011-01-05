@@ -115,12 +115,13 @@ def iteration_import(request, group_slug, iteration_id):
   write_access_or_403(project,request.user)    
   if request.method == "POST":
     form = IterationImportForm(request.POST)
-    form.is_valid()
-    lock = form.cleaned_data["unlock_iteration"]
-    if lock:
-      iteration.locked = True
-      iteration.save()
-    return import_export.export_iteration(iteration, format)
+    if form.is_valid():
+      unlock = form.cleaned_data["unlock_iteration"]
+      if unlock:
+        iteration.locked = False
+        iteration.save()
+      status = import_export.import_iteration(iteration, request.FILES['import_file'] )
+      return HttpResponseRedirect( reverse('iteration', kwargs={'group_slug':project.slug, 'iteration_id':iteration.id}) ) 
   else:
     form = IterationImportForm()
       
@@ -133,13 +134,13 @@ def iteration_export(request, group_slug, iteration_id):
   write_access_or_403(project,request.user)
   if request.method == "POST":
     form = ExportForm(request.POST)
-    form.is_valid()
-    format = form.cleaned_data["format"]
-    lock = form.cleaned_data["lock_iteration"]
-    if lock:
-      iteration.locked = True
-      iteration.save()
-    return import_export.export_iteration(iteration, format)
+    if form.is_valid():
+      format = form.cleaned_data["format"]
+      lock = form.cleaned_data["lock_iteration"]
+      if lock:
+        iteration.locked = True
+        iteration.save()
+      return import_export.export_iteration(iteration, format)
   else:
     form = ExportForm()
       
