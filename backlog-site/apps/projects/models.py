@@ -156,6 +156,7 @@ class Iteration( models.Model):
   project = models.ForeignKey(Project, related_name="iterations")
   default_iteration = models.BooleanField( default=False )
   points_log = generic.GenericRelation( PointsLog )
+  locked = models.BooleanField( default=False )
   
   include_in_velocity = models.BooleanField(_('include_in_velocity'), default=True)
   

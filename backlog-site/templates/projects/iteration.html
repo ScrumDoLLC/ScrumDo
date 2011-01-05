@@ -37,10 +37,16 @@
               <br/>              
               {% canwrite project %}
                 <a href="#iterationDetails" rel="facebox">Edit Details</a><br/>
-                <a href="{% url stories iteration.project.slug  %}?iteration={{iteration.id}}">Iteration Planning</a><br/>
+                <a href="{% url stories iteration.project.slug  %}?iteration={{iteration.id}}">Iteration Planning</a><br/>                
               {% endcanwrite %}
-              <a rel="facebox" href="{% url iteration_export iteration.project.slug iteration.id %}">Export</a>
+              <a rel="facebox" href="{% url iteration_export iteration.project.slug iteration.id %}">Export</a><br/>
               
+              {% canwrite project %}
+                {% if iteration.locked %}
+                  <br/><a rel="facebox" href="{% url unlock_iteration iteration.project.slug iteration.id %}">Unlock</a><br/>
+                  <a href="{% url iteration_import iteration.project.slug iteration.id}}">Import</a><br/>                  
+                {% endif %}
+              {% endcanwrite %}                
             </div>
           
         </div>
