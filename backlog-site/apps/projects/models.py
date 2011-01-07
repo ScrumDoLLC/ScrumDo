@@ -204,6 +204,10 @@ class Story( models.Model ):
       (2, "In Progress"),
       (3, "Reviewing"),
       (4, "Done")   )
+  STATUS_REVERSE = {"TODO":STATUS_TODO,
+                    "In Progress":STATUS_DOING,
+                    "Reviewing":STATUS_REVIEWING,
+                    "Done":STATUS_REVIEWING }
   
   rank = models.IntegerField() 
   summary = models.TextField( )

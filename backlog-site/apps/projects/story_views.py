@@ -273,7 +273,7 @@ def processImport( project, file , user):
       points = int(sheet.cell(row+1,2).value)
     except:
       points = "?"
-    story = Story( project=project, summary=summary, detail=detail, rank=0, local_id=project.stories.count()+1, creator=user, points=points, iteration=project.get_default_iteration())
+    story = Story( project=project, summary=summary, detail=detail, rank=0, local_id=project.getNextId(), creator=user, points=points, iteration=project.get_default_iteration())
     story.save()   
     signals.story_created.send( sender=file, story=story, user=user )
   user.message_set.create(message=("%d stories imported" % count))

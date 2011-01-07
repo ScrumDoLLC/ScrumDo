@@ -10,35 +10,72 @@ from projects.models import Story
 
 ezxf = xlwt.easyxf
 
-def export_iteration(iteration, format ):
+def exportIteration(iteration, format ):
   """ Exports an iteration, format should be xls, xml or csv. """
   if format == "xls":
-    return export_excel( iteration )
+    return _exportExcel( iteration )
   elif format == "xml":
-    return export_xml( iteration )
+    return _exportXML( iteration )
   else:
-    return export_csv( iteration )
+    return _exportCSV( iteration )
 
+
+def importIteration(iteration, file ):
+  m = re.search('\.(\S+)', file.name)
+
+  if m.group(1) == "xml" :
+    return _importXMLIteration(iteration, file)
+  elif m.group(1) == "xls" :
+    return _importExcelIteration(iteration, file)
+  else:
+    return _importCSVIteration(iteration, file)
     
-def get_headers( project ):
+    
+def _getHeaders( project ):
   """Returns an array of tupples with info on columns.
-      (target width, title, function to get the data from a story, excel output format)
+      (target width, title, function to get the data from a story, excel output format, function to assign the value to a story)
   """
   wrap_xf = ezxf('align: wrap on, vert top')
   numeric_xf = ezxf('align: wrap on, vert top, horiz right')
-  return [ (50,"Story ID", lambda story: story.local_id ,numeric_xf),
-           (350,"Summary", lambda story: story.summary,wrap_xf),
-           (300,"Detail", lambda story: story.detail ,wrap_xf),
-           (50,"Points", lambda story: int(story.points) if story.points.isdigit() else story.points, numeric_xf),
-           (70,"Status", lambda story: Story.STATUS_CHOICES[story.status-1][1] ,wrap_xf),
-           (70,"Assignee", lambda story:  story.assignee.username if story.assignee is not None else "" ,wrap_xf),
-           (50,"Rank", lambda story: story.rank,numeric_xf ),          
-           (200,project.extra_1_label, lambda story: story.extra_1,wrap_xf), 
-           (200,project.extra_2_label, lambda story: story.extra_2,wrap_xf), 
-           (200,project.extra_3_label, lambda story: story.extra_3,wrap_xf)
-         ]
+  
+  # Question: I couldn't do these as lambdas in-line below because they have an assignment,
+  #           is there a better way to handle it?
+  def setId(story,value):
+    story.local_id=value
+  def setSummary(story,value):
+    story.summary=value
+  def setDetail(story,value):
+    story.detail=value
+  def setPoints(story,value):
+    story.points=value
+  def setStatus(story,value):
+    try:
+      story.status = Story.STATUS_REVERSE[value]
+    except:
+      pass # Ignore invalid statuses?      
+  def setAssignee(story,value):
+    pass # TODO!
+  def setRank(story,value):
+    story.rank = value
+  def setExtra1(story,value):
+    story.extra_1 = value
+  def setExtra2(story,value):
+    story.extra_2 = value
+  def setExtra3(story,value):
+    story.extra_3 = value
+    
+  return [ (50,"Story ID", lambda story: story.local_id ,numeric_xf, setId),
+           (350,"Summary", lambda story: story.summary,wrap_xf, setSummary),
+           (300,"Detail", lambda story: story.detail ,wrap_xf, setDetail),
+           (50,"Points", lambda story: int(story.points) if story.points.isdigit() else story.points, numeric_xf, setPoints),
+           (70,"Status", lambda story: Story.STATUS_CHOICES[story.status-1][1] ,wrap_xf, setStatus), # TODO the setting function
+           (70,"Assignee", lambda story:  story.assignee.username if story.assignee is not None else "" ,wrap_xf, setAssignee),  # TODO the setting function
+           (50,"Rank", lambda story: story.rank,numeric_xf ,  setRank),          
+           (200,project.extra_1_label, lambda story: story.extra_1,wrap_xf,  setExtra1), 
+           (200,project.extra_2_label, lambda story: story.extra_2,wrap_xf,  setExtra2), 
+           (200,project.extra_3_label, lambda story: story.extra_3,wrap_xf,  setExtra3) ]
           
-def export_excel( iteration ):
+def _exportExcel( iteration ):
   """ Exports the stories in an iteration as an excel sheet. """
   response = HttpResponse( mimetype="Application/vnd.ms-excel")
   response['Content-Disposition'] = 'attachment; filename=iteration.xls'
@@ -46,7 +83,7 @@ def export_excel( iteration ):
   w = xlwt.Workbook()
   ws = w.add_sheet('Iteration Export')
   
-  headers = get_headers(iteration.project)
+  headers = _getHeaders(iteration.project)
   heading_xf = ezxf('font: bold on; align: wrap on, vert centre, horiz center')  
   for idx,header in enumerate(headers):
     ws.write(0,idx,header[1],heading_xf)
@@ -63,14 +100,14 @@ def export_excel( iteration ):
   
 
 
-def export_xml( iteration ):
+def _exportXML( iteration ):
   """ Exports the stories in an iteration as XML """  
   stories = iteration.stories.all().order_by("rank")
   doc = Document()  
   iteration_node = doc.createElement("iteration")
   doc.appendChild(iteration_node)
 
-  headers = get_headers(iteration.project)  
+  headers = _getHeaders(iteration.project)  
   
   for idx, story in enumerate(stories):
     row = []
@@ -78,7 +115,7 @@ def export_xml( iteration ):
     iteration_node.appendChild( story_node )
     for hidx, header in enumerate(headers):
       f = header[2]
-      story_node.setAttribute(to_xml_node_name(header[1]), str(f(story)).replace("\n"," ").replace("\r",""))
+      story_node.setAttribute(_toXMLNodeName(header[1]), str(f(story)).replace("\n"," ").replace("\r",""))
       # TODO: There's a bug in the minidom implementation that doesn't convert newlines to their entities, and there's
       #       no good work-around I can find without monkey patching minidom
 
@@ -87,10 +124,10 @@ def export_xml( iteration ):
   response['Content-Disposition'] = 'attachment; filename=iteration.xml'
   return response
   
-def to_xml_node_name( name ):
+def _toXMLNodeName( name ):
   return name.replace(" ","_").lower()
 
-def export_csv( iteration ):
+def _exportCSV( iteration ):
   """ Exports the stories in an iteration as CSV """
   response =  HttpResponse( mimetype="text/csv") 
   response['Content-Disposition'] = 'attachment; filename=iteration.csv'
@@ -98,7 +135,7 @@ def export_csv( iteration ):
 
   writer = csv.writer(response, delimiter=',' ,  quoting=csv.QUOTE_ALL, escapechar='\\')
     
-  headers = get_headers(iteration.project)  
+  headers = _getHeaders(iteration.project)  
   row = []
   for idx,header in enumerate(headers):
     row.append(header[1])
@@ -114,32 +151,80 @@ def export_csv( iteration ):
 
   return response
 
-def import_iteration(iteration, file ):
-  m = re.search('\.(\S+)', file.name)
+
+
+def _importData( data, iteration ):
+  imported = 0
+  failed = 0
+  for row in data:
+    if _importSingleRow(row, iteration):
+      imported += 1
+    else:
+      failed += 1
+  return (imported,failed)
+      
+
+def _getFieldFromImportData( data, field_name ):
+  """ This method returns a value for a given field.  Generally, it's used for translating user data
+      into values suitable for a story.  """
+  # TODO - Right now, we do only exact matches, we might want a more intelligent
+  #        search scheme to accept a wider variety of import formats.
+  #        For instance, case insensitive, ignore whitespace, whatever.
+
+  rv = data.get(field_name)
+  if( rv == None ):
+    rv = data.get( _toXMLNodeName(field_name) )    
+  return rv;
   
-  if m.group(1) == "xml" :
-    return importXMLIteration(iteration, file)
-  elif m.group(1) == "xls" :
-    return importExcelIteration(iteration, file)
-  else:
-    return importCSVIteration(iteration, file)
+  
+def _importSingleRow( row, iteration):
+  local_id = _getFieldFromImportData( row, "Story ID" )
+  story = None
+  if local_id != None:
+    try:
+      story = Story.objects.get( project=iteration.project, local_id=int(local_id) )  
+    except:
+      # Story didn't exist already, so we'll be making a new one
+      # This is a little dangerous if there was a story id set, since we'll now be ignoreing
+      # that and that might not be what the user intended.
+      story = Story(project=iteration.project, iteration=iteration, local_id=project.getNextId() )  
+  
+  
+  # I guess a user could move rows from one iteration export to another, so set it here.
+  story.iteration = iteration
+  
+  headers = _getHeaders()
+  for header in headers:
+    value = _getFieldFromImportData( row, header[1] )
+    if value != None:
+      f = header[4]  # This should be a method capable of setting the property
+      f(story, value)
+  
+  story.save()
+
+
     
-def importExcelIteration(iteration, file):
+def _importExcelIteration(iteration, file):
   stories = []
   workbook = open_workbook(file_contents=file.read())
-  sheet = workbook.sheets()[0];
+  sheet = workbook.sheets()[0]
   count = 0
-  headers = get_headers( iteration.project )
-  for row in range(1,sheet.nrows):    
-    for col in range( len(headers)  ):
+  headers = _getHeaders( iteration.project )
+  import_data = []
+  for row in range(1,sheet.nrows):
+    row = {}    
+    for col in range( sheet.cols  ):
+      header = sheet.cell(0,col).value
       val = sheet.cell(row,col).value
-      print "%s %d,%d = %s" % (headers[col][1],row,col,val)
+      row[header] = value
+    import_data.append( row )
+  _importData( import_data , iteration)
     
 
 
-def importXMLIteration(iteration, file):
+def _importXMLIteration(iteration, file):
   pass
 
-def importCSVIteration(iteration, file):
+def _importCSVIteration(iteration, file):
   pass
   
