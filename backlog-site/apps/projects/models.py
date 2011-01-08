@@ -105,7 +105,12 @@ class Project(Group):
             members.append(member)
       return members
       
-    
+    def get_member_by_username(self, username):
+      members = self.all_members()
+      for member in members:
+        if member.username == username:
+          return member
+      return None
 
     def hasReadAccess( self, user ):
       if self.creator == user:

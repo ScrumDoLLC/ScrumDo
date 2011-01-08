@@ -64,7 +64,9 @@ def _getHeaders( project ):
     except:
       pass # Ignore invalid statuses?      
   def setAssignee(story,value):
-    pass # TODO!
+    member = story.project.get_member_by_username(value)
+    story.assignee = member
+
   def setRank(story,value):
     try:
       story.rank = int(value)
@@ -81,14 +83,22 @@ def _getHeaders( project ):
              (350,"Summary", lambda story: story.summary,wrap_xf, setSummary),
              (300,"Detail", lambda story: story.detail ,wrap_xf, setDetail),
              (50,"Points", lambda story: int(story.points) if story.points.isdigit() else story.points, numeric_xf, setPoints),
-             (70,"Status", lambda story: Story.STATUS_CHOICES[story.status-1][1] ,wrap_xf, setStatus), # TODO the setting function             
-             (50,"Rank", lambda story: story.rank,numeric_xf ,  setRank),          
-             (200,project.extra_1_label, lambda story: story.extra_1,wrap_xf,  setExtra1), 
-             (200,project.extra_2_label, lambda story: story.extra_2,wrap_xf,  setExtra2), 
-             (200,project.extra_3_label, lambda story: story.extra_3,wrap_xf,  setExtra3) ]
+             (70,"Status", lambda story: Story.STATUS_CHOICES[story.status-1][1] ,wrap_xf, setStatus), 
+             (50,"Rank", lambda story: story.rank,numeric_xf ,  setRank) ]
+              
 
   if project.use_assignee:  
     headers.insert(6, (70,"Assignee", lambda story:  story.assignee.username if story.assignee is not None else "" ,wrap_xf, setAssignee))
+    
+  if project.use_extra_1:
+    headers.append((200,project.extra_1_label, lambda story: story.extra_1,wrap_xf,  setExtra1))
+
+  if project.use_extra_2:
+    headers.append( (200,project.extra_2_label, lambda story: story.extra_2,wrap_xf,  setExtra2) )
+
+  if project.use_extra_3:
+    headers.append( (200,project.extra_3_label, lambda story: story.extra_3,wrap_xf,  setExtra3) )
+    
   return headers
           
 def _exportExcel( iteration ):
@@ -132,8 +142,8 @@ def _exportXML( iteration ):
     for hidx, header in enumerate(headers):
       f = header[2]
       story_node.setAttribute(_toXMLNodeName(header[1]), str(f(story)).replace("\n"," ").replace("\r",""))
-      # TODO: There's a bug in the minidom implementation that doesn't convert newlines to their entities, and there's
-      #       no good work-around I can find without monkey patching minidom
+      # TODO (Future Enhancement): There's a bug in the minidom implementation that doesn't convert newlines to their entities insite attributes, and there's
+      #       no good work-around I can find without monkey patching minidom itself
 
 
   response = HttpResponse(doc.toprettyxml(indent="  "), mimetype="text/xml") 
@@ -170,6 +180,15 @@ def _exportCSV( iteration ):
 
 
 def _importData( data, iteration , user):
+  """ Imports data from a python object to an iteration.
+      The idea here is that all the import mechanisms (CSV, XML, XLS) can translate
+      their input to a python object hierarchy, and they all can pass that off to 
+      this method to do the actual import so we only have to write the sync-code 
+      once. 
+      
+      data should be an array of python dict like objects, where the keys are
+      the names from the getHeaders call, and the values are the user's input.
+      """
   imported = 0
   failed = 0
   for row in data:
@@ -184,13 +203,15 @@ def _importData( data, iteration , user):
 def _getFieldFromImportData( data, field_name ):
   """ This method returns a value for a given field.  Generally, it's used for translating user data
       into values suitable for a story.  """
-  # TODO - Right now, we do only exact matches, we might want a more intelligent
+  # TODO (Future Enhancement) - Right now, we do only exact matches, we might want a more intelligent
   #        search scheme to accept a wider variety of import formats.
   #        For instance, case insensitive, ignore whitespace, whatever.
 
   rv = data.get(field_name)
   if( rv == None ):
+    # If we didn't find one, lets try anlternative naming...    
     rv = data.get( _toXMLNodeName(field_name) )    
+
   return rv;
   
   
@@ -204,7 +225,7 @@ def _importSingleRow( row, iteration, user):
         logger.debug("Found story to update (%s)" % local_id)
       except:
         # Story didn't exist already, so we'll be making a new one
-        # This is a little dangerous if there was a story id set, since we'll now be ignoreing
+        # This is a little dangerous if there was a story id set, since we'll now be ignoring
         # that and that might not be what the user intended.
         story = Story(project=iteration.project, iteration=iteration, local_id=iteration.project.getNextId() )  
         story.creator = user
