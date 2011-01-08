@@ -62,7 +62,7 @@ urlpatterns += patterns('projects.story_views',
     url(r'^project/(?P<group_slug>[-\w]+)/story/(?P<story_id>[-\w]+)/delete', 'delete_story', name="delete_story"),
     url(r'^project/(?P<group_slug>[-\w]+)/story/(?P<story_id>[-\w]+)', 'story', name="story_form"),
     url(r'^project/(?P<group_slug>[-\w]+)/mini_story/(?P<story_id>[-\w]+)', 'mini_story'),    
-    url(r'^project/(?P<group_slug>[-\w]+)/import','import_file', name="import_file"),
+
     
 )
 

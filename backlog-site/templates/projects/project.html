@@ -66,9 +66,6 @@
             
              <div class="blue_box">
                 <h1>Options</h1>              <br/>
-                {% canwrite project %}
-                 <div class="iterationHeader"><a href="{% url import_file project.slug %}">Import File</a></div>
-                {% endcanwrite %}
                 {% isadmin project %}                  
                     <div class="iterationHeader"><a href="{% url project_admin project.slug %}" >{% trans "Project Admin" %}</a></div>
                 {% endisadmin %}                

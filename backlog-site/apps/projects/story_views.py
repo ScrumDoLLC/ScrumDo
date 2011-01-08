@@ -243,41 +243,6 @@ def stories(request, group_slug):
   }, context_instance=RequestContext(request))
 
 
-
-
-# Handles the excel import.
-@login_required
-def import_file(request, group_slug):
-  project = get_object_or_404(Project, slug=group_slug)
-  write_access_or_403(project,request.user)
-  if request.method == 'POST':     
-      processImport(project, request.FILES['import_file'], request.user);
-      return HttpResponseRedirect(reverse('project_detail', kwargs={'group_slug':project.slug}) )
-  else:
-      form = ImportForm()
-      
-  return render_to_response("projects/import.html", {
-           "form":form,
-        }, context_instance=RequestContext(request))
-
-
-def processImport( project, file , user):
-  workbook = open_workbook(file_contents=file.read())
-  sheet = workbook.sheets()[0];
-  count = 0
-  for row in range(sheet.nrows-1):    
-    summary = sheet.cell(row+1,0).value
-    detail = sheet.cell(row+1,1).value
-    count = count + 1
-    try:
-      points = int(sheet.cell(row+1,2).value)
-    except:
-      points = "?"
-    story = Story( project=project, summary=summary, detail=detail, rank=0, local_id=project.getNextId(), creator=user, points=points, iteration=project.get_default_iteration())
-    story.save()   
-    signals.story_created.send( sender=file, story=story, user=user )
-  user.message_set.create(message=("%d stories imported" % count))
-
 def pretty_print_story(request, group_slug, story_id):
   """Returns an html snippet that we use for a read-only full view of the story.  Right now, this is used
      when you mouse-hover over the eye icon for a story on an iteration page.  """
