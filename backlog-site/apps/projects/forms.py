@@ -61,14 +61,16 @@ class StoryForm( forms.ModelForm ):
   project = None      
   tags = forms.CharField( required=False )
   general_rank = forms.CharField( required=False, widget=forms.RadioSelect(choices=RANK_CHOICES), initial=2)
-  
+
   def __init__(self, project, *args, **kwargs):    
     super(StoryForm, self).__init__(*args, **kwargs)      
     self.fields["points"].choices = self.instance.POINT_CHOICES    
     self.fields["points"].widget = forms.RadioSelect(choices=self.instance.POINT_CHOICES)
     self.fields["summary"].widget = forms.TextInput()
     self.fields["summary"].widget.size = 200
-    self.fields["assignee"].choices = project.all_member_choices()
+    members = project.all_member_choices()
+    members.insert(0,("","---------"))
+    self.fields["assignee"].choices = members
     self.fields["extra_1"].widget = forms.widgets.Textarea(attrs={'rows':3, 'cols':50}) 
     self.fields["extra_2"].widget = forms.widgets.Textarea(attrs={'rows':3, 'cols':50}) 
     self.fields["extra_3"].widget = forms.widgets.Textarea(attrs={'rows':3, 'cols':50})         
