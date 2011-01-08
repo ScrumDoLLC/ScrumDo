@@ -120,7 +120,7 @@ def iteration_import(request, group_slug, iteration_id):
       if unlock:
         iteration.locked = False
         iteration.save()
-      status = import_export.importIteration(iteration, request.FILES['import_file'] )
+      status = import_export.importIteration(iteration, request.FILES['import_file'], request.user )
       return HttpResponseRedirect( reverse('iteration', kwargs={'group_slug':project.slug, 'iteration_id':iteration.id}) ) 
   else:
     form = IterationImportForm()

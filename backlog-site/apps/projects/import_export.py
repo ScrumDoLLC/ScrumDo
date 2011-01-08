@@ -8,10 +8,15 @@ import re
 
 from projects.models import Story
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 ezxf = xlwt.easyxf
 
 def exportIteration(iteration, format ):
   """ Exports an iteration, format should be xls, xml or csv. """
+  logger.info("Exporting iteration %s %d" % (iteration.project.slug, iteration.id) )
   if format == "xls":
     return _exportExcel( iteration )
   elif format == "xml":
@@ -20,15 +25,15 @@ def exportIteration(iteration, format ):
     return _exportCSV( iteration )
 
 
-def importIteration(iteration, file ):
+def importIteration(iteration, file , user):
   m = re.search('\.(\S+)', file.name)
 
   if m.group(1) == "xml" :
-    return _importXMLIteration(iteration, file)
+    return _importXMLIteration(iteration, file, user)
   elif m.group(1) == "xls" :
-    return _importExcelIteration(iteration, file)
+    return _importExcelIteration(iteration, file, user)
   else:
-    return _importCSVIteration(iteration, file)
+    return _importCSVIteration(iteration, file, user)
     
     
 def _getHeaders( project ):
@@ -38,16 +43,21 @@ def _getHeaders( project ):
   wrap_xf = ezxf('align: wrap on, vert top')
   numeric_xf = ezxf('align: wrap on, vert top, horiz right')
   
-  # Question: I couldn't do these as lambdas in-line below because they have an assignment,
-  #           is there a better way to handle it?
+  # Some quick methods to define how imported field values are set in a story.
+  # This is one place we can do any logic to clean up the data.
   def setId(story,value):
-    story.local_id=value
+    story.local_id=int(value)
   def setSummary(story,value):
-    story.summary=value
+    story.summary=str(value)
   def setDetail(story,value):
-    story.detail=value
+    story.detail=str(value)
   def setPoints(story,value):
-    story.points=value
+    try:
+      story.points=str(value)
+    except:
+      story.points = "?"
+    if story.points == "":
+      story.points = "?"
   def setStatus(story,value):
     try:
       story.status = Story.STATUS_REVERSE[value]
@@ -56,24 +66,30 @@ def _getHeaders( project ):
   def setAssignee(story,value):
     pass # TODO!
   def setRank(story,value):
-    story.rank = value
+    try:
+      story.rank = int(value)
+    except:
+      story.rank = story.iteration.stories.count()
   def setExtra1(story,value):
-    story.extra_1 = value
+    story.extra_1 = str(value)
   def setExtra2(story,value):
-    story.extra_2 = value
+    story.extra_2 = str(value)
   def setExtra3(story,value):
-    story.extra_3 = value
-    
-  return [ (50,"Story ID", lambda story: story.local_id ,numeric_xf, setId),
-           (350,"Summary", lambda story: story.summary,wrap_xf, setSummary),
-           (300,"Detail", lambda story: story.detail ,wrap_xf, setDetail),
-           (50,"Points", lambda story: int(story.points) if story.points.isdigit() else story.points, numeric_xf, setPoints),
-           (70,"Status", lambda story: Story.STATUS_CHOICES[story.status-1][1] ,wrap_xf, setStatus), # TODO the setting function
-           (70,"Assignee", lambda story:  story.assignee.username if story.assignee is not None else "" ,wrap_xf, setAssignee),  # TODO the setting function
-           (50,"Rank", lambda story: story.rank,numeric_xf ,  setRank),          
-           (200,project.extra_1_label, lambda story: story.extra_1,wrap_xf,  setExtra1), 
-           (200,project.extra_2_label, lambda story: story.extra_2,wrap_xf,  setExtra2), 
-           (200,project.extra_3_label, lambda story: story.extra_3,wrap_xf,  setExtra3) ]
+    story.extra_3 = str(value)
+  
+  headers = [ (50,"Story ID", lambda story: story.local_id ,numeric_xf, setId),
+             (350,"Summary", lambda story: story.summary,wrap_xf, setSummary),
+             (300,"Detail", lambda story: story.detail ,wrap_xf, setDetail),
+             (50,"Points", lambda story: int(story.points) if story.points.isdigit() else story.points, numeric_xf, setPoints),
+             (70,"Status", lambda story: Story.STATUS_CHOICES[story.status-1][1] ,wrap_xf, setStatus), # TODO the setting function             
+             (50,"Rank", lambda story: story.rank,numeric_xf ,  setRank),          
+             (200,project.extra_1_label, lambda story: story.extra_1,wrap_xf,  setExtra1), 
+             (200,project.extra_2_label, lambda story: story.extra_2,wrap_xf,  setExtra2), 
+             (200,project.extra_3_label, lambda story: story.extra_3,wrap_xf,  setExtra3) ]
+
+  if project.use_assignee:  
+    headers.insert(6, (70,"Assignee", lambda story:  story.assignee.username if story.assignee is not None else "" ,wrap_xf, setAssignee))
+  return headers
           
 def _exportExcel( iteration ):
   """ Exports the stories in an iteration as an excel sheet. """
@@ -153,14 +169,15 @@ def _exportCSV( iteration ):
 
 
 
-def _importData( data, iteration ):
+def _importData( data, iteration , user):
   imported = 0
   failed = 0
   for row in data:
-    if _importSingleRow(row, iteration):
+    if _importSingleRow(row, iteration, user):
       imported += 1
     else:
       failed += 1
+  logger.info("Imported %d records, failed on %d" % (imported,failed))
   return (imported,failed)
       
 
@@ -177,34 +194,46 @@ def _getFieldFromImportData( data, field_name ):
   return rv;
   
   
-def _importSingleRow( row, iteration):
-  local_id = _getFieldFromImportData( row, "Story ID" )
-  story = None
-  if local_id != None:
-    try:
-      story = Story.objects.get( project=iteration.project, local_id=int(local_id) )  
-    except:
-      # Story didn't exist already, so we'll be making a new one
-      # This is a little dangerous if there was a story id set, since we'll now be ignoreing
-      # that and that might not be what the user intended.
-      story = Story(project=iteration.project, iteration=iteration, local_id=project.getNextId() )  
+def _importSingleRow( row, iteration, user):
+  try:
+    local_id = _getFieldFromImportData( row, "Story ID" )
+    story = None
+    if local_id != None:
+      try:
+        story = Story.objects.get( project=iteration.project, local_id=int(local_id) )  
+        logger.debug("Found story to update (%s)" % local_id)
+      except:
+        # Story didn't exist already, so we'll be making a new one
+        # This is a little dangerous if there was a story id set, since we'll now be ignoreing
+        # that and that might not be what the user intended.
+        story = Story(project=iteration.project, iteration=iteration, local_id=iteration.project.getNextId() )  
+        story.creator = user
+        logger.debug("Creating new story to import into.")
   
   
-  # I guess a user could move rows from one iteration export to another, so set it here.
-  story.iteration = iteration
+    # I guess a user could move rows from one iteration export to another, so set it here.
+    story.iteration = iteration
   
-  headers = _getHeaders()
-  for header in headers:
-    value = _getFieldFromImportData( row, header[1] )
-    if value != None:
-      f = header[4]  # This should be a method capable of setting the property
-      f(story, value)
+    headers = _getHeaders(iteration.project)
+    for header in headers:
+      value = _getFieldFromImportData( row, header[1] )
+      if value != None:
+        try:
+          f = header[4]  # This should be a method capable of setting the property
+          logger.debug("Setting %s to %s" % (header[1], str(value) ) )        
+          f(story, value)
+        except:
+          logger.debug("Failed to set %s to %s, ignoring." % (header[1], str(value) ) )
   
-  story.save()
+    story.save()
+    return True
+  except:
+    logger.debug("Failed to import a record.")
+    return False
 
 
     
-def _importExcelIteration(iteration, file):
+def _importExcelIteration(iteration, file, user):
   stories = []
   workbook = open_workbook(file_contents=file.read())
   sheet = workbook.sheets()[0]
@@ -212,19 +241,21 @@ def _importExcelIteration(iteration, file):
   headers = _getHeaders( iteration.project )
   import_data = []
   for row in range(1,sheet.nrows):
-    row = {}    
-    for col in range( sheet.cols  ):
+    rowData = {}    
+    count += 1
+    for col in range( sheet.ncols  ):
       header = sheet.cell(0,col).value
       val = sheet.cell(row,col).value
-      row[header] = value
-    import_data.append( row )
-  _importData( import_data , iteration)
+      rowData[header] = val
+    import_data.append( rowData )
+  logger.info("Found %d rows in an excel sheet " % count)
+  _importData( import_data , iteration, user)
     
 
 
-def _importXMLIteration(iteration, file):
+def _importXMLIteration(iteration, file, user):
   pass
 
-def _importCSVIteration(iteration, file):
+def _importCSVIteration(iteration, file, user):
   pass
   

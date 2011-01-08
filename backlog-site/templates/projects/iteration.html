@@ -43,9 +43,9 @@
               
               {% canwrite project %}
                 {% if iteration.locked %}
-                  <br/><a rel="facebox" href="{% url unlock_iteration iteration.project.slug iteration.id %}">Unlock</a><br/>
-                  <a rel="facebox" href="{% url iteration_import iteration.project.slug iteration.id %}">Import</a><br/>                  
+                  <br/><a rel="facebox" href="{% url unlock_iteration iteration.project.slug iteration.id %}">Unlock</a><br/>                  
                 {% endif %}
+                <a rel="facebox" href="{% url iteration_import iteration.project.slug iteration.id %}">Import</a><br/>                  
               {% endcanwrite %}                
             </div>
           
