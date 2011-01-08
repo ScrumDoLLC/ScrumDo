@@ -2,6 +2,10 @@
 
 <div style="width:500px">
  <h1>Import Iteration</h1>
+  <p>
+    <b>Tip:</b>  Run an export of this iteration to get a template to use for the file format.
+  </p>
+ 
    <form enctype="multipart/form-data" class="uniForm" id="project_form" method="POST" action="{% url iteration_import project.slug iteration.id %}">
        <fieldset class="inlineLabels">
            {{ form|as_uni_form}}

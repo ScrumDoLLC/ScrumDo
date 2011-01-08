@@ -26,6 +26,8 @@ def exportIteration(iteration, format ):
 
 
 def importIteration(iteration, file , user):
+  """ Imports data to an iteration.  Both updating and creating stories is supported. 
+      file can be either Excel, XML, or CSV """
   m = re.search('\.(\S+)', file.name)
 
   if m.group(1) == "xml" :
@@ -40,11 +42,12 @@ def _getHeaders( project ):
   """Returns an array of tupples with info on columns.
       (target width, title, function to get the data from a story, excel output format, function to assign the value to a story)
   """
+  # There's some excel-specific data mixed in here that doesn't entirely fit, but I'm leaving it for now.
   wrap_xf = ezxf('align: wrap on, vert top')
   numeric_xf = ezxf('align: wrap on, vert top, horiz right')
   
   # Some quick methods to define how imported field values are set in a story.
-  # This is one place we can do any logic to clean up the data.
+  # This is one place we can do any logic to clean up the data.  
   def setId(story,value):
     story.local_id=int(value)
   def setSummary(story,value):
@@ -85,7 +88,9 @@ def _getHeaders( project ):
              (50,"Points", lambda story: int(story.points) if story.points.isdigit() else story.points, numeric_xf, setPoints),
              (70,"Status", lambda story: Story.STATUS_CHOICES[story.status-1][1] ,wrap_xf, setStatus), 
              (50,"Rank", lambda story: story.rank,numeric_xf ,  setRank) ]
-              
+
+
+  # And some optional columns that depend on project settings:
 
   if project.use_assignee:  
     headers.insert(6, (70,"Assignee", lambda story:  story.assignee.username if story.assignee is not None else "" ,wrap_xf, setAssignee))
@@ -255,7 +260,6 @@ def _importSingleRow( row, iteration, user):
 
     
 def _importExcelIteration(iteration, file, user):
-  stories = []
   workbook = open_workbook(file_contents=file.read())
   sheet = workbook.sheets()[0]
   count = 0
