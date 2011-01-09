@@ -42,12 +42,21 @@
               <a rel="facebox" href="{% url iteration_export iteration.project.slug iteration.id %}">Export</a><br/>
               
               {% canwrite project %}
-                {% if iteration.locked %}
-                  <br/><a rel="facebox" href="{% url unlock_iteration iteration.project.slug iteration.id %}">Unlock</a><br/>                  
-                {% endif %}
                 <a rel="facebox" href="{% url iteration_import iteration.project.slug iteration.id %}">Import</a><br/>                  
               {% endcanwrite %}                
             </div>
+            
+            {% if iteration.locked %}
+              <div class="blue_box" style="background-color:#ffbbbb;">
+                <h1>Locked</h1>
+                <br/>       
+                
+                You can not edit the stories in it.
+                {% canwrite project %}       
+                <br/><a rel="facebox" href="{% url unlock_iteration iteration.project.slug iteration.id %}">Unlock Iteration</a><br/>                  
+                {% endcanwrite %}     
+              </div>
+            {% endif %}
           
         </div>
       
