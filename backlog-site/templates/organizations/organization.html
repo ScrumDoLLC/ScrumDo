@@ -12,13 +12,13 @@
 {% block body %}
 
     
-      <div class="right_panel">
-          <div class="blue_box">
+      <div class="big_right_panel">
+          <div class="news_box">
             <h1>{{ organization.name }}</h1>              
             {{ organization.description }}           
           </div>
           
-          <div class="blue_box">
+          <div class="news_box">
             <h1>Actions</h1>  
             <a href="{% url organization_edit organization.slug %}" rel="facebox">Edit Details</a>
           </div>
@@ -26,7 +26,7 @@
       
       
       
-    <div style="width: 550px;">
+    <div class="left_panel">
 
 
         <div class="sectionHeader">Projects</div>        

@@ -163,6 +163,7 @@ INSTALLED_APPS = (
     'projects',
     'organizations',
     'topics',
+    'activities',
     'django_extensions',
     'django_evolution',
     'forum',

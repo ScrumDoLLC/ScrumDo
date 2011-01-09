@@ -12,35 +12,26 @@
 {% load topics_tags %}
 {% load wiki_tags %}
 {% load theme_tags %}
+{% load iteration_tags %}
 
 {% block head_title %}{{ project.name }}{% endblock %}
 
 
+{% block panel %}
+{% include "projects/panel.html" %}  
+{% endblock %}
+
+{% block add_story %}
+    {% if user.is_authenticated %}
+    {% canwrite project %}
+      {% include "stories/add_story_form.html" %}
+    {% endcanwrite %}
+
+    {% endif %}
+{% endblock %}
+
 
 {% block body %}
-    
-    
-       {% canwrite project %}
-         {% include "stories/add_story_form.html" %}
-       {% endcanwrite %}
-       
-        <div class="right_panel">
-          {% if daysLeft %}
-            <div class="blue_box small_project_list">
-              <div class="daysLeft">{{ daysLeft }} Day{{ daysLeft|pluralize }} Left</div>
-            </div>
-          {% endif %}
-          
-          {% canwrite project %}
-            <div class="blue_box small_project_list">
-              <h1>Actions</h1>
-              <br/>              
-              <a href="#iterationDetails" rel="facebox">Edit Details</a><br/>
-              <a href="{% url stories iteration.project.slug  %}?iteration={{iteration.id}}">Add Stories From Backlog</a><br/>
-            </div>
-          {% endcanwrite %}
-        </div>
-      
         <h1>{{ iteration.name }}</h1>
 
         {% if iteration.start_date %}<i>{{iteration.start_date|date:"M d, Y"}} - {{iteration.end_date|date:"M d, Y"}}</i>{% endif %}
@@ -178,7 +169,7 @@
     }
    
     $(document).bind('beforeReveal.facebox', function() {
-        $('#facebox .body').width('880px');        
+        $('#facebox .body').width('500px');        
     });
     
     $(document).bind('afterReveal.facebox', function() {
@@ -243,7 +234,11 @@
        { 
          $("#story_hover_content").html("Loading...");
          $("#story_hover_window").fadeIn("fast");         
-         $("#story_hover_window").centerInClient();        
+         $("#story_hover_window").centerInClient();
+         $("#story_hover_window").css('left', 
+           $(".hoverDetails").position().left - 
+           ($("#story_hover_window").width() + 30));
+    
          story_id = $(this).attr("story_id");
          $.ajax({
            url: "/projects/project/" + project_slug + "/story/" + story_id + "/pretty",

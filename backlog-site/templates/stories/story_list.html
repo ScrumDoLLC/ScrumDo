@@ -11,15 +11,27 @@
 {% load topics_tags %}
 {% load wiki_tags %}
 {% load theme_tags %}
+{% load iteration_tags %}
 
 {% block head_title %}{{ project.name }}{% endblock %}
+
+{% block panel %}
+{% include "projects/panel.html" %}  
+{% endblock %}
+
+{% block add_story %}
+    {% if user.is_authenticated %}
+    {% canwrite project %}
+      {% include "stories/add_story_form.html" %}
+    {% endcanwrite %}
+
+    {% endif %}
+{% endblock %}
 
 {% block body %}
 
  <img style="float:right" src="/site_media/static/images/ajax-loader.gif" id="loadingIcon">
  <h1>Iteration Planning</h1>
- 
-  {% include "stories/add_story_form.html" %}
   
   <div id="columnContainer">
 

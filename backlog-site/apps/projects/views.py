@@ -2,6 +2,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.core.paginator import Paginator, InvalidPage
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
@@ -54,13 +55,19 @@ def home( request ):
   member_projects = [];
   organizations = [];
   activities=[]
+  next_page = False
   
   if request.user.is_authenticated():
     organizations = Organization.getOrganizationsForUser(request.user)
     activities = SubjectActivity.getActivitiesForUser(request.user)
+
+    paginator = Paginator(activities, 5)
+    page_obj = paginator.page(1)
+    activities = page_obj.object_list
+    next_page = page_obj.has_next()
+
     memberships = ProjectMember.objects.filter( user=request.user )
     for membership in memberships:
-
       try:
         
         if( membership.project.creator_id == request.user.id):
@@ -74,7 +81,8 @@ def home( request ):
   return render_to_response("homepage.html", {
        "my_projects":my_projects,
        "my_organizations": organizations,
-       "my_activities": activities,
+       "activities": activities,
+       "activities_next_page":next_page,
        "member_projects":member_projects,
        "now": datetime.datetime.now()
     }, context_instance=RequestContext(request))

@@ -11,9 +11,13 @@
 {% load topics_tags %}
 {% load wiki_tags %}
 {% load theme_tags %}
+{% load iteration_tags %}
 
 {% block head_title %}{{ project.name }}{% endblock %}
 
+{% block panel %}
+{% include "projects/panel.html" %}  
+{% endblock %}
 
 
 {% block body %}
