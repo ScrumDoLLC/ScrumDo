@@ -44,7 +44,42 @@ def persist_getvars(request):
     if len(getvars.keys()) > 0:
         return "?%s" % getvars.urlencode()
     return ''
-    
+
+@register.tag(name="notlocked")
+def isNotLocked(parser, token):
+  tag_name, story = token.split_contents()
+  nodelist = parser.parse(('endnotlocked',))
+  parser.delete_first_token()
+  return NotLockedNode(nodelist, story)
+
+class NotLockedNode(template.Node):
+    def __init__(self, nodelist, story):
+        self.nodelist = nodelist
+        self.story = story
+    def render(self, context):
+      if not context[self.story].iteration.locked:
+        output = self.nodelist.render(context)
+        return output
+      else:
+        return ""
+        
+@register.tag(name="locked")
+def istLocked(parser, token):
+  tag_name, story = token.split_contents()
+  nodelist = parser.parse(('endlocked',))
+  parser.delete_first_token()
+  return LockedNode(nodelist, story)
+
+class LockedNode(template.Node):
+    def __init__(self, nodelist, story):
+        self.nodelist = nodelist
+        self.story = story
+    def render(self, context):
+      if context[self.story].iteration.locked:
+        output = self.nodelist.render(context)
+        return output
+      else:
+        return ""        
     
 @register.tag(name="isadmin")
 def isadmin( parser, token):
@@ -82,7 +117,6 @@ class CanWriteNode(template.Node):
         return output
       else:
         return ""
-
 
 
 @register.tag(name="canread")

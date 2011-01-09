@@ -1,6 +1,7 @@
 {% load i18n %}
 {% load comments_tag %}
 {% load theme_tags %}
+{% load projects_tags %}
 
 <div id="story_area" style="width:950px">
 
@@ -9,6 +10,14 @@
    
     <h1>Story #{{story.local_id}}</h1><br/>
   
+    
+    
+    {% locked story %}
+      <div style="background-color:#ffaaaa ; text-align: center; min-height:32px;">
+        <h2>Read Only: The iteration this story belongs to is locked.</h2>
+      </div>
+    {% endlocked %}
+    
    <div id="story_details">
     <table>
       <tr><td>Summary:</td><td>{{form.summary}}    {{form.summary.errors}} </td></tr>
@@ -34,12 +43,24 @@
    
    <input type="hidden" name="return_type" value="{{return_type}}">
    <input type="hidden" name="rank" value="{{ story.rank }}">
-   <INPUT  TYPE="image" SRC="/site_media/static/images/updateStoryButton.png" >
+   {% notlocked story %}
+     <INPUT  TYPE="image" SRC="/site_media/static/images/updateStoryButton.png" >
+   {% endnotlocked %}
+   
+
  </form>
  
- <form method="POST" id="deleteForm" action="{% url delete_story project.slug story.id %}">
-   <INPUT style="float:right ; margin-top: -25px; margin-right: 5px" TYPE="image" SRC="/site_media/static/images/deleteButton.png" >
- </form>
+ {% locked story %}
+   <div style="background-color:#ffaaaa ; text-align: center; min-height:32px;">
+     <h2>Read Only: The iteration this story belongs to is locked.</h2>
+   </div>
+ {% endlocked %}
+ 
+ {% notlocked story %}
+   <form method="POST" id="deleteForm" action="{% url delete_story project.slug story.id %}">
+     <INPUT style="float:right ; margin-top: -25px; margin-right: 5px" TYPE="image" SRC="/site_media/static/images/deleteButton.png" >
+   </form>
+ {% endnotlocked %}
  
 <br/><br/><br/><br/>
 <h2>Comments {% silk "comments" %}</h2>
@@ -50,6 +71,8 @@
 </div>
 
 <script type="text/javascript" charset="utf-8">
+
+
 
       $("#story_area .commentForm").show();
       

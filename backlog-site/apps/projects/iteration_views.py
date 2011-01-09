@@ -112,18 +112,24 @@ def iteration_import(request, group_slug, iteration_id):
 def iteration_import(request, group_slug, iteration_id):
   project = get_object_or_404(Project, slug=group_slug)  
   iteration = get_object_or_404(Iteration, id=iteration_id)  
+  
+  if iteration.locked:
+    form_class = IterationImportFormWithUnlock
+  else:
+    form_class = IterationImportForm
+  
   write_access_or_403(project,request.user)    
   if request.method == "POST":
-    form = IterationImportForm(request.POST)
+    form = form_class(request.POST)
     if form.is_valid():
-      unlock = form.cleaned_data["unlock_iteration"]
+      unlock = form.cleaned_data.get("unlock_iteration",False)
       if unlock:
         iteration.locked = False
         iteration.save()
       status = import_export.importIteration(iteration, request.FILES['import_file'], request.user )
       return HttpResponseRedirect( reverse('iteration', kwargs={'group_slug':project.slug, 'iteration_id':iteration.id}) ) 
   else:
-    form = IterationImportForm()
+    form = form_class(  )
       
   return render_to_response('projects/import_options.html', { 'project':project, 'iteration':iteration, 'form': form,  }, context_instance=RequestContext(request))
 

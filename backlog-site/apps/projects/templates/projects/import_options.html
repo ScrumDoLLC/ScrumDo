@@ -9,6 +9,8 @@
    <form enctype="multipart/form-data" class="uniForm" id="project_form" method="POST" action="{% url iteration_import project.slug iteration.id %}">
        <fieldset class="inlineLabels">
            {{ form|as_uni_form}}
+
+           
            <div class="form_block">
                <div class="buttonHolder"><button class="primaryAction" type="submit" >Import</button></div>
            </div>
