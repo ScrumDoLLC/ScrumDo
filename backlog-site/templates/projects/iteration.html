@@ -47,13 +47,13 @@
             </div>
             
             {% if iteration.locked %}
-              <div class="blue_box" style="background-color:#ffbbbb;">
+              <div class="blue_box" style="background-color:#ffffaa;">
                 <h1>Locked</h1>
                 <br/>       
                 
-                You can not edit the stories in it.
+                You can not edit these stories.<br/>
                 {% canwrite project %}       
-                <br/><a rel="facebox" href="{% url unlock_iteration iteration.project.slug iteration.id %}">Unlock Iteration</a><br/>                  
+                <br/>{% silk "lock_open" %}<a rel="facebox" href="{% url unlock_iteration iteration.project.slug iteration.id %}">Unlock Iteration</a><br/>                  
                 {% endcanwrite %}     
               </div>
             {% endif %}
