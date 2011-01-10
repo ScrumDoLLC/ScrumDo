@@ -20,6 +20,7 @@
 # Django settings for code project.
 
 
+# Import all
 import os.path
 import posixpath
 import pinax
