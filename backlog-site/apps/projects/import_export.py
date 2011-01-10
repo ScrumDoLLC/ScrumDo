@@ -48,19 +48,22 @@ def _getHeaders( project ):
   
   # Some quick methods to define how imported field values are set in a story.
   # This is one place we can do any logic to clean up the data.  
+  def intOrString( value ):
+    try:
+      if int(value) == float(value):
+        return int(float(value))
+    except:
+      pass
+    return value
   def setId(story,value):
-    story.local_id=int(value)
+    story.local_id=intOrString(value)
   def setSummary(story,value):
     story.summary=str(value)
   def setDetail(story,value):
     story.detail=str(value)
   def setPoints(story,value):
-    try:
-      story.points=str(value)
-    except:
-      story.points = "?"
-    if story.points == "":
-      story.points = "?"
+    story.points=intOrString(value)
+
   def setStatus(story,value):
     try:
       story.status = Story.STATUS_REVERSE[value]
@@ -81,6 +84,7 @@ def _getHeaders( project ):
     story.extra_2 = str(value)
   def setExtra3(story,value):
     story.extra_3 = str(value)
+
   
   headers = [ (50,"Story ID", lambda story: story.local_id ,numeric_xf, setId),
              (350,"Summary", lambda story: story.summary,wrap_xf, setSummary),
@@ -245,8 +249,7 @@ def _importSingleRow( row, iteration, user):
       value = _getFieldFromImportData( row, header[1] )
       if value != None:
         try:
-          f = header[4]  # This should be a method capable of setting the property
-          logger.debug("Setting %s to %s" % (header[1], str(value) ) )        
+          f = header[4]  # This should be a method capable of setting the property          
           f(story, value)
         except:
           logger.debug("Failed to set %s to %s, ignoring." % (header[1], str(value) ) )
@@ -282,5 +285,25 @@ def _importXMLIteration(iteration, file, user):
   pass
 
 def _importCSVIteration(iteration, file, user):
-  pass
+  import_file = csv.reader( file , delimiter=',' ,  quoting=csv.QUOTE_ALL, escapechar='\\' )
+  headers = None
+  import_data = []
+  count = 0
+  for row in import_file:    
+    try:
+      if headers == None:
+        headers = row
+      else:
+        import_row = {}
+        for idx,header in enumerate(headers):        
+          import_row[header] = row[idx]
+          #logger.debug("Import field %s as %s"%(header, row[idx]) )
+        count += 1
+        import_data.append( import_row )      
+    except:
+      logger.warn("Failed to import CSV row")
+  logger.info("Found %d rows in a CSV file" % count)
+  _importData( import_data, iteration, user )
+    
+  
   
