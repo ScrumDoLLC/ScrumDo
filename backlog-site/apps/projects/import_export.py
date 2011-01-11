@@ -2,7 +2,8 @@ from django.http import HttpResponse
 import StringIO
 from xlrd import open_workbook
 import xlwt
-from xml.dom.minidom import Document
+from xml.dom.minidom import Document, parse
+
 import csv
 import re
 
@@ -159,8 +160,8 @@ def _exportXML( iteration ):
   response['Content-Disposition'] = 'attachment; filename=iteration.xml'
   return response
   
-def _toXMLNodeName( name ):
-  return name.replace(" ","_").lower()
+def _toXMLNodeName( name ):  
+  return re.sub('[^a-zA-Z0-9_-]',"",name.replace(" ","_").lower())
 
 def _exportCSV( iteration ):
   """ Exports the stories in an iteration as CSV """
@@ -282,7 +283,21 @@ def _importExcelIteration(iteration, file, user):
 
 
 def _importXMLIteration(iteration, file, user):
-  pass
+  xml = parse( file )
+  import_data = []
+  count = 0
+  for story_node in xml.getElementsByTagName("story"):    
+    attrs = story_node.attributes                           
+    import_row = {}
+    for attrName in attrs.keys():
+      import_row[attrName] = attrs[attrName].nodeValue
+    count += 1
+    import_data.append(import_row)
+  logger.info("Found %d rows in an XML file" % count)
+  _importData( import_data, iteration, user )  
+    
+  
+  
 
 def _importCSVIteration(iteration, file, user):
   import_file = csv.reader( file , delimiter=',' ,  quoting=csv.QUOTE_ALL, escapechar='\\' )
