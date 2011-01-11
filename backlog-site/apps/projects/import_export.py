@@ -1,11 +1,31 @@
-from django.http import HttpResponse
-import StringIO
-from xlrd import open_workbook
-import xlwt
-from xml.dom.minidom import Document, parse
+# ScrumDo - Agile/Scrum story management web application 
+# Copyright (C) 2011 ScrumDo LLC
+# 
+# This software is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+# 
+# This software is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+# 
+# You should have received a copy (See file COPYING) of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
+
+
+import StringIO
 import csv
 import re
+
+from xml.dom.minidom import Document, parse
+from django.http import HttpResponse
+
+import xlwt
+from xlrd import open_workbook
 
 from projects.models import Story
 
@@ -18,9 +38,9 @@ ezxf = xlwt.easyxf
 def exportIteration(iteration, format ):
   """ Exports an iteration, format should be xls, xml or csv. """
   logger.info("Exporting iteration %s %d" % (iteration.project.slug, iteration.id) )
-  if format == "xls":
+  if format.lower() == "xls":
     return _exportExcel( iteration )
-  elif format == "xml":
+  elif format.lower() == "xml":
     return _exportXML( iteration )
   else:
     return _exportCSV( iteration )
@@ -31,11 +51,12 @@ def importIteration(iteration, file , user):
       file can be either Excel, XML, or CSV """
   m = re.search('\.(\S+)', file.name)
 
-  if m.group(1) == "xml" :
+  if m.group(1).lower() == "xml" :
     return _importXMLIteration(iteration, file, user)
-  elif m.group(1) == "xls" :
+  elif m.group(1).lower() == "xls" :
     return _importExcelIteration(iteration, file, user)
   else:
+    # Assume CSV, hope for the best.
     return _importCSVIteration(iteration, file, user)
     
     
@@ -47,7 +68,7 @@ def _getHeaders( project ):
   wrap_xf = ezxf('align: wrap on, vert top')
   numeric_xf = ezxf('align: wrap on, vert top, horiz right')
   
-  # Some quick methods to define how imported field values are set in a story.
+  # Some methods to define how imported field values are set in a story.
   # This is one place we can do any logic to clean up the data.  
   def intOrString( value ):
     try:
@@ -118,13 +139,15 @@ def _exportExcel( iteration ):
   stories = iteration.stories.all().order_by("rank")
   w = xlwt.Workbook()
   ws = w.add_sheet('Iteration Export')
-  
   headers = _getHeaders(iteration.project)
   heading_xf = ezxf('font: bold on; align: wrap on, vert centre, horiz center')  
+  
+  # Write out a header row.
   for idx,header in enumerate(headers):
     ws.write(0,idx,header[1],heading_xf)
     ws.col(idx).width = 37*header[0]
 
+  # Write out all the data.
   for idx, story in enumerate(stories):
     for hidx, header in enumerate(headers):
       f = header[2]
@@ -152,9 +175,9 @@ def _exportXML( iteration ):
     for hidx, header in enumerate(headers):
       f = header[2]
       story_node.setAttribute(_toXMLNodeName(header[1]), str(f(story)).replace("\n"," ").replace("\r",""))
-      # TODO (Future Enhancement): There's a bug in the minidom implementation that doesn't convert newlines to their entities insite attributes, and there's
-      #       no good work-around I can find without monkey patching minidom itself
-
+      # TODO (Future Enhancement): There's a bug in the minidom implementation that doesn't convert newlines to their entities inside attributes, 
+      #      and there's no good work-around I can find without monkey patching minidom itself.
+      #      We should generally recommend people stick to excel or CSV files.
 
   response = HttpResponse(doc.toprettyxml(indent="  "), mimetype="text/xml") 
   response['Content-Disposition'] = 'attachment; filename=iteration.xml'
@@ -207,6 +230,10 @@ def _importData( data, iteration , user):
     else:
       failed += 1
   logger.info("Imported %d records, failed on %d" % (imported,failed))
+  if failed == 0:
+    user.message_set.create(message="Imported %d records." % imported )               
+  else:
+    user.message_set.create(message="Imported %d records, failed on %d" % (imported,failed))               
   return (imported,failed)
       
 
@@ -219,7 +246,7 @@ def _getFieldFromImportData( data, field_name ):
 
   rv = data.get(field_name)
   if( rv == None ):
-    # If we didn't find one, lets try anlternative naming...    
+    # If we didn't find one, lets try an alternative naming...    
     rv = data.get( _toXMLNodeName(field_name) )    
 
   return rv;
@@ -232,7 +259,7 @@ def _importSingleRow( row, iteration, user):
     if local_id != None:
       try:
         story = Story.objects.get( project=iteration.project, local_id=int(local_id) )  
-        logger.debug("Found story to update (%s)" % local_id)
+        logger.debug("Found story to update (%d)" % int(local_id) )
       except:
         # Story didn't exist already, so we'll be making a new one
         # This is a little dangerous if there was a story id set, since we'll now be ignoring
@@ -242,7 +269,7 @@ def _importSingleRow( row, iteration, user):
         logger.debug("Creating new story to import into.")
   
   
-    # I guess a user could move rows from one iteration export to another, so set it here.
+    # A user could move rows from one iteration export to another, so set it here. It'll probably be rare to actually happen.
     story.iteration = iteration
   
     headers = _getHeaders(iteration.project)
@@ -253,7 +280,7 @@ def _importSingleRow( row, iteration, user):
           f = header[4]  # This should be a method capable of setting the property          
           f(story, value)
         except:
-          logger.debug("Failed to set %s to %s, ignoring." % (header[1], str(value) ) )
+          logger.info("Failed to set %s to %s, ignoring." % (header[1], str(value) ) )
   
     story.save()
     return True
