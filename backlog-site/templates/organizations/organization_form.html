@@ -38,14 +38,12 @@
         success: function(responseText) { $("#story_{{story.id}}").hide(); $(document).trigger('close.facebox'); }
       });
       
-      // bind 'myForm' and provide a simple callback function 
       $(".comments_area form").ajaxForm({
-        replaceTarget: true,
-        target: $("#story_area"),
-        beforeSubmit: function(arr, $form, options) { 
-          $form.hide();
-        }
-        
+          replaceTarget: true,
+          target: $("#story_area"),
+          beforeSubmit: function(arr, $form, options) { 
+            $form.hide();
+          }        
       }); 
 
 </script>
