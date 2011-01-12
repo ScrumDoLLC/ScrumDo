@@ -44,6 +44,9 @@ from projects.forms import *
 from projects.access import *
 import projects.signals as signals
 
+import logging
+
+logger = logging.getLogger(__name__)
 
 # View called via ajax on the iteration or iteration planning pages.  Meant to set the status of 
 # a story, and then return an html snippet that can be replaced on the page with the new status
@@ -228,6 +231,7 @@ def stories(request, group_slug):
       story.creator = request.user
       story.iteration = project.get_default_iteration()
       story.rank = calculate_rank( project, int(form.cleaned_data['general_rank']) )
+      logger.info(story.summary)
       story.save()             
       signals.story_created.send( sender=request, story=story, user=request.user )
       request.user.message_set.create(message="New story created.")
