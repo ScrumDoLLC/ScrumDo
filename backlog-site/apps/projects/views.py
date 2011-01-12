@@ -85,12 +85,13 @@ def home( request ):
         pass
     
     
-  return render_to_response("homepage.html", {
-       "my_projects":my_projects,
-       "my_organizations": organizations,
-       "member_projects":member_projects
-    }, context_instance=RequestContext(request))
-
+    return render_to_response("homepage.html", {
+         "my_projects":my_projects,
+         "my_organizations": organizations,
+         "member_projects":member_projects
+      }, context_instance=RequestContext(request))
+  else:
+    return render_to_response("unauthenticated_homepage.html", context_instance=RequestContext(request))
 
 # The project admin page, this is where you can change the title, description, etc. of a project.
 @login_required
