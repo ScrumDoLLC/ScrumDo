@@ -1,0 +1,3 @@
+In <a href="{% url project_detail obj.story.project.slug %}">{{ obj.story.project.name }}</a>, <a href="{% url profile_detail obj.user.username %}" title="{{ obj.user.username }}">{{ obj.user.username }}</a> worked on Story {{ obj.story.summary }}:<br/>
+{{ obj.story.detail }}<br/><br/>
+On {{ obj.created }}.
