@@ -121,8 +121,10 @@ h1 {
 /* HEADER */
 
 #tabhead {
-    background: #035 url('/site_media/static/images/header.png') left top repeat-x;
-    position: relative;
+	background-color: #000;
+  background: -webkit-gradient(linear, left top, left bottom, from(#111), to(#333)); /* for webkit browsers */
+	background: -moz-linear-gradient(top,  #111,  #333); /* for firefox 3.6+ */
+  position: relative;
 }
 #tabhead .logo {
     height: 107px;
@@ -150,7 +152,15 @@ h1 {
 #subnav {
   margin: 0;
   height: 37px;
-	background: #d7e695 url('/site_media/static/images/header_lower.png') repeat-x;
+  
+  background-color: #d7e695;
+  background: -webkit-gradient(linear, left top, left bottom, from(#d7e695), to(#B6C873)); /* for webkit browsers */
+  background: -moz-linear-gradient(top,  #d7e695,  #B6C873);
+  border-top: 1px solid #fffeff;
+  border-bottom: 1px solid #666;
+  box-shadow: 0px 0px 5px #555;
+ -webkit-box-shadow: 0px 0px 5px #555;
+ -moz-box-shadow: 0px 0px 5px #555;
 }
 #subnav ul {
     float: right;
