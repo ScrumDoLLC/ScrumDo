@@ -12,14 +12,14 @@
 {% block body %}
 
     
-      <div class="right_panel">
-          <div class="blue_box">
+      <div class="big_right_panel">
+          <div class="news_box">
             <h1>Team: {{ team.name }}</h1>       
             Grants {{team.access_type}} permissions.
           </div>
       </div>
       
-    <div style="width: 550px;">
+    <div class="left_panel">
 
         {% if organization.projects.count %}
               <div class="sectionHeader">Projects</div>        

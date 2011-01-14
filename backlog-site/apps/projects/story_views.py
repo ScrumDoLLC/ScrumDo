@@ -44,7 +44,6 @@ from projects.forms import *
 from projects.access import *
 import projects.signals as signals
 
-
 # View called via ajax on the iteration or iteration planning pages.  Meant to set the status of 
 # a story, and then return an html snippet that can be replaced on the page with the new status
 @login_required
@@ -105,6 +104,8 @@ def reorder_story( request, group_slug, story_id):
     story.save()
     
     stories = project.stories.all().filter(iteration=iteration).order_by("rank")
+    story.activity_signal.send(sender=Story, news=request.user.username + " reordered story \"" +story.summary + "\" in iteration\"" +iteration.name+"\" for project " +project.name, user=request.user, story=story, action="reordered" ,object=story.summary, context=project.slug)
+
     
     if request.POST.get("action","") == "reorder" :
       # For now, a stupid reorder everything algorithm
@@ -155,7 +156,7 @@ def story( request, group_slug, story_id ):
     write_access_or_403(project,request.user)
     form = StoryForm( project, request.POST, project, instance=story) # A form bound to the POST data    
 
-    if form.is_valid(): # All validation rules pass      
+    if form.is_valid(): # All validation rules pass
       story = form.save(  )      
       signals.story_updated.send( sender=request, story=story, user=request.user )
 
@@ -228,8 +229,8 @@ def stories(request, group_slug):
       story.creator = request.user
       story.iteration = project.get_default_iteration()
       story.rank = calculate_rank( project, int(form.cleaned_data['general_rank']) )
-      story.save()             
-      signals.story_created.send( sender=request, story=story, user=request.user )
+      story.save()
+      story.activity_signal.send(sender=Story, news=request.user.username + " worked on story\"" +story.summary + "\" in \"" +project.name+"\"", user=request.user,action="saved" ,object=story.summary, story=story, context=project.slug)
       request.user.message_set.create(message="New story created.")
       form = StoryForm(project)
   else:
@@ -257,7 +258,8 @@ def import_file(request, group_slug):
       form = ImportForm()
       
   return render_to_response("projects/import.html", {
-           "form":form,
+          "project": project,
+          "form":form,
         }, context_instance=RequestContext(request))
 
 
@@ -274,8 +276,8 @@ def processImport( project, file , user):
     except:
       points = "?"
     story = Story( project=project, summary=summary, detail=detail, rank=0, local_id=project.stories.count()+1, creator=user, points=points, iteration=project.get_default_iteration())
-    story.save()   
-    signals.story_created.send( sender=file, story=story, user=user )
+    story.save()
+  #story.activity_signal.send(sender=Story, news=request.user.username + " imported\"" +file.name + "\" into \"" +project.name+"\"", user=request.user,action="imported" ,object=file.name, context=project.slug)
   user.message_set.create(message=("%d stories imported" % count))
 
 def pretty_print_story(request, group_slug, story_id):

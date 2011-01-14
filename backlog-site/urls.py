@@ -19,7 +19,7 @@
 from django.conf.urls.defaults import *
 from django.conf import settings
 import views
-
+import feeds
 
 from django.views.generic.simple import direct_to_template
 
@@ -34,6 +34,12 @@ if settings.ACCOUNT_OPEN_SIGNUP:
 else:
     signup_view = "signup_codes.views.signup"
 
+feeds = {
+    'project':feeds.ProjectStories,
+    'current':feeds.ProjectCurrentStories,
+    'iteration':feeds.ProjectIterationStories,
+}
+
 
 urlpatterns = patterns('',
     url(r'^$', "projects.views.home" , name="home"),
@@ -47,6 +53,7 @@ urlpatterns = patterns('',
     url(r'^account/signup/$', signup_view, name="acct_signup"),
     (r'^extras/', include('extras.urls')),    
     (r'^forum/', include('forum.urls')),
+    (r'^feeds/(?P<url>.*)/$', 'django.contrib.syndication.views.feed', {'feed_dict': feeds}),
     (r'^about/', include('about.urls')),
     (r'^account/', include('account.urls')),
     (r'^openid/(.*)', PinaxConsumer()),
@@ -57,7 +64,8 @@ urlpatterns = patterns('',
     (r'^tagging_utils/', include('tagging_utils.urls')),
     (r'^attachments/', include('attachments.urls')),
     (r'^projects/', include('projects.urls')),    
-    (r'^organization/', include('organizations.urls')),        
+    (r'^activities/', include('activities.urls')),    
+    (r'^organization/', include('organizations.urls')),    
     (r'^admin/(.*)', admin.site.root),
 )
 

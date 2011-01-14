@@ -14,119 +14,22 @@
 {% load iteration_tags %}
 
 {% block head_title %}{{ project.name }}{% endblock %}
-
-
-
-{% block body %}
     
+
+{% block panel %}
+{% include "projects/panel.html" %}  
+{% endblock %}
+
+
+{% block add_story %}
     {% if user.is_authenticated %}
     {% canwrite project %}
       {% include "stories/add_story_form.html" %}
     {% endcanwrite %}
-        <div class="right_panel">
-            <div class="blue_box">
-              <h1>{{ project.name }}</h1>                    
-              {{ project.description }}
-              <p>
-                  {% show_tags_for project %}
-              </p>
-            </div>
-            
-           <div class="project_stats blue_box">
-              <h1>Stats <a href="#statsHelp" rel="facebox">{% silk "help" %}</a></h1>
-              {% if project.velocity %}
-              Velocity: <b>{{project.velocity}}</b> <br/>
-              {% endif %}
-              Stories: <b>{{ project.stories.count }}</b> <br/>
-              {% if project.iterations_left %}
-              Iterations Left: <b>{{ project.iterations_left }}</b><br/>
-              {% endif %}
-            </div>
-
-            {% canwrite project %}
-             {% if project.story_queue.count %}
-              <div class="blue_box">            
-                <h1>Syncronize</h1>
-                <div class="iterationHeader"><a href="{% url story_queue_url project.slug %}">Import Stories</a> ({{project.story_queue.count}})</div>
-              </div>
-             {% endif %}
-            {% endcanwrite %}
-
-            <div class="iterations">
-              <h1>Iterations</h1>
-              {% for iteration in project.iterations.all %}
-                  <div class="iterationHeader">{% iteration_name iteration %} </div> 
-              {% endfor %}              
-              {% canwrite project %}
-              <br/><br/>
-              <a href="{% url iteration_create project.slug %}"><img  src="/site_media/static/images/addIterationButton.png"></a>
-              {% endcanwrite %}
-            </div>
-            
-            
-             <div class="blue_box">
-                <h1>Options</h1>              <br/>
-                {% canwrite project %}
-                 <div class="iterationHeader"><a href="{% url import_file project.slug %}">Import File</a></div>
-                {% endcanwrite %}
-                {% isadmin project %}                  
-                    <div class="iterationHeader"><a href="{% url project_admin project.slug %}" >{% trans "Project Admin" %}</a></div>
-                {% endisadmin %}                
-              </div>
-            
-             {% if project.organization %}    
-             <div class="project_stats blue_box">        
-                <h1>{{project.organization.name}}</h1>
-                <ul>
-                {% for team in project.teams.all %}
-                 <li><a href="{% url team_detail organization_slug=project.organization.slug team_id=team.id %}">{{ team.name }}</a></li>
-                {% endfor %}
-                </ul>
-              </div>
-              {% endif %}
-            
-            <div class="members">
-                <h2>{% trans "Members" %}</h2>
-                <table width="100%" >
-                    {% for member in project.members.all %}
-                        {% if forloop.counter0|divisibleby:"2" %}<tr>{% endif %}
-                        <td>
-                            <div class="avatar">{% avatar member.user 40 %}</div>
-                            <div class="details"><a href="{% url profile_detail member.user.username %}" title="{{ member.user.username }}">{{ member.user.username }}</a></div>
-                        </td>
-                        {% if forloop.counter0|add:"1"|divisibleby:"2" %}</tr>{% endif %}
-                    {% endfor %}
-                    {% if project.members.all|length|divisibleby:"2" %}{% else %}</tr>{% endif %}
-                      
-
-                </table>
-                 {% isadmin project %} 
-                 <hr/>
-                          <form id="add-member" method="POST" action="">
-                                  {{ adduser_form.non_field_errors }}
-                                  {{ adduser_form.recipient }}    {{adduser_form.recipient.errors}}
-                                  <input type="hidden" name="action" value="add" />
-                                  <input type="image" src="/site_media/static/images/addMemberButton.png" />
-                          </form>
-
-                {% endisadmin %}
-                
-                
-            </div>
-            
-           
-            
-            {% trans "Slug:" %} <tt>{{ project.slug }}</tt><br />
-            {% trans "Creator:" %} <a href="{% url profile_detail project.creator.username %}">{{ project.creator }}</a><br />
-            {% trans "Created:" %} {{ project.created|date }}
-
-            <hr/>
-           
-            
-        </div>
-
     {% endif %}
-    
+{% endblock %}
+
+{% block body %}
     <div style="width: 550px;">
 
                 

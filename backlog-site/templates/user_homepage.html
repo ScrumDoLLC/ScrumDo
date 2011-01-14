@@ -1,12 +1,17 @@
 {% load theme_tags %}
 {% load projects_tags %}
-
+{% load avatar_tags %}
 
 <div class="big_right_panel">
     
+ <div class="news_box">
+<h1>A message from ScrumDo:</h1>
+  This is a beta look at ScrumDo.  We're still actively working on the site fixing things, adding new features, and tweaking things already here.  
+  We'll do everything we can to make sure any work saved here is safe, but we can't guarentee anything.
+</div>
 
     
-    <div class="blue_box small_project_list">
+    <div class="news_box small_project_list">
       <h1>Your Projects</h1>
       <p>Projects that you have created.</p>
 
@@ -23,7 +28,7 @@
     </div>
     
     {% if member_projects %}
-      <div class="blue_box small_project_list">
+      <div class="news_box small_project_list">
         <h1>Other Projects</h1>
         <p>Projects that others own, but you have access to.</p>
 
@@ -37,7 +42,7 @@
     {% endif %}
     
     
-    <div class="blue_box small_project_list">
+    <div class="news_box small_project_list">
       <h1>Your Organizations</h1>
       <p>Organizations that you are a member of.</p>
     
@@ -61,14 +66,143 @@
 
 
 
-
-<!-- ACTIVITY FEED SHOULD GO HERE... -->
-<div style="padding:15px; padding-right:20px;">
-<h2>A message from ScrumDo</h2>
+<div class="news_panel">
+  <img style="float:right; display: none" src="/site_media/static/images/ajax-loader.gif" id="loadingIcon">
+<div class="news_box small_newsfeed_list">
+  <h1>News Feed</h1>
   <p >
-  This is a beta look at ScrumDo.  We're still actively working on the site fixing things, adding new features, and tweaking things already here.  
-  We'll do everything we can to make sure any work saved here is safe, but we can't guarentee anything.
+    <div id="feedContent">
+      {% include "activities/activity_list.html" %}
+    </div>
+    <div id="feedAnchor">
+    </div>
+{% comment %}
+  {% for act in my_activities %}
+  <div class="avatar"><a href="{% url profile_detail act.user.username %}" title="{{ act.user.username }}">{% avatar act.user 40 %} </a> <a href="{% url profile_detail act.user.username %}" title="{{ act.user.username }}">{{ act.user.username }}</a></div>
+  {% ifnotequal None act.news %}
+  {{act.news}}
+
+  {% else %}
+ <div class="details">{{  act.action }} {{ act.object}} in  {{ act.context}}</div>
+
+  {% endifnotequal %}
+ <br/>
+  <abbr>
+  {{ act.created|timesince }} ago  &nbsp;&nbsp; |&nbsp; Like-Coming Soon &nbsp;| &nbsp;Comment - Coming Soon
+  </abbr>
+
+  <br/>
+  <hr/>
+  {% endfor %}
+{% endcomment %}
   </p>
+</div>
 </div>
 
 
+<script type="text/javascript">
+
+// this code from:
+// http://www.palewire.com/posts/2010/11/07/django-recipe-twitter-style-infinite-scroll/
+
+// Scroll globals
+var pageNum = 1;
+var hasNextPage = {{ activities_next_page|lower }}; // Indicates whether to expect another page after this one
+var baseUrl = '/activities/user/';
+
+
+// loadOnScroll handler
+var loadOnScroll = function() {
+   // If the current scroll position is past out cutoff point...
+    if ($(window).scrollTop() > $(document).height() - ($(window).height()*3)) {
+        // temporarily unhook the scroll event watcher so we don't call a bunch of times in a row
+        $(window).unbind();
+        // execute the load function below that will visit the JSON feed and stuff data into the HTML
+        loadItems();
+    }
+};
+
+var loadItems = function() {
+    // If the next page doesn't exist, just quit now 
+    if (hasNextPage === false) {
+        return false
+    }
+    // Update the page number
+    pageNum = pageNum + 1;
+    // Configure the url we're about to hit
+    var url = baseUrl + pageNum;
+    $.ajax({
+        url: url, 
+        success: function(html) {
+            // Update global next page variable
+            // Pop all our items out into the page
+            $("#feedContent").append(html);
+        },
+        error: function () {
+        hasNextPage = false;
+},
+        complete: function(html, textStatus){
+            // Turn the scroll monitor back on
+            $(window).bind('scroll', loadOnScroll);
+            activateLinks();
+        }
+    });
+};
+
+
+
+function like(activity_id) {
+      $.ajax({
+        url: "/activities/like/"+activity_id,
+        data:{},
+        success: function(html){
+          $("#"+activity_id+"like").html(html);  
+        }
+      });
+
+}
+    function loadNewsFeed()
+    {
+      $("#loadingIcon").show();
+      $("#feedContent").html("");
+      var n;
+      for(n = 1; n <= pageNum; n++) {
+      $.ajax({
+        url: "/activities/user/1",
+        data:{},
+        success: function(html){
+          $("#feedContent").append(html);
+            $(window).bind('scroll', loadOnScroll);
+          activateLinks();
+        }
+      });
+   }
+          $("#loadingIcon").hide();
+
+}
+    
+
+ function activateLinks () {
+     $(".commentLink").click( function() 
+        {                    
+            $(this).parent().children(".commentForm").show();
+            $(this).hide();
+            return false;
+        } );
+
+        $(".commentForm form").ajaxForm(function () 
+           { loadNewsFeed(); activateLinks();});
+
+        $(".responses form").ajaxForm(function () {
+		      loadNewsFeed(); activateLinks();});
+
+}
+
+
+  $(document).ready(function() {
+   $(window).bind('scroll', loadOnScroll);
+          activateLinks();
+
+         })     
+
+</script>

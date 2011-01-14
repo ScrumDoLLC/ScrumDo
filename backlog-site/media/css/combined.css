@@ -45,16 +45,39 @@ td {
     padding: 0;
 }
 h1 {
+    border-bottom: 1px solid #000;
+    font-weight: normal;
     margin: 0;
+    margin-bottom: 10px;
+    margin-top: 10px;
 }
 
+h2 {
+    font-weight: normal;
+}
 
+#body_outer {
+    width: 100%;
+    clear: both;
+    position: relative;
+}
 
 #body {
-    clear: both;
     margin: 0 auto;
     padding: 10px;
-    width: 800px;
+    padding-top: 0px;
+    padding-right: 180px;
+    width: 640px;
+}
+
+#panel {
+    width: 180px;
+    position: absolute;
+    right: 0px;
+    top: 144px;
+    z-index: 999;
+    background-color: #F1F2DF;
+    border-left: 1px solid #c2c2b1;
 }
 #footer {
     color: #999; /* footer text colour */
@@ -121,7 +144,7 @@ h1 {
 /* HEADER */
 
 #tabhead {
-    background: #035 url('/site_media/static/images/header.png') left top repeat-x;
+    background: #3b2724 url('/site_media/static/images/header.png') left top repeat-x;
     position: relative;
 }
 #tabhead .logo {
@@ -150,7 +173,7 @@ h1 {
 #subnav {
   margin: 0;
   height: 37px;
-	background: #d7e695 url('/site_media/static/images/header_lower.png') repeat-x;
+  background: #f1f2df url('/site_media/static/images/header_lower.png') repeat-x;
 }
 #subnav ul {
     float: right;
@@ -163,16 +186,17 @@ h1 {
 }
 #subnav ul a:link, #subnav ul a:visited {
     float: left;
-    font-weight: bold;
+/*    font-weight: bold;*/
     text-decoration: none;
-    color: #fff;
+    color: #3b2724;
     font-size: 16px;
+    display: block;
     padding: 5px 20px 4px;
-	text-shadow: #868888 1px 1px 2px;
+    text-shadow: #c2c2b1 1px 1px 1px;
 }
 #subnav ul a:hover {
     color: #FFF;
-    background: #9BC;
+    background: #ccc;
 }
 
 
@@ -205,8 +229,11 @@ ul.errorlist {
 /* MESSAGES */
 
 ul#messages {
-    margin: 0 0 10px 0;
+    margin: 0px;
+    margin-botton: 10px;
+    margin-right: 0px;
     padding: 0;
+    
     list-style: none;
 }
 ul#messages li {
@@ -273,20 +300,33 @@ div.profile_info p {
     margin: 0;
 }
 div.left_panel {
-    width: 550px;
+    width: 400px;
 }
 div.right_panel {
-    margin-top: 20px;
-    width: 200px;
+/*    margin-top: 20px;*/
+    margin-right: -180px;
+    width: 180px;
     float: right;
     z-index: 999;
+    background-color: #F1F2DF;
+    border-left: 1px solid #c2c2b1;
 }
 
 div.big_right_panel {
-    margin-top: 20px;
+/*    margin-top: 20px;*/
+    padding: 0;
+    margin-left: 20px;
+    margin-right: -180px;
     width: 400px;
     float: right;
     z-index: 999;
+}
+div.news_panel {
+    width: 400px;
+}
+
+div.news_panel #id_comment {
+    width: 200px;
 }
 
 /* @override 
@@ -384,7 +424,7 @@ ul.tabs {
 #facebox .body {
     padding: 10px;
     background: #fff;
-    width: 570px;
+    width: 470px;
 }
 
 #facebox .loading {
@@ -605,7 +645,7 @@ table.email_list td {
    .uniForm legend{ font-weight: bold; font-size: 100%; margin: 0; padding: 1.5em 0; }
   
     .uniForm .ctrlHolder{ padding: 1em; border-bottom: 1px solid #efefef; }
-    .uniForm .ctrlHolder.focused{ background: #fffcdf; }
+    .uniForm .ctrlHolder.focused{ background: #e8f7ff; }
     
     .uniForm .inlineLabels .noLabel{}
     
@@ -877,20 +917,10 @@ p.expand_collapse_all a {
 /* GROUPS */
 
 div.groups {
-    background: #DEF;
     padding: 8px;
     margin-bottom: 20px;
 }
 div.groups h2 {
-    margin: 0 0 5px 0;
-    padding: 0;
-}
-div.members {
-    background: #DEF;
-    padding: 8px;
-    margin-bottom: 20px;
-}
-div.members h2 {
     margin: 0 0 5px 0;
     padding: 0;
 }
@@ -975,4 +1005,12 @@ table.topics .comment_stats {
 
 #id_recipient {
   width: 90%;
+}
+
+div.footer {
+	position:absolute;
+	bottom:0;
+	text-align: center;
+    height:60px;   /* Height of the footer */
+
 }

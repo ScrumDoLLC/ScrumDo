@@ -1,0 +1,21 @@
+{% load i18n %}
+{% load avatar_tags %}
+{% load comments_tag %}
+
+  {% for act in activities %}
+  <div class="avatar"><a href="{% url profile_detail act.user.username %}" title="{{ act.user.username }}">{% avatar act.user 40 %} </a> <a href="{% url profile_detail act.user.username %}" title="{{ act.user.username }}">{{ act.user.username }}</a></div>
+  {% ifnotequal None act.news %}
+  {{act.news}}
+
+  {% else %}
+ <div class="details">{{  act.action }} {{ act.object}} in  {{ act.context}}</div>
+
+  {% endifnotequal %}
+ <br/>
+  <abbr>
+  {{ act.created|timesince }} ago  &nbsp;&nbsp; {#| &nbsp; <span id="{{act.id}}like"> {{ act.like }}</span> <a href="#" onclick="like({{act.id}})">Likes</a>#}
+  </abbr>
+{# {% comments act %} #}
+  <br/>
+  <hr/>
+  {% endfor %}
