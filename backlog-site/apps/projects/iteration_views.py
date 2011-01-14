@@ -34,6 +34,8 @@ from projects.forms import *
 from projects.access import *
 import projects.import_export as import_export
 
+from story_views import handleAddStory
+
 @login_required
 def iteration(request, group_slug, iteration_id):
    project = get_object_or_404( Project, slug=group_slug )
@@ -57,7 +59,7 @@ def iteration(request, group_slug, iteration_id):
    except:
     pass
    
-   add_story_form = StoryForm(project)
+   add_story_form = handleAddStory(request, project)
    
    return render_to_response("projects/iteration.html", {
        "iteration": iteration,

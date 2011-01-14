@@ -49,6 +49,8 @@ from projects.models import Project, ProjectMember, Iteration, Story
 from projects.forms import *
 from organizations.models import Organization
 
+from story_views import handleAddStory
+
 TOPIC_COUNT_SQL = """
 SELECT COUNT(*)
 FROM topics_topic
@@ -343,7 +345,7 @@ def project(request, group_slug=None, form_class=ProjectUpdateForm, adduser_form
     else:
         adduser_form = adduser_form_class(project=project)
     
-    add_story_form = StoryForm(project)
+    add_story_form = handleAddStory(request, project)
     
     return render_to_response(template_name, {
         "project_form": project_form,
