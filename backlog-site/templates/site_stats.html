@@ -38,6 +38,11 @@
                });
         </script>
         
+        <h2>Top Projects by story count:</h2>
+        {% for project in top_projects %}
+          {{ project.0 }} <a href="{% url project_detail project.2 %}">{{ project.2 }}</a><br/>
+        {% endfor %}
+        
         
 
     
