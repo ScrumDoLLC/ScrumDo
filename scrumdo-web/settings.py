@@ -89,7 +89,7 @@ STATIC_URL = '/site_media/static/'
 
 # Additional directories which hold static files
 STATICFILES_DIRS = (
-    ('backlog-site', os.path.join(PROJECT_ROOT, 'media')),
+    ('scrumdo-web', os.path.join(PROJECT_ROOT, 'media')),
     ('pinax', os.path.join(PINAX_ROOT, 'media', PINAX_THEME)),
 )
 
@@ -125,7 +125,7 @@ MIDDLEWARE_CLASSES = (
 #    'debug_toolbar.middleware.DebugToolbarMiddleware'
 )
 
-ROOT_URLCONF = 'backlog-site.urls'
+ROOT_URLCONF = 'scrumdo-web.urls'
 
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_ROOT, "templates"),
