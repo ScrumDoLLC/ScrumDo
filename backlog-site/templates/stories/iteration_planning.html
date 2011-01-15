@@ -99,6 +99,8 @@
       
       </ul>
     </div> <!-- End backlog story_column -->
+
+
   </div><!-- End columnContainer -->
   
 
@@ -106,9 +108,15 @@
   <div id="addIterationDiv" style="display:none;">   
   </div>
   
+
+  <div id="story_hover_window" >
+     <div id="story_hover_content">
+     </div>
+  </div>
+  
   <div style="display:none"> 
  
-
+<script src="{{ STATIC_URL }}js/story_hover.js" type="text/javascript"></script>        
 <script type="text/javascript" charset="utf-8">
 
   {# Inject some page values into javascript variables so we know them at runtime. #}  
@@ -167,6 +175,7 @@
         $("#iteration_column").attr("iteration_id", iterationID);      
         calculatePoints("#iteration_column","#iteration_points");
         $("#loadingIcon").hide();
+        $(".hoverDetails").hover( displayStoryHover, hideStoryHover );
       }
     });
   }

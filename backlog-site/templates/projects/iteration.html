@@ -88,6 +88,9 @@
 {% endblock %}
 
 {% block extra_body %}
+
+<script src="{{ STATIC_URL }}js/story_hover.js" type="text/javascript"></script>        
+
 <script type="text/javascript">
 
     var project_slug = "{{ iteration.project.slug }}";
@@ -217,34 +220,7 @@
     }
 
 
-    // The story-hover is that eye-icon thing that shows the full story when you hover over it.
-    var popupStatus = 0;  
-    function displayStoryHover()
-    {
-       if(popupStatus==0)
-       { 
-         $("#story_hover_content").html("Loading...");
-         $("#story_hover_window").fadeIn("fast");         
-         $("#story_hover_window").centerInClient();
-         $("#story_hover_window").css('left', 
-           $(".hoverDetails").position().left - 
-           ($("#story_hover_window").width() + 30));
-    
-         story_id = $(this).attr("story_id");
-         $.ajax({
-           url: "/projects/project/" + project_slug + "/story/" + story_id + "/pretty",
-           type: "GET",
-           success: function(data) { $("#story_hover_window").html(data); }
-         });
-         popupStatus = 1;           
-       }      
-    }
-    
-    function hideStoryHover()
-    {
-      $("#story_hover_window").fadeOut("fast");
-      popupStatus = 0;
-    }
+ 
     
      
     $(document).ready(function() {

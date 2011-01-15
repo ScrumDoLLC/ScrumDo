@@ -13,7 +13,7 @@
   </div>
   
   <span class="storyIcons">
-    <a onclick="jQuery('#todoButtons_{{story.id}}').show(); return false;" href="#">{% notlocked story %}<img title="Change Status" src="/site_media/static/pinax/images/silk/icons/control_play_blue.png" /></a>{% endnotlocked %}<a onclick="jQuery.facebox({ ajax: '/projects/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=mini'}); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}"><img title="Story Details" src="/site_media/static/pinax/images/silk/icons/magnifier.png" /></a></span>
+    <a class="hoverDetails" story_id="{{ story.id }}" href="#">{% silk "eye" %}</a><a onclick="jQuery('#todoButtons_{{story.id}}').show(); return false;" href="#">{% notlocked story %}<img title="Change Status" src="/site_media/static/pinax/images/silk/icons/control_play_blue.png" /></a>{% endnotlocked %}<a onclick="jQuery.facebox({ ajax: '/projects/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=mini'}); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}"><img title="Story Details" src="/site_media/static/pinax/images/silk/icons/magnifier.png" /></a></span>
   <h1><span style="color:#cccccc;">#{{story.local_id}}</span> {{ story.summary }}</h1>
 
   {% filter truncatewords:"20" %}
