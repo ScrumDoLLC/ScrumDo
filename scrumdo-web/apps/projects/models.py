@@ -201,6 +201,7 @@ class Story( models.Model ):
   POINT_CHOICES = (
       ('?', '?'), 
       ('0', '0'),
+      ('0.5','0.5'),      
       ('1', '1'),
       ('2', '2'),
       ('3', '3'), 
@@ -244,8 +245,13 @@ class Story( models.Model ):
 
 
   def points_value(self):
+    
+    # the float() method understands inf!
+    if self.points.lower() == "inf" :
+      return 0
+      
     try:
-      return int(self.points)
+      return float(self.points)
     except:
       return 0
   

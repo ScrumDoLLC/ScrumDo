@@ -8,12 +8,15 @@ def calculatePoints( stories ):
   points_claimed = 0;
   for story in stories:
     try:
-      story_points = int(story.points);
+      story_points = story.points_value()      
       points_total += story_points
+      # print "%d %f" % ( story.id,story_points)
       if( story.status == Story.STATUS_DONE):
         points_claimed += story_points
     except ValueError:
       pass # probably ? or infinity
+      
+  #print (points_total, points_claimed)
   return (points_total, points_claimed)
 
 
@@ -35,7 +38,7 @@ def calculateProject( project ):
       for story in iteration.stories.all():
         if story.status == Story.STATUS_DONE:
           try:
-            points_total += int(story.points)
+            points_total += story.points_value()
           except ValueError:
             pass # probably ? or infinity
   
@@ -49,14 +52,14 @@ def calculateProject( project ):
   
   project.save();
       
-  print "%d / %d / %d / %s " % (project.velocity, log.points_total, log.points_claimed, project.name );
+  #print "%d / %d / %d / %s " % (project.velocity, log.points_total, log.points_claimed, project.name );
   
   for iteration in project.iterations.filter( start_date__lte=tomorrow, end_date__gte=yesterday):
     if( iteration != project.get_default_iteration() ):    
       points = calculatePoints( iteration.stories.all() );
       if points[0] > 0:  # only logging active iterations with stuff in them
         log = PointsLog( points_claimed=points[1], points_total=points[0], related_object=iteration)
-        print ">  %d / %d / %s " % (log.points_total, log.points_claimed, iteration.name );
+        #print ">  %d / %d / %s " % (log.points_total, log.points_claimed, iteration.name );
         log.save();
 
 
