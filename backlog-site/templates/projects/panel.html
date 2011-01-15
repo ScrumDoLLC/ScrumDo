@@ -110,6 +110,7 @@
                 <div class="big_links">
                   {% isadmin project %}                  
                      <a href="{% url project_admin project.slug %}" >{% trans "Project Admin" %}</a><br/>
+                     <a href="{% url project_extras_url project.slug %}" >{% trans "Extras" %}</a><br/>
                   {% endisadmin %}
 		            </div>
               </div>
