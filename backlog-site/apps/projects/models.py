@@ -106,7 +106,12 @@ class Project(Group):
             members.append(member)
       return members
       
-    
+    def get_member_by_username(self, username):
+      members = self.all_members()
+      for member in members:
+        if member.username == username:
+          return member
+      return None
 
     def hasReadAccess( self, user ):
       if self.creator == user:
@@ -157,6 +162,7 @@ class Iteration( models.Model):
   project = models.ForeignKey(Project, related_name="iterations")
   default_iteration = models.BooleanField( default=False )
   points_log = generic.GenericRelation( PointsLog )
+  locked = models.BooleanField( default=False )
   
   activity_signal = django.dispatch.Signal(providing_args=["news", "user","action","context"])
   activity_signal.connect(SubjectActivity.activity_handler)
@@ -210,6 +216,10 @@ class Story( models.Model ):
       (2, "In Progress"),
       (3, "Reviewing"),
       (4, "Done")   )
+  STATUS_REVERSE = {"TODO":STATUS_TODO,
+                    "In Progress":STATUS_DOING,
+                    "Reviewing":STATUS_REVIEWING,
+                    "Done":STATUS_REVIEWING }
   
   rank = models.IntegerField() 
   summary = models.TextField( )
@@ -232,7 +242,6 @@ class Story( models.Model ):
   activity_signal = django.dispatch.Signal(providing_args=["news", "user","action", "story", "context"])
   activity_signal.connect(SubjectActivity.activity_handler)
 
-  
 
   def points_value(self):
     try:

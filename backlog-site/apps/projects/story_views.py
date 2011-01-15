@@ -44,6 +44,10 @@ from projects.forms import *
 from projects.access import *
 import projects.signals as signals
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 # View called via ajax on the iteration or iteration planning pages.  Meant to set the status of 
 # a story, and then return an html snippet that can be replaced on the page with the new status
 @login_required
@@ -133,14 +137,16 @@ def mini_story( request, group_slug, story_id):
     }, context_instance=RequestContext(request))
 
 
-# calculates the rank a new story should have for a project based off of 3 general rankings.
-# 0=top, 1=middle, 2=bottom
-def calculate_rank( project, general_rank ):
+def _calculate_rank( iteration, general_rank ):
+  """ calculates the rank a new story should have for a project based off of 3 general rankings.
+  0=top, 1=middle, 2=bottom 
+  TODO (Improvement) - I'd like to re-think how ranking is done for both initial and adjustments of ranks.
+  """
   if( general_rank == 0):
     return 0 
   if( general_rank == 1):
-    return round( project.stories.all().count() / 2)
-  return project.stories.all().count()+1
+    return round( iteration.stories.all().count() / 2)
+  return iteration.stories.all().count()+1
 
 
 # Returns the edit-story form, with minimal html wrapper.  This is useful for displaying within
@@ -212,6 +218,36 @@ def stories_iteration(request, group_slug, iteration_id):
   }, context_instance=RequestContext(request))
 
 
+def handleAddStory( request , project ):
+  """ Handles the add story form.  
+      Various views have an add story form on them.  This method handles that,
+      and returns a new StoryForm object the view can use. """
+  if request.method == "POST" and request.POST.get("action") == "addStory":
+    form = StoryForm(project, request.POST) # A form bound to the POST data
+    if form.is_valid(): # All validation rules pass
+      story = form.save( commit=False )
+      story.local_id = project.getNextId()
+      story.project = project
+      story.creator = request.user
+      iteration_id = request.POST.get("iteration",None)
+      if iteration_id != None:
+        iteration = get_object_or_404(Iteration, id=iteration_id)
+        if iteration.project != project:
+          # Shenanigans!
+          raise PermissionDenied()
+        story.iteration = iteration
+      else:
+        story.iteration = project.get_default_iteration()
+      story.rank = _calculate_rank( story.iteration, int(form.cleaned_data['general_rank']) )
+      logger.info(story.summary)
+      story.save()
+      story.activity_signal.send(sender=Story, news=request.user.username + " worked on story\"" +story.summary + "\" in \"" +project.name+"\"", user=request.user,action="saved" ,object=story.summary, story=story, context=project.slug)
+      request.user.message_set.create(message="Story #%d created." % story.local_id )
+    else:
+      return form
+  return StoryForm( project )
+      
+
 # The iteration planning tool.  It can also handle the add story form.
 # TODO (cleanup): We should factor out the add story form functionality
 # TODO (cleanup): We should rename this method, and likely rename the URL that points at it as well.
@@ -219,22 +255,8 @@ def stories_iteration(request, group_slug, iteration_id):
 def stories(request, group_slug):
   project = get_object_or_404(Project, slug=group_slug)  
   write_access_or_403(project,request.user)
-  if request.method == 'POST': # If the form has been submitted...
-    
-    form = StoryForm(project, request.POST) # A form bound to the POST data
-    if form.is_valid(): # All validation rules pass
-      story = form.save( commit=False )
-      story.local_id = project.getNextId()
-      story.project = project
-      story.creator = request.user
-      story.iteration = project.get_default_iteration()
-      story.rank = calculate_rank( project, int(form.cleaned_data['general_rank']) )
-      story.save()
-      story.activity_signal.send(sender=Story, news=request.user.username + " worked on story\"" +story.summary + "\" in \"" +project.name+"\"", user=request.user,action="saved" ,object=story.summary, story=story, context=project.slug)
-      request.user.message_set.create(message="New story created.")
-      form = StoryForm(project)
-  else:
-    form = StoryForm(project)
+
+  form = handleAddStory(request, project )
 
   return render_to_response("stories/story_list.html", {
     "add_story_form": form,
@@ -244,41 +266,6 @@ def stories(request, group_slug):
   }, context_instance=RequestContext(request))
 
 
-
-
-# Handles the excel import.
-@login_required
-def import_file(request, group_slug):
-  project = get_object_or_404(Project, slug=group_slug)
-  write_access_or_403(project,request.user)
-  if request.method == 'POST':     
-      processImport(project, request.FILES['import_file'], request.user);
-      return HttpResponseRedirect(reverse('project_detail', kwargs={'group_slug':project.slug}) )
-  else:
-      form = ImportForm()
-      
-  return render_to_response("projects/import.html", {
-          "project": project,
-          "form":form,
-        }, context_instance=RequestContext(request))
-
-
-def processImport( project, file , user):
-  workbook = open_workbook(file_contents=file.read())
-  sheet = workbook.sheets()[0];
-  count = 0
-  for row in range(sheet.nrows-1):    
-    summary = sheet.cell(row+1,0).value
-    detail = sheet.cell(row+1,1).value
-    count = count + 1
-    try:
-      points = int(sheet.cell(row+1,2).value)
-    except:
-      points = "?"
-    story = Story( project=project, summary=summary, detail=detail, rank=0, local_id=project.stories.count()+1, creator=user, points=points, iteration=project.get_default_iteration())
-    story.save()
-  #story.activity_signal.send(sender=Story, news=request.user.username + " imported\"" +file.name + "\" into \"" +project.name+"\"", user=request.user,action="imported" ,object=file.name, context=project.slug)
-  user.message_set.create(message=("%d stories imported" % count))
 
 def pretty_print_story(request, group_slug, story_id):
   """Returns an html snippet that we use for a read-only full view of the story.  Right now, this is used

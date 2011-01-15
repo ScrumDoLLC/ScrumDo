@@ -11,8 +11,7 @@
    
     <div id="statGraph" style="width:740px;height:600px;"></div>
 
-        
-        <script>
+        <script type="text/javascript" charset="utf-8">          
         // then fetch the data with jQuery
                function onDataReceived(series) {
                    // extract the first coordinate pair so you can see that
@@ -38,6 +37,11 @@
                    success: onDataReceived
                });
         </script>
+        
+        <h2>Top Projects by story count:</h2>
+        {% for project in top_projects %}
+          {{ project.0 }} <a href="{% url project_detail project.2 %}">{{ project.2 }}</a><br/>
+        {% endfor %}
         
         
 

@@ -28,7 +28,6 @@
     
     {% if project %}
 <!--      <div id="tools_list" style="display:none">
-        <ul class="toolsList">
           {% canwrite project %}
           <li>
               <img src="{{ STATIC_URL }}images/iteration_planning.png">
@@ -58,7 +57,7 @@
     
     
       <div id="iteration_header_list" style="display:none">
-        <div class="iteration_header_list">
+        <div class="iteration_header_list" style="width: 600px;">
         {% for iteration in project.iterations.all %}
       
         <div class="iteration_header_list_detail">

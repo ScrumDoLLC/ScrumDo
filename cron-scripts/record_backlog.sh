@@ -1,3 +1,3 @@
 #!/bin/bash
 source /home/ec2-user/backlog-site/pinax-env/bin/activate
-python /home/ec2-user/backlog-site/backlog-site/burnup_chart.py
+python /home/ec2-user/backlog-site/backlog-site/manage.py burnup_chart

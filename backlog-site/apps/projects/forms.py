@@ -61,14 +61,16 @@ class StoryForm( forms.ModelForm ):
   project = None      
   tags = forms.CharField( required=False )
   general_rank = forms.CharField( required=False, widget=forms.RadioSelect(choices=RANK_CHOICES), initial=2)
-  
+
   def __init__(self, project, *args, **kwargs):    
     super(StoryForm, self).__init__(*args, **kwargs)      
     self.fields["points"].choices = self.instance.POINT_CHOICES    
     self.fields["points"].widget = forms.RadioSelect(choices=self.instance.POINT_CHOICES)
     self.fields["summary"].widget = forms.TextInput()
     self.fields["summary"].widget.size = 200
-    self.fields["assignee"].choices = project.all_member_choices()
+    members = project.all_member_choices()
+    members.insert(0,("","---------"))
+    self.fields["assignee"].choices = members
     self.fields["extra_1"].widget = forms.widgets.Textarea(attrs={'rows':3, 'cols':50}) 
     self.fields["extra_2"].widget = forms.widgets.Textarea(attrs={'rows':3, 'cols':50}) 
     self.fields["extra_3"].widget = forms.widgets.Textarea(attrs={'rows':3, 'cols':50})         
@@ -125,8 +127,20 @@ class ProjectUpdateForm(forms.ModelForm):
         model = Project
         fields = ('name', 'description')
 
-class ImportForm(forms.Form):
-  file  = forms.FileField()
+class IterationImportForm(forms.Form):
+  import_file  = forms.FileField(required=False)
+
+class IterationImportFormWithUnlock(forms.Form):
+  import_file  = forms.FileField(required=False)
+  unlock_iteration = forms.BooleanField( required=False, help_text = _("Unlocking the iteration allows users with the appropriate access to edit stories in this iteration.") )
+
+class UnlockForm(forms.Form):
+  unlock_iteration = forms.BooleanField( required=False, help_text = _("Unlocking the iteration allows users with the appropriate access to edit stories in this iteration.") )
+
+class ExportForm(forms.Form): 
+  format = forms.ChoiceField(choices=(("xls","Excel"),("csv","Comma Seperated Value (CSV)"),("xml","XML") ) )
+  lock_iteration = forms.BooleanField( required=False, help_text = _("Locking the iteration prevents anyone from editing any stories in it until the iteration is unlocked.") )
+
   
 class AddUserForm(forms.Form):
     

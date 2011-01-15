@@ -42,7 +42,10 @@ urlpatterns = patterns('projects.views',
 )
 
 urlpatterns += patterns('projects.iteration_views',
-    url(r'^project/(?P<group_slug>[-\w]+)/iteration_create$', 'iteration_create', name="iteration_create"),
+    url(r'^project/(?P<group_slug>[-\w]+)/iteration_create$', 'iteration_create', name="iteration_create"),    
+    url(r'^project/(?P<group_slug>[-\w]+)/iteration/(?P<iteration_id>[-\w]+)/unlock$', 'unlock_iteration', name="unlock_iteration"),        
+    url(r'^project/(?P<group_slug>[-\w]+)/iteration/(?P<iteration_id>[-\w]+)/import$', 'iteration_import', name="iteration_import"),            
+    url(r'^project/(?P<group_slug>[-\w]+)/iteration/(?P<iteration_id>[-\w]+)/export$', 'iteration_export', name="iteration_export"),        
     url(r'^project/(?P<group_slug>[-\w]+)/iteration/(?P<iteration_id>[-\w]+)$', 'iteration', name="iteration"),
 )
 
@@ -59,7 +62,7 @@ urlpatterns += patterns('projects.story_views',
     url(r'^project/(?P<group_slug>[-\w]+)/story/(?P<story_id>[-\w]+)/delete', 'delete_story', name="delete_story"),
     url(r'^project/(?P<group_slug>[-\w]+)/story/(?P<story_id>[-\w]+)', 'story', name="story_form"),
     url(r'^project/(?P<group_slug>[-\w]+)/mini_story/(?P<story_id>[-\w]+)', 'mini_story'),    
-    url(r'^project/(?P<group_slug>[-\w]+)/import','import_file', name="import_file"),
+
     
 )
 

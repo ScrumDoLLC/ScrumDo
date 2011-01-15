@@ -17,12 +17,29 @@
 
 from django.shortcuts import render_to_response, get_object_or_404
 from projects.models import SiteStats
+from django.template import RequestContext
 from django.http import HttpResponse
 from django.core import serializers
 from datetime import datetime, date
 import time
 import json
+from django.contrib.auth.decorators import login_required
+from projects.models import Project
+from django.db import connection
 
+@login_required
+def stats(request):
+  if not request.user.is_staff:
+    raise PermissionDenied()
+  cursor = connection.cursor()
+  cursor.execute("select count(*) as story_count, p.*  from projects_project as p join projects_story as s on s.project_id=p.id group by p.id order by story_count DESC limit 50")
+  
+  topProjects = cursor.fetchall()
+  print len(topProjects)
+  
+    
+  
+  return render_to_response( 'site_stats.html' , {'top_projects':topProjects}, context_instance=RequestContext(request))
 
 def stats_data(request):
   stats = SiteStats.objects.all();

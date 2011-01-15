@@ -72,6 +72,9 @@ def has_read_access( project, user ):
     # A public project!
     return True
     
+  if user.is_staff:
+    return True    
+    
   key = cache_key(project, user, "read")
   cached_value = cache.get(key)
   if cached_value == None:

@@ -1,0 +1,16 @@
+{% load uni_form %}
+
+<div  style="width:500px;">
+ <h1>Unlock Iteration</h1>
+ <p>
+   You should only unlock this iteration if you were the one to lock it.
+ </p>
+   <form class="uniForm" id="project_form" method="POST" action="{% url unlock_iteration project.slug iteration.id %}">
+       <fieldset class="inlineLabels">
+           {{ form|as_uni_form}}
+           <div class="form_block">
+               <div class="buttonHolder"><button class="primaryAction" type="submit" >Unlock</button></div>
+           </div>
+       </fieldset>
+   </form>
+</div>

@@ -88,7 +88,7 @@
 {% endblock %}
 
 {% block extra_body %}
-    <script type="text/javascript">
+<script type="text/javascript">
 
     var project_slug = "{{ iteration.project.slug }}";
     var current_story_popup = "";
@@ -109,11 +109,9 @@
         }
       });
     }
-    
-
-        
         
     $(".showFilter").click( function() { $("#filterDialog").toggle(); return false;} );
+    
     $(".filterForm").ajaxForm(
         {
           beforeSend: function() { $("#loadingIcon").show();},
@@ -126,11 +124,6 @@
             $("ul").sortable("disable");
           }
         });
-    
-
-    
-
-    
 
     {# This is the method that handles the user-drop event and records that fact on the server. #}
     function updateStoryPosition(event, ui)
@@ -151,7 +144,6 @@
           $("#loadingIcon").hide();          
         }
       });
-
     }
         
     function filterByTag( tag )
@@ -182,7 +174,7 @@
     });
     
     
-
+    // When the story form is shown, this sets up some ajaxy links on it. 
     function setUpStoryLinks() 
     {
 
@@ -225,6 +217,7 @@
     }
 
 
+    // The story-hover is that eye-icon thing that shows the full story when you hover over it.
     var popupStatus = 0;  
     function displayStoryHover()
     {
@@ -244,9 +237,9 @@
            success: function(data) { $("#story_hover_window").html(data); }
          });
          popupStatus = 1;           
-       }
-      
+       }      
     }
+    
     function hideStoryHover()
     {
       $("#story_hover_window").fadeOut("fast");
@@ -254,103 +247,103 @@
     }
     
      
-        $(document).ready(function() {
-             
-              $(".subIteration").click( function() 
-              {
-                iteration_id = $(this).attr("iteration_id");
-                moveCurrentlyOpenStoryToIteration(iteration_id);
-              } );
+    $(document).ready(function() {
+         
+          $(".subIteration").click( function() 
+          {
+            iteration_id = $(this).attr("iteration_id");
+            moveCurrentlyOpenStoryToIteration(iteration_id);
+          } );
 
-              loadIteration( "{{ iteration.id }}","","")  ;
-              
-              
-
-              $("#story_list").sortable({ 
-                update: updateStoryPosition, 
-                tolerance: 'pointer', 
-                distance: 5,
-                opacity:0.6, 
-                placeholder: "ui-state-highlight" 
-                });
-              
-              {# Draw the graph... #}
-               {% if iteration.points_log.count %}      
-                 generateBurnDown( "#iterationBurndown", "{{project.slug}}" , "{{iteration.id}}" , 0);         
-               {% endif %}
-        });
-        
-        function moveCurrentlyOpenStoryToIteration( iteration_id )
-        {
-          $("#loadingIcon").show();
-          $.ajax({
-            url: "/projects/project/" + project_slug + "/story/" + current_story_popup + "/reorder",
-            data:({ action:"move_iteration", iteration:iteration_id }),
-            type: "POST",
-            success: function() {
-              $("#loadingIcon").hide();
-              $("#story_" + current_story_popup).hide(true);              
-            }
-          });
+          loadIteration( "{{ iteration.id }}","","")  ;
           
-        }
+          
+
+          $("#story_list").sortable({ 
+            update: updateStoryPosition, 
+            tolerance: 'pointer', 
+            distance: 5,
+            opacity:0.6, 
+            placeholder: "ui-state-highlight" 
+            });
+          
+          {# Draw the graph... #}
+           {% if iteration.points_log.count %}      
+             generateBurnDown( "#iterationBurndown", "{{project.slug}}" , "{{iteration.id}}" , 0);         
+           {% endif %}
+    });
         
-        function setStatusReviewing( storyID )
-        {
-          $(".todoButtons").hide();
-          $.ajax({
-            url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_reviewing",      
-            type: "POST",
-            data: ({return_type : "block"}),            
-            success: function(responseText) {        
-              $("#story_" + storyID).replaceWith(responseText);
-              setUpStoryLinks();
-            }
-          });
+    function moveCurrentlyOpenStoryToIteration( iteration_id )
+    {
+      $("#loadingIcon").show();
+      $.ajax({
+        url: "/projects/project/" + project_slug + "/story/" + current_story_popup + "/reorder",
+        data:({ action:"move_iteration", iteration:iteration_id }),
+        type: "POST",
+        success: function() {
+          $("#loadingIcon").hide();
+          $("#story_" + current_story_popup).hide(true);              
         }
-        function setStatusTodo( storyID )
-        {
-          $(".todoButtons").hide();
-          $.ajax({
-            url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_todo",      
-            type: "POST",
-            data: ({return_type : "block"}),            
-            success: function(responseText) {        
-              $("#story_" + storyID).replaceWith(responseText);
-              setUpStoryLinks();
-            }
-          });
-        }     
-
-
-        function setStatusDoing( storyID )
-        {
-          $(".todoButtons").hide();    
-          $.ajax({
-            url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_doing",      
-            type: "POST",
-            data: ({return_type : "block"}),                        
-            success: function(responseText) {        
-              $("#story_" + storyID).replaceWith(responseText);
-              setUpStoryLinks();
-            }
-          });
+      });
+      
+    }
+    
+    function setStatusReviewing( storyID )
+    {
+      $(".todoButtons").hide();
+      $.ajax({
+        url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_reviewing",      
+        type: "POST",
+        data: ({return_type : "block"}),            
+        success: function(responseText) {        
+          $("#story_" + storyID).replaceWith(responseText);
+          setUpStoryLinks();
         }
-
-
-        function setStatusDone( storyID )
-        {
-          $(".todoButtons").hide();    
-          $.ajax({
-            url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_done",      
-            type: "POST",
-            data: ({return_type : "block"}),                        
-            success: function(responseText) {        
-              $("#story_" + storyID).replaceWith(responseText);
-              setUpStoryLinks();
-            }
-          });
+      });
+    }
+    function setStatusTodo( storyID )
+    {
+      $(".todoButtons").hide();
+      $.ajax({
+        url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_todo",      
+        type: "POST",
+        data: ({return_type : "block"}),            
+        success: function(responseText) {        
+          $("#story_" + storyID).replaceWith(responseText);
+          setUpStoryLinks();
         }
-    </script>
+      });
+    }     
+
+
+    function setStatusDoing( storyID )
+    {
+      $(".todoButtons").hide();    
+      $.ajax({
+        url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_doing",      
+        type: "POST",
+        data: ({return_type : "block"}),                        
+        success: function(responseText) {        
+          $("#story_" + storyID).replaceWith(responseText);
+          setUpStoryLinks();
+        }
+      });
+    }
+
+
+    function setStatusDone( storyID )
+    {
+      $(".todoButtons").hide();    
+      $.ajax({
+        url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_done",      
+        type: "POST",
+        data: ({return_type : "block"}),                        
+        success: function(responseText) {        
+          $("#story_" + storyID).replaceWith(responseText);
+          setUpStoryLinks();
+        }
+      });
+    }
+</script>
     
 {% endblock %}

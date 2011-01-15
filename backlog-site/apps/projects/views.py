@@ -52,6 +52,8 @@ from organizations.models import Organization
 from activities.models import SubjectActivity
 import datetime
 
+from story_views import handleAddStory
+
 TOPIC_COUNT_SQL = """
 SELECT COUNT(*)
 FROM topics_topic
@@ -93,18 +95,19 @@ def home( request ):
         else:
           member_projects.append( membership.project )
       except:
-        pass
-    
-    
-  return render_to_response("homepage.html", {
+        pass  
+
+
+    return render_to_response("homepage.html", {
        "my_projects":my_projects,
        "my_organizations": organizations,
        "activities": activities,
        "activities_next_page":next_page,
        "member_projects":member_projects,
        "now": datetime.datetime.now()
-    }, context_instance=RequestContext(request))
-
+      }, context_instance=RequestContext(request))
+  else:
+    return render_to_response("unauthenticated_homepage.html", context_instance=RequestContext(request))
 
 # The project admin page, this is where you can change the title, description, etc. of a project.
 @login_required
@@ -356,7 +359,7 @@ def project(request, group_slug=None, form_class=ProjectUpdateForm, adduser_form
     else:
         adduser_form = adduser_form_class(project=project)
     
-    add_story_form = StoryForm(project)
+    add_story_form = handleAddStory(request, project)
     
     return render_to_response(template_name, {
         "project_form": project_form,
