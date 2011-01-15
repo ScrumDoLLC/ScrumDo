@@ -258,7 +258,7 @@ def stories(request, group_slug):
 
   form = handleAddStory(request, project )
 
-  return render_to_response("stories/story_list.html", {
+  return render_to_response("stories/iteration_planning.html", {
     "add_story_form": form,
     "project": project,
     "default_iteration_id": int(request.GET.get("iteration","-1"))

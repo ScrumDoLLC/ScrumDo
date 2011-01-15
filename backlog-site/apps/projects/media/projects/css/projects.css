@@ -304,7 +304,7 @@
 
 #columnContainer {
   height: 100%;
-  width: 640px;
+  width: 100%;
 }
 
 #columnContainer h1 {
@@ -312,28 +312,27 @@
     margin: 0;
 }
 .story_column {
-  width: 300px;;
+  width: 49%;
   vertical-align: top;
   margin-top: 20px;
-  margin-left: 5px;
-  margin-right: 5px;
+  margin-left: 0px;
+  margin-right: 0px;
   display: inline-block;
   background-color: #ff965c;
+  padding: 0px;
+  border: 1px solid #d4d4d4;
+  background-color: #f0fcff;
+  height: 100%;
 }
 .iteration_column {
 }
 
 .story_list {
   overflow: auto;
-  height: 600px;
+  height: 650px;
   padding-left: 0px;
 }
-.story_column {
-  padding: 0px;
-  border: 1px solid #d4d4d4;
-  background-color: #f0fcff;
-  height: 100%;
-}
+
 
 
 
