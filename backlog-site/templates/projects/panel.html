@@ -56,7 +56,7 @@
   <h2>Other Iterations</h2>
   <div class="big_links">
     {% for iteration in project.iterations.all %}
-    {% iteration_name iteration %} {% if iteration.stories.count %}({{iteration.stories.count}}){% endif %}<br/>
+    {% iteration_name iteration %} {% if iteration.stories.count %}&nbsp;({{iteration.stories.count}}){% endif %}<br/>
     {% endfor %}
     {% canwrite project %}
     <p>

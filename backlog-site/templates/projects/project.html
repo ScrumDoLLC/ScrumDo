@@ -30,7 +30,7 @@
 {% endblock %}
 
 {% block body %}
-    <div style="width: 550px;">
+    
 
                 
         {% if user.is_authenticated %}
@@ -42,7 +42,7 @@
                     <h1>{{ iteration.name }} </h1> 
                     <i>{{iteration.start_date|date:"M d, Y"}} - {{iteration.end_date|date:"M d, Y"}}</i>
                     {% if iteration.points_log.count %}
-                      <div id="iterationBurndown_{{iteration.id}}" style="width:540px;height:300px;"></div>  
+                      <div id="iterationBurndown_{{iteration.id}}" style="width:100%;height:300px;"></div>  
                     {% else %}
                       <img src="/site_media/static/images/burndown.png">
                     {% endif %}
@@ -51,7 +51,7 @@
                   <h1>Overall Project</h1>
                    
                   {% if project.points_log.count %}
-                     <div id="overallBurndown" style="width:540px;height:300px;"></div>
+                     <div id="overallBurndown" style="width:100%;height:300px;"></div>
                   {% else %}
                     <img src="/site_media/static/images/burndown.png">
                   {% endif %}
@@ -61,7 +61,7 @@
             </div>
         {% endif %}
 
-    </div>
+    
 
 
     <div style="display:none" id="statsHelp">
