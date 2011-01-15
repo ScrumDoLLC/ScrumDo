@@ -37,17 +37,17 @@
 <div class="side_box">
   <h2>Iteration Actions</h2>
   <div class="big_links">
+    {% if iteration.locked %}
+      {% canwrite project %}
+        {% silk "lock_open" %} <a rel="facebox" href="{% url unlock_iteration iteration.project.slug iteration.id %}">Unlock Iteration</a><br/>
+      {% endcanwrite %}
+    {% endif %}    
     <a href="#iterationDetails" rel="facebox">Edit Details</a><br/>
     <a href="{% url stories iteration.project.slug  %}?iteration={{iteration.id}}">Iteration Planning</a>
     <a rel="facebox" href="{% url iteration_export iteration.project.slug iteration.id %}">Export</a><br/>
     {% canwrite project %}
       <a rel="facebox" href="{% url iteration_import iteration.project.slug iteration.id %}">Import</a><br/>
     {% endcanwrite %}
-    {% if iteration.locked %}
-      {% canwrite project %}
-        <br/>{% silk "lock_open" %}<a rel="facebox" href="{% url unlock_iteration iteration.project.slug iteration.id %}">Unlock Iteration</a><br/>
-      {% endcanwrite %}
-    {% endif %}    
   </div>
 </div>
 {% endcanwrite %}
