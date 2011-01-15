@@ -66,15 +66,15 @@ h2 {
     margin: 0 auto;
     padding: 10px;
     padding-top: 0px;
-    padding-right: 180px;
-    width: 640px;
+    padding-right: 210px;
+    max-width: 840px;
 }
 
 #panel {
     width: 180px;
     position: absolute;
     right: 0px;
-    top: 144px;
+    top: 146px;
     z-index: 999;
     background-color: #F1F2DF;
     border-left: 1px solid #c2c2b1;
