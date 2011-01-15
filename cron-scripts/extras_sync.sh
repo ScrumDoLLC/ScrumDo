@@ -1,3 +1,3 @@
 #!/bin/bash
 source /home/ec2-user/backlog-site/pinax-env/bin/activate
-python /home/ec2-user/backlog-site/backlog-site/manage.py extras_sync
+python /home/ec2-user/backlog-site/scrumdo-web/manage.py extras_sync
