@@ -1,0 +1,44 @@
+{% extends "projects/base.html" %}
+
+{% load group_tags %}
+
+{% block panel %}
+{% include "projects/panel.html" %}  
+{% endblock %}
+
+{% block body %}
+  <h1>{{project.name}} Extras</h1>
+  <div id="extrasList">
+    
+    {% for config in extras %}
+      
+        <div class="single_extra">
+        <img src="{{config.extra.getLogo}}" style="float:left">
+        
+        <div class="single_extra_text">
+          <b>{{ config.extra.getName }}</b><br/>{{ config.extra.getDescription }}<br/>
+        </div>        
+        <div class="single_extra_bottom">
+          {% if config.enabled  %}          
+            
+            
+            <form action="{% url disable_extra_url config.extra.getSlug project.slug %}" method="POST">
+              <a href="{% url configure_extra_url config.extra.getSlug project.slug %}" class="button blue">Configure</a>
+              <button type="submit" class="button red">Disable</button>
+            </form>
+            <i>{{ config.status }}</i>
+            
+          {% else %}
+            <form action="{% url enable_extra_url  config.extra.getSlug project.slug %}" method="POST">
+              <button type="submit" class="button green">Enable</button>
+            </form>
+            
+          {% endif %}
+        </div>
+        
+        </div>
+    {% endfor %}
+
+  </div>
+  
+{% endblock %}

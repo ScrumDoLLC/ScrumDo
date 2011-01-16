@@ -1,0 +1,29 @@
+{% extends "organizations/base.html" %}
+
+{% load i18n %}
+{% load uni_form %}
+{% load humanize %}
+{% load pagination_tags %}
+{% load order_by %}
+{% load extra_tagging_tags %}
+
+
+
+{% block head_title %}{% blocktrans %}Create Organization{% endblocktrans %}{% endblock %}
+
+{% block body %}
+    <h1>{% trans "Create Organization" %}</h1>
+    
+    <p>{% trans "An <b>organization</b> is a grouping of projects and teams working on those projects." %}</p>
+
+    <form class="uniForm" id="project_form" method="POST" action="">          
+        <fieldset class="inlineLabels">
+            {{ form|as_uni_form }}
+            <div class="form_block">
+                <input type="hidden" name="action" value="create" />
+                <div class="buttonHolder"><button class="primaryAction" type="submit" >Create Organization</button></div>
+            </div>
+        </fieldset>
+    </form>
+    
+{% endblock %}

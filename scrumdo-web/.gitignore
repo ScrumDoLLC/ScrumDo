@@ -1,0 +1,8 @@
+.svn
+local_settings.py
+site_media/media/avatars
+*~
+*#*
+runserver.log
+selenium-server.log
+pre-test.json

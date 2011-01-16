@@ -1,0 +1,10 @@
+Example scripts that we run on the ScrumDo.com web server on a periodic basis.
+
+Our crontab looks something like this:
+
+10 22 * * * scrumdo/cron-scripts/record_backlog.sh
+11 22 * * * scrumdo/cron-scripts/site_stats.sh
+*/2 * * * * scrumdo/cron-scripts/send_email.sh
+1 1 * * * scrumdo/cron-scripts/resend_email.sh
+*/5 * * * * scrumdo/cron-scripts/extras_sync.sh
+2 1 * * * scrumdo/cron-scripts/extras_pull.sh

@@ -1,0 +1,61 @@
+<div id="story_form">
+  <form method="POST">
+    {{ add_story_form.non_field_errors }}
+    {{add_story_form.summary}}    {{add_story_form.summary.errors}} <button id="add_button" type="submit">Add Story</button><!-- <INPUT TYPE="Submit">Add Story</input>--><!--SRC="/site_media/static/images/addStoryButton.png"-->
+     <br/>
+    <div id="story_details">
+      <table>
+        <tr><td>Detail:</td><td>{{add_story_form.detail}}    {{add_story_form.detail.errors}} </td></tr>
+        <tr><td>Tags:</td><td>{{add_story_form.tags}} {{add_story_form.tags.errors}} </td></tr>
+        <tr><td>Points:&nbsp;</td><td>{{add_story_form.points}}  {{add_story_form.points.errors}} </td></tr>
+        {% if project.use_assignee %}
+          <tr><td>Assigned To:&nbsp;</td><td>{{add_story_form.assignee}}  {{add_story_form.assignee.errors}} </td></tr>
+        {% endif %}
+        <tr><td>Backlog&nbsp;Position:&nbsp;</td><td>{{add_story_form.general_rank}}  {{add_story_form.general_rank.errors}} </td></tr>
+     
+        {% if project.use_extra_1 %}
+          <tr><td>{{project.extra_1_label}}:&nbsp;</td><td>{{add_story_form.extra_1}}  {{add_story_form.extra_1.errors}} </td></tr>
+        {% endif %}
+        {% if project.use_extra_2 %}
+          <tr><td>{{project.extra_2_label}}:&nbsp;</td><td>{{add_story_form.extra_2}}  {{add_story_form.extra_2.errors}} </td></tr>
+        {% endif %}
+        {% if project.use_extra_3 %}
+          <tr><td>{{project.extra_3_label}}:&nbsp;</td><td>{{add_story_form.extra_3}}  {{add_story_form.extra_3.errors}} </td></tr>
+        {% endif %}
+       </table>
+    </div>
+    
+      <input type="hidden" name="action" value="addStory" />
+    
+    {% if iteration %}
+      <input type="hidden" name="iteration" value="{{ iteration.id }}" />
+    {% endif %}
+    
+  </form>
+ </div>
+ 
+<script type="text/javascript" charset="utf-8">
+  
+    story_form_expanded = false;
+    $(document).ready(function() {
+      $('#id_summary').keyup( function(self) 
+            { 
+                if( $(this).val().length > 0 )
+                {
+                  if( ! story_form_expanded )
+                  {
+                    $("#story_details").show(true);
+                  }
+                  story_form_expanded = true;
+                }
+                else
+                {
+                  if( story_form_expanded )
+                  {
+                    $("#story_details").hide();              
+                  }
+                  story_form_expanded = false;
+                }
+            } );
+      });
+</script>

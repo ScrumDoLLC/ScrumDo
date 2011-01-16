@@ -1,0 +1,131 @@
+{% extends "projects/base.html" %}
+
+{% load i18n %}
+{% load uni_form %}
+{% load avatar_tags %}
+{% load threadedcommentstags %}
+{% load pagination_tags %}
+{% load extra_tagging_tags %}
+{% load projects_tags %}
+{% load group_tags %}
+{% load topics_tags %}
+{% load wiki_tags %}
+{% load theme_tags %}
+{% load iteration_tags %}
+
+{% block head_title %}{{ project.name }}{% endblock %}
+
+{% block panel %}
+{% include "projects/panel.html" %}  
+{% endblock %}
+
+
+{% block body %}    
+  <h1>{{ project.name }}</h1>
+  
+  <form method="POST" action="" class="uniForm">
+       {{ form.non_field_errors }}
+         
+         <h2>Project Options</h2>
+         <table class="projectOptionsForm">
+           <tr><td style="font-weight:bold">Name:</td><td>{{form.name}} {{form.name.errors}}</td></tr>
+           <tr><td style="font-weight:bold">Description:</td><td>{{form.description}} {{form.description.errors}}</td></tr>
+         </table>
+         <h2>Point Scale</h2>
+         
+         <input type="radio" checked name="dummy"> <b>Modified Fibonacci</b> - ?, 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100, Infinity <br/><br/>
+         <i>We will be adding alternate point scales in the future</i>
+         
+         
+         <h2>Optional Fields</h2>
+         <p>Optional fields are special, structured fields that not all users need nor want.  They're off by default.</p>
+          <table class="projectOptionsForm">
+            <tr><td style="font-weight:bold">{{form.use_assignee}} Track Assignee {{form.use_assignee.errors}}</td><td><i>Adds an Assignee field to stories, so you can track who is currently responsible.</i></td></tr>            
+            <!--<tr><td style="font-weight:bold">{{form.use_acceptance}} Acceptance Criteria {{form.use_acceptance.errors}}</td><td><i>Adds a series of fields for storing acceptance criteria in a structured way.</i></td></tr>-->
+          </table>
+          <input type="hidden" name="use_acceptance" value="">
+          <input type="hidden" name="action" value="updateProject">
+          <h2>Custom Fields</h2>
+          <p>Custom fields are free-input text boxes that accompany each story.  To use one, turn it on by selecting the checkbox, and give it a name in the text input.</p>
+          <table class="projectOptionsForm">
+            <tr><td style="font-weight:bold">{{form.use_extra_1}} Custom Field 1: {{form.use_extra_1.errors}}</td><td>{{form.extra_1_label}} {{form.extra_1_label.errors}} <br/></td></tr>
+            <tr><td style="font-weight:bold">{{form.use_extra_2}} Custom Field 2: {{form.use_extra_2.errors}}</td><td>{{form.extra_2_label}} {{form.extra_2_label.errors}}</td></tr>
+            <tr><td style="font-weight:bold">{{form.use_extra_3}} Custom Field 3: {{form.use_extra_3.errors}}</td><td>{{form.extra_3_label}} {{form.extra_3_label.errors}}</td></tr>
+          </table>
+          
+          <h2>Velocity Calculations</h2>
+          <p><i>Right now, we only offer one velocity calculation mathod.  Check back later for more.</i></p>
+            
+            
+      <br/>
+      
+      <div class="form_block">
+      
+          <div class="buttonHolder"><button class="primaryAction" type="submit" >Save Project</button></div>
+      </div>
+      
+  </form>
+  
+  <br/><br/>
+  <hr/>
+  
+     {% if organizations %}
+         <h2>Move to organization</h2>
+         <p>You can move this project into one of your organizations.</p>     
+         <form  method="POST" action="" class="uniForm">       
+           <fieldset class="inlineLabels">
+                   <div class="ctrlHolder">
+           	                <label for="id_organization">                    
+           	                    Organization
+           	                </label>
+
+           	                <select name="organization_id" id="id_organization">
+                              {% for organization in organizations %}
+                              <option value="{{organization.id}}">{{organization.name}}</option>
+                              {% endfor %}
+                            </select>                    
+                   </div>
+           </fieldset>
+       
+          <div class="form_block">     
+             <div class="buttonHolder"><button class="primaryAction" type="submit" >Move Project</button></div>
+          </div>
+          <input type="hidden" name="action" value="moveToOrganization">
+         </form>
+         <br/>
+         <hr/>
+     {% endif %}
+
+
+     {% if project.organization %}
+     <h2>Remove from organization</h2>
+      <p>You can move this project out of your organization.</p>     
+      <form  method="POST" action="" class="uniForm">       
+        <fieldset class="inlineLabels">
+                <div class="ctrlHolder">
+        	                <label for="id_organization">                    
+        	                    Remove from organization?
+        	                </label>
+
+        	                <input type="checkbox" name="remove">           
+                </div>
+        </fieldset>
+    
+       <div class="form_block">     
+          <div class="buttonHolder"><button class="primaryAction" type="submit" >Remove From Organization</button></div>
+       </div>
+       <input type="hidden" name="action" value="removeFromOrganization">
+      </form>
+      <br/>
+      <hr/>
+     {% endif %}
+
+      <br/>
+        <p>{% silk "delete" %} <a href="#" onclick="$('#delete_project_form').toggle(); return false;">{% trans "Delete project" %}</a><p>
+
+         <form class="delete_form" id="delete_project_form" action="{% url project_delete project.slug %}" method="POST" style="display: none;">
+             <input type="submit" value="{% trans "Delete Project" %}" /><br/> All content will be removed as soon as you push this button.<br/>It's permanent and irreversable.
+        </form>
+  
+{% endblock %}
+

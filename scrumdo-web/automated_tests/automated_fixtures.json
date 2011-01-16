@@ -1,0 +1,2045 @@
+[
+  {
+    "pk": 74, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_account", 
+      "name": "Can add account", 
+      "content_type": 25
+    }
+  }, 
+  {
+    "pk": 77, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_otherserviceinfo", 
+      "name": "Can add other service info", 
+      "content_type": 26
+    }
+  }, 
+  {
+    "pk": 80, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_passwordreset", 
+      "name": "Can add password reset", 
+      "content_type": 27
+    }
+  }, 
+  {
+    "pk": 75, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_account", 
+      "name": "Can change account", 
+      "content_type": 25
+    }
+  }, 
+  {
+    "pk": 78, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_otherserviceinfo", 
+      "name": "Can change other service info", 
+      "content_type": 26
+    }
+  }, 
+  {
+    "pk": 81, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_passwordreset", 
+      "name": "Can change password reset", 
+      "content_type": 27
+    }
+  }, 
+  {
+    "pk": 76, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_account", 
+      "name": "Can delete account", 
+      "content_type": 25
+    }
+  }, 
+  {
+    "pk": 79, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_otherserviceinfo", 
+      "name": "Can delete other service info", 
+      "content_type": 26
+    }
+  }, 
+  {
+    "pk": 82, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_passwordreset", 
+      "name": "Can delete password reset", 
+      "content_type": 27
+    }
+  }, 
+  {
+    "pk": 122, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_subjectactivity", 
+      "name": "Can add subject activity", 
+      "content_type": 41
+    }
+  }, 
+  {
+    "pk": 123, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_subjectactivity", 
+      "name": "Can change subject activity", 
+      "content_type": 41
+    }
+  }, 
+  {
+    "pk": 124, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_subjectactivity", 
+      "name": "Can delete subject activity", 
+      "content_type": 41
+    }
+  }, 
+  {
+    "pk": 22, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_logentry", 
+      "name": "Can add log entry", 
+      "content_type": 8
+    }
+  }, 
+  {
+    "pk": 23, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_logentry", 
+      "name": "Can change log entry", 
+      "content_type": 8
+    }
+  }, 
+  {
+    "pk": 24, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_logentry", 
+      "name": "Can delete log entry", 
+      "content_type": 8
+    }
+  }, 
+  {
+    "pk": 40, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_announcement", 
+      "name": "Can add announcement", 
+      "content_type": 14
+    }
+  }, 
+  {
+    "pk": 41, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_announcement", 
+      "name": "Can change announcement", 
+      "content_type": 14
+    }
+  }, 
+  {
+    "pk": 42, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_announcement", 
+      "name": "Can delete announcement", 
+      "content_type": 14
+    }
+  }, 
+  {
+    "pk": 67, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_attachment", 
+      "name": "Can add attachment", 
+      "content_type": 23
+    }
+  }, 
+  {
+    "pk": 68, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_attachment", 
+      "name": "Can change attachment", 
+      "content_type": 23
+    }
+  }, 
+  {
+    "pk": 69, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_attachment", 
+      "name": "Can delete attachment", 
+      "content_type": 23
+    }
+  }, 
+  {
+    "pk": 70, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_foreign_attachments", 
+      "name": "Can delete foreign attachments", 
+      "content_type": 23
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_group", 
+      "name": "Can add group", 
+      "content_type": 2
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_message", 
+      "name": "Can add message", 
+      "content_type": 4
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_permission", 
+      "name": "Can add permission", 
+      "content_type": 1
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_user", 
+      "name": "Can add user", 
+      "content_type": 3
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_group", 
+      "name": "Can change group", 
+      "content_type": 2
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_message", 
+      "name": "Can change message", 
+      "content_type": 4
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_permission", 
+      "name": "Can change permission", 
+      "content_type": 1
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_user", 
+      "name": "Can change user", 
+      "content_type": 3
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_group", 
+      "name": "Can delete group", 
+      "content_type": 2
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_message", 
+      "name": "Can delete message", 
+      "content_type": 4
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_permission", 
+      "name": "Can delete permission", 
+      "content_type": 1
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_user", 
+      "name": "Can delete user", 
+      "content_type": 3
+    }
+  }, 
+  {
+    "pk": 43, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_avatar", 
+      "name": "Can add avatar", 
+      "content_type": 15
+    }
+  }, 
+  {
+    "pk": 44, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_avatar", 
+      "name": "Can change avatar", 
+      "content_type": 15
+    }
+  }, 
+  {
+    "pk": 45, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_avatar", 
+      "name": "Can delete avatar", 
+      "content_type": 15
+    }
+  }, 
+  {
+    "pk": 71, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_profile", 
+      "name": "Can add profile", 
+      "content_type": 24
+    }
+  }, 
+  {
+    "pk": 72, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_profile", 
+      "name": "Can change profile", 
+      "content_type": 24
+    }
+  }, 
+  {
+    "pk": 73, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_profile", 
+      "name": "Can delete profile", 
+      "content_type": 24
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_contenttype", 
+      "name": "Can add content type", 
+      "content_type": 5
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_contenttype", 
+      "name": "Can change content type", 
+      "content_type": 5
+    }
+  }, 
+  {
+    "pk": 15, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_contenttype", 
+      "name": "Can delete content type", 
+      "content_type": 5
+    }
+  }, 
+  {
+    "pk": 128, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_evolution", 
+      "name": "Can add evolution", 
+      "content_type": 43
+    }
+  }, 
+  {
+    "pk": 125, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_version", 
+      "name": "Can add version", 
+      "content_type": 42
+    }
+  }, 
+  {
+    "pk": 129, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_evolution", 
+      "name": "Can change evolution", 
+      "content_type": 43
+    }
+  }, 
+  {
+    "pk": 126, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_version", 
+      "name": "Can change version", 
+      "content_type": 42
+    }
+  }, 
+  {
+    "pk": 130, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_evolution", 
+      "name": "Can delete evolution", 
+      "content_type": 43
+    }
+  }, 
+  {
+    "pk": 127, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_version", 
+      "name": "Can delete version", 
+      "content_type": 42
+    }
+  }, 
+  {
+    "pk": 161, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_association", 
+      "name": "Can add association", 
+      "content_type": 54
+    }
+  }, 
+  {
+    "pk": 158, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_nonce", 
+      "name": "Can add nonce", 
+      "content_type": 53
+    }
+  }, 
+  {
+    "pk": 164, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_useropenidassociation", 
+      "name": "Can add user openid association", 
+      "content_type": 55
+    }
+  }, 
+  {
+    "pk": 162, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_association", 
+      "name": "Can change association", 
+      "content_type": 54
+    }
+  }, 
+  {
+    "pk": 159, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_nonce", 
+      "name": "Can change nonce", 
+      "content_type": 53
+    }
+  }, 
+  {
+    "pk": 165, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_useropenidassociation", 
+      "name": "Can change user openid association", 
+      "content_type": 55
+    }
+  }, 
+  {
+    "pk": 163, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_association", 
+      "name": "Can delete association", 
+      "content_type": 54
+    }
+  }, 
+  {
+    "pk": 160, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_nonce", 
+      "name": "Can delete nonce", 
+      "content_type": 53
+    }
+  }, 
+  {
+    "pk": 166, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_useropenidassociation", 
+      "name": "Can delete user openid association", 
+      "content_type": 55
+    }
+  }, 
+  {
+    "pk": 25, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_emailaddress", 
+      "name": "Can add e-mail address", 
+      "content_type": 9
+    }
+  }, 
+  {
+    "pk": 28, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_emailconfirmation", 
+      "name": "Can add e-mail confirmation", 
+      "content_type": 10
+    }
+  }, 
+  {
+    "pk": 26, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_emailaddress", 
+      "name": "Can change e-mail address", 
+      "content_type": 9
+    }
+  }, 
+  {
+    "pk": 29, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_emailconfirmation", 
+      "name": "Can change e-mail confirmation", 
+      "content_type": 10
+    }
+  }, 
+  {
+    "pk": 27, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_emailaddress", 
+      "name": "Can delete e-mail address", 
+      "content_type": 9
+    }
+  }, 
+  {
+    "pk": 30, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_emailconfirmation", 
+      "name": "Can delete e-mail confirmation", 
+      "content_type": 10
+    }
+  }, 
+  {
+    "pk": 152, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_externalstorymapping", 
+      "name": "Can add external story mapping", 
+      "content_type": 51
+    }
+  }, 
+  {
+    "pk": 155, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_extraconfiguration", 
+      "name": "Can add extra configuration", 
+      "content_type": 52
+    }
+  }, 
+  {
+    "pk": 143, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_projectextramapping", 
+      "name": "Can add project extra mapping", 
+      "content_type": 48
+    }
+  }, 
+  {
+    "pk": 146, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_storyqueue", 
+      "name": "Can add story queue", 
+      "content_type": 49
+    }
+  }, 
+  {
+    "pk": 149, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_syncronizationqueue", 
+      "name": "Can add syncronization queue", 
+      "content_type": 50
+    }
+  }, 
+  {
+    "pk": 153, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_externalstorymapping", 
+      "name": "Can change external story mapping", 
+      "content_type": 51
+    }
+  }, 
+  {
+    "pk": 156, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_extraconfiguration", 
+      "name": "Can change extra configuration", 
+      "content_type": 52
+    }
+  }, 
+  {
+    "pk": 144, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_projectextramapping", 
+      "name": "Can change project extra mapping", 
+      "content_type": 48
+    }
+  }, 
+  {
+    "pk": 147, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_storyqueue", 
+      "name": "Can change story queue", 
+      "content_type": 49
+    }
+  }, 
+  {
+    "pk": 150, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_syncronizationqueue", 
+      "name": "Can change syncronization queue", 
+      "content_type": 50
+    }
+  }, 
+  {
+    "pk": 154, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_externalstorymapping", 
+      "name": "Can delete external story mapping", 
+      "content_type": 51
+    }
+  }, 
+  {
+    "pk": 157, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_extraconfiguration", 
+      "name": "Can delete extra configuration", 
+      "content_type": 52
+    }
+  }, 
+  {
+    "pk": 145, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_projectextramapping", 
+      "name": "Can delete project extra mapping", 
+      "content_type": 48
+    }
+  }, 
+  {
+    "pk": 148, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_storyqueue", 
+      "name": "Can delete story queue", 
+      "content_type": 49
+    }
+  }, 
+  {
+    "pk": 151, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_syncronizationqueue", 
+      "name": "Can delete syncronization queue", 
+      "content_type": 50
+    }
+  }, 
+  {
+    "pk": 131, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_forum", 
+      "name": "Can add Forum", 
+      "content_type": 44
+    }
+  }, 
+  {
+    "pk": 137, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_post", 
+      "name": "Can add Post", 
+      "content_type": 46
+    }
+  }, 
+  {
+    "pk": 140, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_subscription", 
+      "name": "Can add Subscription", 
+      "content_type": 47
+    }
+  }, 
+  {
+    "pk": 134, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_thread", 
+      "name": "Can add Thread", 
+      "content_type": 45
+    }
+  }, 
+  {
+    "pk": 132, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_forum", 
+      "name": "Can change Forum", 
+      "content_type": 44
+    }
+  }, 
+  {
+    "pk": 138, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_post", 
+      "name": "Can change Post", 
+      "content_type": 46
+    }
+  }, 
+  {
+    "pk": 141, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_subscription", 
+      "name": "Can change Subscription", 
+      "content_type": 47
+    }
+  }, 
+  {
+    "pk": 135, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_thread", 
+      "name": "Can change Thread", 
+      "content_type": 45
+    }
+  }, 
+  {
+    "pk": 133, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_forum", 
+      "name": "Can delete Forum", 
+      "content_type": 44
+    }
+  }, 
+  {
+    "pk": 139, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_post", 
+      "name": "Can delete Post", 
+      "content_type": 46
+    }
+  }, 
+  {
+    "pk": 142, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_subscription", 
+      "name": "Can delete Subscription", 
+      "content_type": 47
+    }
+  }, 
+  {
+    "pk": 136, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_thread", 
+      "name": "Can delete Thread", 
+      "content_type": 45
+    }
+  }, 
+  {
+    "pk": 34, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_dontsendentry", 
+      "name": "Can add don't send entry", 
+      "content_type": 12
+    }
+  }, 
+  {
+    "pk": 31, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_message", 
+      "name": "Can add message", 
+      "content_type": 11
+    }
+  }, 
+  {
+    "pk": 37, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_messagelog", 
+      "name": "Can add message log", 
+      "content_type": 13
+    }
+  }, 
+  {
+    "pk": 35, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_dontsendentry", 
+      "name": "Can change don't send entry", 
+      "content_type": 12
+    }
+  }, 
+  {
+    "pk": 32, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_message", 
+      "name": "Can change message", 
+      "content_type": 11
+    }
+  }, 
+  {
+    "pk": 38, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_messagelog", 
+      "name": "Can change message log", 
+      "content_type": 13
+    }
+  }, 
+  {
+    "pk": 36, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_dontsendentry", 
+      "name": "Can delete don't send entry", 
+      "content_type": 12
+    }
+  }, 
+  {
+    "pk": 33, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_message", 
+      "name": "Can delete message", 
+      "content_type": 11
+    }
+  }, 
+  {
+    "pk": 39, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_messagelog", 
+      "name": "Can delete message log", 
+      "content_type": 13
+    }
+  }, 
+  {
+    "pk": 113, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_organization", 
+      "name": "Can add organization", 
+      "content_type": 38
+    }
+  }, 
+  {
+    "pk": 116, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_team", 
+      "name": "Can add team", 
+      "content_type": 39
+    }
+  }, 
+  {
+    "pk": 114, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_organization", 
+      "name": "Can change organization", 
+      "content_type": 38
+    }
+  }, 
+  {
+    "pk": 117, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_team", 
+      "name": "Can change team", 
+      "content_type": 39
+    }
+  }, 
+  {
+    "pk": 115, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_organization", 
+      "name": "Can delete organization", 
+      "content_type": 38
+    }
+  }, 
+  {
+    "pk": 118, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_team", 
+      "name": "Can delete team", 
+      "content_type": 39
+    }
+  }, 
+  {
+    "pk": 98, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_iteration", 
+      "name": "Can add iteration", 
+      "content_type": 33
+    }
+  }, 
+  {
+    "pk": 92, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_pointslog", 
+      "name": "Can add points log", 
+      "content_type": 31
+    }
+  }, 
+  {
+    "pk": 95, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_project", 
+      "name": "Can add project", 
+      "content_type": 32
+    }
+  }, 
+  {
+    "pk": 110, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_projectmember", 
+      "name": "Can add project member", 
+      "content_type": 37
+    }
+  }, 
+  {
+    "pk": 89, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_sitestats", 
+      "name": "Can add site stats", 
+      "content_type": 30
+    }
+  }, 
+  {
+    "pk": 101, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_story", 
+      "name": "Can add story", 
+      "content_type": 34
+    }
+  }, 
+  {
+    "pk": 104, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_storytag", 
+      "name": "Can add story tag", 
+      "content_type": 35
+    }
+  }, 
+  {
+    "pk": 107, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_storytagging", 
+      "name": "Can add story tagging", 
+      "content_type": 36
+    }
+  }, 
+  {
+    "pk": 99, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_iteration", 
+      "name": "Can change iteration", 
+      "content_type": 33
+    }
+  }, 
+  {
+    "pk": 93, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_pointslog", 
+      "name": "Can change points log", 
+      "content_type": 31
+    }
+  }, 
+  {
+    "pk": 96, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_project", 
+      "name": "Can change project", 
+      "content_type": 32
+    }
+  }, 
+  {
+    "pk": 111, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_projectmember", 
+      "name": "Can change project member", 
+      "content_type": 37
+    }
+  }, 
+  {
+    "pk": 90, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_sitestats", 
+      "name": "Can change site stats", 
+      "content_type": 30
+    }
+  }, 
+  {
+    "pk": 102, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_story", 
+      "name": "Can change story", 
+      "content_type": 34
+    }
+  }, 
+  {
+    "pk": 105, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_storytag", 
+      "name": "Can change story tag", 
+      "content_type": 35
+    }
+  }, 
+  {
+    "pk": 108, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_storytagging", 
+      "name": "Can change story tagging", 
+      "content_type": 36
+    }
+  }, 
+  {
+    "pk": 100, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_iteration", 
+      "name": "Can delete iteration", 
+      "content_type": 33
+    }
+  }, 
+  {
+    "pk": 94, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_pointslog", 
+      "name": "Can delete points log", 
+      "content_type": 31
+    }
+  }, 
+  {
+    "pk": 97, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_project", 
+      "name": "Can delete project", 
+      "content_type": 32
+    }
+  }, 
+  {
+    "pk": 112, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_projectmember", 
+      "name": "Can delete project member", 
+      "content_type": 37
+    }
+  }, 
+  {
+    "pk": 91, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_sitestats", 
+      "name": "Can delete site stats", 
+      "content_type": 30
+    }
+  }, 
+  {
+    "pk": 103, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_story", 
+      "name": "Can delete story", 
+      "content_type": 34
+    }
+  }, 
+  {
+    "pk": 106, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_storytag", 
+      "name": "Can delete story tag", 
+      "content_type": 35
+    }
+  }, 
+  {
+    "pk": 109, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_storytagging", 
+      "name": "Can delete story tagging", 
+      "content_type": 36
+    }
+  }, 
+  {
+    "pk": 16, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_session", 
+      "name": "Can add session", 
+      "content_type": 6
+    }
+  }, 
+  {
+    "pk": 17, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_session", 
+      "name": "Can change session", 
+      "content_type": 6
+    }
+  }, 
+  {
+    "pk": 18, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_session", 
+      "name": "Can delete session", 
+      "content_type": 6
+    }
+  }, 
+  {
+    "pk": 83, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_signupcode", 
+      "name": "Can add signup code", 
+      "content_type": 28
+    }
+  }, 
+  {
+    "pk": 86, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_signupcoderesult", 
+      "name": "Can add signup code result", 
+      "content_type": 29
+    }
+  }, 
+  {
+    "pk": 84, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_signupcode", 
+      "name": "Can change signup code", 
+      "content_type": 28
+    }
+  }, 
+  {
+    "pk": 87, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_signupcoderesult", 
+      "name": "Can change signup code result", 
+      "content_type": 29
+    }
+  }, 
+  {
+    "pk": 85, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_signupcode", 
+      "name": "Can delete signup code", 
+      "content_type": 28
+    }
+  }, 
+  {
+    "pk": 88, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_signupcoderesult", 
+      "name": "Can delete signup code result", 
+      "content_type": 29
+    }
+  }, 
+  {
+    "pk": 19, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_site", 
+      "name": "Can add site", 
+      "content_type": 7
+    }
+  }, 
+  {
+    "pk": 20, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_site", 
+      "name": "Can change site", 
+      "content_type": 7
+    }
+  }, 
+  {
+    "pk": 21, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_site", 
+      "name": "Can delete site", 
+      "content_type": 7
+    }
+  }, 
+  {
+    "pk": 55, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_tag", 
+      "name": "Can add tag", 
+      "content_type": 19
+    }
+  }, 
+  {
+    "pk": 58, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_taggeditem", 
+      "name": "Can add tagged item", 
+      "content_type": 20
+    }
+  }, 
+  {
+    "pk": 56, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_tag", 
+      "name": "Can change tag", 
+      "content_type": 19
+    }
+  }, 
+  {
+    "pk": 59, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_taggeditem", 
+      "name": "Can change tagged item", 
+      "content_type": 20
+    }
+  }, 
+  {
+    "pk": 57, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_tag", 
+      "name": "Can delete tag", 
+      "content_type": 19
+    }
+  }, 
+  {
+    "pk": 60, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_taggeditem", 
+      "name": "Can delete tagged item", 
+      "content_type": 20
+    }
+  }, 
+  {
+    "pk": 49, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_freethreadedcomment", 
+      "name": "Can add Free Threaded Comment", 
+      "content_type": 17
+    }
+  }, 
+  {
+    "pk": 52, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_testmodel", 
+      "name": "Can add test model", 
+      "content_type": 18
+    }
+  }, 
+  {
+    "pk": 46, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_threadedcomment", 
+      "name": "Can add Threaded Comment", 
+      "content_type": 16
+    }
+  }, 
+  {
+    "pk": 50, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_freethreadedcomment", 
+      "name": "Can change Free Threaded Comment", 
+      "content_type": 17
+    }
+  }, 
+  {
+    "pk": 53, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_testmodel", 
+      "name": "Can change test model", 
+      "content_type": 18
+    }
+  }, 
+  {
+    "pk": 47, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_threadedcomment", 
+      "name": "Can change Threaded Comment", 
+      "content_type": 16
+    }
+  }, 
+  {
+    "pk": 51, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_freethreadedcomment", 
+      "name": "Can delete Free Threaded Comment", 
+      "content_type": 17
+    }
+  }, 
+  {
+    "pk": 54, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_testmodel", 
+      "name": "Can delete test model", 
+      "content_type": 18
+    }
+  }, 
+  {
+    "pk": 48, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_threadedcomment", 
+      "name": "Can delete Threaded Comment", 
+      "content_type": 16
+    }
+  }, 
+  {
+    "pk": 119, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_topic", 
+      "name": "Can add topic", 
+      "content_type": 40
+    }
+  }, 
+  {
+    "pk": 120, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_topic", 
+      "name": "Can change topic", 
+      "content_type": 40
+    }
+  }, 
+  {
+    "pk": 121, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_topic", 
+      "name": "Can delete topic", 
+      "content_type": 40
+    }
+  }, 
+  {
+    "pk": 61, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_article", 
+      "name": "Can add Article", 
+      "content_type": 21
+    }
+  }, 
+  {
+    "pk": 64, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_changeset", 
+      "name": "Can add Change set", 
+      "content_type": 22
+    }
+  }, 
+  {
+    "pk": 62, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_article", 
+      "name": "Can change Article", 
+      "content_type": 21
+    }
+  }, 
+  {
+    "pk": 65, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_changeset", 
+      "name": "Can change Change set", 
+      "content_type": 22
+    }
+  }, 
+  {
+    "pk": 63, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_article", 
+      "name": "Can delete Article", 
+      "content_type": 21
+    }
+  }, 
+  {
+    "pk": 66, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_changeset", 
+      "name": "Can delete Change set", 
+      "content_type": 22
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "auth.user", 
+    "fields": {
+      "username": "selenium_super_user", 
+      "first_name": "", 
+      "last_name": "", 
+      "is_active": 1, 
+      "is_superuser": 1, 
+      "is_staff": 1, 
+      "last_login": "2011-01-16 10:12:49", 
+      "groups": [], 
+      "user_permissions": [], 
+      "password": "sha1$b33dd$e40397799133cdb128eb0396b381fa85ee36a99d", 
+      "email": "selenium_super_user@scrumdo.com", 
+      "date_joined": "2011-01-16 10:12:49"
+    }
+  }, 
+  {
+    "pk": 25, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "account", 
+      "name": "account", 
+      "app_label": "account"
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "announcement", 
+      "name": "announcement", 
+      "app_label": "announcements"
+    }
+  }, 
+  {
+    "pk": 21, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "article", 
+      "name": "Article", 
+      "app_label": "wiki"
+    }
+  }, 
+  {
+    "pk": 54, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "association", 
+      "name": "association", 
+      "app_label": "django_openid"
+    }
+  }, 
+  {
+    "pk": 23, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "attachment", 
+      "name": "attachment", 
+      "app_label": "attachments"
+    }
+  }, 
+  {
+    "pk": 15, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "avatar", 
+      "name": "avatar", 
+      "app_label": "avatar"
+    }
+  }, 
+  {
+    "pk": 22, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "changeset", 
+      "name": "Change set", 
+      "app_label": "wiki"
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "contenttype", 
+      "name": "content type", 
+      "app_label": "contenttypes"
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "dontsendentry", 
+      "name": "don't send entry", 
+      "app_label": "mailer"
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "emailaddress", 
+      "name": "e-mail address", 
+      "app_label": "emailconfirmation"
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "emailconfirmation", 
+      "name": "e-mail confirmation", 
+      "app_label": "emailconfirmation"
+    }
+  }, 
+  {
+    "pk": 43, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "evolution", 
+      "name": "evolution", 
+      "app_label": "django_evolution"
+    }
+  }, 
+  {
+    "pk": 51, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "externalstorymapping", 
+      "name": "external story mapping", 
+      "app_label": "extras"
+    }
+  }, 
+  {
+    "pk": 52, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "extraconfiguration", 
+      "name": "extra configuration", 
+      "app_label": "extras"
+    }
+  }, 
+  {
+    "pk": 44, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "forum", 
+      "name": "Forum", 
+      "app_label": "forum"
+    }
+  }, 
+  {
+    "pk": 17, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "freethreadedcomment", 
+      "name": "Free Threaded Comment", 
+      "app_label": "threadedcomments"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "group", 
+      "name": "group", 
+      "app_label": "auth"
+    }
+  }, 
+  {
+    "pk": 33, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "iteration", 
+      "name": "iteration", 
+      "app_label": "projects"
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "logentry", 
+      "name": "log entry", 
+      "app_label": "admin"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "message", 
+      "name": "message", 
+      "app_label": "auth"
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "message", 
+      "name": "message", 
+      "app_label": "mailer"
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "messagelog", 
+      "name": "message log", 
+      "app_label": "mailer"
+    }
+  }, 
+  {
+    "pk": 53, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "nonce", 
+      "name": "nonce", 
+      "app_label": "django_openid"
+    }
+  }, 
+  {
+    "pk": 38, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "organization", 
+      "name": "organization", 
+      "app_label": "organizations"
+    }
+  }, 
+  {
+    "pk": 26, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "otherserviceinfo", 
+      "name": "other service info", 
+      "app_label": "account"
+    }
+  }, 
+  {
+    "pk": 27, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "passwordreset", 
+      "name": "password reset", 
+      "app_label": "account"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "permission", 
+      "name": "permission", 
+      "app_label": "auth"
+    }
+  }, 
+  {
+    "pk": 31, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "pointslog", 
+      "name": "points log", 
+      "app_label": "projects"
+    }
+  }, 
+  {
+    "pk": 46, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "post", 
+      "name": "Post", 
+      "app_label": "forum"
+    }
+  }, 
+  {
+    "pk": 24, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "profile", 
+      "name": "profile", 
+      "app_label": "basic_profiles"
+    }
+  }, 
+  {
+    "pk": 32, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "project", 
+      "name": "project", 
+      "app_label": "projects"
+    }
+  }, 
+  {
+    "pk": 48, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "projectextramapping", 
+      "name": "project extra mapping", 
+      "app_label": "extras"
+    }
+  }, 
+  {
+    "pk": 37, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "projectmember", 
+      "name": "project member", 
+      "app_label": "projects"
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "session", 
+      "name": "session", 
+      "app_label": "sessions"
+    }
+  }, 
+  {
+    "pk": 28, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "signupcode", 
+      "name": "signup code", 
+      "app_label": "signup_codes"
+    }
+  }, 
+  {
+    "pk": 29, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "signupcoderesult", 
+      "name": "signup code result", 
+      "app_label": "signup_codes"
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "site", 
+      "name": "site", 
+      "app_label": "sites"
+    }
+  }, 
+  {
+    "pk": 30, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "sitestats", 
+      "name": "site stats", 
+      "app_label": "projects"
+    }
+  }, 
+  {
+    "pk": 34, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "story", 
+      "name": "story", 
+      "app_label": "projects"
+    }
+  }, 
+  {
+    "pk": 49, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "storyqueue", 
+      "name": "story queue", 
+      "app_label": "extras"
+    }
+  }, 
+  {
+    "pk": 35, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "storytag", 
+      "name": "story tag", 
+      "app_label": "projects"
+    }
+  }, 
+  {
+    "pk": 36, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "storytagging", 
+      "name": "story tagging", 
+      "app_label": "projects"
+    }
+  }, 
+  {
+    "pk": 41, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "subjectactivity", 
+      "name": "subject activity", 
+      "app_label": "activities"
+    }
+  }, 
+  {
+    "pk": 47, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "subscription", 
+      "name": "Subscription", 
+      "app_label": "forum"
+    }
+  }, 
+  {
+    "pk": 50, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "syncronizationqueue", 
+      "name": "syncronization queue", 
+      "app_label": "extras"
+    }
+  }, 
+  {
+    "pk": 19, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "tag", 
+      "name": "tag", 
+      "app_label": "tagging"
+    }
+  }, 
+  {
+    "pk": 20, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "taggeditem", 
+      "name": "tagged item", 
+      "app_label": "tagging"
+    }
+  }, 
+  {
+    "pk": 39, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "team", 
+      "name": "team", 
+      "app_label": "organizations"
+    }
+  }, 
+  {
+    "pk": 18, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "testmodel", 
+      "name": "test model", 
+      "app_label": "threadedcomments"
+    }
+  }, 
+  {
+    "pk": 45, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "thread", 
+      "name": "Thread", 
+      "app_label": "forum"
+    }
+  }, 
+  {
+    "pk": 16, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "threadedcomment", 
+      "name": "Threaded Comment", 
+      "app_label": "threadedcomments"
+    }
+  }, 
+  {
+    "pk": 40, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "topic", 
+      "name": "topic", 
+      "app_label": "topics"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "user", 
+      "name": "user", 
+      "app_label": "auth"
+    }
+  }, 
+  {
+    "pk": 55, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "useropenidassociation", 
+      "name": "user openid association", 
+      "app_label": "django_openid"
+    }
+  }, 
+  {
+    "pk": 42, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "version", 
+      "name": "version", 
+      "app_label": "django_evolution"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "sites.site", 
+    "fields": {
+      "domain": "example.com", 
+      "name": "example.com"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "basic_profiles.profile", 
+    "fields": {
+      "website": null, 
+      "about": null, 
+      "location": null, 
+      "user": 1, 
+      "name": null
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "account.account", 
+    "fields": {
+      "timezone": "US/Eastern", 
+      "user": 1, 
+      "language": "en"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "django_evolution.version", 
+    "fields": {
+      "when": "2011-01-16 10:12:49", 
+      "signature": "(dp1\nS'wiki'\np2\nccopy_reg\n_reconstructor\np3\n(cdjango.utils.datastructures\nSortedDict\np4\nc__builtin__\ndict\np5\n(dp6\nS'Article'\np7\n(dp8\nS'fields'\np9\n(dp10\nS'created_at'\np11\n(dp12\nS'field_type'\np13\ncdjango.db.models.fields\nDateTimeField\np14\nssS'removed'\np15\n(dp16\ng13\ncdjango.db.models.fields\nBooleanField\np17\nssS'creator_ip'\np18\n(dp19\nS'max_length'\np20\nI15\nsg13\ncdjango.db.models.fields\nIPAddressField\np21\nsS'null'\np22\nI01\nssS'creator'\np23\n(dp24\ng13\ncdjango.db.models.fields.related\nForeignKey\np25\nsg22\nI01\nsS'related_model'\np26\nS'auth.User'\np27\nssS'markup'\np28\n(dp29\ng20\nI20\nsg13\ncdjango.db.models.fields\nCharField\np30\nsg22\nI01\nssS'title'\np31\n(dp32\ng13\ng30\nsg20\nI50\nssS'object_id'\np33\n(dp34\ng13\ncdjango.db.models.fields\nPositiveIntegerField\np35\nsg22\nI01\nssS'summary'\np36\n(dp37\ng20\nI150\nsg13\ng30\nsg22\nI01\nssS'content'\np38\n(dp39\ng13\ncdjango.db.models.fields\nTextField\np40\nssS'content_type'\np41\n(dp42\ng13\ng25\nsg22\nI01\nsg26\nS'contenttypes.ContentType'\np43\nssS'last_update'\np44\n(dp45\ng13\ng14\nsg22\nI01\nssS'id'\np46\n(dp47\ng13\ncdjango.db.models.fields\nAutoField\np48\nsS'primary_key'\np49\nI01\nssS'tags'\np50\n(dp51\ng13\nctagging.fields\nTagField\np52\nsg20\nI255\nsssS'meta'\np53\n(dp54\nS'unique_together'\np55\n(lp56\nsS'db_table'\np57\nS'wiki_article'\np58\nsS'db_tablespace'\np59\nS''\nsS'pk_column'\np60\ng46\nsssS'ChangeSet'\np61\n(dp62\ng9\n(dp63\nS'comment'\np64\n(dp65\ng13\ng30\nsg20\nI50\nssS'content_diff'\np66\n(dp67\ng13\ng40\nssS'editor_ip'\np68\n(dp69\ng13\ng21\nsg20\nI15\nssS'modified'\np70\n(dp71\ng13\ng14\nssS'reverted'\np72\n(dp73\ng13\ng17\nssS'old_title'\np74\n(dp75\ng13\ng30\nsg20\nI50\nssS'old_markup'\np76\n(dp77\ng20\nI20\nsg13\ng30\nsg22\nI01\nssS'editor'\np78\n(dp79\ng13\ng25\nsg22\nI01\nsg26\nS'auth.User'\np80\nssS'article'\np81\n(dp82\ng13\ng25\nsg26\nS'wiki.Article'\np83\nssg46\n(dp84\ng13\ng48\nsg49\nI01\nssS'revision'\np85\n(dp86\ng13\ncdjango.db.models.fields\nIntegerField\np87\nsssg53\n(dp88\ng55\n(lp89\nsg57\nS'wiki_changeset'\np90\nsg59\nS''\nsg60\ng46\nssstRp91\n(dp92\nS'keyOrder'\np93\n(lp94\ng7\nag61\nasbsS'attachments'\np95\ng3\n(g4\ng5\n(dp96\nS'Attachment'\np97\n(dp98\ng9\n(dp99\ng23\n(dp100\ng13\ng25\nsg26\nS'auth.User'\np101\nssS'created'\np102\n(dp103\ng13\ng14\nssg70\n(dp104\ng13\ng14\nssg33\n(dp105\ng13\ng35\nssS'attachment_file'\np106\n(dp107\ng13\ncdjango.db.models.fields.files\nFileField\np108\nsg20\nI100\nssg41\n(dp109\ng13\ng25\nsg26\nS'contenttypes.ContentType'\np110\nssg46\n(dp111\ng13\ng48\nsg49\nI01\nsssg53\n(dp112\ng55\n(lp113\nsg57\nS'attachments_attachment'\np114\nsg59\nS''\nsg60\ng46\nssstRp115\n(dp116\ng93\n(lp117\ng97\nasbsS'signup_codes'\np118\ng3\n(g4\ng5\n(dp119\nS'SignupCodeResult'\np120\n(dp121\ng9\n(dp122\nS'timestamp'\np123\n(dp124\ng13\ng14\nssS'signup_code'\np125\n(dp126\ng13\ng25\nsg26\nS'signup_codes.SignupCode'\np127\nssg46\n(dp128\ng13\ng48\nsg49\nI01\nssS'user'\np129\n(dp130\ng13\ng25\nsg26\nS'auth.User'\np131\nsssg53\n(dp132\ng55\n(lp133\nsg57\nS'signup_codes_signupcoderesult'\np134\nsg59\nS''\nsg60\ng46\nsssS'SignupCode'\np135\n(dp136\ng9\n(dp137\nS'code'\np138\n(dp139\ng13\ng30\nsg20\nI40\nssg102\n(dp140\ng13\ng14\nssS'notes'\np141\n(dp142\ng13\ng40\nssS'email'\np143\n(dp144\ng13\ncdjango.db.models.fields\nEmailField\np145\nsg20\nI75\nssS'use_count'\np146\n(dp147\ng13\ng35\nssS'max_uses'\np148\n(dp149\ng13\ng35\nssS'expiry'\np150\n(dp151\ng13\ng14\nsg22\nI01\nssS'inviter'\np152\n(dp153\ng13\ng25\nsg22\nI01\nsg26\nS'auth.User'\np154\nssg46\n(dp155\ng13\ng48\nsg49\nI01\nsssg53\n(dp156\ng55\n(lp157\nsg57\nS'signup_codes_signupcode'\np158\nsg59\nS''\nsg60\ng46\nssstRp159\n(dp160\ng93\n(lp161\ng135\nag120\nasbsS'timezones'\np162\ng3\n(g4\ng5\n(dtRp163\n(dp164\ng93\n(lp165\nsbsS'topics'\np166\ng3\n(g4\ng5\n(dp167\nS'Topic'\np168\n(dp169\ng9\n(dp170\nS'body'\np171\n(dp172\ng13\ng40\nssg102\n(dp173\ng13\ng14\nssg31\n(dp174\ng13\ng30\nsg20\nI50\nssg70\n(dp175\ng13\ng14\nssg33\n(dp176\ng13\ng35\nsg22\nI01\nssg41\n(dp177\ng13\ng25\nsg22\nI01\nsg26\nS'contenttypes.ContentType'\np178\nssg23\n(dp179\ng13\ng25\nsg26\nS'auth.User'\np180\nssg46\n(dp181\ng13\ng48\nsg49\nI01\nssg50\n(dp182\ng13\ng52\nsg20\nI255\nsssg53\n(dp183\ng55\n(lp184\nsg57\nS'topics_topic'\np185\nsg59\nS''\nsg60\ng46\nssstRp186\n(dp187\ng93\n(lp188\ng168\nasbsS'threadedcomments'\np189\ng3\n(g4\ng5\n(dp190\nS'ThreadedComment'\np191\n(dp192\ng9\n(dp193\ng64\n(dp194\ng13\ng40\nssS'is_approved'\np195\n(dp196\ng13\ng17\nssS'parent'\np197\n(dp198\ng13\ng25\nsg22\nI01\nsg26\nS'threadedcomments.ThreadedComment'\np199\nssS'date_modified'\np200\n(dp201\ng13\ng14\nssg28\n(dp202\ng13\ng87\nsg22\nI01\nssS'date_submitted'\np203\n(dp204\ng13\ng14\nssg33\n(dp205\ng13\ng35\nssg129\n(dp206\ng13\ng25\nsg26\nS'auth.User'\np207\nssg41\n(dp208\ng13\ng25\nsg26\nS'contenttypes.ContentType'\np209\nssS'is_public'\np210\n(dp211\ng13\ng17\nssS'ip_address'\np212\n(dp213\ng20\nI15\nsg13\ng21\nsg22\nI01\nssg46\n(dp214\ng13\ng48\nsg49\nI01\nssS'date_approved'\np215\n(dp216\ng13\ng14\nsg22\nI01\nsssg53\n(dp217\ng55\n(lp218\nsg57\nS'threadedcomments_threadedcomment'\np219\nsg59\nS''\nsg60\ng46\nsssS'TestModel'\np220\n(dp221\ng9\n(dp222\nS'date'\np223\n(dp224\ng13\ng14\nssg210\n(dp225\ng13\ng17\nssg46\n(dp226\ng13\ng48\nsg49\nI01\nssS'name'\np227\n(dp228\ng13\ng30\nsg20\nI5\nsssg53\n(dp229\ng55\n(lp230\nsg57\nS'threadedcomments_testmodel'\np231\nsg59\nS''\nsg60\ng46\nsssS'FreeThreadedComment'\np232\n(dp233\ng9\n(dp234\nS'website'\np235\n(dp236\ng13\ncdjango.db.models.fields\nURLField\np237\nsg20\nI200\nssg64\n(dp238\ng13\ng40\nssg227\n(dp239\ng13\ng30\nsg20\nI128\nssg197\n(dp240\ng13\ng25\nsg22\nI01\nsg26\nS'threadedcomments.FreeThreadedComment'\np241\nssg200\n(dp242\ng13\ng14\nssg28\n(dp243\ng13\ng87\nsg22\nI01\nssg203\n(dp244\ng13\ng14\nssg33\n(dp245\ng13\ng35\nssg143\n(dp246\ng13\ng145\nsg20\nI75\nssg195\n(dp247\ng13\ng17\nssg41\n(dp248\ng13\ng25\nsg26\nS'contenttypes.ContentType'\np249\nssg210\n(dp250\ng13\ng17\nssg212\n(dp251\ng20\nI15\nsg13\ng21\nsg22\nI01\nssg46\n(dp252\ng13\ng48\nsg49\nI01\nssg215\n(dp253\ng13\ng14\nsg22\nI01\nsssg53\n(dp254\ng55\n(lp255\nsg57\nS'threadedcomments_freethreadedcomment'\np256\nsg59\nS''\nsg60\ng46\nssstRp257\n(dp258\ng93\n(lp259\ng191\nag232\nag220\nasbsS'django_filters'\np260\ng3\n(g4\ng5\n(dtRp261\n(dp262\ng93\n(lp263\nsbsS'sites'\np264\ng3\n(g4\ng5\n(dp265\nS'Site'\np266\n(dp267\ng9\n(dp268\nS'domain'\np269\n(dp270\ng13\ng30\nsg20\nI100\nssg46\n(dp271\ng13\ng48\nsg49\nI01\nssg227\n(dp272\ng13\ng30\nsg20\nI50\nsssg53\n(dp273\ng55\n(lp274\nsg57\nS'django_site'\np275\nsg59\nS''\nsg60\ng46\nssstRp276\n(dp277\ng93\n(lp278\ng266\nasbsS'contenttypes'\np279\ng3\n(g4\ng5\n(dp280\nS'ContentType'\np281\n(dp282\ng9\n(dp283\nS'model'\np284\n(dp285\ng13\ng30\nsg20\nI100\nssS'app_label'\np286\n(dp287\ng13\ng30\nsg20\nI100\nssg46\n(dp288\ng13\ng48\nsg49\nI01\nssg227\n(dp289\ng13\ng30\nsg20\nI100\nsssg53\n(dp290\ng55\n((S'app_label'\nS'model'\nttp291\nsg57\nS'django_content_type'\np292\nsg59\nS''\nsg60\ng46\nssstRp293\n(dp294\ng93\n(lp295\ng281\nasbsS'about'\np296\ng3\n(g4\ng5\n(dtRp297\n(dp298\ng93\n(lp299\nsbsS'announcements'\np300\ng3\n(g4\ng5\n(dp301\nS'Announcement'\np302\n(dp303\ng9\n(dp304\ng23\n(dp305\ng13\ng25\nsg26\nS'auth.User'\np306\nssS'site_wide'\np307\n(dp308\ng13\ng17\nssg31\n(dp309\ng13\ng30\nsg20\nI50\nssS'creation_date'\np310\n(dp311\ng13\ng14\nssg38\n(dp312\ng13\ng40\nssS'members_only'\np313\n(dp314\ng13\ng17\nssg46\n(dp315\ng13\ng48\nsg49\nI01\nsssg53\n(dp316\ng55\n(lp317\nsg57\nS'announcements_announcement'\np318\nsg59\nS''\nsg60\ng46\nssstRp319\n(dp320\ng93\n(lp321\ng302\nasbsS'__version__'\np322\nI1\nsS'projects'\np323\ng3\n(g4\ng5\n(dp324\nS'Story'\np325\n(dp326\ng9\n(dp327\nS'status'\np328\n(dp329\ng13\ng87\nsg20\nI2\nssS'extra_1'\np330\n(dp331\ng13\ng40\nsg22\nI01\nssg23\n(dp332\ng13\ng25\nsg26\nS'auth.User'\np333\nssg102\n(dp334\ng13\ng14\nssS'iteration'\np335\n(dp336\ng13\ng25\nsg26\nS'projects.Iteration'\np337\nssS'detail'\np338\n(dp339\ng13\ng40\nssS'rank'\np340\n(dp341\ng13\ng87\nssg36\n(dp342\ng13\ng40\nssS'project'\np343\n(dp344\ng13\ng25\nsg26\nS'projects.Project'\np345\nssS'assignee'\np346\n(dp347\ng13\ng25\nsg22\nI01\nsg26\nS'auth.User'\np348\nssS'local_id'\np349\n(dp350\ng13\ng87\nssg70\n(dp351\ng13\ng14\nssS'extra_3'\np352\n(dp353\ng13\ng40\nsg22\nI01\nssg46\n(dp354\ng13\ng48\nsg49\nI01\nssS'extra_2'\np355\n(dp356\ng13\ng40\nsg22\nI01\nssS'points'\np357\n(dp358\ng13\ng30\nsg20\nI3\nsssg53\n(dp359\ng55\n(lp360\nsg57\nS'projects_story'\np361\nsg59\nS''\nsg60\ng46\nsssS'StoryTagging'\np362\n(dp363\ng9\n(dp364\nS'story'\np365\n(dp366\ng13\ng25\nsg26\nS'projects.Story'\np367\nssS'tag'\np368\n(dp369\ng13\ng25\nsg26\nS'projects.StoryTag'\np370\nssg46\n(dp371\ng13\ng48\nsg49\nI01\nsssg53\n(dp372\ng55\n(lp373\nsg57\nS'projects_storytagging'\np374\nsg59\nS''\nsg60\ng46\nsssS'Iteration'\np375\n(dp376\ng9\n(dp377\nS'include_in_velocity'\np378\n(dp379\ng13\ng17\nssS'locked'\np380\n(dp381\ng13\ng17\nssg227\n(dp382\ng13\ng30\nsg20\nI100\nssS'end_date'\np383\n(dp384\ng13\ncdjango.db.models.fields\nDateField\np385\nsg22\nI01\nssg338\n(dp386\ng13\ng40\nssg46\n(dp387\ng13\ng48\nsg49\nI01\nssg343\n(dp388\ng13\ng25\nsg26\nS'projects.Project'\np389\nssS'default_iteration'\np390\n(dp391\ng13\ng17\nssS'start_date'\np392\n(dp393\ng13\ng385\nsg22\nI01\nsssg53\n(dp394\ng55\n(lp395\nsg57\nS'projects_iteration'\np396\nsg59\nS''\nsg60\ng46\nsssS'SiteStats'\np397\n(dp398\ng9\n(dp399\ng223\n(dp400\ng13\ng385\nssS'project_count'\np401\n(dp402\ng13\ng87\nssS'user_count'\np403\n(dp404\ng13\ng87\nssS'story_count'\np405\n(dp406\ng13\ng87\nssg46\n(dp407\ng13\ng48\nsg49\nI01\nsssg53\n(dp408\ng55\n(lp409\nsg57\nS'projects_sitestats'\np410\nsg59\nS''\nsg60\ng46\nsssS'PointsLog'\np411\n(dp412\ng9\n(dp413\ng33\n(dp414\ng13\ng35\nssS'points_claimed'\np415\n(dp416\ng13\ng87\nssS'points_total'\np417\n(dp418\ng13\ng87\nssg41\n(dp419\ng13\ng25\nsg26\nS'contenttypes.ContentType'\np420\nssg223\n(dp421\ng13\ng385\nssg46\n(dp422\ng13\ng48\nsg49\nI01\nsssg53\n(dp423\ng55\n(lp424\nsg57\nS'projects_pointslog'\np425\nsg59\nS''\nsg60\ng46\nsssS'Project'\np426\n(dp427\ng9\n(dp428\nS'organization'\np429\n(dp430\ng13\ng25\nsg22\nI01\nsg26\nS'organizations.Organization'\np431\nssS'extra_3_label'\np432\n(dp433\ng20\nI25\nsg13\ng30\nsg22\nI01\nssS'use_acceptance'\np434\n(dp435\ng13\ng17\nssS'description'\np436\n(dp437\ng13\ng40\nssg23\n(dp438\ng13\ng25\nsg26\nS'auth.User'\np439\nssS'use_extra_1'\np440\n(dp441\ng13\ng17\nssS'iterations_left'\np442\n(dp443\ng13\ng35\nsg22\nI01\nssg102\n(dp444\ng13\ng14\nssS'private'\np445\n(dp446\ng13\ng17\nssS'slug'\np447\n(dp448\ng20\nI50\nsg13\ncdjango.db.models.fields\nSlugField\np449\nsS'unique'\np450\nI01\nsS'db_index'\np451\nI01\nssS'member_users'\np452\n(dp453\ng13\ncdjango.db.models.fields.related\nManyToManyField\np454\nsg26\nS'auth.User'\np455\nssS'extra_2_label'\np456\n(dp457\ng20\nI25\nsg13\ng30\nsg22\nI01\nssS'extra_1_label'\np458\n(dp459\ng20\nI25\nsg13\ng30\nsg22\nI01\nssS'velocity'\np460\n(dp461\ng13\ng35\nsg22\nI01\nssS'use_assignee'\np462\n(dp463\ng13\ng17\nssS'velocity_iteration_span'\np464\n(dp465\ng13\ng35\nsg22\nI01\nssS'use_extra_3'\np466\n(dp467\ng13\ng17\nssg46\n(dp468\ng13\ng48\nsg49\nI01\nssS'use_extra_2'\np469\n(dp470\ng13\ng17\nssg227\n(dp471\ng20\nI80\nsg13\ng30\nsg450\nI01\nsssg53\n(dp472\ng55\n(lp473\nsg57\nS'projects_project'\np474\nsg59\nS''\nsg60\ng46\nsssS'StoryTag'\np475\n(dp476\ng9\n(dp477\ng343\n(dp478\ng13\ng25\nsg26\nS'projects.Project'\np479\nssg46\n(dp480\ng13\ng48\nsg49\nI01\nssg227\n(dp481\ng13\ng30\nsg20\nI32\nsssg53\n(dp482\ng55\n(lp483\nsg57\nS'projects_storytag'\np484\nsg59\nS''\nsg60\ng46\nsssS'ProjectMember'\np485\n(dp486\ng9\n(dp487\nS'away_since'\np488\n(dp489\ng13\ng14\nssS'away'\np490\n(dp491\ng13\ng17\nssg343\n(dp492\ng13\ng25\nsg26\nS'projects.Project'\np493\nssg129\n(dp494\ng13\ng25\nsg26\nS'auth.User'\np495\nssS'away_message'\np496\n(dp497\ng13\ng30\nsg20\nI500\nssg46\n(dp498\ng13\ng48\nsg49\nI01\nsssg53\n(dp499\ng55\n(lp500\nsg57\nS'projects_projectmember'\np501\nsg59\nS''\nsg60\ng46\nssstRp502\n(dp503\ng93\n(lp504\ng397\nag411\nag426\nag375\nag325\nag475\nag362\nag485\nasbsS'tagging_utils'\np505\ng3\n(g4\ng5\n(dtRp506\n(dp507\ng93\n(lp508\nsbsS'activities'\np509\ng3\n(g4\ng5\n(dp510\nS'SubjectActivity'\np511\n(dp512\ng9\n(dp513\ng365\n(dp514\ng13\ng25\nsg22\nI01\nsg26\nS'projects.Story'\np515\nssS'like'\np516\n(dp517\ng13\ng87\nssg102\n(dp518\ng13\ng14\nssS'object'\np519\n(dp520\ng13\ng30\nsg20\nI100\nssg129\n(dp521\ng13\ng25\nsg22\nI01\nsg26\nS'auth.User'\np522\nssS'context'\np523\n(dp524\ng13\ng30\nsg20\nI100\nssS'action'\np525\n(dp526\ng13\ng30\nsg20\nI100\nssS'news'\np527\n(dp528\ng13\ng40\nssg46\n(dp529\ng13\ng48\nsg49\nI01\nsssg53\n(dp530\ng55\n(lp531\nsg57\nS'activities_subjectactivity'\np532\nsg59\nS''\nsg60\ng46\nssstRp533\n(dp534\ng93\n(lp535\ng511\nasbsS'mailer'\np536\ng3\n(g4\ng5\n(dp537\nS'Message'\np538\n(dp539\ng9\n(dp540\nS'message_body'\np541\n(dp542\ng13\ng40\nssS'to_address'\np543\n(dp544\ng13\ng30\nsg20\nI50\nssS'from_address'\np545\n(dp546\ng13\ng30\nsg20\nI50\nssS'when_added'\np547\n(dp548\ng13\ng14\nssS'priority'\np549\n(dp550\ng13\ng30\nsg20\nI1\nssg46\n(dp551\ng13\ng48\nsg49\nI01\nssS'subject'\np552\n(dp553\ng13\ng30\nsg20\nI100\nsssg53\n(dp554\ng55\n(lp555\nsg57\nS'mailer_message'\np556\nsg59\nS''\nsg60\ng46\nsssS'DontSendEntry'\np557\n(dp558\ng9\n(dp559\ng543\n(dp560\ng13\ng30\nsg20\nI50\nssg46\n(dp561\ng13\ng48\nsg49\nI01\nssg547\n(dp562\ng13\ng14\nsssg53\n(dp563\ng55\n(lp564\nsg57\nS'mailer_dontsendentry'\np565\nsg59\nS''\nsg60\ng46\nsssS'MessageLog'\np566\n(dp567\ng9\n(dp568\ng541\n(dp569\ng13\ng40\nssg543\n(dp570\ng13\ng30\nsg20\nI50\nssg545\n(dp571\ng13\ng30\nsg20\nI50\nssS'when_attempted'\np572\n(dp573\ng13\ng14\nssg547\n(dp574\ng13\ng14\nssg549\n(dp575\ng13\ng30\nsg20\nI1\nssS'result'\np576\n(dp577\ng13\ng30\nsg20\nI1\nssS'log_message'\np578\n(dp579\ng13\ng40\nssg46\n(dp580\ng13\ng48\nsg49\nI01\nssg552\n(dp581\ng13\ng30\nsg20\nI100\nsssg53\n(dp582\ng55\n(lp583\nsg57\nS'mailer_messagelog'\np584\nsg59\nS''\nsg60\ng46\nssstRp585\n(dp586\ng93\n(lp587\ng538\nag557\nag566\nasbsS'django_openid'\np588\ng3\n(g4\ng5\n(dp589\nS'Nonce'\np590\n(dp591\ng9\n(dp592\ng123\n(dp593\ng13\ng87\nssS'salt'\np594\n(dp595\ng13\ng30\nsg20\nI40\nssg46\n(dp596\ng13\ng48\nsg49\nI01\nssS'server_url'\np597\n(dp598\ng13\ng30\nsg20\nI255\nsssg53\n(dp599\ng55\n(lp600\nsg57\nS'django_openid_nonce'\np601\nsg59\nS''\nsg60\ng46\nsssS'UserOpenidAssociation'\np602\n(dp603\ng9\n(dp604\nS'openid'\np605\n(dp606\ng13\ng30\nsg20\nI255\nssg102\n(dp607\ng13\ng14\nssg46\n(dp608\ng13\ng48\nsg49\nI01\nssg129\n(dp609\ng13\ng25\nsg26\nS'auth.User'\np610\nsssg53\n(dp611\ng55\n(lp612\nsg57\nS'django_openid_useropenidassociation'\np613\nsg59\nS''\nsg60\ng46\nsssS'Association'\np614\n(dp615\ng9\n(dp616\nS'handle'\np617\n(dp618\ng13\ng30\nsg20\nI255\nssS'issued'\np619\n(dp620\ng13\ng87\nssg597\n(dp621\ng13\ng40\nsg20\nI2047\nssS'assoc_type'\np622\n(dp623\ng13\ng40\nsg20\nI64\nssS'secret'\np624\n(dp625\ng13\ng40\nsg20\nI255\nssS'lifetime'\np626\n(dp627\ng13\ng87\nssg46\n(dp628\ng13\ng48\nsg49\nI01\nsssg53\n(dp629\ng55\n(lp630\nsg57\nS'django_openid_association'\np631\nsg59\nS''\nsg60\ng46\nssstRp632\n(dp633\ng93\n(lp634\ng590\nag614\nag602\nasbsS'sessions'\np635\ng3\n(g4\ng5\n(dp636\nS'Session'\np637\n(dp638\ng9\n(dp639\nS'session_key'\np640\n(dp641\ng13\ng30\nsg20\nI40\nsg49\nI01\nssS'expire_date'\np642\n(dp643\ng13\ng14\nssS'session_data'\np644\n(dp645\ng13\ng40\nsssg53\n(dp646\ng55\n(lp647\nsg57\nS'django_session'\np648\nsg59\nS''\nsg60\ng640\nssstRp649\n(dp650\ng93\n(lp651\ng637\nasbsS'staticfiles'\np652\ng3\n(g4\ng5\n(dtRp653\n(dp654\ng93\n(lp655\nsbsS'account'\np656\ng3\n(g4\ng5\n(dp657\nS'PasswordReset'\np658\n(dp659\ng9\n(dp660\nS'reset'\np661\n(dp662\ng13\ng17\nssg123\n(dp663\ng13\ng14\nssg46\n(dp664\ng13\ng48\nsg49\nI01\nssS'temp_key'\np665\n(dp666\ng13\ng30\nsg20\nI100\nssg129\n(dp667\ng13\ng25\nsg26\nS'auth.User'\np668\nsssg53\n(dp669\ng55\n(lp670\nsg57\nS'account_passwordreset'\np671\nsg59\nS''\nsg60\ng46\nsssS'Account'\np672\n(dp673\ng9\n(dp674\nS'timezone'\np675\n(dp676\ng13\nctimezones.fields\nTimeZoneField\np677\nsg20\nI100\nssg46\n(dp678\ng13\ng48\nsg49\nI01\nssS'language'\np679\n(dp680\ng13\ng30\nsg20\nI10\nssg129\n(dp681\ng13\ng25\nsg450\nI01\nsg26\nS'auth.User'\np682\nsssg53\n(dp683\ng55\n(lp684\nsg57\nS'account_account'\np685\nsg59\nS''\nsg60\ng46\nsssS'OtherServiceInfo'\np686\n(dp687\ng9\n(dp688\nS'value'\np689\n(dp690\ng13\ng40\nssg46\n(dp691\ng13\ng48\nsg49\nI01\nssS'key'\np692\n(dp693\ng13\ng30\nsg20\nI50\nssg129\n(dp694\ng13\ng25\nsg26\nS'auth.User'\np695\nsssg53\n(dp696\ng55\n(lp697\n(S'user'\nS'key'\ntp698\nasg57\nS'account_otherserviceinfo'\np699\nsg59\nS''\nsg60\ng46\nssstRp700\n(dp701\ng93\n(lp702\ng672\nag686\nag658\nasbsS'auth'\np703\ng3\n(g4\ng5\n(dp704\ng538\n(dp705\ng9\n(dp706\nS'message'\np707\n(dp708\ng13\ng40\nssg46\n(dp709\ng13\ng48\nsg49\nI01\nssg129\n(dp710\ng13\ng25\nsg26\nS'auth.User'\np711\nsssg53\n(dp712\ng55\n(lp713\nsg57\nS'auth_message'\np714\nsg59\nS''\nsg60\ng46\nsssS'Group'\np715\n(dp716\ng9\n(dp717\nS'permissions'\np718\n(dp719\ng13\ng454\nsg26\nS'auth.Permission'\np720\nssg46\n(dp721\ng13\ng48\nsg49\nI01\nssg227\n(dp722\ng20\nI80\nsg13\ng30\nsg450\nI01\nsssg53\n(dp723\ng55\n(lp724\nsg57\nS'auth_group'\np725\nsg59\nS''\nsg60\ng46\nsssS'User'\np726\n(dp727\ng9\n(dp728\nS'username'\np729\n(dp730\ng20\nI30\nsg13\ng30\nsg450\nI01\nssS'first_name'\np731\n(dp732\ng13\ng30\nsg20\nI30\nssS'last_name'\np733\n(dp734\ng13\ng30\nsg20\nI30\nssS'is_active'\np735\n(dp736\ng13\ng17\nssg143\n(dp737\ng13\ng145\nsg20\nI75\nssS'is_superuser'\np738\n(dp739\ng13\ng17\nssS'is_staff'\np740\n(dp741\ng13\ng17\nssS'last_login'\np742\n(dp743\ng13\ng14\nssS'groups'\np744\n(dp745\ng13\ng454\nsg26\nS'auth.Group'\np746\nssS'user_permissions'\np747\n(dp748\ng13\ng454\nsg26\nS'auth.Permission'\np749\nssS'password'\np750\n(dp751\ng13\ng30\nsg20\nI128\nssg46\n(dp752\ng13\ng48\nsg49\nI01\nssS'date_joined'\np753\n(dp754\ng13\ng14\nsssg53\n(dp755\ng55\n(lp756\nsg57\nS'auth_user'\np757\nsg59\nS''\nsg60\ng46\nsssS'Permission'\np758\n(dp759\ng9\n(dp760\nS'codename'\np761\n(dp762\ng13\ng30\nsg20\nI100\nssg46\n(dp763\ng13\ng48\nsg49\nI01\nssg41\n(dp764\ng13\ng25\nsg26\nS'contenttypes.ContentType'\np765\nssg227\n(dp766\ng13\ng30\nsg20\nI50\nsssg53\n(dp767\ng55\n((S'content_type'\nS'codename'\nttp768\nsg57\nS'auth_permission'\np769\nsg59\nS''\nsg60\ng46\nssstRp770\n(dp771\ng93\n(lp772\ng758\nag715\nag726\nag538\nasbsS'django_sorting'\np773\ng3\n(g4\ng5\n(dtRp774\n(dp775\ng93\n(lp776\nsbsS'ajax_validation'\np777\ng3\n(g4\ng5\n(dtRp778\n(dp779\ng93\n(lp780\nsbsS'tagging'\np781\ng3\n(g4\ng5\n(dp782\nS'Tag'\np783\n(dp784\ng9\n(dp785\ng46\n(dp786\ng13\ng48\nsg49\nI01\nssg227\n(dp787\ng20\nI50\nsg13\ng30\nsg450\nI01\nsg451\nI01\nsssg53\n(dp788\ng55\n(lp789\nsg57\nS'tagging_tag'\np790\nsg59\nS''\nsg60\ng46\nsssS'TaggedItem'\np791\n(dp792\ng9\n(dp793\ng368\n(dp794\ng13\ng25\nsg26\nS'tagging.Tag'\np795\nssg46\n(dp796\ng13\ng48\nsg49\nI01\nssg41\n(dp797\ng13\ng25\nsg26\nS'contenttypes.ContentType'\np798\nssg33\n(dp799\ng13\ng35\nsg451\nI01\nsssg53\n(dp800\ng55\n((S'tag'\nS'content_type'\nS'object_id'\nttp801\nsg57\nS'tagging_taggeditem'\np802\nsg59\nS''\nsg60\ng46\nssstRp803\n(dp804\ng93\n(lp805\ng783\nag791\nasbsS'organizations'\np806\ng3\n(g4\ng5\n(dp807\nS'Organization'\np808\n(dp809\ng9\n(dp810\ng436\n(dp811\ng13\ng40\nssg23\n(dp812\ng13\ng25\nsg26\nS'auth.User'\np813\nssg102\n(dp814\ng13\ng14\nssg46\n(dp815\ng13\ng48\nsg49\nI01\nssg447\n(dp816\ng20\nI50\nsg13\ng449\nsg450\nI01\nsg451\nI01\nssg227\n(dp817\ng13\ng30\nsg20\nI65\nsssg53\n(dp818\ng55\n(lp819\nsg57\nS'organizations_organization'\np820\nsg59\nS''\nsg60\ng46\nsssS'Team'\np821\n(dp822\ng9\n(dp823\ng227\n(dp824\ng13\ng30\nsg20\nI65\nssS'access_type'\np825\n(dp826\ng13\ng30\nsg20\nI25\nssS'members'\np827\n(dp828\ng13\ng454\nsg26\nS'auth.User'\np829\nssg429\n(dp830\ng13\ng25\nsg26\nS'organizations.Organization'\np831\nssg46\n(dp832\ng13\ng48\nsg49\nI01\nssS'projects'\np833\n(dp834\ng13\ng454\nsg26\nS'projects.Project'\np835\nsssg53\n(dp836\ng55\n(lp837\nsg57\nS'organizations_team'\np838\nsg59\nS''\nsg60\ng46\nssstRp839\n(dp840\ng93\n(lp841\ng808\nag821\nasbsS'pagination'\np842\ng3\n(g4\ng5\n(dtRp843\n(dp844\ng93\n(lp845\nsbsS'forum'\np846\ng3\n(g4\ng5\n(dp847\nS'Post'\np848\n(dp849\ng9\n(dp850\ng171\n(dp851\ng13\ng40\nssS'thread'\np852\n(dp853\ng13\ng25\nsg26\nS'forum.Thread'\np854\nssS'author'\np855\n(dp856\ng13\ng25\nsg26\nS'auth.User'\np857\nssS'body_html'\np858\n(dp859\ng13\ng40\nssS'time'\np860\n(dp861\ng13\ng14\nsg22\nI01\nssg46\n(dp862\ng13\ng48\nsg49\nI01\nsssg53\n(dp863\ng55\n(lp864\nsg57\nS'forum_post'\np865\nsg59\nS''\nsg60\ng46\nsssS'Forum'\np866\n(dp867\ng9\n(dp868\ng436\n(dp869\ng13\ng40\nssg197\n(dp870\ng13\ng25\nsg22\nI01\nsg26\nS'forum.Forum'\np871\nssg31\n(dp872\ng13\ng30\nsg20\nI100\nssS'ordering'\np873\n(dp874\ng13\ng87\nsg22\nI01\nssS'posts'\np875\n(dp876\ng13\ng87\nssg46\n(dp877\ng13\ng48\nsg49\nI01\nssS'threads'\np878\n(dp879\ng13\ng87\nssg744\n(dp880\ng13\ng454\nsg26\nS'auth.Group'\np881\nssg447\n(dp882\ng13\ng449\nsg20\nI50\nsg451\nI01\nsssg53\n(dp883\ng55\n(lp884\nsg57\nS'forum_forum'\np885\nsg59\nS''\nsg60\ng46\nsssS'Thread'\np886\n(dp887\ng9\n(dp888\nS'latest_post_time'\np889\n(dp890\ng13\ng14\nsg22\nI01\nssS'forum'\np891\n(dp892\ng13\ng25\nsg26\nS'forum.Forum'\np893\nssg31\n(dp894\ng13\ng30\nsg20\nI100\nssS'views'\np895\n(dp896\ng13\ng87\nssg875\n(dp897\ng13\ng87\nssS'sticky'\np898\n(dp899\ng13\ng17\nssS'closed'\np900\n(dp901\ng13\ng17\nssg46\n(dp902\ng13\ng48\nsg49\nI01\nsssg53\n(dp903\ng55\n(lp904\nsg57\nS'forum_thread'\np905\nsg59\nS''\nsg60\ng46\nsssS'Subscription'\np906\n(dp907\ng9\n(dp908\ng46\n(dp909\ng13\ng48\nsg49\nI01\nssg852\n(dp910\ng13\ng25\nsg26\nS'forum.Thread'\np911\nssg855\n(dp912\ng13\ng25\nsg26\nS'auth.User'\np913\nsssg53\n(dp914\ng55\n((S'author'\nS'thread'\nttp915\nsg57\nS'forum_subscription'\np916\nsg59\nS''\nsg60\ng46\nssstRp917\n(dp918\ng93\n(lp919\ng866\nag886\nag848\nag906\nasbsS'emailconfirmation'\np920\ng3\n(g4\ng5\n(dp921\nS'EmailAddress'\np922\n(dp923\ng9\n(dp924\ng143\n(dp925\ng13\ng145\nsg20\nI75\nssS'verified'\np926\n(dp927\ng13\ng17\nssg46\n(dp928\ng13\ng48\nsg49\nI01\nssS'primary'\np929\n(dp930\ng13\ng17\nssg129\n(dp931\ng13\ng25\nsg26\nS'auth.User'\np932\nsssg53\n(dp933\ng55\n((S'user'\nS'email'\nttp934\nsg57\nS'emailconfirmation_emailaddress'\np935\nsg59\nS''\nsg60\ng46\nsssS'EmailConfirmation'\np936\n(dp937\ng9\n(dp938\nS'email_address'\np939\n(dp940\ng13\ng25\nsg26\nS'emailconfirmation.EmailAddress'\np941\nssg46\n(dp942\ng13\ng48\nsg49\nI01\nssS'sent'\np943\n(dp944\ng13\ng14\nssS'confirmation_key'\np945\n(dp946\ng13\ng30\nsg20\nI40\nsssg53\n(dp947\ng55\n(lp948\nsg57\nS'emailconfirmation_emailconfirmation'\np949\nsg59\nS''\nsg60\ng46\nssstRp950\n(dp951\ng93\n(lp952\ng922\nag936\nasbsS'admin'\np953\ng3\n(g4\ng5\n(dp954\nS'LogEntry'\np955\n(dp956\ng9\n(dp957\nS'action_flag'\np958\n(dp959\ng13\ncdjango.db.models.fields\nPositiveSmallIntegerField\np960\nssS'action_time'\np961\n(dp962\ng13\ng14\nssS'object_repr'\np963\n(dp964\ng13\ng30\nsg20\nI200\nssg33\n(dp965\ng13\ng40\nsg22\nI01\nssS'change_message'\np966\n(dp967\ng13\ng40\nssg129\n(dp968\ng13\ng25\nsg26\nS'auth.User'\np969\nssg41\n(dp970\ng13\ng25\nsg22\nI01\nsg26\nS'contenttypes.ContentType'\np971\nssg46\n(dp972\ng13\ng48\nsg49\nI01\nsssg53\n(dp973\ng55\n(lp974\nsg57\nS'django_admin_log'\np975\nsg59\nS''\nsg60\ng46\nssstRp976\n(dp977\ng93\n(lp978\ng955\nasbsS'markup'\np979\ng3\n(g4\ng5\n(dtRp980\n(dp981\ng93\n(lp982\nsbsS'tag_app'\np983\ng3\n(g4\ng5\n(dtRp984\n(dp985\ng93\n(lp986\nsbsS'extras'\np987\ng3\n(g4\ng5\n(dp988\nS'ProjectExtraMapping'\np989\n(dp990\ng9\n(dp991\ng343\n(dp992\ng13\ng25\nsg26\nS'projects.Project'\np993\nssS'configuration'\np994\n(dp995\ng13\ng40\nssg46\n(dp996\ng13\ng48\nsg49\nI01\nssS'extra_slug'\np997\n(dp998\ng13\ng30\nsg20\nI25\nsssg53\n(dp999\ng55\n(lp1000\nsg57\nS'extras_projectextramapping'\np1001\nsg59\nS''\nsg60\ng46\nsssS'SyncronizationQueue'\np1002\n(dp1003\ng9\n(dp1004\ng365\n(dp1005\ng13\ng25\nsg22\nI01\nsg26\nS'projects.Story'\np1006\nssg997\n(dp1007\ng13\ng30\nsg20\nI25\nssg343\n(dp1008\ng13\ng25\nsg26\nS'projects.Project'\np1009\nssS'queue_date'\np1010\n(dp1011\ng13\ng14\nssg525\n(dp1012\ng13\ng87\nsg20\nI2\nssS'external_id'\np1013\n(dp1014\ng20\nI40\nsg13\ng30\nsg22\nI01\nssg46\n(dp1015\ng13\ng48\nsg49\nI01\nsssg53\n(dp1016\ng55\n(lp1017\nsg57\nS'extras_syncronizationqueue'\np1018\nsg59\nS''\nsg60\ng46\nsssS'StoryQueue'\np1019\n(dp1020\ng9\n(dp1021\ng328\n(dp1022\ng13\ng87\nsg20\nI2\nssg997\n(dp1023\ng13\ng30\nsg20\nI25\nssg352\n(dp1024\ng13\ng40\nsg22\nI01\nssg338\n(dp1025\ng13\ng40\nssg330\n(dp1026\ng13\ng40\nsg22\nI01\nssg70\n(dp1027\ng13\ng14\nssg36\n(dp1028\ng13\ng40\nssg343\n(dp1029\ng13\ng25\nsg26\nS'projects.Project'\np1030\nssg357\n(dp1031\ng13\ng30\nsg20\nI3\nssS'external_url'\np1032\n(dp1033\ng20\nI256\nsg13\ng30\nsg22\nI01\nssg1013\n(dp1034\ng13\ng30\nsg20\nI40\nssg46\n(dp1035\ng13\ng48\nsg49\nI01\nssg355\n(dp1036\ng13\ng40\nsg22\nI01\nssS'imported_on'\np1037\n(dp1038\ng13\ng14\nsssg53\n(dp1039\ng55\n(lp1040\nsg57\nS'extras_storyqueue'\np1041\nsg59\nS''\nsg60\ng46\nsssS'ExternalStoryMapping'\np1042\n(dp1043\ng9\n(dp1044\ng365\n(dp1045\ng13\ng25\nsg26\nS'projects.Story'\np1046\nssg1013\n(dp1047\ng13\ng30\nsg20\nI40\nssg46\n(dp1048\ng13\ng48\nsg49\nI01\nssg997\n(dp1049\ng13\ng30\nsg20\nI20\nssg1032\n(dp1050\ng20\nI256\nsg13\ng30\nsg22\nI01\nsssg53\n(dp1051\ng55\n(lp1052\nsg57\nS'extras_externalstorymapping'\np1053\nsg59\nS''\nsg60\ng46\nsssS'ExtraConfiguration'\np1054\n(dp1055\ng9\n(dp1056\nS'configuration_pickle'\np1057\n(dp1058\ng13\ng40\nssg46\n(dp1059\ng13\ng48\nsg49\nI01\nssg997\n(dp1060\ng13\ng30\nsg20\nI25\nssS'project_slug'\np1061\n(dp1062\ng13\ng30\nsg20\nI55\nsssg53\n(dp1063\ng55\n(lp1064\nsg57\nS'extras_extraconfiguration'\np1065\nsg59\nS''\nsg60\ng46\nssstRp1066\n(dp1067\ng93\n(lp1068\ng989\nag1019\nag1002\nag1042\nag1054\nasbsS'avatar'\np1069\ng3\n(g4\ng5\n(dp1070\nS'Avatar'\np1071\n(dp1072\ng9\n(dp1073\nS'date_uploaded'\np1074\n(dp1075\ng13\ng14\nssg929\n(dp1076\ng13\ng17\nssg46\n(dp1077\ng13\ng48\nsg49\nI01\nssS'avatar'\np1078\n(dp1079\ng13\ncdjango.db.models.fields.files\nImageField\np1080\nsg20\nI1024\nssg129\n(dp1081\ng13\ng25\nsg26\nS'auth.User'\np1082\nsssg53\n(dp1083\ng55\n(lp1084\nsg57\nS'avatar_avatar'\np1085\nsg59\nS''\nsg60\ng46\nssstRp1086\n(dp1087\ng93\n(lp1088\ng1071\nasbsS'django_evolution'\np1089\ng3\n(g4\ng5\n(dp1090\nS'Evolution'\np1091\n(dp1092\ng9\n(dp1093\nS'label'\np1094\n(dp1095\ng13\ng30\nsg20\nI100\nssS'version'\np1096\n(dp1097\ng13\ng25\nsg26\nS'django_evolution.Version'\np1098\nssg46\n(dp1099\ng13\ng48\nsg49\nI01\nssg286\n(dp1100\ng13\ng30\nsg20\nI200\nsssg53\n(dp1101\ng55\n(lp1102\nsg57\nS'django_evolution'\np1103\nsg59\nS''\nsg60\ng46\nsssS'Version'\np1104\n(dp1105\ng9\n(dp1106\nS'when'\np1107\n(dp1108\ng13\ng14\nssg46\n(dp1109\ng13\ng48\nsg49\nI01\nssS'signature'\np1110\n(dp1111\ng13\ng40\nsssg53\n(dp1112\ng55\n(lp1113\nsg57\nS'django_project_version'\np1114\nsg59\nS''\nsg60\ng46\nssstRp1115\n(dp1116\ng93\n(lp1117\ng1104\nag1091\nasbsS'basic_profiles'\np1118\ng3\n(g4\ng5\n(dp1119\nS'Profile'\np1120\n(dp1121\ng9\n(dp1122\ng235\n(dp1123\ng20\nI200\nsg13\ng237\nsg22\nI01\nssS'about'\np1124\n(dp1125\ng13\ng40\nsg22\nI01\nssg227\n(dp1126\ng20\nI50\nsg13\ng30\nsg22\nI01\nssS'location'\np1127\n(dp1128\ng20\nI40\nsg13\ng30\nsg22\nI01\nssg46\n(dp1129\ng13\ng48\nsg49\nI01\nssg129\n(dp1130\ng13\ng25\nsg450\nI01\nsg26\nS'auth.User'\np1131\nsssg53\n(dp1132\ng55\n(lp1133\nsg57\nS'basic_profiles_profile'\np1134\nsg59\nS''\nsg60\ng46\nssstRp1135\n(dp1136\ng93\n(lp1137\ng1120\nasbs."
+    }
+  }
+]

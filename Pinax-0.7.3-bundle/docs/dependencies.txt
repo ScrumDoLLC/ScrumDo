@@ -1,0 +1,99 @@
+Dependencies
+============
+
+This documents what apps use what other apps and what external libs.
+
+account
+    uses apps misc, emailconfirmation, friends, profiles, timezones, microblogging
+
+ajax_validation
+    uses library simplejson
+
+announcements
+    uses app notification
+    and library atomformat
+
+authsub
+    uses library gdata
+
+avatar
+    uses library PIL
+
+basic_profiles
+    uses app notification
+
+bbauth
+    uses library ybrowserauth
+
+blog
+    uses apps friends, notification, tagging, threadedcomments
+    and library atomformat
+
+bookmarks
+    uses apps tagging, voting
+    and library atomformat
+
+misc
+    uses apps blog, bookmarks, mailer, tribes, microblogging, voting
+
+django_extensions
+    uses a wide range of libraries depends on command
+
+django_openid
+    uses libraries openid, yadis
+
+djangologging
+    uses library pygments
+
+emailconfirmation
+    uses app mailer
+
+friends
+    uses apps emailconfirmation, mailer, notification
+    and libraries gdata, simplejson, vobject, ybrowserauth
+
+friends_app
+    uses apps account, friends, notification
+
+messages
+    uses app mailer, notification
+
+notification
+    uses app mailer
+    and library atomformat
+
+oembed
+    uses library simplejson
+
+photologue
+    uses app tagging
+    and library PIL
+
+photos
+    uses apps photologue, projects, tagging, tribes
+
+profiles
+    uses apps account, friends, gravatar, notification, photos, timezones, microblogging
+
+projects
+    uses apps friends, notification, photos, tagging, things, threadedcomments, wiki
+
+swaps
+    uses apps notification, tagging, threadedcomments
+
+tag_app
+    uses apps blog, bookmarks, photos, projects, tagging, tribes, wiki
+
+timezones
+    uses library pytz
+
+tribes
+    uses apps friends, notification, photos, tagging, things, threadedcomments, wiki, microblogging
+
+wiki
+    uses apps notification, tagging
+    and libraries atomformat, creoleparser, diff_match_patch, docutils
+
+microblogging
+    uses apps account, notification, tribes
+    and libraries atomformat, twitter

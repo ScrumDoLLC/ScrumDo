@@ -1,0 +1,108 @@
+{% extends "projects/base.html" %}
+
+{% load i18n %}
+{% load uni_form %}
+{% load avatar_tags %}
+{% load threadedcommentstags %}
+{% load pagination_tags %}
+{% load extra_tagging_tags %}
+{% load projects_tags %}
+{% load group_tags %}
+{% load topics_tags %}
+{% load wiki_tags %}
+{% load theme_tags %}
+{% load iteration_tags %}
+
+{% block head_title %}{{ project.name }}{% endblock %}
+
+{% block panel %}
+{% include "projects/panel.html" %}  
+{% endblock %}
+
+
+{% block body %}
+    
+    <h1>Predictions</h1>
+    
+    <p>You have <b>{{total_points}}</b> points worth of work left in the backlog.  Ideally, at your current velocity that could be finished in <b>{{ideal_iterations}}</b> iterations ({{total_points}} points / {{velocity}} velocity = {{ideal_iterations}} iterations).  Due to the way
+      the stories break out, it will likely take <b>{{predicted_iterations}}</b> iterations</p>
+
+    <p>Assuming we can complete <b>{{velocity}}</b> points per iteration, that our stories are correctly sized, and that rankings don't change, 
+    we can predict the iterations shown below.  </p>
+    <a href="#" class="changeAssumptionLink">Change Assumptions</a>
+    
+    <form style="display:none" class="uniForm" id="assumption_form" method="GET" action="">
+       <fieldset class="inlineLabels">
+         
+             <div id="div_id_velocity" class="ctrlHolder">
+     	          <label for="id_velocity">Velocity</label>
+     	          <input id="id_velocity" type="text" class="textinput" name="velocity" maxlength="6" value="{{velocity}}" />           	          
+                <p id="hint_id_velocity" class="formHint">This project's calculated velocity is {{project.velocity}}</p>
+             </div>
+             <div id="div_id_iteration_length" class="ctrlHolder">
+     	          <label for="id_iteration_length">Iteration Length</label>
+     	          <input id="id_iteration_length" type="text" class="textinput" name="iteration_length" maxlength="6" value="{{iteration_length}}" />           	          
+                <p id="hint_iteration_length" class="formHint">Measured in calendar days.  2 weeks = 14 days</p>
+             </div>
+             <div id="div_id_carry_over" class="ctrlHolder">
+     	          <label for="id_carry_over">Carry Over Points</label>
+     	          <input id="id_carry_over" type="checkbox" name="carry_over" maxlength="6" {% if carry_over %}checked{% endif %} />           	          
+                <p id="hint_carry_over" class="formHint">Should we carry over the balance of points from iterations that don't equal the velocity?  When turned on, you'll see how many points were carried over.  Positive value means the iterations was under loaded, negative values mean it was over loaded.</p>
+             </div>
+
+
+                     <div class="form_block">
+                         <input type="hidden" name="action" value="create" />
+                         <div class="buttonHolder"><button class="primaryAction" type="submit" >Change Assumptions</button></div>
+                     </div>
+                 </fieldset>
+             </form>
+      
+
+    </form>
+    
+    
+    <br/><br/>
+    
+    {% for prediction in predictions %}
+    <div class="predictedIteration">
+      <h1>Iteration {{prediction.num}} ({{prediction.points}} points) {{prediction.start|date:"M d Y"}} - {{prediction.end|date:"M d Y"}}</h1>
+      <ul>
+        {% for story in prediction.stories %}
+          <li><span class="storyNumber"><a onclick="jQuery.facebox({ ajax: '/projects/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=mini'}); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}">#{{story.local_id}}</a></span> {{story.summary}} <div class="predictedPointsBox">{{story.points}}</div></li>
+        {% endfor %}
+      </ul>
+      {% if carry_over %}      
+      {{ prediction.carried }} points carried over.
+      {% endif %}
+    </div>
+    {% endfor %}
+    
+    {% if unsized_stories %}
+    <div class="predictedIteration">
+      <h1>Unsized Stories</h1>
+      <p>These stories are in the above plan, but they're not currently sized which will affect the accuracy of the predictions.</p>
+      <ul>
+        {% for story in unsized_stories %}
+          <li><span class="storyNumber"><a onclick="jQuery.facebox({ ajax: '/projects/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=mini'}); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}">#{{story.local_id}}</a></span> {{story.summary}} <div class="predictedPointsBox">{{story.points}}</div></li>
+        {% endfor %}
+      </ul>
+    </div>    
+    {% endif %}
+  
+{% endblock %}
+
+{% block extra_body %}
+    <script type="text/javascript">
+      
+      $(".changeAssumptionLink").click( function() { $(this).hide(); $("#assumption_form").show(); } );
+      
+      // TODO - horrible name for this method, but the story template calls it.
+      function calculateBothPoints() 
+      {
+        window.location.reload();
+      }
+    
+    </script>
+    
+{% endblock %}

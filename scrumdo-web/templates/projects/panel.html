@@ -1,0 +1,178 @@
+{% load i18n %}
+{% load uni_form %}
+{% load avatar_tags %}
+{% load threadedcommentstags %}
+{% load pagination_tags %}
+{% load extra_tagging_tags %}
+{% load projects_tags %}
+{% load group_tags %}
+{% load topics_tags %}
+{% load wiki_tags %}
+{% load theme_tags %}
+{% load iteration_tags %}
+
+
+    {% if user.is_authenticated %}
+            <div class="side_box">
+              <h2>{{ project.name }}</h2>                    
+	      <p>
+              {{ project.description }}
+	      </p>
+              <p>
+                  {% show_tags_for project %}
+              </p>
+            </div>
+
+	    {% if iterationinfo %}
+{% if daysLeft %}
+<div class="side_box">
+  <h2>Iteration {{ iteration.name }}</h2>
+  <div class="big_links">
+    {{ daysLeft }} Day{{ daysLeft|pluralize }} Left
+  </div>
+</div>
+{% endif %}
+
+{% canwrite project %}
+<div class="side_box">
+  <h2>Iteration Actions</h2>
+  <div class="big_links">
+    {% if iteration.locked %}
+      {% canwrite project %}
+        {% silk "lock_open" %} <a rel="facebox" href="{% url unlock_iteration iteration.project.slug iteration.id %}">Unlock Iteration</a><br/>
+      {% endcanwrite %}
+    {% endif %}    
+    <a href="#iterationDetails" rel="facebox">Edit Details</a><br/>
+    <a href="{% url stories iteration.project.slug  %}?iteration={{iteration.id}}">Iteration Planning</a>
+    <a rel="facebox" href="{% url iteration_export iteration.project.slug iteration.id %}">Export</a><br/>
+    {% canwrite project %}
+      <a rel="facebox" href="{% url iteration_import iteration.project.slug iteration.id %}">Import</a><br/>
+    {% endcanwrite %}
+  </div>
+</div>
+{% endcanwrite %}
+
+<div class="side_box">
+  <h2>Other Iterations</h2>
+  <div class="big_links">
+    {% for iteration in project.iterations.all %}
+    {% iteration_name iteration %} {% if iteration.stories.count %}&nbsp;({{iteration.stories.count}}){% endif %}<br/>
+    {% endfor %}
+    {% canwrite project %}
+    <p>
+      <a href="{% url iteration_create project.slug %}"><button>Add Iteration</button><!--  src="/site_media/static/images/addIterationButton.png">--></a>
+    </p>
+    {% endcanwrite %}
+  </div>
+</div>
+{% else %}
+            <div class="side_box">
+              <h2>Iterations</h2>
+	      <div class="big_links">
+              {% for iteration in project.iterations.all %}
+                  {% iteration_name iteration %}{% if iteration.stories.count %}({{iteration.stories.count}}){% endif %}<br/>
+              {% endfor %}
+              {% canwrite project %}
+              <p>
+		<a href="{% url iteration_create project.slug %}"><button>Add Iteration</button><!--  src="/site_media/static/images/addIterationButton.png">--></a>
+	      </p>
+              {% endcanwrite %}
+              </div>
+            </div>
+	    {% endif %}
+
+	    <div class="side_box">
+	      <h2>RSS</h2>
+	      <div class="big_links">
+		<a target="_blank" href="/feeds/project/{{ project.pk }}">Project Summary</a><br/>
+		<a target="_blank" href="/feeds/current/{{ project.pk }}">Current Iteration</a><br/>
+		{% if iterationinfo %}
+		<a target="_blank" href="/feeds/iteration/{{ project.pk }}/{{ iteration.pk }}">This Iteration</a><br/>
+		{% endif %}
+	      </div>
+	    </div>
+            
+           <div class="project_stats side_box">
+              <h2>Stats <a href="#statsHelp" rel="facebox">{% silk "help" %}</a></h2>
+              <p>{% if project.velocity %}
+              Velocity: <b>{{project.velocity}}</b> <br/>
+              {% endif %}
+              Stories: <b>{{ project.stories.count }}</b> <br/>
+              {% if project.iterations_left %}
+              Iterations Left: <b>{{ project.iterations_left }}</b><br/>
+              {% endif %}
+	      </p>
+            </div>
+            
+            
+             <div class="side_box">
+                <h2>Options</h2>
+                <div class="big_links">
+                  {% isadmin project %}                  
+                     <a href="{% url project_admin project.slug %}" >{% trans "Project Admin" %}</a><br/>
+                     <a href="{% url project_extras_url project.slug %}" >{% trans "Extras" %}</a><br/>
+                  {% endisadmin %}
+		            </div>
+              </div>
+            
+             {% if project.organization %}    
+             <div class="project_stats side_box">        
+                <h2>{{project.organization.name}}</h2>
+		  <ul>
+                {% for team in project.teams.all %}
+                 <li><a href="{% url team_detail organization_slug=project.organization.slug team_id=team.id %}">{{ team.name }}</a></li>
+                {% endfor %}
+                </ul>
+              </div>
+              {% endif %}
+            
+            <div class="members side_box">
+                <h2>{% trans "Members" %}</h2>
+		    <table width="100%" >
+                    {% for member in project.members.all %}
+                        {% if forloop.counter0|divisibleby:"2" %}<tr>{% endif %}
+                        <td>
+                            <div class="avatar">{% avatar member.user 40 %}</div>
+                            <div class="details"><a href="{% url profile_detail member.user.username %}" title="{{ member.user.username }}">{{ member.user.username }}</a></div>
+                        </td>
+                        {% if forloop.counter0|add:"1"|divisibleby:"2" %}</tr>{% endif %}
+                    {% endfor %}
+                    {% if project.members.all|length|divisibleby:"2" %}{% else %}</tr>{% endif %}
+
+                </table>
+                 {% isadmin project %} 
+                <form id="add-member" method="POST" action="">
+                                  {{ adduser_form.non_field_errors }}
+                                  {{ adduser_form.recipient }}    {{adduser_form.recipient.errors}}
+                                  <p><input type="hidden" name="action" value="add" />
+                                  <button type="submit">Add Member</button><!--<input type="image" src="/site_media/static/images/addMemberButton.png" />--></p>
+                          </form>             
+                {% endisadmin %}
+
+            </div>
+            
+           
+            <div class="side_box">
+	      <h2>Project Details</h2>
+              <p>{% trans "Slug:" %} <tt>{{ project.slug }}</tt><br />
+              {% trans "Creator:" %} <a href="{% url profile_detail project.creator.username %}">{{ project.creator }}</a><br />
+              {% trans "Created:" %} {{ project.created|date }}
+	      </p>
+	    </div>
+
+      <div style="width:400px; display:none" id="statsHelp">
+        <h2>Velocity</h2>
+        Velocity is calculated on a nightly basis.  It represents how many points per iteration your team has completed.  It's averaged over the past
+        several iterations.  You can change how this stat is calculated on the <a href="{% url project_admin project.slug %}" >project admin</a> page.
+        <h2>Stories</h2>
+        The total number of strories in this project.
+        <h2>Iterations Left</h2>
+        If you continue working at the stated velocity, and you complete all of the stories in the project not yet marked as done, it will take you this many
+        iterations to complete the project.
+        <br/><br/>
+
+      </div>
+
+{% endif %}
+
+

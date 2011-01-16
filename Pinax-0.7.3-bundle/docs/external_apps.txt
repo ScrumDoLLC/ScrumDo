@@ -1,0 +1,22 @@
+External Apps
+=============
+
+The majority of functionality in Pinax is provided by external, reusable
+Django apps.
+
+.. toctree::
+   :maxdepth: 1
+
+   external/emailconfirmation/index
+   external/timezones/index
+   external/threadedcomments/index
+   external/ajax-validation/index
+   external/flag/index
+   external/pagination/index
+   external/oembed/index
+   external/notification/index
+   external/mailer/index
+   external/dbtemplates/index
+   external/robots/index
+   external/announcements/index
+   external/messages/index

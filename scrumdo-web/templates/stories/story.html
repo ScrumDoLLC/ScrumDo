@@ -1,0 +1,104 @@
+{% load i18n %}
+{% load comments_tag %}
+{% load theme_tags %}
+{% load projects_tags %}
+
+<div id="story_area" style="width:950px">
+
+<form id="story_detail_form" method="POST" action="{% url story_form group_slug=project.slug story_id=story.id %}">
+   {{ form.non_field_errors }}
+   
+    <h1>Story #{{story.local_id}}</h1><br/>
+  
+    
+    
+    {% locked story %}
+      <div style="background-color:#ffaaaa ; text-align: center; min-height:32px;">
+        <h2>Read Only: The iteration this story belongs to is locked.</h2>
+      </div>
+    {% endlocked %}
+    
+   <div id="story_details">
+    <table>
+      <tr><td>Summary:</td><td>{{form.summary}}    {{form.summary.errors}} </td></tr>
+      <tr><td>Detail:</td><td>{{form.detail}}    {{form.detail.errors}} </td></tr>
+      <tr><td>Tags:</td><td>{{form.tags}} {{form.tags.errors}} </td></tr>
+      <tr><td>Points:&nbsp;</td><td>{{form.points}}  {{form.points.errors}} </td></tr>
+      {% if project.use_assignee %}
+        <tr><td>Assigned To:&nbsp;</td><td>{{form.assignee}}  {{form.assignee.errors}} </td></tr>
+      {% endif %}
+      <tr><td>Backlog&nbsp;Position:&nbsp;</td><td>{{form.general_rank}}  {{form.general_rank.errors}} </td></tr>
+   
+      {% if project.use_extra_1 %}
+        <tr><td>{{project.extra_1_label}}:&nbsp;</td><td>{{form.extra_1}}  {{form.extra_1.errors}} </td></tr>
+      {% endif %}
+      {% if project.use_extra_2 %}
+        <tr><td>{{project.extra_2_label}}:&nbsp;</td><td>{{form.extra_2}}  {{form.extra_2.errors}} </td></tr>
+      {% endif %}
+      {% if project.use_extra_3 %}
+        <tr><td>{{project.extra_3_label}}:&nbsp;</td><td>{{form.extra_3}}  {{form.extra_3.errors}} </td></tr>
+      {% endif %}
+     </table>
+   </div>
+   
+   <input type="hidden" name="return_type" value="{{return_type}}">
+   <input type="hidden" name="rank" value="{{ story.rank }}">
+   {% notlocked story %}
+     <INPUT  TYPE="image" SRC="/site_media/static/images/updateStoryButton.png" >
+   {% endnotlocked %}
+   
+
+ </form>
+ 
+ {% locked story %}
+   <div style="background-color:#ffaaaa ; text-align: center; min-height:32px;">
+     <h2>Read Only: The iteration this story belongs to is locked.</h2>
+   </div>
+ {% endlocked %}
+ 
+ {% notlocked story %}
+   <form method="POST" id="deleteForm" action="{% url delete_story project.slug story.id %}">
+     <INPUT style="float:right ; margin-top: -25px; margin-right: 5px" TYPE="image" SRC="/site_media/static/images/deleteButton.png" >
+   </form>
+ {% endnotlocked %}
+ 
+<br/><br/><br/><br/>
+<h2>Comments {% silk "comments" %}</h2>
+<div class="comments_area">
+{% comments story %}
+</div>
+
+</div>
+
+<script type="text/javascript" charset="utf-8">
+
+
+
+      $("#story_area .commentForm").show();
+      
+      $("#story_detail_form").ajaxForm({        
+        success: function(responseText) { 
+          $("#story_{{story.id}}").replaceWith(responseText);
+          calculateBothPoints();
+          $(document).trigger('close.facebox');   
+        }});
+        
+      $("#deleteForm").ajaxForm({
+        beforeSubmit: function(arr, $form, options) { return confirm ("Are you sure you want to delete this story?"); },
+        success: function(responseText) { $("#story_{{story.id}}").hide(); $(document).trigger('close.facebox'); }
+      });
+      
+      // bind 'myForm' and provide a simple callback function 
+      $(".comments_area form").ajaxForm({
+        replaceTarget: true,
+        target: $("#story_area"),
+        beforeSubmit: function(arr, $form, options) { 
+          $form.hide();
+        }
+        
+      }); 
+
+</script>
+
+
+

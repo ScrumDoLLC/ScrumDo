@@ -1,0 +1,51 @@
+{% extends "projects/base.html" %}
+
+{% load i18n %}
+{% load uni_form %}
+{% load humanize %}
+{% load pagination_tags %}
+{% load order_by %}
+{% load theme_tags %}
+{% load extra_tagging_tags %}
+{% load projects_tags %}
+
+{% block head_title %}{% blocktrans %}Create Project{% endblocktrans %}{% endblock %}
+
+{% block body %}
+    <h1>{% trans "Create Project" %}</h1>
+    
+    <p>{% trans "A <b>project</b> is a collection of user stories." %}</p>
+    {% if user.is_authenticated %}
+        <form class="uniForm" id="project_form" method="POST" action="">
+            <fieldset class="inlineLabels">
+              
+              <div id="div_id_org" class="ctrlHolder">
+      	                <label for="id_org">                    
+      	                    Organization
+      	                </label>
+      	          <select style="width:40%" id="id_org" name="organization">
+      	            <option value="none">No Organization</option>
+      	            {% for org in admin_organizations %}
+      	              <option value="{{org.id}}" {% ifequal default_organization org %}selected{% endifequal %} >{{org.name}}</option>
+      	            {% endfor %}
+    	            </select>
+
+                  <p id="hint_id_org" class="formHint">Associate this project with an organization to enable team based functions.  You must be an admin of the organization to create a project for it.<br/><br/>
+                    <a style="text-decoration:none" href="{% url organization_create %}">{% silk "add" %}Create New Organization</a>
+                  </p>
+              </div>
+
+                {{ project_form|as_uni_form }}
+                <div class="form_block">
+                    <input type="hidden" name="action" value="create" />
+                    <div class="buttonHolder"><button class="primaryAction" type="submit" >Create Project</button></div>
+                </div>
+            </fieldset>
+        </form>
+    {% else %}
+        {% url acct_signup as signup_url %}
+        {% url acct_login as login_url %}
+        <p>{% blocktrans %}<a href="{{ signup_url }}">Sign up</a> and <a href="{{ login_url }}">log in </a> to create your own project or join an existing one.{% endblocktrans %}</p>
+    {% endif %}
+    
+{% endblock %}

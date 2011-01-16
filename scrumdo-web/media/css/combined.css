@@ -1,0 +1,1025 @@
+/* File contains styles from
+  base.css
+  tabs.css
+  facebox.css
+  annoucements.css
+  accounts.css
+  uni-form.css
+  site.css
+  site_tabs.css
+  tasks.css
+  groups.css
+  topics.css
+ */
+
+
+
+html, body {
+    height: 100%;
+}
+body {
+    background-color: #FFF;
+    margin: 0;
+    color: #333;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 10pt;
+}
+a, a:visited {
+    color: #13C;
+}
+img {
+    border: 0;
+}
+dt {
+    font-weight: bold;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: 0;
+    font-size: inherit;
+}
+td {
+    margin: 0;
+    border: 0;
+    padding: 0;
+}
+h1 {
+    border-bottom: 1px solid #000;
+    font-weight: normal;
+    margin: 0;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+h2 {
+    font-weight: normal;
+}
+
+#body_outer {
+    width: 100%;
+    clear: both;
+    position: relative;
+}
+
+#body {
+    margin: 0 auto;
+    padding: 10px;
+    padding-top: 0px;
+    padding-right: 210px;
+    max-width: 840px;
+}
+
+#panel {
+    width: 180px;
+    position: absolute;
+    right: 0px;
+    top: 146px;
+    z-index: 999;
+    background-color: #F1F2DF;
+    border-left: 1px solid #c2c2b1;
+}
+#footer {
+    color: #999; /* footer text colour */
+    margin: 50px auto;
+    padding: 10px;
+    clear: both;
+    width: 800px;
+}
+#footer a, #footer a:visited {
+    color: #444; /* footer link colour */
+}
+#footer a:hover {
+    color: #777; /* footer link hover colour */
+}
+
+.alpha_warning {
+	padding: 5px;
+	background-color: #fefdde;
+	text-align: center;
+}
+.ie6_warning a {
+	color: white;
+}
+.ie6_warning h2 {
+	margin: 0px;
+}
+.ie6_warning {
+	min-height: 50px;
+	background-color: #8b1e17;
+	color: white;
+	font-size: 16px;
+	padding: 10px;
+	border-style: solid;
+	border-color: #ff2600;
+}
+/* CLEARS */
+
+.clearboth {
+    clear: both;
+}
+
+/* reference:
+ *   http://www.positioniseverything.net/easyclearing.html
+ *   http://www.zeldman.com/2006/10/27/ie7fixes1/
+ *      comment by michael on 10/28/2006
+ */
+.clearfix {
+    min-height: 1%;
+}
+
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+/* hides from ie5-mac \*/
+* html .clearfix { height: 1%; }
+/* end hide from ie5-mac */
+
+
+/* HEADER */
+
+#tabhead {
+	background-color: #000;
+  background: -webkit-gradient(linear, left top, left bottom, from(#111), to(#333)); /* for webkit browsers */
+	background: -moz-linear-gradient(top,  #111,  #333); /* for firefox 3.6+ */
+  position: relative;
+}
+#tabhead .logo {
+    height: 107px;
+    padding-left: 35px;
+    padding-top: 0;
+}
+
+#tabhead .login {
+    position: absolute;
+    top: 6px;
+    right: 15px;
+    color: #fff; /* login bar text colour */
+}
+#tabhead .login a, #tabhead .login a:visited {
+    color: #fff; /* login bar link colour */
+}
+#tabhead .login a:hover {
+    color: #FFF; /* login bar link hover colour */
+}
+
+#locale_switcher {
+    display: inline;
+}
+
+#subnav {
+  margin: 0;
+  height: 37px;
+  
+  background-color: #d7e695;
+  background: -webkit-gradient(linear, left top, left bottom, from(#d7e695), to(#B6C873)); /* for webkit browsers */
+  background: -moz-linear-gradient(top,  #d7e695,  #B6C873);
+  border-top: 1px solid #fffeff;
+  border-bottom: 1px solid #666;
+  box-shadow: 0px 0px 5px #555;
+ -webkit-box-shadow: 0px 0px 5px #555;
+ -moz-box-shadow: 0px 0px 5px #555;
+}
+#subnav ul {
+    float: right;
+    margin: 2px 20px 0;
+    padding: 0;
+}
+#subnav ul li {
+    display: inline;
+    list-style-type: none;
+}
+#subnav ul a:link, #subnav ul a:visited {
+    float: left;
+/*    font-weight: bold;*/
+    text-decoration: none;
+    color: #3b2724;
+    font-size: 16px;
+    display: block;
+    padding: 5px 20px 4px;
+    text-shadow: #ffffff 1px 1px 1px;
+}
+#subnav ul a:hover {
+    color: #FFF;
+    background: #ccc;
+}
+
+
+/* FORMS */
+
+form th {
+    text-align : left;
+}
+form.signup input[type="submit"], form.login input[type="submit"] {
+    margin: 20px 0;
+    font-size: 14pt;
+}
+input[type="text"], input[type="password"], textarea {
+    padding: 3px;
+    margin: 3px;
+    border: solid 1px #C6C6C6;
+    border-bottom: solid 1px #E3E3E3;
+    color: #666;
+    font-size: 12pt;
+    background: #F3F3F3 url('/site_media/static/pinax/images/form-shadow.png') left top repeat-x;
+}
+ul.errorlist {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: red;
+}
+
+
+/* MESSAGES */
+
+ul#messages {
+    margin: 0px;
+    margin-botton: 10px;
+    margin-right: 0px;
+    padding: 0;
+    
+    list-style: none;
+}
+ul#messages li {
+    padding: 5px 10px;
+    background: #EFD;
+    margin: 3px;
+    border: 1px solid #BC9;
+}
+ul#messages li a {
+    float: right;
+    color: #693;
+}
+
+
+/* WHAT NEXT */
+
+dl.what_next {
+    margin: 2em;
+}
+dl.what_next dt {
+    font-size: 120%;
+}
+dl.what_next dd {
+    margin: 0 0 1em 0;
+    font-style: italic;
+}
+p.what_next {
+    font-size: 120%;
+}
+
+
+/* FORM TOGGLE */
+
+.form-toggle p {
+    margin-bottom: 2px;
+}
+
+.form-toggle p span {
+    background: #DEF;
+    padding: 3px 6px;
+    border-top: 1px solid #9BC;
+    border-left: 1px solid #9BC;
+    border-right: 1px solid #9BC;
+    cursor: pointer;
+}
+
+.form-toggle form {
+    padding: 3px 6px;
+    margin: 0;
+    background: #DEF;
+    border: 1px solid #9BC;
+}
+
+
+
+/* EXTRAS TO CLEAN UP */
+
+.warning {
+    color: red;
+    font-weight: bold;
+}
+
+div.profile_info p {
+    margin: 0;
+}
+div.left_panel {
+    width: 400px;
+}
+div.right_panel {
+/*    margin-top: 20px;*/
+    margin-right: -180px;
+    width: 180px;
+    float: right;
+    z-index: 999;
+    background-color: #F1F2DF;
+    border-left: 1px solid #c2c2b1;
+}
+
+div.big_right_panel {
+/*    margin-top: 20px;*/
+    padding: 0;
+    margin-left: 20px;
+    margin-right: -180px;
+    width: 400px;
+    float: right;
+    z-index: 999;
+}
+div.news_panel {
+    width: 400px;
+}
+
+div.news_panel #id_comment {
+    width: 200px;
+}
+
+/* @override 
+	http://localhost:8000/site_media/static/pinax/css/tabs.css
+	http://localhost:8000/site_media/static/pinax/css/facebox.css
+	http://localhost:8000/site_media/static/pinax/css/announcements.css
+	http://localhost:8000/site_media/static/pinax/css/accounts.css
+	http://localhost:8000/site_media/static/uni_form/uni-form.css
+	http://localhost:8000/site_media/static/css/site.css
+	http://localhost:8000/site_media/static/css/site.css
+	http://localhost:8000/site_media/static/css/site_tabs.css
+	http://localhost:8000/site_media/static/tasks/css/tasks.css
+	http://localhost:8000/site_media/static/pinax/css/groups.css
+	http://localhost:8000/site_media/static/pinax/css/topics.css
+	http://localhost:8000/site_media/static/css/combined.css
+*/
+
+/* GENERAL TAB STYLING */
+
+#left_tabs {
+    position: absolute;
+    bottom: -1px; /* must be same thickness as tab border */
+    left: 210px; /* based on width and padding of logo */
+}
+#right_tabs {
+    position: absolute;
+    right: 15px;
+    bottom: -1px; /* must be same thickness as tab border */
+}
+
+ul.tabs a, ul.tabs a:visited {
+    color: #fff; /* unselected tab text colour */
+    font-weight: bold;
+    text-decoration: none;
+	text-shadow: #7b7c7c 1px 1px 1px;
+}
+ul.tabs a:hover {
+    color: #666; /* unselected tab text hover colour */
+}
+ul.tabs li {
+    list-style-type: none;
+    display: inline;
+    background-color: #a5be52; /* unselected tab colour */
+    padding: 5px 0 4px;
+    margin: 0 1px; /* to compensate for border */
+}
+ul.tabs li a {
+    padding: 5px 12px;
+}
+ul.tabs {
+    margin: 0 0 5px;
+}
+
+#facebox .b {
+    background:url('/site_media/static/pinax/images/facebox/b.png');
+}
+
+#facebox .tl {
+    background: url('/site_media/static/pinax/images/facebox/tl.png');
+}
+
+#facebox .tr {
+    background: url('/site_media/static/pinax/images/facebox/tr.png');
+}
+
+#facebox .bl {
+    background: url('/site_media/static/pinax/images/facebox/bl.png');
+}
+
+#facebox .br {
+    background: url('/site_media/static/pinax/images/facebox/br.png');
+}
+
+#facebox {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    text-align: left;
+}
+
+#facebox .popup {
+    position: relative;
+}
+
+#facebox table {
+    border-collapse: collapse;
+}
+
+#facebox td {
+    border-bottom: 0;
+    padding: 0;
+}
+
+#facebox .body {
+    padding: 10px;
+    background: #fff;
+
+}
+
+#facebox .loading {
+    text-align: center;
+}
+
+#facebox .image {
+    text-align: center;
+}
+
+#facebox img {
+    border: 0;
+    margin: 0;
+}
+
+#facebox .footer {
+    border-top: 1px solid #DDDDDD;
+    padding-top: 5px;
+    margin-top: 10px;
+    text-align: right;
+}
+
+#facebox .footer img {
+    vertical-align: middle;
+}
+
+#facebox .tl, #facebox .tr, #facebox .bl, #facebox .br {
+    height: 10px;
+    width: 10px;
+    overflow: hidden;
+    padding: 0;
+}
+
+#facebox_overlay {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    height:100%;
+    width:100%;
+}
+
+.facebox_hide {
+    z-index:-100;
+}
+
+.facebox_overlayBG {
+    background-color: #000;
+    z-index: 99;
+}
+
+* html #facebox_overlay { /* ie6 hack */
+    position: absolute;
+    height: expression(document.body.scrollHeight > document.body.offsetHeight ? document.body.scrollHeight : document.body.offsetHeight + 'px');
+}
+
+/* ANNOUNCEMENTS */
+
+#site_wide_announcements {
+    background: #fefdde;
+    padding: 10px;
+    text-align: center;
+}
+#site_wide_announcements ul {
+    padding: 0;
+    margin: 0;
+}
+
+/** ACCOUNTS **/
+
+/* EMAIL ADDRESS */
+
+.verified {
+    color: green;
+}
+.remove {
+    color: red;
+}
+.unverified {
+    color: gray;
+}
+.primary {
+    font-weight: bold;
+}
+table.email_list td {
+    padding: 5px 10px;
+}
+
+
+
+
+.uniForm{ margin: 0; padding: 0; position: relative; z-index: 1; } /* reset stuff */
+  
+  /* Some generals and more resets */
+  .uniForm fieldset{ border: none; margin: 0; padding: 0; }
+    .uniForm fieldset legend{ margin: 0; padding: 0; }
+    
+    /* This are the main units that contain form elements */
+    .uniForm .ctrlHolder,
+    .uniForm .buttonHolder{ margin: 0; padding: 0; clear: both; }
+    
+    /* Clear all floats */ 
+    .uniForm:after,
+      .uniForm .buttonHolder:after, 
+      .uniForm .ctrlHolder:after, 
+        .uniForm .ctrlHolder .multiField:after,
+          .uniForm .inlineLabel:after{ content: "."; display: block; height: 0; line-height: 0; font-size: 0; clear: both; min-height: 0; visibility: hidden; }
+      
+      .uniForm label,
+      .uniForm button{ cursor: pointer; }
+
+/* ------------------------------------------------------------------------------ */
+/* ##########################   DEFAULT LAYOUT   ################################ */
+/* ------------------------------------------------------------------------------ */
+/*       Styles for form controls where labels are above the input elements       */
+/* ------------------------------------------------------------------------------ */
+
+      .uniForm label,
+      .uniForm .label{ display: block; float: none; margin: 0 0 .5em 0; padding: 0; line-height: 100%; width: auto; }
+      
+      /* Float the input elements */
+      .uniForm .textInput,
+      .uniForm .fileUpload,
+      .uniForm .selectInput,
+      .uniForm select,
+      .uniForm textarea{ float: left; width: 53%; margin: 0; }
+      
+      /* Postition the hints */
+      .uniForm .formHint{ float: right; width: 43%; margin: 0; clear: none; }
+      
+      /* Position the elements inside combo boxes (multiple inputs/selects/checkboxes/radio buttons per unit) */
+      .uniForm ul{ float: left; width: 53%; margin: 0; padding: 0; }
+        .uniForm ul li{ margin: 0 0 .5em 0; list-style: none; }
+          .uniForm ul li label{ margin: 0; float: none; display: block; overflow: visible; }
+        /* Alternate layout */
+        .uniForm ul.alternate li{ float: left; width: 30%; margin-right: 3%; }
+          .uniForm ul.alternate li label{ float: none; display: block; width: 98%; }
+            .uniForm ul .textInput,
+            .uniForm ul .selectInput,
+            .uniForm ul select,
+            .uniForm ul.alternate .textInput,
+            .uniForm ul.alternate .selectInput,
+            .uniForm ul.alternate select{ width: 98%; margin-top: .5em; display: block; float: none; }
+            
+        /* Required fields asterisk styling */
+        .uniForm label em,
+        .uniForm .label em{ float: left; width: 1em; margin: 0 0 0 -1em; }
+
+/* ------------------------------------------------------------------------------ */
+/* #########################   ALTERNATE LAYOUT   ############################### */
+/* ------------------------------------------------------------------------------ */
+/*    Styles for form controls where labels are in line with the input elements   */
+/*    Set the class of the parent (preferably to a fieldset) to .inlineLabels     */
+/* ------------------------------------------------------------------------------ */
+
+      .uniForm .inlineLabels label,
+      .uniForm .inlineLabels .label{ float: left; margin: .3em 2% 0 0; padding: 0; line-height: 1; position: relative; width: 32%; }
+      
+      /* Float the input elements */
+      .uniForm .inlineLabels .textInput,
+      .uniForm .inlineLabels .fileUpload,
+      .uniForm .inlineLabels .selectInput,
+      .uniForm .inlineLabels select,
+      .uniForm .inlineLabels textarea{ float: left; width: 64%; }
+
+    /* Postition the hints */
+    .uniForm .inlineLabels .formHint{ clear: both; float: none; width: auto; margin-left: 34%; position: static; }
+    
+    /* Position the elements inside combo boxes (multiple inputs/selects/checkboxes/radio buttons per unit) */
+    .uniForm .inlineLabels ul{ float: left; width: 66%; }
+      .uniForm .inlineLabels ul li{ margin: .5em 0; }
+        .uniForm .inlineLabels ul li label{ float: none; display: block; width: 100%; }
+      /* Alternate layout */
+      .uniForm .inlineLabels ul.alternate li{ margin-right: 3%; margin-top: .25em; }
+          .uniForm .inlineLabels ul li label .textInput,
+          .uniForm .inlineLabels ul li label textarea,
+          .uniForm .inlineLabels ul li label select{ float: none; display: block; width: 98%;  }
+    
+    /* Required fields asterisk styling */
+    .uniForm .inlineLabels label em,
+    .uniForm .inlineLabels .label em{ display: block; float: none; margin: 0; position: absolute; right: 0; }
+
+/* ----------------------------------------------------------------------------- */
+/* ########################### Additional Stuff ################################ */
+/* ----------------------------------------------------------------------------- */
+
+  /* Generals */
+    .uniForm legend{ color: inherit; }
+    
+      .uniForm .secondaryAction{ float: left; }
+      
+      /* .inlineLabel is used for inputs within labels - checkboxes and radio buttons */
+      .uniForm .inlineLabel input,
+      .uniForm .inlineLabels .inlineLabel input,
+      .uniForm .blockLabels .inlineLabel input,
+      /* class .inlineLabel is depreciated */
+      .uniForm label input{ float: none; display: inline; margin: 0; padding: 0; border: none; }
+            
+      .uniForm .buttonHolder .inlineLabel,
+      .uniForm .buttonHolder label{ float: left; margin: .5em 0 0 0; width: auto; max-width: 60%; text-align: left; }
+      
+      /* When you don't want to use a label */
+      .uniForm .inlineLabels .noLabel ul{ margin-left: 34%; /* Match to width of label + gap to field */ }
+      
+      /* Classes for control of the widths of the fields */
+      .uniForm .small { width: 30% !important; }
+      .uniForm .medium{ width: 45% !important; }
+      .uniForm .large {  } /* Large is default and should match the value you set for .textInput, textarea or select */
+      .uniForm .auto  { width: auto !important; }
+      .uniForm .small,
+      .uniForm .medium,
+      .uniForm .auto{ margin-right: 4px; }
+
+/* Columns */
+.uniForm .col{ float: left; }
+.uniForm .col{ width: 50%; }
+
+
+   .uniForm legend{ font-weight: bold; font-size: 100%; margin: 0; padding: 1.5em 0; }
+  
+    .uniForm .ctrlHolder{ padding: 1em; border-bottom: 1px solid #efefef; }
+    .uniForm .ctrlHolder.focused{ background: #e8f7ff; }
+    
+    .uniForm .inlineLabels .noLabel{}
+    
+    .uniForm .buttonHolder{ background: #efefef; text-align: right; margin: 1.5em 0 0 0; padding: 1.5em;
+                            /* CSS3 */
+                            border-radius: 4px;
+                            -webkit-border-radius: 4px;
+                            -moz-border-radius: 4px;
+                            -o-border-radius: 4px;
+                            -khtml-border-radius: 4px;
+                          }
+      .uniForm .buttonHolder .primaryAction{ padding: 10px 22px; line-height: 1; background: #254a86; border: 1px solid #163362; font-size: 12px; font-weight: bold; color: #fff;
+                                             /* CSS3 */
+                                             border-radius: 4px;
+                                             -webkit-border-radius: 4px;
+                                             -moz-border-radius: 4px;
+                                             -o-border-radius: 4px;
+                                             -khtml-border-radius: 4px;
+                                             box-shadow: 1px 1px 0 #fff;
+                                             -webkit-box-shadow: 1px 1px 0 #fff;
+                                             -moz-box-shadow: 1px 1px 0 #fff;
+                                             text-shadow: -1px -1px 0 rgba(0,0,0,.25);
+                                           }
+      .uniForm .buttonHolder .primaryAction:active{ position: relative; top: 1px; }
+      .uniForm .secondaryAction { text-align: left; }
+      .uniForm button.secondaryAction { background: transparent; border: none; color: #777; margin: 1.25em 0 0 0; padding: 0; }
+      
+        .uniForm .inlineLabels label em,
+        .uniForm .inlineLabels .label em{ font-style: normal; font-weight: bold; }
+        .uniForm label small{ font-size: .75em; color: #777; }
+        
+      .uniForm .textInput,
+      .uniForm textarea { padding: 4px 2px; border: 1px solid #aaa; background: #fff; }
+      .uniForm textarea { height: 12em; }
+      .uniForm select {}
+      .uniForm .fileUpload {}
+      
+      .uniForm ul{}
+        .uniForm li{}
+          .uniForm ul li label{ font-size: .85em; }
+            
+            .uniForm .small {}
+            .uniForm .medium{}
+            .uniForm .large {} /* Large is default and should match the value you set for .textInput, textarea or select */
+            .uniForm .auto {}
+            .uniForm .small,
+            .uniForm .medium,
+            .uniForm .auto{}
+      
+      /* Get rid of the 'glow' effect in WebKit, optional */
+      .uniForm .ctrlHolder .textInput:focus,
+      .uniForm .ctrlHolder textarea:focus{ outline: none; }
+      
+      .uniForm .formHint { font-size: .85em; color: #777; }
+      .uniForm .inlineLabels .formHint { padding-top: .5em; }
+      .uniForm .ctrlHolder.focused .formHint{ color: #333; }
+      
+/* ----------------------------------------------------------------------------- */
+/* ############################### Messages #################################### */
+/* ----------------------------------------------------------------------------- */
+
+  /* Error message at the top of the form */
+  .uniForm #errorMsg{ background: #ffdfdf; border: 1px solid #f3afb5; margin: 0 0 1.5em 0; padding: 0 1.5em;
+                      /* CSS3 */
+                      border-radius: 4px;
+                      -webkit-border-radius: 4px;
+                      -moz-border-radius: 4px;
+                      -o-border-radius: 4px;
+                      -khtml-border-radius: 4px;
+                    }
+    .uniForm #errorMsg h3{} /* Feel free to use a heading level suitable to your page structure */
+    .uniForm #errorMsg ol{ margin: 0 0 1.5em 0; padding: 0; }
+      .uniForm #errorMsg ol li{ margin: 0 0 3px 1.5em; padding: 7px; background: #f6bec1; position: relative; font-size: .85em;
+                                /* CSS3 */
+                                border-radius: 4px;
+                                -webkit-border-radius: 4px;
+                                -moz-border-radius: 4px;
+                                -o-border-radius: 4px;
+                                -khtml-border-radius: 4px;
+                              }
+  
+  .uniForm .ctrlHolder.error,
+  .uniForm .ctrlHolder.focused.error{ background: #ffdfdf; border: 1px solid #f3afb5;
+                                      /* CSS3 */
+                                      border-radius: 4px;
+                                      -webkit-border-radius: 4px;
+                                      -moz-border-radius: 4px;
+                                      -o-border-radius: 4px;
+                                      -khtml-border-radius: 4px;
+                                    }
+    .uniForm .ctrlHolder.error input.error,
+    .uniForm .ctrlHolder.error select.error,
+    .uniForm .ctrlHolder.error textarea.error{ color: #af4c4c; margin: 0 0 6px 0; padding: 4px; }
+  
+  /* Success messages at the top of the form */
+  .uniForm #okMsg{ background: #c8ffbf; border: 1px solid #a2ef95; margin: 0 0 1.5em 0; padding: 0 1.5em; text-align: center;
+                   /* CSS3 */
+                   border-radius: 4px;
+                   -webkit-border-radius: 4px;
+                   -moz-border-radius: 4px;
+                   -o-border-radius: 4px;
+                   -khtml-border-radius: 4px;
+                 }
+    .uniForm #okMsg p{ margin: 0; }
+
+/* ----------------------------------------------------------------------------- */
+/* ############################### Columns ##################################### */
+/* ----------------------------------------------------------------------------- */
+
+    .uniForm .col{}
+    .uniForm .col.first{}
+    .uniForm .col.last{}
+    .uniForm .col{ margin-bottom: 1.5em; }
+    /* Use .first and .last classes to control the layout/spacing of your columns */
+    .uniForm .col.first{ width: 49%; float: left; clear: none; }
+    .uniForm .col.last { width: 49%; float: right; clear: none; margin-right: 0; }
+
+/*
+IT IS STRONGLY ADVISED TO MAKE YOUR CHANGES AFTER THIS COMMENT BY REPEATING (COPYING) THE SELECTOR FROM ABOVE, 
+AND MODIFYING IT WITH YOUR OWN PROPERTIES/VALUES. THIS IS RECOMMENDED BECAUSE IF YOU HAPPEN TO RUN INTO TROUBLE, 
+YOU CAN VERY EASILY REVERT TO A GENERIC STYLE OF UNI-FORM. BEST OF LUCK... 
+*/
+
+/* ------------------------------------------------------------------------------ */
+
+.iterationHeader {
+ 	margin: 0px;
+	font-size: 18px;
+	padding: 2px 2px 2px 9px;
+}
+
+
+/* SITE-SPECIFIC TAB STYLING */
+
+body.profile #tab_profile a,
+body.projects #tab_projects a,
+body.notices #tab_notices a
+{
+    color: #000; /* selected tab text colour */
+}
+body.profile #tab_profile,
+body.projects #tab_projects,
+body.notices #tab_notices
+{
+    margin: 0; /* to compensate for border */
+    padding: 5px 0 5px;
+    background-color: #d7e695; /* selected tab colour */
+    
+    border-left: 1px solid #000; /* tab border */
+    border-top: 1px solid #000; /* tab border */
+    border-right: 1px solid #000;
+
+	
+}
+
+form.add-attachment{
+    background-color: #eee;
+    padding: 1em;
+}
+
+form.add-attachment p{
+    margin: 0.3em 0;
+}
+
+.task_list .even {
+    background-color: #EEE;
+}
+.task_list .odd {
+    background-color: #DDD;
+}
+
+tr.task_resolved td, tr.task_closed td {
+    text-decoration: line-through;
+}
+tr.task_closed td {
+    text-decoration: line-through;
+    color: #999;
+}
+tr.task_closed td a {
+    color: #999;
+}
+
+table.task_list td {
+    vertical-align: top;
+    padding: 5px 20px 5px 5px;
+}
+
+table.task_list {
+    width: 100%;
+}
+
+table.task_list th {
+    background: #9BC;
+    text-align: left;
+    color: #FFF;
+    padding: 5px 20px 5px 5px;
+}
+
+tr.task_grouping {
+    background: #DEF;
+    color: #333;
+    border-top: 1px solid #BCD;
+}
+
+tr.task_grouping .toggle {
+    cursor: pointer;
+}
+
+tr.task_grouping .focus {
+    float: right;
+}
+tr.task_grouping .focus a {
+    color: #666;
+}
+
+tr.task_grouping .count {
+    color: #666;
+}
+div.task div.bulk h2 {
+    margin: 0;
+}
+div.task div.bulk {
+    margin-left: 158px;
+    padding: 4px;
+}
+
+div.task-meta {
+    float: left;
+    width: 150px;
+    margin: 0;
+    padding: 4px;
+    font-size: 80%;
+}
+
+div.task-meta2 {
+    color: #666;
+    margin-top: 1em;
+    font-size: 90%;
+}
+
+div.task-meta2 b {
+    color: #000;
+}
+
+h2.task_resolved, h2.task_closed {
+    text-decoration: line-through;
+}
+
+p.expand_collapse_all {
+    margin: 2px;
+    font-size: 8pt;
+}
+
+p.expand_collapse_all a {
+    color: #333;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.task_filter ul {
+    background: #DEF;
+    padding: 5px;
+}
+
+.task_filter li {
+    display: inline;
+}
+
+/* GROUPS */
+
+div.groups {
+    padding: 8px;
+    margin-bottom: 20px;
+}
+div.groups h2 {
+    margin: 0 0 5px 0;
+    padding: 0;
+}
+div.members .avatar {
+    padding: 0;
+    text-align: center;
+    width: 100%;
+}
+div.members .details {
+    text-align: center;
+    overflow: hidden;
+    width: 100%;
+    margin: 0 0 12px 0;
+}
+
+.stats {
+    color: #999;
+    border-top: 1px solid #CCC;
+    font-size: 90%;
+}
+
+/* this has some overlap with comments.css and needs review */
+
+table.topic, table.topics {
+    width: 100%;
+}
+table.topic td, table.topics td {
+    vertical-align: top;
+    padding: 5px 20px 5px 5px;
+}
+table.topic td h1, table.topics td h2 {
+    margin: 0;
+    padding: 0;
+}
+.responses .even, .topics .even {
+    background-color: #FAFAFA;
+}
+.responses .odd, .topics .odd {
+    background-color: #F3F3F3;
+}
+.responses {
+    margin-left: 0px;
+    padding-left: 0px;
+}
+.responses li {
+    list-style-type: none;
+}
+td.meta {
+    width: 100px;
+    margin: 4px;
+}
+div.meta {
+    float: left;
+    width: 100px;
+    margin: 4px;
+    padding: 4px;
+}
+div.bulk {
+    margin-left: 120px;
+    padding: 4px;
+}
+.hidden { display: none; }
+.thread-0 { margin-left: 0px; }
+.thread-1 { margin-left: 20px; }
+.thread-2 { margin-left: 40px; }
+.thread-3 { margin-left: 60px; }
+.thread-4 { margin-left: 80px; }
+.thread-5 { margin-left: 100px; }
+.thread-6 { margin-left: 120px; }
+.thread-7 { margin-left: 140px; }
+.thread-8 { margin-left: 160px; }
+
+table.topics .created {
+    color: #999;
+    font-size: 90%;
+}
+table.topics .comment_stats {
+    color: #999;
+    border-top: 1px solid #CCC;
+    font-size: 90%;
+}
+
+#id_recipient {
+  width: 90%;
+}
+
+div.footer {
+
+	text-align: center;
+  height:60px;   /* Height of the footer */
+
+}

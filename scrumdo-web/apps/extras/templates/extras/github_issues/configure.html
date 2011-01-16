@@ -1,0 +1,18 @@
+{% extends "extras/configure-base.html" %}
+
+{% load uni_form %}
+{% load group_tags %}
+
+{% block configure_content %}
+ <form class="uniForm" id="project_form" method="POST" action="">
+     <fieldset class="inlineLabels">
+       
+       
+
+         {{ form|as_uni_form}}
+         <div class="form_block">
+             <div class="buttonHolder"><button class="primaryAction" type="submit" >Configure</button></div>
+         </div>
+     </fieldset>
+ </form>
+{% endblock %}

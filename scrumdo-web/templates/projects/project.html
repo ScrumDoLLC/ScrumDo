@@ -1,0 +1,101 @@
+{% extends "projects/base.html" %}
+
+{% load i18n %}
+{% load uni_form %}
+{% load avatar_tags %}
+{% load threadedcommentstags %}
+{% load pagination_tags %}
+{% load extra_tagging_tags %}
+{% load projects_tags %}
+{% load group_tags %}
+{% load topics_tags %}
+{% load wiki_tags %}
+{% load theme_tags %}
+{% load iteration_tags %}
+
+{% block head_title %}{{ project.name }}{% endblock %}
+    
+
+{% block panel %}
+{% include "projects/panel.html" %}  
+{% endblock %}
+
+
+{% block add_story %}
+    {% if user.is_authenticated %}
+    {% canwrite project %}
+      {% include "stories/add_story_form.html" %}
+    {% endcanwrite %}
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    
+
+                
+        {% if user.is_authenticated %}
+            <div>
+                
+                
+                
+                  {% for iteration in project.get_current_iterations %}
+                    <h1>{{ iteration.name }} </h1> 
+                    <i>{{iteration.start_date|date:"M d, Y"}} - {{iteration.end_date|date:"M d, Y"}}</i>
+                    {% if iteration.points_log.count %}
+                      <div id="iterationBurndown_{{iteration.id}}" style="width:100%;height:300px;"></div>  
+                    {% else %}
+                      <img src="/site_media/static/images/burndown.png">
+                    {% endif %}
+                  {% endfor %}
+                    
+                  <h1>Overall Project</h1>
+                   
+                  {% if project.points_log.count %}
+                     <div id="overallBurndown" style="width:100%;height:300px;"></div>
+                  {% else %}
+                    <img src="/site_media/static/images/burndown.png">
+                  {% endif %}
+                   
+                    
+   
+            </div>
+        {% endif %}
+
+        
+{% endblock %}
+
+{% block extra_body %}
+    <script type="text/javascript">
+      
+      
+    
+
+    
+    
+        $(document).ready(function() {
+                  
+                var options = {
+                   colors: ["#2292ff", "#ADD75C"],
+                   xaxis: { minTickSize: [1, "day"] , mode: "time", timeformat: "%m/%d/%y" },
+                   grid: { markings: weekendAreas } ,
+                   legend: {    position: "nw" },
+                   series: { lines: {   show: true , fill:true  }, 
+                             points: { radius:5, show: true, fill: true} 
+                               }                   
+                };
+
+       
+                generateBurnDown( "#overallBurndown", "{{project.slug}}" , null , 0);
+                
+         
+                // var backlog_data_total = [{% for log in project.points_log.all %} [{{log.timestamp}},{{log.points_total}}], {% endfor %}];
+                //                   var backlog_data_claimed = [{% for log in project.points_log.all %} [{{log.timestamp}},{{log.points_claimed}}], {% endfor %}];                 
+                //                   $.plot($("#overallBurndown"), [{label:" Total Points", data:backlog_data_total},{label:" Claimed Points",data:backlog_data_claimed}], options);
+                //   
+               {% for iteration in project.get_current_iterations %}
+                 generateBurnDown( "#iterationBurndown_{{iteration.id}}", "{{project.slug}}" , "{{iteration.id}}" , 0.25);
+               {% endfor %}
+        });
+    </script>
+    
+{% endblock %}

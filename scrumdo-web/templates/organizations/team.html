@@ -1,0 +1,110 @@
+{% extends "organizations/base.html" %}
+
+{% load i18n %}
+
+{% load humanize %}
+{% load theme_tags %}
+{% load extra_tagging_tags %}
+{% load avatar_tags %}
+
+{% block head_title %}{{organization.name}}{% endblock %}
+
+{% block body %}
+
+    
+      <div class="big_right_panel">
+          <div class="news_box">
+            <h1>Team: {{ team.name }}</h1>       
+            Grants {{team.access_type}} permissions.
+          </div>
+      </div>
+      
+    <div class="left_panel">
+
+        {% if organization.projects.count %}
+              <div class="sectionHeader">Projects</div>        
+              <ul class="organizationList">
+              {% for project in team.projects.all %}
+                <li class="organizationItem">
+                  <a href="#removeProject{{project.id}}" rel="facebox"><img class="memberDeleteButton" src="/site_media/static/pinax/images/silk/icons/delete.png" /></a>
+
+           
+                  <div class="organizationListOptionButtons">
+           
+                  </div>
+                  {% silk "database_table" %}<a href="{% url project_detail project.slug %}">{{project.name}}</a><br/>
+                  {{ project.stories.count }} stor{{ project.stories.count|pluralize:"y,ies" }}, {{ project.iterations.count }} iteration{{ project.iterations.count|pluralize }}
+                  <hr/>
+                   <div style="display:none" id="removeProject{{project.id}}">
+                      <h2>Are you sure you want to remove {{project.name}} from this team?</h2><br/>
+                      <div style="width:100% ; text-align: center;">
+
+                        <form action="" method="POST">
+                          <a onClick="$(document).trigger('close.facebox');return false;" class="cancelDelete" href="#">Cancel</a> -              
+                          <input type="hidden" name="action" value="removeProject">
+                          <input type="hidden" name="project_id" value="{{project.id}}">
+                          <input type="submit" value="Remove Project">
+                        </form>
+                      </div>
+                    </div>
+                </li>                    
+              {% endfor %}        
+                <li class="organizationItem">
+                  <form id="add_project_form" action="" method="POST">
+                  <select name="project">
+                  {% for project in organization.projects.all %}
+                    <option value="{{project.id}}">{{project.name}}</option>
+                  {% endfor %}
+                  </select>
+                  <input type="hidden" name="action" value="addProject">
+                  <input type="submit" value="Add Project">
+                  </form>
+                </li>
+              </ul>
+        {% else %}
+          <p>This organization doesn't have any projects to add to this team.</p>
+        {% endif %}
+        <div class="sectionHeader">Members</div>
+        <ul class="organizationList">
+        {% for member in team.members.all %}
+          <li class="organizationItem">            
+            <a href="#removeUser{{member.id}}" rel="facebox"><img class="memberDeleteButton" src="/site_media/static/pinax/images/silk/icons/delete.png" /></a>
+            {% avatar member 40 %} {{member.username}}            
+            {% if member.email %} &lt;{{member.email}}&gt; {% endif %}
+            {% if member.first_name %} {{member.first_name}} {% endif %}
+            {% if member.last_name %} {{member.last_name}} {% endif %}
+            
+            <div style="display:none" id="removeUser{{member.id}}">
+              <h2>Are you sure you want to remove {{member.username}} from this team?</h2><br/>
+              <div style="width:100% ; text-align: center;">
+              
+                <form action="" method="POST">
+                  <a onClick="$(document).trigger('close.facebox');return false;" class="cancelDelete" href="#">Cancel</a> -              
+                  <input type="hidden" name="action" value="removeUser">
+                  <input type="hidden" name="user_id" value="{{member.id}}">
+                  <input type="submit" value="Remove User">
+                </form>
+              </div>
+            </div>
+            
+          </li>
+        {% endfor %}        
+          <li class="organizationItem">
+            
+            <form id="add-member" method="POST" action="">
+                    {{ adduser_form.non_field_errors }}
+                    {{ adduser_form.recipient }}    {{adduser_form.recipient.errors}}
+                    <input type="hidden" name="action" value="addMember" />
+                    <input type="image" src="/site_media/static/images/addMemberButton.png" />
+            </form>
+          </li>
+        </ul>
+        
+        
+
+        
+    </div>
+    
+    
+
+{% endblock %}

@@ -1,0 +1,316 @@
+{% extends "projects/base.html" %}
+
+{% load i18n %}
+{% load uni_form %}
+{% load avatar_tags %}
+{% load threadedcommentstags %}
+{% load pagination_tags %}
+{% load extra_tagging_tags %}
+{% load projects_tags %}
+{% load group_tags %}
+{% load topics_tags %}
+{% load wiki_tags %}
+{% load theme_tags %}
+{% load iteration_tags %}
+
+{% block head_title %}{{ project.name }}{% endblock %}
+
+{% block panel %}
+{% include "projects/panel.html" %}  
+{% endblock %}
+
+{% block add_story %}
+    {% if user.is_authenticated %}
+    {% canwrite project %}
+      {% include "stories/add_story_form.html" %}
+    {% endcanwrite %}
+
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+
+ <img style="float:right" src="/site_media/static/images/ajax-loader.gif" id="loadingIcon">
+ <h1>Iteration Planning</h1>
+  
+  <div id="columnContainer">
+
+    <div class="story_column">
+      <div class="story_column_header">
+          <select id="iterationChooser">
+            <option value="">              
+              Choose an iteration...
+            </option>
+           
+            {% for iteration in project.iterations.all %}
+              {% ifnotequal iteration project.get_default_iteration %}
+                <option value="{{ iteration.id }}" {% ifequal iteration.id default_iteration_id %}selected="selected"{% endifequal %}>
+                  {{ iteration.name }}
+                </option>
+              {% endifnotequal %}
+            {% endfor %}
+          </select>  <br/><br/>
+          <a href="{% url iteration_create project.slug %}" ><img  id="addIterationButton" src="/site_media/static/images/addIterationButton.png"></a>
+          <span id="iteration_points"></span>
+      </div>
+      &nbsp;&nbsp;
+      <div id="empty_iteration_column">
+        <br/>
+        <img src="/site_media/static/images/chooseIteration.png">
+        <br/><br/><br/>
+        <br/><br/><br/>
+      </div>
+      <ul style="display:none" class="story_list" id="iteration_column" iteration_id="">
+      
+      </ul>
+    </div><!-- End story_column -->
+  
+  
+    <div class="backlog story_column">
+      <div class="story_column_header">
+        <span style="float:right">
+        <h1>
+          Backlog
+        </h1>
+        <span id="backlog_points"></span>
+      </div>
+      
+      &nbsp;<a class="showFilter" href="#">Filter</a>              
+      <div id="filterDialog" style="display:none">
+        <a name="filterDialog"></a>
+        <form class="filterForm" action="{% url stories_iteration project.slug project.get_default_iteration.id %}" method="GET">
+          <table width="100%">
+            <tr><td>Search Text:</td><td><input type="text" name="search"></tr>
+            <tr><td>Tags:</td><td><input type="text" name="tags" id="tags_input"></tr>
+
+          </table>
+          <input type="hidden" name="display_type" value="mini">
+          <input type="submit" value="Filter" id="filter_button">
+          <input type="reset" value="Clear Filter" id="clear_filter_button">
+        </form>
+      
+      </div>
+      
+      
+      
+
+      
+      <ul class="story_list" id="backlog_column" iteration_id="{{ project.get_default_iteration.id }}">
+      
+      </ul>
+    </div> <!-- End backlog story_column -->
+
+
+  </div><!-- End columnContainer -->
+  
+
+  
+  <div id="addIterationDiv" style="display:none;">   
+  </div>
+  
+
+  <div id="story_hover_window" >
+     <div id="story_hover_content">
+     </div>
+  </div>
+  
+  <div style="display:none"> 
+ 
+<script src="{{ STATIC_URL }}js/story_hover.js" type="text/javascript"></script>        
+<script type="text/javascript" charset="utf-8">
+
+  {# Inject some page values into javascript variables so we know them at runtime. #}  
+  var project_slug = "{{ project.slug }}";
+  var default_iteration = "{{ project.get_default_iteration.id }}";
+  
+  
+  {# Method to calculate the number of points in an iteration #}
+  function calculatePoints( iteration_list, iteration_points)
+  {
+    iter_points = 0;
+    inf = 0;
+    question = 0;
+    $(iteration_list).children("li").each(function(index)
+      {
+        points = $(this).children("div.pointsBox").text();
+        if( points == "?")
+        {
+          question++;
+        }
+        else if( points == "Inf")
+        {
+          inf++;
+        }
+        else
+        {
+          iter_points += parseFloat( points) ;
+        }
+      });
+      
+      var result = "Points: " + iter_points;
+      if( inf > 0)
+      {
+        result = result + " + (<b>inf</b> x " + inf + ") ";
+      }
+      if( question > 0)
+      {
+        result = result + " ( <b>?</b> x " + question + ")";
+      }
+      
+        
+      $(iteration_points).html(result);
+    
+  }
+  
+  
+  
+  {# loadIteration will call a url like this: /projects/project/b10-24/stories/1 and put its contents inside the <ul id="iteration_column"> area #}     
+  function loadIteration( iterationID )
+  {
+    $("#loadingIcon").show();
+    $.ajax({
+      url: "/projects/project/" + project_slug + "/stories/" + iterationID,
+      success: function(html){
+        $("#iteration_column").html(html);  
+        $("#iteration_column").attr("iteration_id", iterationID);      
+        calculatePoints("#iteration_column","#iteration_points");
+        $("#loadingIcon").hide();
+        $(".hoverDetails").hover( displayStoryHover, hideStoryHover );
+      }
+    });
+  }
+  
+  {# This is the method that handles the user-drop event and records that fact on the server. #}
+  function updateStoryPosition(event, ui)
+  {  
+    iterationId = $(ui.item).parent().attr("iteration_id");
+    $("#loadingIcon").show();
+    $.ajax({
+      url: "/projects/project/" + project_slug + "/story/" + $(ui.item).attr("story_id") + "/reorder",
+      data:({ action:"reorder", index:ui.item.index(), iteration:iterationId }),
+      type: "POST",
+      success: function() {
+        calculateBothPoints();
+        $("#loadingIcon").hide();
+      }
+    });
+
+  }
+  
+  {# Calculates the points that go into the column headers. #}
+  function calculateBothPoints()
+  {
+     calculatePoints("#iteration_column","#iteration_points");
+     calculatePoints("#backlog_column","#backlog_points");
+  }
+
+  {# Set up the drag & drop functionality of our story lists. #}
+  $("ul").sortable({connectWith: "ul", update: updateStoryPosition , placeholder: "ui-state-highlight"});
+  $("ul").disableSelection();
+ 
+  {# When the iteration combo box changes, load the correct iteration into the left column (or hide it if there is no iteration) #}
+  function loadIterationFromChooser()
+  {
+    if( $("#iterationChooser").val().length > 0)
+    {
+      $("#empty_iteration_column").hide();
+      $("#iteration_column").show();
+      loadIteration( $("#iterationChooser").val() );
+    }
+    else
+    {
+      $("#empty_iteration_column").show();
+      $("#iteration_column").hide();        
+    }
+  }
+  
+  {# The filter form ajax stuff... #}
+  $(".showFilter").click( function() { $("#filterDialog").toggle(); return false;} );
+  $(".filterForm").ajaxForm(
+      {
+        beforeSend: function() { $("#loadingIcon").show();},
+        success: function(html)
+        {
+          $("#backlog_column").html(html);  
+          $(document).trigger('close.facebox');   
+          $("#loadingIcon").hide();            
+        }
+      });
+  
+  
+  {# When the tieration drop down is changed, load that iteration. #}
+  $("#iterationChooser").change( function() 
+    {
+       loadIterationFromChooser();
+    });
+
+    {# Load the intial backlog stories. #}
+    $.ajax({
+      url: "/projects/project/" + project_slug + "/stories/" + default_iteration,
+      success: function(html){
+        $("#backlog_column").append(html);
+        calculatePoints("#backlog_column","#backlog_points");
+      }
+    });
+
+       
+  
+  function setStatusTodo( storyID )
+  {
+    $(".todoButtons").hide();
+    $.ajax({
+      url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_todo",      
+      type: "POST",
+      success: function(responseText) {        
+        $("#story_" + storyID).replaceWith(responseText);
+      }
+    });
+  }     
+  
+  
+  function setStatusDoing( storyID )
+  {
+    $(".todoButtons").hide();    
+    $.ajax({
+      url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_doing",      
+      type: "POST",
+      success: function(responseText) {        
+        $("#story_" + storyID).replaceWith(responseText);
+      }
+    });
+  }
+  
+  function setStatusReviewing( storyID )
+  {
+    $(".todoButtons").hide();    
+    $.ajax({
+      url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_reviewing",      
+      type: "POST",
+      success: function(responseText) {        
+        $("#story_" + storyID).replaceWith(responseText);
+      }
+    });
+  }
+  
+  function setStatusDone( storyID )
+  {
+    $(".todoButtons").hide();    
+    $.ajax({
+      url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_done",      
+      type: "POST",
+      success: function(responseText) {        
+        $("#story_" + storyID).replaceWith(responseText);
+      }
+    });
+  }    
+
+       
+  $(document).ready( function() 
+  {
+    loadIterationFromChooser(); 
+    $("#loadingIcon").hide();
+    $(".hoverDetails").hover( displayStoryHover, hideStoryHover );
+  } ); 
+</script>
+
+</div>{% endblock %}

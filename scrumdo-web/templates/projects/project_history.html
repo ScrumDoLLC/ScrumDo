@@ -1,0 +1,28 @@
+{% extends "projects/base.html" %}
+
+{% load i18n %}
+{% load uni_form %}
+{% load avatar_tags %}
+{% load threadedcommentstags %}
+{% load pagination_tags %}
+{% load extra_tagging_tags %}
+{% load projects_tags %}
+{% load group_tags %}
+{% load topics_tags %}
+{% load wiki_tags %}
+{% load theme_tags %}
+{% load iteration_tags %}
+
+{% block head_title %}{{ project.name }}{% endblock %}
+
+{% block panel %}
+{% include "projects/panel.html" %}  
+{% endblock %}
+
+{% block body %}
+  <script type="text/javascript" charset="utf-8">
+    graph_count = 0;  
+  </script>
+  <h1>Project History</h1>
+  {% include "projects/project_history_item.html" %}  
+{% endblock %}

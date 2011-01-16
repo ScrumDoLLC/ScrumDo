@@ -1,0 +1,23 @@
+{% extends "forum_base.html" %}{% load i18n %}
+
+{% block title %}{% trans "Forums" %}{% endblock %}
+
+{% block content %}
+<table id='djangoForumList'>
+<tr>
+<th>{% trans "Forum" %}</th>
+<th>{% trans "Last Post" %}</th>
+</tr>
+
+{% for forum in object_list %}
+<tr>
+<td class='djangoForumListDetails'><p><strong><a href='{{ forum.get_absolute_url }}'>{{ forum.title }}</a></strong><br /><span class='djangoForumStats'>{% blocktrans with forum.threads as thread_count and forum.posts as post_count %}{{ thread_count }} threads, {{ post_count }} posts{% endblocktrans %}</span></p>
+<p>{{ forum.description }}</p></td>
+{% with forum.forum_latest_post as latest_post %}
+<td class='djangoForumListLastPost'>{% if latest_post %}{% blocktrans with latest_post.time|timesince as time and latest_post.author as author %}{{ time }} ago by {{ author }}{% endblocktrans %} (<a href='{{ latest_post.get_absolute_url }}'>{% trans "view" %}</a>){% else %}{% trans "No Posts" %}{% endif %}</td>
+{% endwith %}
+</tr>
+{% endfor %}
+</table>
+{% if request.user.is_authenticated %}<p><a href="{% url forum_subscriptions %}">{% trans "Update Subscriptions" %}</a></p>{% endif %}
+{% endblock %}

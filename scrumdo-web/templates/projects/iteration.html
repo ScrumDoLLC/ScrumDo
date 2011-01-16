@@ -1,0 +1,325 @@
+{% extends "projects/base.html" %}
+
+{% load i18n %}
+{% load uni_form %}
+{% load avatar_tags %}
+{% load threadedcommentstags %}
+{% load pagination_tags %}
+{% load extra_tagging_tags %}
+{% load projects_tags %}
+{% load iteration_tags %}
+{% load group_tags %}
+{% load topics_tags %}
+{% load wiki_tags %}
+{% load theme_tags %}
+{% load iteration_tags %}
+
+{% block head_title %}{{ project.name }}{% endblock %}
+
+
+{% block panel %}
+{% include "projects/panel.html" %}  
+{% endblock %}
+
+{% block add_story %}
+    {% if user.is_authenticated %}
+    {% canwrite project %}
+      {% include "stories/add_story_form.html" %}
+    {% endcanwrite %}
+
+    {% endif %}
+{% endblock %}
+
+
+{% block body %}
+        <h1>{{ iteration.name }}</h1>
+
+        {% if iteration.start_date %}<i>{{iteration.start_date|date:"M d, Y"}} - {{iteration.end_date|date:"M d, Y"}}</i>{% endif %}
+        
+        {% if not iteration.default_iteration %}
+          {% if iteration.points_log.count %}
+            <div id="iterationBurndown" style="width:100%;height:200px;"></div>  
+          {% else %}
+            <br/><img src="/site_media/static/images/burndown.png">
+          {% endif %}
+        {% else %}
+          This is your Backlog, it's where new stories are created.  It represents the total amount of work left to do on the project.
+        {% endif %}
+        
+        <div style="clear:both;">&nbsp;</div>
+
+        <img style="float:right" src="/site_media/static/images/ajax-loader.gif" id="loadingIcon">
+        <h1>Stories</h1>
+
+        {% with iteration.id as iteration_id %}
+            {% include "stories/filter_form.html" %}
+        {% endwith %}
+                
+        <ul id="story_list">
+
+        </ul>
+    </div>
+    
+
+      <div id="subIterationList" style="display:none">
+        {% for subiteration in project.iterations.all %}
+          {% ifnotequal subiteration iteration %}
+          
+            <div class="subIteration" iteration_id="{{subiteration.id}}">{% iteration_icon subiteration %} {{subiteration.name}}</div>
+          {% endifnotequal %}
+        {% endfor %}
+      </div>
+
+    
+    <div id="iterationDetails" style="display:none">
+      <form method="POST" action="">
+        {{ iteration_form|as_uni_form }}
+        <br/>
+        <input type="submit" value="Save">
+      </form>
+    </div>
+    
+    <div id="story_hover_window" >
+      <div id="story_hover_content">
+      </div>
+    </div>
+    
+    
+{% endblock %}
+
+{% block extra_body %}
+
+<script src="{{ STATIC_URL }}js/story_hover.js" type="text/javascript"></script>        
+
+<script type="text/javascript">
+
+    var project_slug = "{{ iteration.project.slug }}";
+    var current_story_popup = "";
+
+    function loadIteration( iterationID , tags, search)
+    {
+      $("#loadingIcon").show();
+      $.ajax({
+        url: "/projects/project/" + project_slug + "/stories/" + iterationID,
+        data:{display_type:"block",
+              tags:tags,
+              search:search},
+        success: function(html){
+          $("#story_list").html(html);  
+          $("#story_list").attr("iteration_id", iterationID);      
+          $("#loadingIcon").hide();
+          setUpStoryLinks();          
+        }
+      });
+    }
+        
+    $(".showFilter").click( function() { $("#filterDialog").toggle(); return false;} );
+    
+    $(".filterForm").ajaxForm(
+        {
+          beforeSend: function() { $("#loadingIcon").show();},
+          success: function(html)
+          {
+            $("#story_list").html(html);  
+            $(document).trigger('close.facebox');   
+            $("#loadingIcon").hide();   
+            setUpStoryLinks();        
+            $("ul").sortable("disable");
+          }
+        });
+
+    {# This is the method that handles the user-drop event and records that fact on the server. #}
+    function updateStoryPosition(event, ui)
+    {        
+      if( $(ui.item).attr("draggedOffScreen") == "1" )
+      {
+        // We were getting double sort/drag events sometimes when dragging to a different iteration.
+        return;
+      }
+      iterationId = "{{ iteration.id }}";
+      $("#loadingIcon").show();
+      $.ajax({
+        url: "/projects/project/" + project_slug + "/story/" + $(ui.item).attr("story_id") + "/reorder",
+        data:({ action:"reorder", index:ui.item.index(), iteration:iterationId }),
+        type: "POST",
+        success: function() {
+          calculateBothPoints();
+          $("#loadingIcon").hide();          
+        }
+      });
+    }
+        
+    function filterByTag( tag )
+    {
+      $("#filterDialog").show();
+      $("#tags_input").val(tag);
+      $("#filter_button").submit();
+    }
+
+    function calculateBothPoints()
+    {
+      setUpStoryLinks();
+    }
+   
+    $(document).bind('beforeReveal.facebox', function() {
+        $('#facebox .body').width('500px');        
+    });
+    
+    $(document).bind('afterReveal.facebox', function() {
+        $("#id_start_date-2").datepicker({dateFormat: 'yy-mm-dd' });
+        $("#id_end_date-2").datepicker({dateFormat: 'yy-mm-dd' });
+    });
+    
+    $(document).bind('reveal.facebox', function() {
+      $('#facebox input').each( function(intIndex){
+        $(this).attr('id',jQuery(this).attr('id') + '-2')
+      });
+    });
+    
+    
+    // When the story form is shown, this sets up some ajaxy links on it. 
+    function setUpStoryLinks() 
+    {
+
+      $(".commentLink").click( function() 
+        {                    
+            $(this).parent().children(".commentForm").show();
+            $(this).hide();
+            return false;
+        } );
+
+        $(".commentForm form").ajaxForm(
+           {          
+            success: function(responseText, statusText, xhr, obj) { $("#filter_button").submit();  }
+          });
+          
+        $(".responses form  ").ajaxForm(
+             {          
+              success: function(responseText, statusText, xhr, obj) { $("#filter_button").submit();  }
+        });
+        
+        $(".moveIterationIcon").click( function(event)
+        {
+          var pos = $(this).offset();  
+          var width = $(this).width();
+            
+          //show the menu directly over the placeholder
+          $("#subIterationList").css( { "left": (pos.left + width) + "px", "top":pos.top + "px" } );
+          $("#subIterationList").fadeIn(100);
+          
+          current_story_popup = $(this).attr("story_id");
+          
+          $('body').one("click",function() {
+              $("#subIterationList").fadeOut(100);
+          });
+           
+          return false;
+        });
+        
+        $(".hoverDetails").hover( displayStoryHover, hideStoryHover );
+    }
+
+
+ 
+    
+     
+    $(document).ready(function() {
+         
+          $(".subIteration").click( function() 
+          {
+            iteration_id = $(this).attr("iteration_id");
+            moveCurrentlyOpenStoryToIteration(iteration_id);
+          } );
+
+          loadIteration( "{{ iteration.id }}","","")  ;
+          
+          
+
+          $("#story_list").sortable({ 
+            update: updateStoryPosition, 
+            tolerance: 'pointer', 
+            distance: 5,
+            opacity:0.6, 
+            placeholder: "ui-state-highlight" 
+            });
+          
+          {# Draw the graph... #}
+           {% if iteration.points_log.count %}      
+             generateBurnDown( "#iterationBurndown", "{{project.slug}}" , "{{iteration.id}}" , 0);         
+           {% endif %}
+    });
+        
+    function moveCurrentlyOpenStoryToIteration( iteration_id )
+    {
+      $("#loadingIcon").show();
+      $.ajax({
+        url: "/projects/project/" + project_slug + "/story/" + current_story_popup + "/reorder",
+        data:({ action:"move_iteration", iteration:iteration_id }),
+        type: "POST",
+        success: function() {
+          $("#loadingIcon").hide();
+          $("#story_" + current_story_popup).hide(true);              
+        }
+      });
+      
+    }
+    
+    function setStatusReviewing( storyID )
+    {
+      $(".todoButtons").hide();
+      $.ajax({
+        url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_reviewing",      
+        type: "POST",
+        data: ({return_type : "block"}),            
+        success: function(responseText) {        
+          $("#story_" + storyID).replaceWith(responseText);
+          setUpStoryLinks();
+        }
+      });
+    }
+    function setStatusTodo( storyID )
+    {
+      $(".todoButtons").hide();
+      $.ajax({
+        url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_todo",      
+        type: "POST",
+        data: ({return_type : "block"}),            
+        success: function(responseText) {        
+          $("#story_" + storyID).replaceWith(responseText);
+          setUpStoryLinks();
+        }
+      });
+    }     
+
+
+    function setStatusDoing( storyID )
+    {
+      $(".todoButtons").hide();    
+      $.ajax({
+        url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_doing",      
+        type: "POST",
+        data: ({return_type : "block"}),                        
+        success: function(responseText) {        
+          $("#story_" + storyID).replaceWith(responseText);
+          setUpStoryLinks();
+        }
+      });
+    }
+
+
+    function setStatusDone( storyID )
+    {
+      $(".todoButtons").hide();    
+      $.ajax({
+        url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_done",      
+        type: "POST",
+        data: ({return_type : "block"}),                        
+        success: function(responseText) {        
+          $("#story_" + storyID).replaceWith(responseText);
+          setUpStoryLinks();
+        }
+      });
+    }
+</script>
+    
+{% endblock %}

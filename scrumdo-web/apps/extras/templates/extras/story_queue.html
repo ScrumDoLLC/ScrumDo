@@ -1,0 +1,42 @@
+{% extends "projects/base.html" %}
+
+{% load i18n %}
+{% load uni_form %}
+{% load avatar_tags %}
+{% load threadedcommentstags %}
+{% load pagination_tags %}
+{% load extra_tagging_tags %}
+{% load projects_tags %}
+{% load group_tags %}
+{% load topics_tags %}
+{% load wiki_tags %}
+{% load theme_tags %}
+
+{% block head_title %}{{ project.name }}{% endblock %}
+
+
+{% block body %}
+  <h1>Story Queue</h1>
+  <p>These are the stories available from external sources that you configured through the <a href="{% url project_extras_url project.slug %}">Extras</a> page.</p>
+  
+  <ul>
+  {# TODO (Useability): We should probably add:   #}
+  {#     Pagination, sorting, filtering           #}
+  {#     Ability to permanently ignore some imported stories.  #}
+  
+  {% for story in project.story_queue.all %}
+    <li class="story_block gripper_{% ifequal story.status 1 %}todo{% endifequal %}{% ifequal story.status 3 %}reviewing{% endifequal %}{% ifequal story.status 2 %}doing{% endifequal %}{% ifequal story.status 4 %}done{% endifequal %}">
+      <div class="pointsBox">{{ story.points }}</div>
+      <h1>{{story.summary}}</h1>
+      {% if story.detail %}{{story.detail}}<br/>{% endif %}     
+      {% if story.extra_1 %}{{story.extra_1}}<br/>{% endif %}
+      {% if story.extra_2 %}{{story.extra_2}}<br/>{% endif %}
+      {% if story.extra_3 %}{{story.extra_3}}<br/>{% endif %}      
+      <div style="background-color:#dddddd; padding:8px; margin-top:5px;"><a href="{% url import_story_url project.slug story.id%}" class="green small button">Import Story</a> <a href="{{story.external_url}}">{{story.external_url}}</a></div>
+    </li>    
+  {% endfor %}
+  </ul>
+{% endblock %}
+
+
+

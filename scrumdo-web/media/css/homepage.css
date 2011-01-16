@@ -1,0 +1,256 @@
+/* @override http://localhost:8000/site_media/static/css/homepage.css */
+
+html, body {
+	height: 100%;
+}
+
+body {
+	background-color: #FFF;
+	margin: 0;
+	color: #333;
+	font-family: "Helvetica Neue", Arial, sans-serif;
+	font-size: 10pt;
+}
+
+a, a:visited {
+	color: #13C;
+}
+
+img {
+	border: 0;
+}
+
+#body {
+	clear: both;
+	margin: 0 auto;
+	padding: 10px;
+	width: 810px;
+	min-height: 250px;
+	font-size: 14px;
+}
+
+#body #leftColumn {
+	width: 255px;
+	display: inline-block;	
+	vertical-align: top;
+	margin-right: 8px;
+	}
+
+#body #middleColumn {
+	width: 260px;
+	display: inline-block;	
+	vertical-align: top;
+	margin-right: 19px;
+	margin-left: 6px;
+}
+
+.infoBlob h1 {
+	margin: 0px;
+	
+}
+.infoBlob {
+	width: 330px;
+	background: #ffffff;
+	padding: 10px 20px;
+	border: 2px solid #454545;
+	display: inline-block;
+	height: 105px;
+    -moz-border-radius: 20px;
+    -webkit-border-radius: 20px;
+    -khtml-border-radius: 20px;
+    border-radius: 20px;
+    margin-right: 20px;	
+}
+
+#body #rightColumn {
+	width: 242px;
+	display: inline-block;	
+}
+
+#tabhead a {
+	color: #fff;
+	font: bold 16px "Lucida Grande", Lucida, Verdana, sans-serif;
+	text-decoration: none;
+	margin-right: 20px;
+}
+
+#tabhead {
+	background-color: #000;	
+    background: -webkit-gradient(linear, left top, left bottom, from(#111), to(#333));
+    background: -moz-linear-gradient(top,  #111,  #333);
+   	min-height: 34px;
+   	padding-left: 15px;
+   	padding-top: 10px;
+   	text-align: center;
+   	color: #fff;
+}
+
+#tabhead .logo {
+	height: 32px;
+	padding-left: 35px;
+	padding-top: 0;
+}
+
+#tabhead .login {
+	position: absolute;
+	top: 3px;
+	right: 3px;
+	color: #fff;
+/* login bar text colour */
+}
+
+#higlightContentText h1 {
+	font: bold 41px Helvetica, Geneva, sans-serif;
+	letter-spacing: -2px;
+	color: #000;
+	margin-top: 9px;
+	margin-bottom: 0px;
+	text-shadow: #fff 1px 1px 1px;
+}
+
+#higlightContentText h2 {
+	margin-top: 9px;
+	margin-bottom: 0px;
+	text-shadow: #eee 1px 1px 1px;
+}
+
+#higlightContentText img {
+	margin-top: 9px;
+	margin-left: 42px;
+}
+
+#higlightContentText h3 {
+	margin-top: 9px;
+	color: #424343;
+	font-family: "Lucida Grande", Lucida, Verdana, sans-serif;
+	font-weight: normal;
+	font-style: normal;
+	margin-top: 5px;
+	text-shadow: #ccc 1px 1px 1px;
+}
+
+#higlightContentText {
+	width: 390px;
+	display: inline-block;
+	height: 300px;
+	vertical-align: top;
+	padding-right: 15px;
+}
+
+
+
+#highlightContentImage {
+	width: 390px;
+	display: inline-block;
+
+}
+
+#infoContent {
+	min-height: 200px;
+	width: 90%;
+	margin-left: auto;
+	margin-right: auto;
+}
+#info {
+	width: 100%;
+	background-color: #e0e0e0;
+	padding: 15px;
+	
+	border-top-style: solid;
+	border-top-color: #8b8b8b;
+}
+
+#homepagePreview {
+	float: none;
+}
+
+#hilightContent {
+	width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#tabhead .login a, #tabhead .login a:visited {
+	color: #fff;
+
+}
+
+#tabhead .login a:hover {
+	color: #FFF;
+}
+
+#body h1 {
+	font-size: 22px;
+}
+#hilightArea {
+	margin: 0;
+	height: 324px;
+	background: #d7e695 url(/site_media/static/images/homepageStripes.png) repeat-x;
+	border-bottom: 1px solid #7a7a7a;
+	border-top: 1px solid #fffeff;
+	box-shadow: 0px 0px 10px #555;
+	-webkit-box-shadow: 0px 0px 10px #555;
+	-moz-box-shadow: 0px 0px 10px #555;
+}
+
+
+#leftColumn h1 {
+	margin-bottom: 3px;
+}
+
+.homepageFeatureList {
+	margin-top: 0px;
+	margin-left: 0px;	
+	padding-left: 18px;	
+}
+
+.homepageFeatureList li {
+	margin-left: 5px;	
+	margin-bottom: 3px;
+}
+
+.features {
+	width: 2900px;
+}
+.featureList h2 {
+	margin: 5px 10px 10px 15px;
+}
+.featureList {
+	overflow: scroll;
+	height: 295px;
+	overflow-y: hidden;
+	background-color: #fff;
+	padding: 10px;
+	border-radius: 10px;
+	border: 1px solid #b0b0b0;
+}
+.featureBox img {
+	margin-bottom: 5px;
+}
+.featureBox {
+	vertical-align: top;
+	display: inline-block;
+	width: 300px;
+	height: 200px;
+	background-color: #ffffff;
+	margin: 5px 10px 25px;
+	padding: 15px;
+	border-radius: 10px;
+	border-style: outset;
+	border-width: 1px;
+	
+	text-align: center;
+	
+	box-shadow: 0px 0px 10px #555;
+	-webkit-box-shadow: 0px 0px 10px #555;
+	-moz-box-shadow: 0px 0px 10px #555;
+	font-size: 14px;
+}
+
+#footer {
+	text-align: center;
+	width: 100%;
+	margin-top: 50px;
+}
+
+
