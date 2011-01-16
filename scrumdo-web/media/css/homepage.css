@@ -147,7 +147,7 @@ img {
 
 #infoContent {
 	min-height: 200px;
-	width: 800px;
+	width: 90%;
 	margin-left: auto;
 	margin-right: auto;
 }
@@ -208,3 +208,49 @@ img {
 	margin-left: 5px;	
 	margin-bottom: 3px;
 }
+
+.features {
+	width: 2900px;
+}
+.featureList h2 {
+	margin: 5px 10px 10px 15px;
+}
+.featureList {
+	overflow: scroll;
+	height: 295px;
+	overflow-y: hidden;
+	background-color: #fff;
+	padding: 10px;
+	border-radius: 10px;
+	border: 1px solid #b0b0b0;
+}
+.featureBox img {
+	margin-bottom: 5px;
+}
+.featureBox {
+	vertical-align: top;
+	display: inline-block;
+	width: 300px;
+	height: 200px;
+	background-color: #ffffff;
+	margin: 5px 10px 25px;
+	padding: 15px;
+	border-radius: 10px;
+	border-style: outset;
+	border-width: 1px;
+	
+	text-align: center;
+	
+	box-shadow: 0px 0px 10px #555;
+	-webkit-box-shadow: 0px 0px 10px #555;
+	-moz-box-shadow: 0px 0px 10px #555;
+	font-size: 14px;
+}
+
+#footer {
+	text-align: center;
+	width: 100%;
+	margin-top: 50px;
+}
+
+
