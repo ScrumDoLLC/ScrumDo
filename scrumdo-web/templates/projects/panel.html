@@ -160,6 +160,19 @@
 	      </p>
 	    </div>
 
+      <div style="width:400px; display:none" id="statsHelp">
+        <h2>Velocity</h2>
+        Velocity is calculated on a nightly basis.  It represents how many points per iteration your team has completed.  It's averaged over the past
+        several iterations.  You can change how this stat is calculated on the <a href="{% url project_admin project.slug %}" >project admin</a> page.
+        <h2>Stories</h2>
+        The total number of strories in this project.
+        <h2>Iterations Left</h2>
+        If you continue working at the stated velocity, and you complete all of the stories in the project not yet marked as done, it will take you this many
+        iterations to complete the project.
+        <br/><br/>
+
+      </div>
+
 {% endif %}
 
 
