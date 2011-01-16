@@ -38,6 +38,8 @@ def team(request, organization_slug, team_id):
   adduser_form=AddUserForm(team=team)
   
   if request.method == "POST":
+    if not _isAdmin(request.user, organization):
+      return HttpResponseForbidden("Can not complete action - You are not an admin on this team")
     action = request.POST.get("action")
     if action == "addMember":
       adduser_form = AddUserForm(request.POST, team=team)
@@ -70,7 +72,8 @@ def team(request, organization_slug, team_id):
   
   
   
-  
+def _isAdmin( user, organization ):
+  return Organization.objects.filter( teams__members = user , teams__access_type="admin", teams__organization=organization).count() > 0
   
 def team_create(request, organization_slug):
   organization = get_object_or_404(Organization, slug=organization_slug)

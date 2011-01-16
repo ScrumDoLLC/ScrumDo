@@ -78,13 +78,20 @@ def _getHeaders( project ):
       pass
     return value
   def setId(story,value):
-    story.local_id=intOrString(value)
+    pass
   def setSummary(story,value):
     story.summary=str(value)
   def setDetail(story,value):
     story.detail=str(value)
   def setPoints(story,value):
-    story.points=intOrString(value)
+    try:
+      story.points=float(value)
+    except:
+      if value == "":
+        story.points = "?"
+      else:
+        story.points = value
+    
 
   def setStatus(story,value):
     try:
@@ -279,13 +286,14 @@ def _importSingleRow( row, iteration, user):
         try:
           f = header[4]  # This should be a method capable of setting the property          
           f(story, value)
+          # logger.debug("Setting %s to %s" % (header[1],value) )
         except:
           logger.info("Failed to set %s to %s, ignoring." % (header[1], str(value) ) )
   
     story.save()
     return True
-  except:
-    logger.debug("Failed to import a record.")
+  except Exception as e:
+    logger.debug("Failed to import a record. %s" % e)
     return False
 
 
