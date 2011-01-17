@@ -5,68 +5,115 @@
 {% load humanize %}
 {% load theme_tags %}
 {% load extra_tagging_tags %}
-
+{% load avatar_tags %}
 
 {% block head_title %}{{organization.name}}{% endblock %}
 
-{% block body %}
+{% block body %}      
 
-    
-      <div class="right_panel">
-          <div class="blue_box">
-            <h1>{{ organization.name }}</h1>              
-            {{ organization.description }}           
-          </div>
-          
-          <div class="blue_box">
-            <h1>Actions</h1>  
-            <a href="{% url organization_edit organization.slug %}" rel="facebox">Edit Details</a>
-          </div>
-      </div>
-      
-      
-      
-    <div style="width: 550px;">
+<div id="side">
+  <div class="box">
+    <div class="box-top">
+      <div class="title">
+	<a href="{% url organization_detail organization.slug %}">{{ organization.name }}</a>
+	<a title="{% trans "Settings" %}" href="{% url organization_edit organization.slug %}" >{% silk "cog" %}</a><br/>
+      </div><!--title-->
+    </div><!--box-top-->
+    <div class="box-heading">
+      {{ organization.description }}
+    </div><!--box-heading-->
+    <div class="box-bottom"></div>
+  </div><!--box-->
+  <div class="projects-box box">
+    <div class="box-top">
+      <div class="title">Projects</div>
+    </div><!--box-top-->
+    <div class="box-content">
+      {% for project in organization.projects.all %}
+      <div class="project">
+	<a href="{% url project_detail project.slug %}">{% silk "database_table" %} {{project.name}}</a><br/>
+	{{ project.stories.count }} stor{{ project.stories.count|pluralize:"y,ies" }}, {{ project.iterations.count }} iteration{{ project.iterations.count|pluralize }}
+      </div><!--project-->
+      {% endfor %}
+    </div><!--box-content-->
+    <div class="box-bottom"></div>
+  </div><!--box-->
+</div><!--side-->
 
 
-        <div class="sectionHeader">Projects</div>        
-        <ul class="organizationList">
-        {% for project in organization.projects.all %}
-          <li class="organizationItem">
-            <div class="organizationListOptionButtons">
-           
-            </div>
-            {% silk "database_table" %}<a href="{% url project_detail project.slug %}">{{project.name}}</a><br/>
-            {{ project.stories.count }} stor{{ project.stories.count|pluralize:"y,ies" }}, {{ project.iterations.count }} iteration{{ project.iterations.count|pluralize }}
-            <hr/>
-          </li>
+<div class="teams-box box">
+  <div class="box-top">
+    <div class="title">Teams</div>
+  </div><!--box-top-->
+  {% for team,adduser_form in organization_teams %}
+  <div class="box-content">
+    <div class="team">
+      <div class="team-title">{% silk "group" %} {{team.name}}<br/>
+      <span class="subtitle">{{ team.access_type|capfirst }} access ({{ team.projects.count }} project{{ team.projects.count|pluralize }}, {{ team.members.count }} member{{ team.members.count|pluralize }})</span>
+      </div><!--team-title-->
+      <div class="team-projects">
+	{% for project in team.projects.all %}
+	<div class="project">
+	  <a href="{% url project_detail project.slug %}">{% silk "database_table" %} {{ project.name }}</a>
+          <a href="#removeProject{{team.id}}_{{project.id}}" rel="facebox"><img class="memberDeleteButton" src="/site_media/static/pinax/images/silk/icons/delete.png" /></a>
+            <div style="display:none" id="removeProject{{team.id}}_{{project.id}}">
+              <h2>Are you sure you want to remove {{project.name}} from team {{ team.name }}?</h2><br/>
+              <div style="width:100% ; text-align: center;">	
+                <form action="" method="POST">
+                  <a onClick="$(document).trigger('close.facebox');return false;" class="cancelDelete" href="#">Cancel</a> -              
+                  <input type="hidden" name="action" value="removeProject">
+		  <input type="hidden" name="team_id" value="{{team.id}}">
+                  <input type="hidden" name="project_id" value="{{project.id}}">
+                  <input type="submit" value="Remove Project">
+                </form>
+              </div><!---->
+            </div><!---->
+	</div><!--project-->
+      {% endfor %}
+	<form id="add_project_form" action="" method="POST">
+          <select name="project">
+            {% for project in organization.projects.all %}
+            <option value="{{project.id}}">{{project.name}}</option>
+            {% endfor %}
+          </select>
+          <input type="hidden" name="action" value="addProject">
+          <input type="hidden" name="team_id" value="{{ team.id }}">
+          <input type="submit" value="Add Project">
+        </form>
+      </div><!--team-projects-->
+      <div class="team-members">
+        {% for member in team.members.all %}
+	<div class="member">
+          <a href="#removeUser{{team.id}}_{{member.id}}" rel="facebox"><img class="memberDeleteButton" src="/site_media/static/pinax/images/silk/icons/delete.png" /></a>
+          {% avatar member 16 %} {{member.username}}            
+          {% if member.email %} &lt;{{member.email}}&gt; {% endif %}
+          {% if member.first_name %} {{member.first_name}} {% endif %}
+          {% if member.last_name %} {{member.last_name}} {% endif %}
+          <div style="display:none" id="removeUser{{team.id}}_{{member.id}}">
+            <h2>Are you sure you want to remove {{member.username}} from this team?</h2><br/>
+            <div style="width:100% ; text-align: center;">
+              <form action="" method="POST">
+                <a onClick="$(document).trigger('close.facebox');return false;" class="cancelDelete" href="#">Cancel</a> -              
+                <input type="hidden" name="action" value="removeUser">
+                <input type="hidden" name="user_id" value="{{member.id}}">
+                <input type="hidden" name="team_id" value="{{team.id}}">
+                <input type="submit" value="Remove User">
+              </form>
+            </div><!---->
+          </div><!---->
+	</div><!--member-->
         {% endfor %}        
-          <li class="organizationItem">
-            <a href="{% url project_create  %}?org={{organization.id}}">{% silk "add" %}Create New Project</a>
-          </li>
-        </ul>
-        
-        <div class="sectionHeader">Teams</div>
-        <ul class="organizationList">
-        {% for team in organization.teams.all %}
-          <li class="organizationItem">
-            {% silk "group" %}<a href="{% url team_detail organization.slug team.id %}">{{team.name}}</a><br/>
-            Grants {{team.access_type}} access on {{team.projects.count}} project{{team.projects.count|pluralize}} to {{ team.members.count }} member{{ team.members.count|pluralize }}
-            <hr/>
-          </li>
-        {% endfor %}        
-          <li class="organizationItem">
-            <a href="{% url team_create organization.slug %}">{% silk "add" %}Create New Team</a>
-          </li>
-        </ul>
-        
-        
-
-        
-    </div>
-    
-    
-<script type="text/javascript" charset="utf-8">
-  
-</script>
+          <form id="add-member" method="POST" action="">
+            {{ adduser_form.non_field_errors }}
+            {{ adduser_form.recipient }}    {{adduser_form.recipient.errors}}
+            <input type="hidden" name="action" value="addMember" />
+	    <input type="hidden" name="team_id" value="{{ team.id }}" />
+	    <input type="submit" value="Add Member" />
+          </form>
+      </div><!--team-members-->
+    </div><!--team-->
+  </div><!--box-content-->
+  {% endfor %}        
+  <div class="box-bottom"></div>
+</div><!--box-->
 {% endblock %}

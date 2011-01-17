@@ -1,4 +1,5 @@
-<a class="showFilter" href="#filterDialog">Filter</a>               
+{% load theme_tags %}
+<a class="showFilter" href="#filterDialog">{% silk "wrench" %} Filter</a>               
 <div id="filterDialog" style="display:none">
   <a name="filterDialog"></a>
   <form class="filterForm" action="{% url stories_iteration project.slug iteration_id %}" method="GET">

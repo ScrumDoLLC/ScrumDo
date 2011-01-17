@@ -118,6 +118,12 @@ class Project(Group):
             return True
         else:
             return False
+
+    def get_num_stories(self):
+      return Story.objects.filter(project=self).count()
+    
+    def get_num_iterations(self):
+      return Iteration.objects.filter(project=self).count()
     
     def get_url_kwargs(self):
         return {'group_slug': self.slug}
@@ -151,6 +157,9 @@ class Iteration( models.Model):
       stories += 1
       points += story.points
     return (stories, points)
+
+  def get_absolute_url(self):
+    return reverse('iteration', kwargs={'group_slug': self.project.slug, 'iteration_id': self.id})
   
   class Meta:
     ordering = ["-default_iteration","end_date"];
@@ -202,7 +211,7 @@ class Story( models.Model ):
 
   tags_to_delete = []
   tags_to_add = []
-  activity_signal = django.dispatch.Signal(providing_args=["news", "user","action","context"])
+  activity_signal = django.dispatch.Signal(providing_args=["news", "user","action", "story", "context"])
   activity_signal.connect(SubjectActivity.activity_handler)
 
   

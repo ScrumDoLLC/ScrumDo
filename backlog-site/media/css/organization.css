@@ -1,0 +1,62 @@
+.organization-description {
+    text-indent: 10px;
+}
+
+.projects-box, .teams-box {
+    width: 298px;
+    margin-top: 20px;
+}
+
+.projects-box .box-top, .teams-box .box-top {
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.projects-box .project {
+    padding: 5px;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.teams-box .team-title {
+    padding: 5px;
+    background-color: #fafafa;
+}
+
+.teams-box .box-content {
+    margin-top: 10px;
+    border-top: 1px solid #e1e1e1;
+    border-bottom: 1px solid #e1e1e1;
+    padding: 0px;
+}
+
+.teams-box .box-bottom {
+    margin-top: 10px;
+    border-top: 1px solid #e1e1e1;
+}
+
+.teams-box .subtitle {
+    padding-left: 10px;
+}
+
+.teams-box .team-projects, .teams-box .team-members {
+    border-top: 1px solid #e1e1e1;
+}
+
+.teams-box .project, .teams-box .member {
+    padding: 5px;
+    padding-left: 10px;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.teams-box #add_project_form, .teams-box #add-member {
+    padding: 5px;
+    padding-left: 10px;
+}
+
+.teams-box #add-member #id_recipient {
+    width: 150px;
+    height: 15px;
+}
+
+#side {
+    margin-right: -20px;
+}

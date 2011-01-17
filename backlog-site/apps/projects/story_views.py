@@ -82,7 +82,7 @@ def reorder_story( request, group_slug, story_id):
     story.save()
     
     stories = project.stories.all().filter(iteration=iteration).order_by("rank")
-    story.activity_signal.send(sender=Story, news=request.user.username + " reordered story \"" +story.summary + "\" in iteration\"" +iteration.name+"\" for project " +project.name, user=request.user,action="reordered" ,object=story.summary, context=project.slug)
+    story.activity_signal.send(sender=Story, news=request.user.username + " reordered story \"" +story.summary + "\" in iteration\"" +iteration.name+"\" for project " +project.name, user=request.user, story=story, action="reordered" ,object=story.summary, context=project.slug)
 
     
     if request.POST.get("action","") == "reorder" :
@@ -135,7 +135,8 @@ def story( request, group_slug, story_id ):
     form = StoryForm( project, request.POST, project, instance=story) # A form bound to the POST data    
 
     if form.is_valid(): # All validation rules pass
-      story = form.save(  )      
+#      story.activity_signal.send(sender=Story,news=None,user=request.user,action="edited",object=story.summary,story=story,context=project.slug)
+      story = form.save()
 
     if( request.POST['return_type'] == 'mini'):
       return render_to_response("stories/single_mini_story.html", {
@@ -207,7 +208,7 @@ def stories(request, group_slug):
       story.iteration = project.get_default_iteration()
       story.rank = calculate_rank( project, int(form.cleaned_data['general_rank']) )
       story.save()
-      story.activity_signal.send(sender=Story, news=request.user.username + " worked on story\"" +story.summary + "\" in \"" +project.name+"\"", user=request.user,action="saved" ,object=story.summary, context=project.slug)
+      story.activity_signal.send(sender=Story, news=request.user.username + " created story\"" +story.summary + "\" in \"" +project.name+"\"", user=request.user,action="created" ,object=story.summary, story=story, context=project.slug)
       request.user.message_set.create(message="New story created.")
       form = StoryForm(project)
   else:
@@ -240,7 +241,8 @@ def import_file(request, group_slug):
       form = ImportForm()
       
   return render_to_response("projects/import.html", {
-           "form":form,
+          "project": project,
+          "form":form,
         }, context_instance=RequestContext(request))
 
 

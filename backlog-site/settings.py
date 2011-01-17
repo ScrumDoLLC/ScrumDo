@@ -11,7 +11,7 @@ PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 # tells Pinax to use the default theme
 PINAX_THEME = 'default'
 
-DEBUG = True 
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 # tells Pinax to serve media through django.views.static.serve.
@@ -98,6 +98,7 @@ MIDDLEWARE_CLASSES = (
     'pagination.middleware.PaginationMiddleware',
     'django_sorting.middleware.SortingMiddleware',
     'pinax.middleware.security.HideSensistiveFieldsMiddleware',
+
 #    'debug_toolbar.middleware.DebugToolbarMiddleware'
 )
 
@@ -163,6 +164,7 @@ INSTALLED_APPS = (
     'projects',
     'organizations',
     'topics',
+    'activities',
     'django_extensions',
     'django_evolution',
     'forum',

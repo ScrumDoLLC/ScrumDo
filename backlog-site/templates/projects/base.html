@@ -7,67 +7,6 @@
 
 {% block extra_head %}
   <script src="{{ STATIC_URL }}js/burndown.js" type="text/javascript"></script>  
-{% endblock %}
-
-{% block subnav %}
-    <ul>
-        {% if user.is_authenticated %}
-          {% if project %}
-            <li><a href="{% url project_detail project.slug %} ">{{project.name}}</a></li>
-            <li><a href="{% url iteration project.slug project.get_default_iteration.id %} ">Backlog</a></li>
-            <li><a href="#iteration_header_list" rel="facebox">Iterations</a></li>
-            <li><a href="#tools_list" rel="facebox">Tools</a></li>
-          {% else %}
-              <li><a href="{% url home %} ">{% trans "Your Projects" %}</a></li>
-              <li><a href="{% url project_create %}">{% trans "Create a Project" %}</a></li>
-          {% endif %}        
-        {% endif %}
-    </ul>
-    
-    {% if project %}
-      <div id="tools_list" style="display:none">
-        <ul class="toolsList">
-          {% canwrite project %}
-          <li>
-              <img src="{{ STATIC_URL }}images/iteration_planning.png">
-              <a href="{% url stories project.slug %}">Iteration Planning</a><br/>
-              Easily rank your stories and move them into an iteration.
-          </li>
-          {% endcanwrite %}
-          <li>
-              <img src="{{ STATIC_URL }}images/project_history.png">
-              <a href="{% url project_history project.slug %}">Project History</a><br/>
-              See how much you've completed in past iterations.
-          </li>  
-          <li>
-              <img src="{{ STATIC_URL }}images/predictions.png">
-              <a href="{% url project_prediction project.slug %}">Predictions</a><br/>
-              Make predictions of what work will get done when based on your ranking and velocity.
-          </li>          
-          {% canwrite project %}              
-          <li>
-              <img src="{{ STATIC_URL }}images/comingSoon.png">
-              <a href="#">Sizing</a><br/>
-              Coming Soon: Easily size stories.
-          </li>        
-          {% endcanwrite %}
-        </ul>
-      </div>
-    
-    
-      <div id="iteration_header_list" style="display:none">
-        <div class="iteration_header_list">
-        {% for iteration in project.iterations.all %}
-      
-        <div class="iteration_header_list_detail">
-          {% if iteration.stories.count %}<b>{{iteration.stories.count}} Stories</b>{%endif%}
-          {% if iteration.start_date %}<i>{{iteration.start_date|date:"M d, Y"}} - {{iteration.end_date|date:"M d, Y"}}</i>{% endif %}        
-        </div>
-        <h2>{% iteration_name iteration %}</h2>
-        <hr/>
-        {% endfor %}
-        </div>
-      </div>
-    {% endif %}
-    
+  <script src="{{ STATIC_URL }}js/project.js" type="text/javascript"></script>  
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/project.css" />
 {% endblock %}

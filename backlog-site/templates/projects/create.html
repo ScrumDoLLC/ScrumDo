@@ -11,6 +11,12 @@
 
 {% block head_title %}{% blocktrans %}Create Project{% endblocktrans %}{% endblock %}
 
+{% block panel %}
+{% if organization %}
+{% include "organizations/organization_panel.html" %}
+{% endif %}
+{% endblock %}
+
 {% block body %}
     <h1>{% trans "Create Project" %}</h1>
     
@@ -26,7 +32,7 @@
       	          <select style="width:40%" id="id_org" name="organization">
       	            <option value="none">No Organization</option>
       	            {% for org in admin_organizations %}
-      	              <option value="{{org.id}}" {% ifequal default_organization org %}selected{% endifequal %} >{{org.name}}</option>
+      	              <option value="{{org.id}}" {% ifequal organization org %}selected{% endifequal %} >{{org.name}}</option>
       	            {% endfor %}
     	            </select>
 

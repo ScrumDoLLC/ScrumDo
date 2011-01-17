@@ -2,71 +2,124 @@
 {% load projects_tags %}
 {% load avatar_tags %}
 
+<script type="text/javascript" src="{{ STATIC_URL }}js/home.js"></script>
+<link rel="stylesheet" href="{{ STATIC_URL }}css/home.css" />
 
-<div class="big_right_panel">
-    
+<div id="side">
 
-    
-    <div class="blue_box small_project_list">
-      <h1>Your Projects</h1>
-      <p>Projects that you have created.</p>
-
-
-      {% for project in my_projects %}  
-        {% ifequal None project.organization %}
-          {% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a><br/>
-          <hr/>
-        {% endifequal %}
-      {% endfor %}
-
-       {% silk "add" %} <a href="{% url project_create %}">Create New Project</a>
-
-    </div>
-    
-    {% if member_projects %}
-      <div class="blue_box small_project_list">
-        <h1>Other Projects</h1>
-        <p>Projects that others own, but you have access to.</p>
-
-
-        {% for project in member_projects %}  
-          {% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a><br/>
-          <hr/>
-        {% endfor %}
-
+  <div id="announcements-box" class="box">
+    <div class="box-top">
+      <div class="title">
+	Announcements
+	<a title="Announcements are messages informing you of important things about the site.">{% silk "help" %}</a>
       </div>
-    {% endif %}
-    
-    
-    <div class="blue_box small_project_list">
-      <h1>Your Organizations</h1>
-      <p>Organizations that you are a member of.</p>
-    
-      {% for org in my_organizations %}  
-        {% silk "building" %} <a href="{% url organization_detail org.slug %}">{{org.name}}</a><br/>
-        <ul class="projectSubList">
-          {% for project in org.projects.all %}
-            {% canread project %}
-              <li>{% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a></li>
-            {% endcanread %}
-          {% endfor %}
-        </ul>
-        <hr/>
+      <div class="buttons">
+  	<a title="Hide Announcements">{% silk "delete" %}</a>
+      </div>
+    </div><!--box-top-->
+    <div class="box-heading">
+      This is a beta look at ScrumDo. We're still actively working on the site: fixing things, adding new features, and tweaking what's already here. We'll do everything we can to make sure any work saved here is safe, but we can't guarentee anything.
+    </div><!--box-heading-->
+    <div class="box-bottom"></div>
+  </div><!--announcements-box-->
+  
+  <div id="projects-box" class="box">
+    <div class="box-top">
+      <div class="title">
+	Projects 
+	<span class="subtitle">({{ num_projects }})</span>      
+	<a title="Projects are used to organize your work. Click between Your Projects and Other Projects to view projects you have created or projects you did not create, but have access to.">{% silk "help" %}</a>
+      </div>
+      <div class="buttons">
+	<a title="Add New Project" href="{% url project_create %}">{% silk "add" %}</a>
+      </div><!--buttons-->
+    </div><!--box-top-->
+    <div class="box-heading">
+      <p>Find a project...</p>
+      <ul>
+	<li><a id="your-projects-button" class="active">Your Projects</a></li>
+	{% if member_projects %}
+	<li><a id="other-projects-button">Other Projects</a></li>
+	{% endif %}
+      </ul>
+    </div><!--box-heading-->
+    <div class="box-content">
+      <div id="your-projects">
+	{% for project in my_projects %}  
+	{% ifequal None project.organization %}
+      <div class="projectfeed">
+	<a title="Subscribe to project activity." target="_blank" href="/feeds/project/{{ project.pk }}">{% silk "feed" %}</a>
+      </div><!--projectfeed-->
+	<div class="project">
+  	  {% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a> <span class="subtitle">({{ project.get_num_iterations }} iteration{{ project.get_num_iterations|pluralize }}, {{ project.get_num_stories }} stor{{ project.get_num_stories|pluralize:"y,ies" }})</span>
+	</div><!--project-->
+	{% endifequal %}
+	{% endfor %}
+      </div><!--your-projects-->
+      {% if member_projects %}
+      <div id="other-projects" class="hidden">
+	{% for project in member_projects %}  
+      <div class="projectfeed">
+	<a title="Subscribe to project activity." target="_blank" href="/feeds/project/{{ project.pk }}">{% silk "feed" %}</a>
+      </div><!--projectfeed-->
+	<div class="project">
+          {% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a> <span class="subtitle">({{ project.get_num_iterations }} iteration{{ project.get_num_iterations|pluralize }}, {{ project.get_num_stories }} stor{{ project.get_num_stories|pluralize:"y,ies" }})</span>
+	</div><!--project-->
+	{% endfor %}
+      </div><!--other-projects-->
+      {% endif %}
+    </div><!--box-content-->
+    <div class="box-bottom"></div>
+  </div><!--projects-box-->
+
+  <div id="organizations-box" class="box">
+    <div class="box-top">
+      <div class="title">
+	Organizations
+	<span class="subtitle">({{ my_organizations|length }})</span>
+	<a title="Organizations let you group projects and teams. Often times, they're used to represent a company.<br/><br/>
+		  The organizations you belong to are listed below.<br/><br/>
+		  To join an organization, ask the owner of that organization to add your ScrumDo username.">{% silk "help" %}</a>
+      </div>
+      <div class="buttons">
+	<a title="Add New Organization" href="{% url organization_create %}">{% silk "add" %}</a>
+      </div><!--buttons-->
+    </div><!--box-top-->
+    {% for org in my_organizations %}  
+    <div class="box-heading">
+      {% silk "building" %} <a href="{% url organization_detail org.slug %}">{{org.name}}</a> - {{org.teams.count}} Team{{ org.teams.count|pluralize }}
+      <p>
+	{{org.description}}
+      </p>
+    </div><!--box-heading-->
+    <div class="box-content">
+      {% for project in org.projects.all %}
+      {% canread project %}
+      <div class="projectfeed">
+	<a title="Subscribe to project activity." target="_blank" href="/feeds/project/{{ project.pk }}">{% silk "feed" %}</a>
+      </div><!--projectfeed-->
+      <div class="project">
+	{% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a> <span class="subtitle">({{ project.get_num_iterations }} iteration{{ project.get_num_iterations|pluralize }}, {{ project.get_num_stories }} stor{{ project.get_num_stories|pluralize:"y,ies" }})</span>      </div>
+      {% endcanread %}
       {% endfor %}
-      {% silk "add" %} <a href="{% url organization_create %}">Create New Organization</a>
+    </div><!--box-content-->
+    {% endfor %}
+    <div class="box-bottom"></div>
+  </div><!--organizations-box-->
+
+</div><!--side-->    
+
+
+<div class="newsfeed">
+  <img style="float:right; display: none" src="{{ STATIC_URL }}images/ajax-loader.gif" id="loadingIcon">
+  <div id="top">News Feed</div>
+  <p>
+    <div id="feedContent">
+      {% include "activities/activity_list.html" %}
     </div>
-
-
-    
-</div>
-
-
-
-<div class="news_panel">
-<div class="news_box small_newsfeed_list">
-  <h1>News Feed</h1>
-  <p >
-
+    <div id="feedAnchor">
+    </div>
+{% comment %}
   {% for act in my_activities %}
   <div class="avatar"><a href="{% url profile_detail act.user.username %}" title="{{ act.user.username }}">{% avatar act.user 40 %} </a> <a href="{% url profile_detail act.user.username %}" title="{{ act.user.username }}">{{ act.user.username }}</a></div>
   {% ifnotequal None act.news %}
@@ -84,15 +137,7 @@
   <br/>
   <hr/>
   {% endfor %}
-  </p>
-</div>
-</div>
-<div style="padding:15px; padding-right:20px;">
-<h2>A message from ScrumDo</h2>
-  <p >
-  This is a beta look at ScrumDo.  We're still actively working on the site fixing things, adding new features, and tweaking things already here.  
-  We'll do everything we can to make sure any work saved here is safe, but we can't guarentee anything.
-  </p>
-</div>
-
+{% endcomment %}
+  <div id="bottom"></div>
+</div><!--newsfeed-->
 
