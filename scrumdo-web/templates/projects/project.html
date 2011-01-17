@@ -95,6 +95,11 @@
                {% for iteration in project.get_current_iterations %}
                  generateBurnDown( "#iterationBurndown_{{iteration.id}}", "{{project.slug}}" , "{{iteration.id}}" , 0.25);
                {% endfor %}
+               
+               {% if GOOGLE_ANALYTICS %}     
+                  _gaq.push(['_trackEvent',"ViewProjectPage", "", "", 1]); 
+               {% endif %}           
+               
         });
     </script>
     

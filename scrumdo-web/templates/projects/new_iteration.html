@@ -26,5 +26,12 @@
 <script type="text/javascript" charset="utf-8">
   $("#id_start_date").datepicker({dateFormat: 'yy-mm-dd' });
   $("#id_end_date").datepicker({dateFormat: 'yy-mm-dd' });
+  
+ 
+  {% if GOOGLE_ANALYTICS %}     
+     _gaq.push(['_trackEvent',"ViewIterationCreationPage", "", "", 1]); 
+  {% endif %}      
+
+  
 </script>
 {% endblock %}

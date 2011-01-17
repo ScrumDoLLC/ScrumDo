@@ -247,6 +247,10 @@
            {% if iteration.points_log.count %}      
              generateBurnDown( "#iterationBurndown", "{{project.slug}}" , "{{iteration.id}}" , 0);         
            {% endif %}
+           
+           {% if GOOGLE_ANALYTICS %}     
+              _gaq.push(['_trackEvent',"ViewIterationPage", "", "", 1]); 
+           {% endif %}           
     });
         
     function moveCurrentlyOpenStoryToIteration( iteration_id )
@@ -262,6 +266,11 @@
         }
       });
       
+      {% if GOOGLE_ANALYTICS %}     
+         _gaq.push(['_trackEvent',"MoveToIteration", "{{current_view}}", "", 1]); 
+      {% endif %}
+      
+      
     }
     
     function setStatusReviewing( storyID )
@@ -276,6 +285,11 @@
           setUpStoryLinks();
         }
       });
+      
+      {% if GOOGLE_ANALYTICS %}     
+         _gaq.push(['_trackEvent',"SetStatusPopup", "{{current_view}}", "Review", 1]); 
+      {% endif %}
+      
     }
     function setStatusTodo( storyID )
     {
@@ -289,6 +303,11 @@
           setUpStoryLinks();
         }
       });
+      
+      {% if GOOGLE_ANALYTICS %}     
+         _gaq.push(['_trackEvent',"SetStatusPopup", "{{current_view}}", "Todo", 1]); 
+      {% endif %}
+      
     }     
 
 
@@ -304,6 +323,11 @@
           setUpStoryLinks();
         }
       });
+      
+      {% if GOOGLE_ANALYTICS %}     
+         _gaq.push(['_trackEvent',"SetStatusPopup", "{{current_view}}", "Doing", 1]); 
+      {% endif %}
+      
     }
 
 
@@ -319,6 +343,11 @@
           setUpStoryLinks();
         }
       });
+      
+      {% if GOOGLE_ANALYTICS %}     
+         _gaq.push(['_trackEvent',"SetStatusPopup", "{{current_view}}", "Done", 1]); 
+      {% endif %}
+      
     }
 </script>
     

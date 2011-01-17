@@ -67,7 +67,8 @@ def iteration(request, group_slug, iteration_id):
        "project" : project,
        "iteration_form": form,
        'daysLeft': daysLeft,
-       'add_story_form': add_story_form
+       'add_story_form': add_story_form,
+       "current_view":"iteration_page"
      }, context_instance=RequestContext(request))
 
 

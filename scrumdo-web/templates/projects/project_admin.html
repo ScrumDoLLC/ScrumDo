@@ -126,6 +126,13 @@
          <form class="delete_form" id="delete_project_form" action="{% url project_delete project.slug %}" method="POST" style="display: none;">
              <input type="submit" value="{% trans "Delete Project" %}" /><br/> All content will be removed as soon as you push this button.<br/>It's permanent and irreversable.
         </form>
+        
+      <script type="text/javascript" charset="utf-8">
+          {% if GOOGLE_ANALYTICS %}     
+             _gaq.push(['_trackEvent',"ViewProjectAdminPage", "", "", 1]); 
+          {% endif %}      
+        
+      </script>
   
 {% endblock %}
 

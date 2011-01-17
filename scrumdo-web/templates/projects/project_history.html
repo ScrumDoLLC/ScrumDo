@@ -25,4 +25,9 @@
   </script>
   <h1>Project History</h1>
   {% include "projects/project_history_item.html" %}  
+  
+  {% if GOOGLE_ANALYTICS %}     
+     _gaq.push(['_trackEvent',"ViewProjectHistoryPage", "", "", 1]); 
+  {% endif %}      
+  
 {% endblock %}

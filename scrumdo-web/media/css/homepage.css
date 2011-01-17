@@ -8,7 +8,7 @@ body {
 	background-color: #FFF;
 	margin: 0;
 	color: #333;
-	font-family: "Helvetica Neue", Arial, sans-serif;
+	font-family: "Helvetica Neue", "Arial", "sans-serif";
 	font-size: 10pt;
 }
 
@@ -122,7 +122,7 @@ img {
 #higlightContentText h3 {
 	margin-top: 9px;
 	color: #424343;
-	font-family: "Lucida Grande", Lucida, Verdana, sans-serif;
+	font-family: "Lucida Grande", Lucida, Verdana, "Arial", sans-serif;
 	font-weight: normal;
 	font-style: normal;
 	margin-top: 5px;

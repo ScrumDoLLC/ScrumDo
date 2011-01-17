@@ -50,7 +50,7 @@
            
             <a href="/">ScrumDo</a>
             <a href="/forum/">Help Forums</a>
-            <a href="#overview" rel="facebox">Intro Video</a>
+            <a id="introVideo" href="#overview" rel="facebox">Intro Video</a>
             
             
             <a style="margin-left:400px" href="/account/login/">Login</a>  
@@ -213,6 +213,15 @@
             });
         });
      });
+     
+     
+     {% if GOOGLE_ANALYTICS %}     
+      $("#introVideo").click(function(){  _gaq.push(['_trackEvent',"WatchOverviewVideo", "", "", 1]);   });
+     {% endif %}  
+     
+     
+     
+     
 </script>
         
 <!--    <script src="{{STATIC_URL}}tasks/js/tasks.js" type="text/javascript" ></script> -->
