@@ -15,10 +15,10 @@
   <span class="storyIcons">
     <a class="hoverDetails" story_id="{{ story.id }}" href="#">{% silk "eye" %}</a><a story_id="{{ story.id }}" class="moveIterationIcon"  href="#">{% notlocked story %}<img title="Move To Another Iteration" src="/site_media/static/pinax/images/silk/icons/page_white_go.png" /></a><a onclick="jQuery('#todoButtons_{{story.id}}').show(); return false;" href="#"><img title="Change Status" src="/site_media/static/pinax/images/silk/icons/control_play_blue.png" /></a>{% endnotlocked %}<a onclick="jQuery.facebox({ ajax: '/projects/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=block'}); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=block"><img title="Story Details" src="/site_media/static/pinax/images/silk/icons/magnifier.png" /></a></span>
     
-  <h1><span style="color:#cccccc;">#{{story.local_id}}</span> {{ story.summary }}</h1>
+  <h1><span style="color:#cccccc;">#{{story.local_id}}</span> {{ story.summary|escape|link_stories:story.project|safe }}</h1>
 
 
-  {{ story.detail }}
+  {{ story.detail|escape|link_stories:story.project|safe }}
   
 
 
