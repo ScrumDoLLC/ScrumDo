@@ -1,6 +1,7 @@
 {% load i18n %}
 {% load theme_tags %}
 {% load projects_tags %}
+{% load avatar_tags %}
 
 <li class="story_small gripper_{% ifequal story.status 1 %}todo{% endifequal %}{% ifequal story.status 2 %}doing{% endifequal %}{% ifequal story.status 3 %}reviewing{% endifequal %}{% ifequal story.status 4 %}done{% endifequal %}" story_id="{{story.id}}" id="story_{{story.id}}" rank="{{ story.rank }}" >
   <div class="pointsBox">{{ story.points }}</div>
@@ -26,6 +27,9 @@
        {{ tag.name }} 
     {% endfor %}
     </div>
+  {% endif %}
+  {% if story.assignee and story.project.use_assignee %}
+    Assigned: <b>{{story.assignee}}</b> {% avatar story.assignee 22 %}
   {% endif %}
   
 
