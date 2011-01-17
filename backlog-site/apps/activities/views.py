@@ -8,6 +8,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 @login_required
 def user_activities(request, page):
   activities = SubjectActivity.getActivitiesForUser(request.user)
+  activities.reverse()
   
   paginator = Paginator(activities, 10)
   page_obj = paginator.page(page)

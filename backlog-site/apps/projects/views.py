@@ -56,7 +56,7 @@ def home( request ):
   organizations = [];
   activities=[]
   next_page = False
-    
+
   if request.user.is_authenticated():
     organizations = Organization.getOrganizationsForUser(request.user)
     activities = SubjectActivity.getActivitiesForUser(request.user)
@@ -65,7 +65,6 @@ def home( request ):
     page_obj = paginator.page(1)
     activities = page_obj.object_list
     next_page = page_obj.has_next()
-
 
     memberships = ProjectMember.objects.filter( user=request.user )
     for membership in memberships:
