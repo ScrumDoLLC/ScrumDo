@@ -15,13 +15,17 @@
     {% if user.is_authenticated %}
             <div class="side_box">
               <h2>{{ project.name }}</h2>                    
-	      <p>
-              {{ project.description }}
-	      </p>
-              <p>
-                  {% show_tags_for project %}
-              </p>
+        	      <p>{{ project.description }}</p>
+                <p>{% show_tags_for project %}</p>
             </div>
+            {% canwrite project %}
+             {% if project.story_queue.count %}
+              <div class="side_box">
+                <h2>Syncronize</h2>
+                <div class="big_links"><a href="{% url story_queue_url project.slug %}">Import Stories</a> ({{project.story_queue.count}})</div>
+              </div>
+             {% endif %}
+            {% endcanwrite %}
 
 	    {% if iterationinfo %}
 {% if daysLeft %}
@@ -32,6 +36,8 @@
   </div>
 </div>
 {% endif %}
+
+
 
 {% canwrite project %}
 <div class="side_box">
