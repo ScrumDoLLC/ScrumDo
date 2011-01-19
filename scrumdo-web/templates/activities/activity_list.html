@@ -1,21 +1,37 @@
 {% load i18n %}
 {% load avatar_tags %}
 {% load comments_tag %}
+{% load theme_tags %}
 
   {% for act in activities %}
-  <div class="avatar"><a href="{% url profile_detail act.user.username %}" title="{{ act.user.username }}">{% avatar act.user 40 %} </a> <a href="{% url profile_detail act.user.username %}" title="{{ act.user.username }}">{{ act.user.username }}</a></div>
-  {% ifnotequal None act.news %}
+   <div class="activity">
+     <div class="icon">
+       {% ifequal act.action "worked on" %}
+       {% silk "script_add" %}
+       {% endifequal %}
+       {% ifequal act.action "edited" %}
+       {% silk "script_edit" %}
+       {% endifequal %}
+       {% ifequal act.action "reordered" %}
+       {% silk "script_go" %}
+       {% endifequal %}
+     </div>
+     <div class="avatar"><a href="{% url profile_detail act.user.username %}" title="{{ act.user.username }}">{% avatar act.user 32 %} </a> <a href="{% url profile_detail act.user.username %}" title="{{ act.user.username }}">{{ act.user.username }}</a></div>
+
+{% comment %}  {% ifnotequal None act.news %}
   {{act.news}}
 
   {% else %}
- <div class="details">{{  act.action }} {{ act.object}} in  {{ act.context}}</div>
+{% endcomment %}
 
-  {% endifnotequal %}
- <br/>
+ <div class="details"><span class="action">{{  act.action }}</span> {{ act.object}} in  {{ act.context}}</div>
+
+{% comment %}  {% endifnotequal %} {% endcomment %}
+
   <abbr>
-  {{ act.created|timesince }} ago  &nbsp;&nbsp; {#| &nbsp; <span id="{{act.id}}like"> {{ act.like }}</span> <a href="#" onclick="like({{act.id}})">Likes</a>#}
+  about {{ act.created|timesince }} ago  &nbsp;&nbsp; {#| &nbsp; <span id="{{act.id}}like"> {{ act.like }}</span> <a href="#" onclick="like({{act.id}})">Likes</a>#}
   </abbr>
 {# {% comments act %} #}
-  <br/>
-  <hr/>
+</div><!--activity-->
+
   {% endfor %}

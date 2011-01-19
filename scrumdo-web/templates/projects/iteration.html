@@ -112,7 +112,7 @@
         }
       });
     }
-        
+    $(document).ready(function () {
     $(".showFilter").click( function() { $("#filterDialog").toggle(); return false;} );
     
     $(".filterForm").ajaxForm(
@@ -127,6 +127,7 @@
             $("ul").sortable("disable");
           }
         });
+    });
 
     {# This is the method that handles the user-drop event and records that fact on the server. #}
     function updateStoryPosition(event, ui)
@@ -217,6 +218,8 @@
         });
         
         $(".hoverDetails").hover( displayStoryHover, hideStoryHover );
+        $(".storyIcons img").tipTip({"delay":100});
+
     }
 
 

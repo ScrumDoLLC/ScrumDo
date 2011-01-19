@@ -36,6 +36,7 @@ def team(request, organization_slug, team_id):
   organization  = get_object_or_404(Organization, slug=organization_slug)
   team = get_object_or_404(Team, id=team_id)
   adduser_form=AddUserForm(team=team)
+  organizations = Organization.getOrganizationsForUser( request.user )
   
   if request.method == "POST":
     if not _isAdmin(request.user, organization):
@@ -65,6 +66,7 @@ def team(request, organization_slug, team_id):
   
   return render_to_response("organizations/team.html", {    
       "organization": organization,
+      "organizations": organizations,
       "team": team,
       "adduser_form":adduser_form
     }, context_instance=RequestContext(request))
@@ -90,8 +92,10 @@ def team_create(request, organization_slug):
   else:
     form = TeamForm()
   
-
+  organizations = Organization.getOrganizationsForUser( request.user )
 
   return render_to_response("organizations/create_team.html", {    
-      "form": form
+      "form": form,
+      "organization": organization,
+      "organizations": organizations,
     }, context_instance=RequestContext(request))

@@ -1,21 +1,17 @@
 {% extends "site_base.html" %}
 
 {% load iteration_tags %}
+{% load theme_tags %}
 {% load i18n %}
 
 {% block body_class %}projects{% endblock %}
 
-
-
-{% block subnav %}
-    <ul>
-        {% if user.is_authenticated %}
-          <li><a href="{% url your_organizations %} ">{% trans "Your Organizations" %}</a></li>
-          {% if organization %}
-            <li><a href="{% url organization_detail organization.slug %} ">{{organization.name}}</a></li>
-          {% else %}              
-              <li><a href="{% url organization_create %}">{% trans "Create an Organization" %}</a></li>
-          {% endif %}        
-        {% endif %}
-    </ul>
+{% block extra_head %}        
+<link rel="stylesheet" href="{{ STATIC_URL }}css/organization.css" />
 {% endblock %}
+
+{% if user.is_authenticated %}
+{% block panel %}
+{% include "organizations/organization_panel.html" %}
+{% endblock %}
+{% endif %}

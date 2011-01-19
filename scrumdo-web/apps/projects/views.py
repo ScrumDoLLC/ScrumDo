@@ -76,12 +76,12 @@ def home( request ):
   organizations = [];
   activities=[]
   next_page = False
-  
+
   if request.user.is_authenticated():
     organizations = Organization.getOrganizationsForUser(request.user)
     activities = SubjectActivity.getActivitiesForUser(request.user)
 
-    paginator = Paginator(activities, 5)
+    paginator = Paginator(activities, 10)
     page_obj = paginator.page(1)
     activities = page_obj.object_list
     next_page = page_obj.has_next()
@@ -95,15 +95,15 @@ def home( request ):
         else:
           member_projects.append( membership.project )
       except:
-        pass  
-
-
+        pass
+    
     return render_to_response("homepage.html", {
        "my_projects":my_projects,
        "my_organizations": organizations,
        "activities": activities,
        "activities_next_page":next_page,
        "member_projects":member_projects,
+       "num_projects":(len (my_projects + member_projects)),
        "now": datetime.datetime.now()
       }, context_instance=RequestContext(request))
   else:
@@ -239,14 +239,16 @@ def create(request, form_class=ProjectForm, template_name="projects/create.html"
 
     # If they got here from the organziation page, there will be an org get-param set stating what organization it was from.
     # we need that here so it's pre-selected in the form.
-    default_organization = None
+    organization = None
+    organizations = []
     if request.GET.get("org","") != "":
-      default_organization = Organization.objects.filter(id=request.GET.get("org",""))[0]
+      organization = Organization.objects.filter(id=request.GET.get("org",""))[0]
+      organizations = Organization.getOrganizationsForUser( request.user )
     
     return render_to_response(template_name, {
         "project_form": project_form,
         "admin_organizations":admin_organizations,
-        "default_organization":default_organization
+        "organization":organization
     }, context_instance=RequestContext(request))
 
 

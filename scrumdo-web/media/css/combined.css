@@ -25,7 +25,7 @@ body {
     font-size: 10pt;
 }
 a, a:visited {
-    color: #13C;
+/*    color: #13C;*/
 }
 img {
     border: 0;
@@ -45,7 +45,7 @@ td {
     padding: 0;
 }
 h1 {
-    border-bottom: 1px solid #000;
+/*    border-bottom: 1px solid #000;*/
     font-weight: normal;
     margin: 0;
     margin-bottom: 10px;
@@ -70,15 +70,6 @@ h2 {
     max-width: 840px;
 }
 
-#panel {
-    width: 180px;
-    position: absolute;
-    right: 0px;
-    top: 146px;
-    z-index: 999;
-    background-color: #F1F2DF;
-    border-left: 1px solid #c2c2b1;
-}
 #footer {
     color: #999; /* footer text colour */
     margin: 50px auto;
@@ -142,15 +133,8 @@ h2 {
 
 
 /* HEADER */
-
-#tabhead {
-	background-color: #000;
-  background: -webkit-gradient(linear, left top, left bottom, from(#111), to(#333)); /* for webkit browsers */
-	background: -moz-linear-gradient(top,  #111,  #333); /* for firefox 3.6+ */
-  position: relative;
-}
 #tabhead .logo {
-    height: 107px;
+/*    height: 107px;*/
     padding-left: 35px;
     padding-top: 0;
 }
@@ -163,9 +147,11 @@ h2 {
 }
 #tabhead .login a, #tabhead .login a:visited {
     color: #fff; /* login bar link colour */
+    text-decoration: none;
 }
 #tabhead .login a:hover {
     color: #FFF; /* login bar link hover colour */
+    text-decoration: underline;
 }
 
 #locale_switcher {
@@ -226,7 +212,7 @@ input[type="text"], input[type="password"], textarea {
     border-bottom: solid 1px #E3E3E3;
     color: #666;
     font-size: 12pt;
-    background: #F3F3F3 url('/site_media/static/pinax/images/form-shadow.png') left top repeat-x;
+/*    background: #F3F3F3 url('/site_media/static/pinax/images/form-shadow.png') left top repeat-x;*/
 }
 ul.errorlist {
     margin: 0;
@@ -706,7 +692,7 @@ table.email_list td {
             .uniForm .auto{}
       
       /* Get rid of the 'glow' effect in WebKit, optional */
-      .uniForm .ctrlHolder .textInput:focus,
+      .uniForm .ctrlHolder .:focus,
       .uniForm .ctrlHolder textarea:focus{ outline: none; }
       
       .uniForm .formHint { font-size: .85em; color: #777; }
@@ -811,7 +797,7 @@ body.notices #tab_notices
 	
 }
 
-form.add-attachment{
+form.attachment{
     background-color: #eee;
     padding: 1em;
 }

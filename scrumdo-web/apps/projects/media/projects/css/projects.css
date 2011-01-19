@@ -168,42 +168,10 @@
   width: 200px;
 }
 
-#subIterationList div:hover {
-  background-color: #66FFFF;
-}
-
-#subIterationList {
-  background-color: #f5f5f5;
-  width: 300px;
-  position: absolute;
-  bottom: 20px;
-  right: 0px;
-  border-style: solid;
-  border-width: 1px;
-  height: 300px;
-  overflow: auto;
-  overflow-x: hidden;
-}
-
-#subIterationList div {
-  font-size: 18px;
-  width: 100%;
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
-  padding: 8px 0 8px 15px;
-}
-
 .projectOptionsForm td {
   padding-left: 10px;
 }
 
-#filterDialog {
-  background-color: #f2f2f7;
-  padding: 15px;
-  margin: 5px;
-  border: 8px solid #ddd;
-  opacity: 1;
-}
 
 .small_project_list hr {
   border: 1px solid #aaa;
@@ -327,14 +295,18 @@
 .iteration_column {
 }
 
-.story_list {
+/*.story_list {
   overflow: auto;
   height: 650px;
   padding-left: 0px;
+}*/
+
+.story_column {
+  padding: 0px;
+  border: 1px solid #d4d4d4;
+  background-color: #f0fcff;
+  height: 100%;
 }
-
-
-
 
 .story_small {
   margin: 3px;
@@ -347,44 +319,6 @@
   padding-left: 22px;
 }
 
-.story_block {
-  margin: 3px;
-  padding: 3px;
-  border-bottom: 1px solid #ececec;
-  background-color: #eeeeee;
-  list-style-type: none;
-  border: 1px solid #b8b8b8;
-  min-height: 33px;
-  padding-left: 22px;
-  width: 100%;
-}
-
-
-.gripper_reviewing {
-  background: #fefefe url(/site_media/static/images/gripper_reviewing.png) repeat-y;
-}
-.gripper_todo {
-  background: #fefefe url(/site_media/static/images/gripper_todo.png) repeat-y;
-}
-.gripper_doing {
-  background: #fefefe url(/site_media/static/images/gripper_doing.png) repeat-y;
-}
-.gripper_done {
-  background: #fefefe url(/site_media/static/images/gripper_done.png) repeat-y;
-}
-
-.todoButtons_block {
-  background-color: #e5e4e6;
-  border-style: outset;
-  border-width: 1px;
-  padding: 7px 5px 5px;
-  width: 23 0px;
-  z-index: 50;
-  position: absolute;
-  margin-left: 520px;
-  margin-top: -5px;
-  display: none;
-}
 
 .todoButtons_mini {
   background-color: #e5e4e6;
@@ -451,21 +385,17 @@
 
 
 #story_form {
-  background-color: #f0fcff;
-  padding: 20px;
-  background-color: #f1f2df;
-  border-bottom: 1px solid #c2c2b1;
-  padding-left: 100px;
+/*  background-color: #f0fcff;*/
+/*  padding: 20px;*/
+/*  background-color: #f1f2df;
+  border-bottom: 1px solid #c2c2b1;*/
 /*  border: 15px solid #aeb7bb;*/
 }
-
+/*
 #story_form input {
   vertical-align: middle;
 }
 
-#story_form #story_details {
-  display: none;
-}
 
 #story_form #id_summary {
   width: 500px;
@@ -475,31 +405,13 @@
     padding: 2px;
     text-align: center;
     width: 150px;
-    font-size: 16px;
+    font-size: 16px;*/
 /*    color: #fff;
     text-shadow: #c2c2b1 1px 1px 1px;
     background-color: #2960b1;
     border: 2px solid #144287;*/
-}
 
-#story_details table tr td {
-  padding-bottom: 3px;
-}
 
-#story_details ul {
-  margin: 0px;
-  padding: 0px;
-}
-#story_details li {
-  list-style-type: none;
-  display: inline-block;
-  background-color: #ededed;
-  padding-top: 5px;
-  padding-bottom: 3px;
-  padding-right: 10px;
-  padding-left: 6px;
-  margin: 1px;
-}
 
 
 div.side_box {
