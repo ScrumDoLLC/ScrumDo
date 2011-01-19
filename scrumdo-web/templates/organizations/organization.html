@@ -16,8 +16,10 @@
     <div class="box-top">
       <div class="title">
 	<a href="{% url organization_detail organization.slug %}">{{ organization.name }}</a>
-	<a title="{% trans "Settings" %}" href="{% url organization_edit organization.slug %}" >{% silk "cog" %}</a><br/>
       </div><!--title-->
+      <div class="settings">
+	<a title="{% trans "Settings" %}" href="{% url organization_edit organization.slug %}" rel="facebox" >{% silk "cog" %}</a>
+      </div><!--settings-->
     </div><!--box-top-->
     <div class="box-heading">
       {{ organization.description }}

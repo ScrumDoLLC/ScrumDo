@@ -125,14 +125,6 @@ def organization_create(request):
     }, context_instance=RequestContext(request))
 
 
-@login_required
-def your_organizations(request):
-  organizations = Organization.getOrganizationsForUser( request.user )
-  return render_to_response("organizations/organization_list.html", {    
-      "organizations": organizations,
-    }, context_instance=RequestContext(request))
-
-
 
 @login_required
 def team_debug(request):

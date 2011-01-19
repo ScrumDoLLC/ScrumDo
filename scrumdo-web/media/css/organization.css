@@ -16,6 +16,10 @@
     border-bottom: 1px solid #e1e1e1;
 }
 
+.teams-box {
+    margin-left: 100px;
+}
+
 .teams-box .team-title {
     padding: 5px;
     background-color: #fafafa;
@@ -58,5 +62,21 @@
 }
 
 #side {
-    margin-right: -20px;
+    margin-right: 20px;
+}
+
+#side .box .box-top .title {
+    z-index: 1;
+    height: 
+}
+#side .box .box-top .settings {
+    text-align: right;
+    margin-top: -20px;
+    margin-right: 5px;
+    z-index: 2;
+}
+
+.memberDeleteButton {
+  float: right;
+  margin-top: 9px;
 }

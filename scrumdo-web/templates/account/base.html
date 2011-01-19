@@ -6,31 +6,33 @@
 
 {% if user.is_authenticated %}
 {% block panel %}
-<div class="box">
-  <div class="box-content">
-    <a href="{% url acct_email %}">{% trans "E-Mail Addresses" %}
-  </div><!--box-content-->
-  <div class="box-content">
-    <a href="{% url profile_detail user.username %} ">{% trans "Your Profile" %}</a>
-  </div><!--box-content-->
-  <div class="box-content">
-    <a href="/openid/associations/">{% trans "OpenID Associations" %}</a>
-  </div><!--box-content-->
-  <div class="box-content">
-    {% if user.password %}
-    <a href="{% url acct_passwd %}">{% trans "Change Password" %}</a>
-    {% else %}
-    <a href="{% url acct_passwd_set %}">{% trans "Set Password" %}</a>
+<div id="panel">
+  <div class="box">
+    <div class="box-content">
+      <a href="{% url acct_email %}">{% trans "E-Mail Addresses" %}
+    </div><!--box-content-->
+    <div class="box-content">
+      <a href="{% url profile_detail user.username %} ">{% trans "Your Profile" %}</a>
+    </div><!--box-content-->
+    <div class="box-content">
+      <a href="/openid/associations/">{% trans "OpenID Associations" %}</a>
+    </div><!--box-content-->
+    <div class="box-content">
+      {% if user.password %}
+      <a href="{% url acct_passwd %}">{% trans "Change Password" %}</a>
+      {% else %}
+      <a href="{% url acct_passwd_set %}">{% trans "Set Password" %}</a>
+      {% endif %}
+    </div><!--box-content-->
+    {% if user.password and request.openids %}
+    <div class="box-content">
+      <a href="{% url acct_passwd_delete %}">{% trans "Delete Password" %}</a>
+    </div><!--box-content-->
     {% endif %}
-  </div><!--box-content-->
-  {% if user.password and request.openids %}
-  <div class="box-content">
-    <a href="{% url acct_passwd_delete %}">{% trans "Delete Password" %}</a>
-  </div><!--box-content-->
-  {% endif %}
-  <div class="box-content">
-    <a href="{% url avatar_change %}">{% trans "Avatar" %}</a>
-  </div><!--box-content-->
-</div><!--box-->
+    <div class="box-content">
+      <a href="{% url avatar_change %}">{% trans "Avatar" %}</a>
+    </div><!--box-content-->
+  </div><!--box-->
+</div><!--panel-->
 {% endblock %}
-    {% endif %}
+{% endif %}

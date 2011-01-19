@@ -17,10 +17,6 @@
 {% block head_title %}{{ project.name }}{% endblock %}
 
 
-{% block panel %}
-{% include "projects/panel.html" %}  
-{% endblock %}
-
 {% block add_story %}
     {% if user.is_authenticated %}
     {% canwrite project %}
@@ -89,240 +85,236 @@
 
 {% block extra_body %}
 
-<script src="{{ STATIC_URL }}js/story_hover.js" type="text/javascript"></script>        
-
+<script src="{{ STATIC_URL }}js/story_hover.js" type="text/javascript"></script>
+<script stc="{{ STATIC_URL }}js/iteration.js" type="text/javascript"></script>
 <script type="text/javascript">
 
-    var project_slug = "{{ iteration.project.slug }}";
-    var current_story_popup = "";
+var project_slug = "{{ iteration.project.slug }}";
+var current_story_popup = "";
 
-    function loadIteration( iterationID , tags, search)
-    {
-      $("#loadingIcon").show();
-      $.ajax({
-        url: "/projects/project/" + project_slug + "/stories/" + iterationID,
-        data:{display_type:"block",
-              tags:tags,
-              search:search},
-        success: function(html){
-          $("#story_list").html(html);  
-          $("#story_list").attr("iteration_id", iterationID);      
-          $("#loadingIcon").hide();
-          setUpStoryLinks();          
-        }
-      });
-    }
-    $(document).ready(function () {
-    $(".showFilter").click( function() { $("#filterDialog").toggle(); return false;} );
+function loadIteration( iterationID , tags, search)
+{
+    $("#loadingIcon").show();
+    $.ajax({
+	    url: "/projects/project/" + project_slug + "/stories/" + iterationID,
+		data:{display_type:"block",
+		    tags:tags,
+		    search:search},
+		success: function(html){
+		$("#story_list").html(html);  
+		$("#story_list").attr("iteration_id", iterationID);      
+		$("#loadingIcon").hide();
+		setUpStoryLinks();          
+	    }
+	});
+}
+$(document).ready(function () {
+	$(".showFilter").click( function() { $("#filterDialog").toggle(); return false;} );
     
-    $(".filterForm").ajaxForm(
-        {
-          beforeSend: function() { $("#loadingIcon").show();},
-          success: function(html)
-          {
-            $("#story_list").html(html);  
-            $(document).trigger('close.facebox');   
-            $("#loadingIcon").hide();   
-            setUpStoryLinks();        
-            $("ul").sortable("disable");
-          }
-        });
+	$(".filterForm").ajaxForm(
+				  {
+				      beforeSend: function() { $("#loadingIcon").show();},
+					  success: function(html)
+					  {
+					      $("#story_list").html(html);  
+					      $(document).trigger('close.facebox');   
+					      $("#loadingIcon").hide();   
+					      setUpStoryLinks();        
+					      $("ul").sortable("disable");
+					  }
+				  });
     });
 
-    {# This is the method that handles the user-drop event and records that fact on the server. #}
-    function updateStoryPosition(event, ui)
-    {        
-      if( $(ui.item).attr("draggedOffScreen") == "1" )
-      {
-        // We were getting double sort/drag events sometimes when dragging to a different iteration.
-        return;
-      }
-      iterationId = "{{ iteration.id }}";
-      $("#loadingIcon").show();
-      $.ajax({
-        url: "/projects/project/" + project_slug + "/story/" + $(ui.item).attr("story_id") + "/reorder",
-        data:({ action:"reorder", index:ui.item.index(), iteration:iterationId }),
-        type: "POST",
-        success: function() {
-          calculateBothPoints();
-          $("#loadingIcon").hide();          
-        }
-      });
-    }
+{# This is the method that handles the user-drop event and records that fact on the server. #}
+function updateStoryPosition(event, ui)
+{        
+    if( $(ui.item).attr("draggedOffScreen") == "1" )
+	{
+	    // We were getting double sort/drag events sometimes when dragging to a different iteration.
+	    return;
+	}
+    iterationId = "{{ iteration.id }}";
+    $("#loadingIcon").show();
+    $.ajax({
+	    url: "/projects/project/" + project_slug + "/story/" + $(ui.item).attr("story_id") + "/reorder",
+		data:({ action:"reorder", index:ui.item.index(), iteration:iterationId }),
+		type: "POST",
+		success: function() {
+		calculateBothPoints();
+		$("#loadingIcon").hide();          
+	    }
+	});
+}
         
-    function filterByTag( tag )
-    {
-      $("#filterDialog").show();
-      $("#tags_input").val(tag);
-      $("#filter_button").submit();
-    }
+function filterByTag( tag )
+{
+    $("#filterDialog").show();
+    $("#tags_input").val(tag);
+    $("#filter_button").submit();
+}
 
-    function calculateBothPoints()
-    {
-      setUpStoryLinks();
-    }
+function calculateBothPoints()
+{
+    setUpStoryLinks();
+}
    
-    $(document).bind('beforeReveal.facebox', function() {
+$(document).bind('beforeReveal.facebox', function() {
         $('#facebox .body').width('500px');        
     });
     
-    $(document).bind('afterReveal.facebox', function() {
+$(document).bind('afterReveal.facebox', function() {
         $("#id_start_date-2").datepicker({dateFormat: 'yy-mm-dd' });
         $("#id_end_date-2").datepicker({dateFormat: 'yy-mm-dd' });
     });
     
-    $(document).bind('reveal.facebox', function() {
-      $('#facebox input').each( function(intIndex){
-        $(this).attr('id',jQuery(this).attr('id') + '-2')
-      });
+$(document).bind('reveal.facebox', function() {
+	$('#facebox input').each( function(intIndex){
+		$(this).attr('id',jQuery(this).attr('id') + '-2')
+		    });
     });
     
     
-    // When the story form is shown, this sets up some ajaxy links on it. 
-    function setUpStoryLinks() 
-    {
+// When the story form is shown, this sets up some ajaxy links on it. 
+function setUpStoryLinks() 
+{
 
-      $(".commentLink").click( function() 
-        {                    
-            $(this).parent().children(".commentForm").show();
-            $(this).hide();
-            return false;
-        } );
+    $(".commentLink").click( function() 
+			     {                    
+				 $(this).parent().children(".commentForm").show();
+				 $(this).hide();
+				 return false;
+			     } );
 
-        $(".commentForm form").ajaxForm(
-           {          
-            success: function(responseText, statusText, xhr, obj) { $("#filter_button").submit();  }
-          });
+    $(".commentForm form").ajaxForm(
+				    {          
+					success: function(responseText, statusText, xhr, obj) { $("#filter_button").submit();  }
+				    });
           
-        $(".responses form  ").ajaxForm(
-             {          
-              success: function(responseText, statusText, xhr, obj) { $("#filter_button").submit();  }
-        });
+    $(".responses form  ").ajaxForm(
+				    {          
+					success: function(responseText, statusText, xhr, obj) { $("#filter_button").submit();  }
+				    });
         
-        $(".moveIterationIcon").click( function(event)
-        {
-          var pos = $(this).offset();  
-          var width = $(this).width();
+    $(".moveIterationIcon").click( function(event)
+				   {
+				       var pos = $(this).offset();  
+				       var width = $(this).width();
             
-          //show the menu directly over the placeholder
-          $("#subIterationList").css( { "left": (pos.left + width) + "px", "top":pos.top + "px" } );
-          $("#subIterationList").fadeIn(100);
+				       //show the menu directly over the placeholder
+				       $("#subIterationList").css( { "left": (pos.left + width) + "px", "top":pos.top + "px" } );
+				       $("#subIterationList").fadeIn(100);
           
-          current_story_popup = $(this).attr("story_id");
+				       current_story_popup = $(this).attr("story_id");
           
-          $('body').one("click",function() {
-              $("#subIterationList").fadeOut(100);
-          });
+				       $('body').one("click",function() {
+					       $("#subIterationList").fadeOut(100);
+					   });
            
-          return false;
-        });
+				       return false;
+				   });
+    $(".hoverDetails").hover( displayStoryHover, hideStoryHover );
+    $(".storyIcons img").tipTip({"delay":100});
+}
+
         
-        $(".hoverDetails").hover( displayStoryHover, hideStoryHover );
-        $(".storyIcons img").tipTip({"delay":100});
-
-    }
-
-
- 
-    
-     
-    $(document).ready(function() {
-         
-          $(".subIteration").click( function() 
-          {
-            iteration_id = $(this).attr("iteration_id");
-            moveCurrentlyOpenStoryToIteration(iteration_id);
-          } );
-
-          loadIteration( "{{ iteration.id }}","","")  ;
-          
-          
-
-          $("#story_list").sortable({ 
-            update: updateStoryPosition, 
-            tolerance: 'pointer', 
-            distance: 5,
-            opacity:0.6, 
-            placeholder: "ui-state-highlight" 
-            });
-          
-          {# Draw the graph... #}
-           {% if iteration.points_log.count %}      
-             generateBurnDown( "#iterationBurndown", "{{project.slug}}" , "{{iteration.id}}" , 0);         
-           {% endif %}
-    });
-        
-    function moveCurrentlyOpenStoryToIteration( iteration_id )
-    {
-      $("#loadingIcon").show();
-      $.ajax({
-        url: "/projects/project/" + project_slug + "/story/" + current_story_popup + "/reorder",
-        data:({ action:"move_iteration", iteration:iteration_id }),
-        type: "POST",
-        success: function() {
-          $("#loadingIcon").hide();
-          $("#story_" + current_story_popup).hide(true);              
-        }
-      });
+function moveCurrentlyOpenStoryToIteration( iteration_id )
+{
+    $("#loadingIcon").show();
+    $.ajax({
+	    url: "/projects/project/" + project_slug + "/story/" + current_story_popup + "/reorder",
+		data:({ action:"move_iteration", iteration:iteration_id }),
+		type: "POST",
+		success: function() {
+		$("#loadingIcon").hide();
+		$("#story_" + current_story_popup).hide(true);              
+	    }
+	});
       
-    }
+}
     
-    function setStatusReviewing( storyID )
-    {
-      $(".todoButtons").hide();
-      $.ajax({
-        url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_reviewing",      
-        type: "POST",
-        data: ({return_type : "block"}),            
-        success: function(responseText) {        
-          $("#story_" + storyID).replaceWith(responseText);
-          setUpStoryLinks();
-        }
-      });
-    }
-    function setStatusTodo( storyID )
-    {
-      $(".todoButtons").hide();
-      $.ajax({
-        url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_todo",      
-        type: "POST",
-        data: ({return_type : "block"}),            
-        success: function(responseText) {        
-          $("#story_" + storyID).replaceWith(responseText);
-          setUpStoryLinks();
-        }
-      });
-    }     
+function setStatusReviewing( storyID )
+{
+    $(".todoButtons").hide();
+    $.ajax({
+	    url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_reviewing",      
+		type: "POST",
+		data: ({return_type : "block"}),            
+		success: function(responseText) {        
+		$("#story_" + storyID).replaceWith(responseText);
+		setUpStoryLinks();
+	    }
+	});
+}
+function setStatusTodo( storyID )
+{
+    $(".todoButtons").hide();
+    $.ajax({
+	    url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_todo",      
+		type: "POST",
+		data: ({return_type : "block"}),            
+		success: function(responseText) {        
+		$("#story_" + storyID).replaceWith(responseText);
+		setUpStoryLinks();
+	    }
+	});
+}     
 
 
-    function setStatusDoing( storyID )
-    {
-      $(".todoButtons").hide();    
-      $.ajax({
-        url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_doing",      
-        type: "POST",
-        data: ({return_type : "block"}),                        
-        success: function(responseText) {        
-          $("#story_" + storyID).replaceWith(responseText);
-          setUpStoryLinks();
-        }
-      });
-    }
+function setStatusDoing( storyID )
+{
+    $(".todoButtons").hide();    
+    $.ajax({
+	    url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_doing",      
+		type: "POST",
+		data: ({return_type : "block"}),                        
+		success: function(responseText) {        
+		$("#story_" + storyID).replaceWith(responseText);
+		setUpStoryLinks();
+	    }
+	});
+}
 
 
-    function setStatusDone( storyID )
-    {
-      $(".todoButtons").hide();    
-      $.ajax({
-        url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_done",      
-        type: "POST",
-        data: ({return_type : "block"}),                        
-        success: function(responseText) {        
-          $("#story_" + storyID).replaceWith(responseText);
-          setUpStoryLinks();
-        }
-      });
-    }
+function setStatusDone( storyID )
+{
+    $(".todoButtons").hide();    
+    $.ajax({
+	    url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_done",      
+		type: "POST",
+		data: ({return_type : "block"}),                        
+		success: function(responseText) {        
+		$("#story_" + storyID).replaceWith(responseText);
+		setUpStoryLinks();
+	    }
+	});
+}
+
+     
+$(document).ready(function() {
+         
+	$(".subIteration").click( function() 
+				  {
+				      iteration_id = $(this).attr("iteration_id");
+				      moveCurrentlyOpenStoryToIteration(iteration_id);
+				  } );
+
+	loadIteration( "{{ iteration.id }}","","")  ;
+          
+          
+
+	$("#story_list").sortable({ 
+		update: updateStoryPosition, 
+		    tolerance: 'pointer', 
+		    distance: 5,
+		    opacity:0.6, 
+		    placeholder: "ui-state-highlight" 
+		    });
+          
+	{# Draw the graph... #}
+	{% if iteration.points_log.count %}      
+	generateBurnDown( "#iterationBurndown", "{{project.slug}}" , "{{iteration.id}}" , 0);         
+	{% endif %}
+    });
 </script>
     
 {% endblock %}

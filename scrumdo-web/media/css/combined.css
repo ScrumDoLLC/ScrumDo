@@ -24,9 +24,6 @@ body {
     font-family: "Helvetica Neue", Arial, sans-serif;
     font-size: 10pt;
 }
-a, a:visited {
-/*    color: #13C;*/
-}
 img {
     border: 0;
 }
@@ -45,7 +42,6 @@ td {
     padding: 0;
 }
 h1 {
-/*    border-bottom: 1px solid #000;*/
     font-weight: normal;
     margin: 0;
     margin-bottom: 10px;
@@ -133,66 +129,9 @@ h2 {
 
 
 /* HEADER */
-#tabhead .logo {
-/*    height: 107px;*/
-    padding-left: 35px;
-    padding-top: 0;
-}
-
-#tabhead .login {
-    position: absolute;
-    top: 6px;
-    right: 15px;
-    color: #fff; /* login bar text colour */
-}
-#tabhead .login a, #tabhead .login a:visited {
-    color: #fff; /* login bar link colour */
-    text-decoration: none;
-}
-#tabhead .login a:hover {
-    color: #FFF; /* login bar link hover colour */
-    text-decoration: underline;
-}
 
 #locale_switcher {
     display: inline;
-}
-
-#subnav {
-  margin: 0;
-  height: 37px;
-  
-  background-color: #d7e695;
-  background: -webkit-gradient(linear, left top, left bottom, from(#d7e695), to(#B6C873)); /* for webkit browsers */
-  background: -moz-linear-gradient(top,  #d7e695,  #B6C873);
-  border-top: 1px solid #fffeff;
-  border-bottom: 1px solid #666;
-  box-shadow: 0px 0px 5px #555;
- -webkit-box-shadow: 0px 0px 5px #555;
- -moz-box-shadow: 0px 0px 5px #555;
-}
-#subnav ul {
-    float: right;
-    margin: 2px 20px 0;
-    padding: 0;
-}
-#subnav ul li {
-    display: inline;
-    list-style-type: none;
-}
-#subnav ul a:link, #subnav ul a:visited {
-    float: left;
-/*    font-weight: bold;*/
-    text-decoration: none;
-    color: #3b2724;
-    font-size: 16px;
-    display: block;
-    padding: 5px 20px 4px;
-    text-shadow: #ffffff 1px 1px 1px;
-}
-#subnav ul a:hover {
-    color: #FFF;
-    background: #ccc;
 }
 
 
@@ -292,39 +231,6 @@ p.what_next {
     font-weight: bold;
 }
 
-div.profile_info p {
-    margin: 0;
-}
-div.left_panel {
-    width: 400px;
-}
-div.right_panel {
-/*    margin-top: 20px;*/
-    margin-right: -180px;
-    width: 180px;
-    float: right;
-    z-index: 999;
-    background-color: #F1F2DF;
-    border-left: 1px solid #c2c2b1;
-}
-
-div.big_right_panel {
-/*    margin-top: 20px;*/
-    padding: 0;
-    margin-left: 20px;
-    margin-right: -180px;
-    width: 400px;
-    float: right;
-    z-index: 999;
-}
-div.news_panel {
-    width: 400px;
-}
-
-div.news_panel #id_comment {
-    width: 200px;
-}
-
 /* @override 
 	http://localhost:8000/site_media/static/pinax/css/tabs.css
 	http://localhost:8000/site_media/static/pinax/css/facebox.css
@@ -340,42 +246,7 @@ div.news_panel #id_comment {
 	http://localhost:8000/site_media/static/css/combined.css
 */
 
-/* GENERAL TAB STYLING */
-
-#left_tabs {
-    position: absolute;
-    bottom: -1px; /* must be same thickness as tab border */
-    left: 210px; /* based on width and padding of logo */
-}
-#right_tabs {
-    position: absolute;
-    right: 15px;
-    bottom: -1px; /* must be same thickness as tab border */
-}
-
-ul.tabs a, ul.tabs a:visited {
-    color: #fff; /* unselected tab text colour */
-    font-weight: bold;
-    text-decoration: none;
-	text-shadow: #7b7c7c 1px 1px 1px;
-}
-ul.tabs a:hover {
-    color: #666; /* unselected tab text hover colour */
-}
-ul.tabs li {
-    list-style-type: none;
-    display: inline;
-    background-color: #a5be52; /* unselected tab colour */
-    padding: 5px 0 4px;
-    margin: 0 1px; /* to compensate for border */
-}
-ul.tabs li a {
-    padding: 5px 12px;
-}
-ul.tabs {
-    margin: 0 0 5px;
-}
-
+/* FACEBOX STYLING */
 #facebox .b {
     background:url('/site_media/static/pinax/images/facebox/b.png');
 }
@@ -507,8 +378,6 @@ ul.tabs {
 table.email_list td {
     padding: 5px 10px;
 }
-
-
 
 
 .uniForm{ margin: 0; padding: 0; position: relative; z-index: 1; } /* reset stuff */
@@ -767,42 +636,14 @@ YOU CAN VERY EASILY REVERT TO A GENERIC STYLE OF UNI-FORM. BEST OF LUCK...
 
 /* ------------------------------------------------------------------------------ */
 
-.iterationHeader {
- 	margin: 0px;
-	font-size: 18px;
-	padding: 2px 2px 2px 9px;
-}
-
 
 /* SITE-SPECIFIC TAB STYLING */
-
-body.profile #tab_profile a,
-body.projects #tab_projects a,
-body.notices #tab_notices a
-{
-    color: #000; /* selected tab text colour */
-}
-body.profile #tab_profile,
-body.projects #tab_projects,
-body.notices #tab_notices
-{
-    margin: 0; /* to compensate for border */
-    padding: 5px 0 5px;
-    background-color: #d7e695; /* selected tab colour */
-    
-    border-left: 1px solid #000; /* tab border */
-    border-top: 1px solid #000; /* tab border */
-    border-right: 1px solid #000;
-
-	
-}
-
 form.attachment{
     background-color: #eee;
     padding: 1em;
 }
 
-form.add-attachment p{
+form.add-attachment p {
     margin: 0.3em 0;
 }
 
@@ -1004,8 +845,6 @@ table.topics .comment_stats {
 }
 
 div.footer {
-
-	text-align: center;
-  height:60px;   /* Height of the footer */
-
+    text-align: center;
+    height:60px;   /* Height of the footer */
 }

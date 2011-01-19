@@ -1,35 +1,6 @@
-#panel {
-    width: 180px;
-    position: absolute;
-    right: 0px;
-    top: 70px;
-    z-index: 999;
-    border-left: 1px solid #e1e1e1;
-    border-top: 1px solid #e1e1e1;
-}
-
-#panel .box {
-     margin-bottom: 0px;
- }
-
-#panel .box-title {
-    border-bottom: 1px solid #e1e1e1;
-    background-color: #fafafa;
+.box-content .team {
     padding: 5px;
-    margin-top: 0px;
-    font-size: 16px;
-}
-
-#panel .box-content {
-    border-left: 0px;
-    border-bottom: 1px solid #e1e1e1;
-    padding: 5px;
-}
-
-#panel .feed {
-    text-align: right;
-    padding: 0px;
-    margin-top: -20px;
+    padding-left: 10px;
 }
 
 #story_form {
@@ -37,7 +8,8 @@
     background: #fafafa;
     margin: 10px;
     padding: 10px;
-    width: 550px;
+    width: 50%;
+/*    width: 550px;*/
     margin-left: 100px;
     margin-right: 180px;
     border-radius: 3px;
@@ -48,11 +20,15 @@
 }
 
 #story_form #id_summary {
-    width: 400px;
+    width: 70%;
+}
+
+#story_form #id_detail {
+    width: 90%;
 }
 
 #story_form #add_button {
-    width: 130px;
+    width: 25%;
     height: 25px;
     background-color: #e8e8e8;	
     background: -webkit-gradient(linear, left top, left bottom, from(#f1f1f1), to(#e1e1e1));
@@ -89,26 +65,87 @@
   display: none;
 }
 
+#story_details table tr td {
+  padding-bottom: 3px;
+}
+
+#story_details ul {
+  margin: 0px;
+  padding: 0px;
+}
+#story_details li {
+  list-style-type: none;
+  display: inline-block;
+  background-color: #ededed;
+  padding-top: 5px;
+  padding-bottom: 3px;
+  padding-right: 10px;
+  padding-left: 6px;
+  margin: 1px;
+}
+
+#story_area input[type='text'] {
+  width: 90%;
+}
+
+#story_hover_window {
+   display:none;  
+   position:fixed;
+   height:400px;
+   width:500px;
+   background:#FFFFFF;  
+   border:2px solid #cecece;  
+   z-index:1000;  
+   padding:12px;  
+   font-size:13px;
+   -moz-box-shadow: 0 0 1em #888;
+   -webkit-box-shadow: 0 0 1em #888;
+   overflow: hidden;
+ }
+
+.projectOptionsForm tr td:first-child {
+  width: 200px;
+}
+
+.projectOptionsForm td {
+  padding-left: 10px;
+}
+
+#story_area textarea {
+  width: 90%;
+}
+
+#story_area {
+  max-height: 500px;
+  width: 500px;
+  overflow: auto;
+  overflow-x: hidden;
+  padding: 10px;
+}
+
 h1 a {
     text-decoration: none;
     color: #000;
 }
 
-#story_list {
+#story_list, .story_list {
     padding: 0px;
-    margin: 0px;
+    margin: 5px;
     border-top: 1px solid #e1e1e1;
+    min-height: 100px;
 }
 
-.story_block {
-    width: 622px;
+.story_block, .story_small {
     padding: 3px;
+    margin: 0px;
     padding-left: 10px;
     list-style-type: none;
     border-bottom: 1px solid #e1e1e1;
     border-right: 1px solid #e1e1e1;
+    background-color: #fff;
     min-height: 33px;
 }
+
 
 
 .gripper_reviewing {
@@ -137,7 +174,7 @@ h1 a {
     background: #fafafa;
     margin: 10px;
     padding: 10px;
-    width: 550px;
+    width: 80%;
     border-radius: 3px;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
@@ -145,34 +182,41 @@ h1 a {
     -khtml-border-radius: 3px;
 }
 
-.todoButtons_block {
+.todoButtons {
     border: 1px solid #e1e1e1;
     background-color: #fafafa;
     padding: 5px;
     width: 23 0px;
     z-index: 50;
     position: absolute;
-    margin-left: 400px;
     margin-top: 0px;
     display: none;
 }
 
-.todoButtons_block a {
+.todoButtons_block {
+    margin-left: 500px;
+}
+
+.todoButtons_mini {
+    margin-left: 100px;
+}
+
+.todoButtons a {
     text-decoration: none;
     color: #000;
     padding-bottom: 1px;
 }
 
-.todoButtons_block #review {
+.todoButtons #review {
     border-bottom: 4px solid #5a1964;
 }
-.todoButtons_block #todo {
+.todoButtons #todo {
     border-bottom: 4px solid #444;
 }
-.todoButtons_block #doing {
+.todoButtons #doing {
     border-bottom: 4px solid #448cca;
 }
-.todoButtons_block #done {
+.todoButtons #done {
     border-bottom: 4px solid #8dc73e;
 }
 
@@ -197,3 +241,46 @@ h1 a {
   border-right: 1px solid #e1e1e1;
 }
 
+.projectOptionsForm tr {
+  height: 32px;
+}
+
+
+.tagsBox {
+  background-color: #fffeff;
+  border-left-style: none;
+  padding-left: 3px;
+  padding-right: 5px;
+  padding-bottom: 2px;
+  margin: 5px -2px -3px;
+}
+.pointsBox {
+  float: right;
+  padding: 3px 3px 5px;
+  background-color: #fef9dd;
+  font-size: 24px;
+  width: 35px;
+  height: 25px;
+  text-align: center;
+  vertical-align: middle;
+  margin-top: -2px;
+  margin-right: -2px;
+  border-left: 1px solid #c8caca;
+  border-bottom: 1px solid #c8caca;
+}
+.backlog {
+  border-left-style: dotted;
+  padding-left: 10px;
+  margin-left: 5px;
+}
+
+#addIterationButton button {
+  vertical-align: middle;
+  float: right;
+  position: relative;
+  bottom: 4px;
+}
+
+#addIterationButton {
+    text-decoration: none;
+}

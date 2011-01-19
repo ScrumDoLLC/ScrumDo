@@ -16,9 +16,6 @@
 {% block head_title %}{{ project.name }}{% endblock %}
     
 
-{% block panel %}
-{% include "projects/panel.html" %}  
-{% endblock %}
 
 
 {% block add_story %}
@@ -34,6 +31,7 @@
 {% for iteration in project.get_current_iterations %}
 <h1>{% iteration_name iteration %}</h1>
 <em>{{iteration.start_date|date:"M d, Y"}} - {{iteration.end_date|date:"M d, Y"}}</em>
+<br/>
 {% if iteration.points_log.count %}
 <div id="iterationBurndown_{{iteration.id}}" style="width:540px;height:300px;"></div>  
 {% else %}

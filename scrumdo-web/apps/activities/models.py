@@ -17,7 +17,7 @@ class SubjectActivity( models.Model ):
   # Returns all activities for user
   @staticmethod
   def getActivitiesForUser( userl ):
-    return SubjectActivity.objects.filter( user = userl ).distinct()
+    return SubjectActivity.objects.filter( user = userl ).distinct().order_by('created').reverse()
 
   @staticmethod
   def activity_handler(sender, **kwargs):

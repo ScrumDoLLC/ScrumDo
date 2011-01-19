@@ -3,6 +3,13 @@
 {% load comments_tag %}
 {% load theme_tags %}
 
+{% if not activities %}
+<div class="activity">
+  <div class="icon"></div>
+  <div class="avatar"></div>
+  No Recent Activity.
+</div><!--activity-->
+{% else %}
   {% for act in activities %}
    <div class="activity">
      <div class="icon">
@@ -35,3 +42,4 @@
 </div><!--activity-->
 
   {% endfor %}
+{% endif %}

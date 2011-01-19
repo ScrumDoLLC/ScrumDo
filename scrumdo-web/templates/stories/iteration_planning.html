@@ -15,10 +15,6 @@
 
 {% block head_title %}{{ project.name }}{% endblock %}
 
-{% block panel %}
-{% include "projects/panel.html" %}  
-{% endblock %}
-
 {% block add_story %}
     {% if user.is_authenticated %}
     {% canwrite project %}
@@ -50,7 +46,7 @@
               {% endifnotequal %}
             {% endfor %}
           </select>  <br/><br/>
-          <a href="{% url iteration_create project.slug %}" ><img  id="addIterationButton" src="/site_media/static/images/addIterationButton.png"></a>
+          <a id="addIterationButton" href="{% url iteration_create project.slug %}" ><button>Add Iteration</button></a>
           <span id="iteration_points"></span>
       </div>
       &nbsp;&nbsp;
@@ -75,7 +71,7 @@
         <span id="backlog_points"></span>
       </div>
       
-      &nbsp;<a class="showFilter" href="#">Filter</a>              
+      &nbsp;<a class="showFilter" href="#">{% silk "wrench" %} Filter</a>              
       <div id="filterDialog" style="display:none">
         <a name="filterDialog"></a>
         <form class="filterForm" action="{% url stories_iteration project.slug project.get_default_iteration.id %}" method="GET">
