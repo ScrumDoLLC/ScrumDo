@@ -1,0 +1,125 @@
+#tabhead {
+	background-color: #000;	
+	background: -webkit-gradient(linear, left top, left bottom, from(#111), to(#333));/* for webkit browsers */
+	background: -moz-linear-gradient(top,  #111,  #333);/* for firefox 3.6+ */
+   	height: 40px;
+   	padding-left: 15px;
+   	padding-top: 10px;
+   	color: #fff;
+	border-bottom: 1px solid #e1e1e1;
+	position: relative;
+}
+
+#tabhead .logo {
+    padding-left: 15px;
+    padding-top: 0px;
+}
+
+#tabhead .login {
+    position: absolute;
+    top: 6px;
+    right: 15px;
+    color: #fff; /* login bar text colour */
+}
+#tabhead .login a, #tabhead .login a:visited {
+    color: #fff; /* login bar link colour */
+    text-decoration: none;
+}
+#tabhead .login a:hover {
+    color: #FFF; /* login bar link hover colour */
+    text-decoration: underline;
+}
+
+#side {
+    width: 298px;
+    padding: 0px;
+    margin-right: -160px;
+    float: right;
+}
+
+#panel {
+    width: 180px;
+    position: absolute;
+    right: 0px;
+    top: 70px;
+    z-index: 999;
+    border-left: 1px solid #e1e1e1;
+    border-top: 1px solid #e1e1e1;
+}
+
+#panel .box {
+     margin-bottom: 0px;
+ }
+
+#panel .box-title {
+    border-bottom: 1px solid #e1e1e1;
+    background-color: #fafafa;
+    padding: 5px;
+    margin-top: 0px;
+    font-size: 16px;
+}
+
+#panel .box-content {
+    border-left: 0px;
+    border-bottom: 1px solid #e1e1e1;
+    padding: 5px;
+}
+
+#panel .feed {
+    text-align: right;
+    padding: 0px;
+    margin-top: -20px;
+}
+
+
+.box {
+    margin-bottom: 10px;
+}
+
+.box-top {
+    min-height: 40px;
+    background: url("/site_media/static/images/layout/box_top.gif") no-repeat 0px 0px #fafafa;
+    text-align: center;
+}
+
+.box-top .title {
+    color: #3a3a3a;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: left;
+    padding-top: 10px;
+    padding-left: 15px;
+}
+.subtitle {
+    color: #c8c8c8;
+    font-weight: normal;
+}
+
+.box-heading {
+    padding: 5px;
+    border: 1px solid #e1e1e1;
+    background-color: #fff;
+}
+
+.box-content {
+    border-left: 1px solid #e1e1e1;
+    border-right: 1px solid #e1e1e1;
+    background-color: #fff;
+}
+
+.box-bottom {
+    height: 10px;
+    background: url("/site_media/static/images/layout/box_bottom.gif") no-repeat 0px 0px;
+}
+
+.box-top .buttons {
+    text-align: right;
+    margin-top: -25px;
+    padding: 5px;
+    font-size: 12px;
+}
+
+.box a {
+    text-decoration: none;
+    color: #000;
+}

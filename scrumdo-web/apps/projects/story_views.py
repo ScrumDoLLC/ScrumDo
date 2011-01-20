@@ -241,7 +241,7 @@ def handleAddStory( request , project ):
       story.rank = _calculate_rank( story.iteration, int(form.cleaned_data['general_rank']) )
       logger.info(story.summary)
       story.save()
-      story.activity_signal.send(sender=Story, news=request.user.username + " worked on story\"" +story.summary + "\" in \"" +project.name+"\"", user=request.user,action="saved" ,object=story.summary, story=story, context=project.slug)
+      story.activity_signal.send(sender=Story, news=request.user.username + " created story\"" +story.summary + "\" in \"" +project.name+"\"", user=request.user,action="created" ,object=story.summary, story=story, context=project.slug)
       request.user.message_set.create(message="Story #%d created." % story.local_id )
     else:
       return form

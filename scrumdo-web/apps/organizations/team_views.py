@@ -32,46 +32,6 @@ from organizations.team_models import *
 
 from organizations.forms import AddUserForm
 
-def team(request, organization_slug, team_id):
-  organization  = get_object_or_404(Organization, slug=organization_slug)
-  team = get_object_or_404(Team, id=team_id)
-  adduser_form=AddUserForm(team=team)
-  
-  if request.method == "POST":
-    if not _isAdmin(request.user, organization):
-      return HttpResponseForbidden("Can not complete action - You are not an admin on this team")
-    action = request.POST.get("action")
-    if action == "addMember":
-      adduser_form = AddUserForm(request.POST, team=team)
-      if adduser_form.is_valid():
-        adduser_form.save(request.user)
-        request.user.message_set.create(message="Member added to team.")               
-        adduser_form=AddUserForm(team=team)
-    if action == "addProject":
-      project = get_object_or_404( Project, id=request.POST.get("project") )
-      team.projects.add(project)
-      team.save()
-    if action == "removeProject":
-      project = Project.objects.filter(id=request.POST.get("project_id"))[0]
-      team.projects.remove(project)
-      team.save()
-    if action == "removeUser":
-      user = User.objects.filter(id=request.POST.get("user_id"))[0]
-      if user == request.user and team.access_type=="admin":
-        request.user.message_set.create(message="Can't remove yourself from the team admin group.")               
-      else:
-        team.members.remove(user);
-        team.save()
-  
-  return render_to_response("organizations/team.html", {    
-      "organization": organization,
-      "team": team,
-      "adduser_form":adduser_form
-    }, context_instance=RequestContext(request))
-  
-  
-  
-  
 def _isAdmin( user, organization ):
   return Organization.objects.filter( teams__members = user , teams__access_type="admin", teams__organization=organization).count() > 0
   
@@ -90,8 +50,10 @@ def team_create(request, organization_slug):
   else:
     form = TeamForm()
   
-
+  organizations = Organization.getOrganizationsForUser( request.user )
 
   return render_to_response("organizations/create_team.html", {    
-      "form": form
+      "form": form,
+      "organization": organization,
+      "organizations": organizations,
     }, context_instance=RequestContext(request))

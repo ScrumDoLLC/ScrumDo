@@ -14,8 +14,10 @@
         <link rel="stylesheet" href="{{STATIC_URL}}css/redmond/jquery-ui-1.8.6.custom.css" />
 
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js" type="text/javascript"></script>
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script>        
-        <link rel="stylesheet" href="{{STATIC_URL}}css/homepage.css" />
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script>       
+         <link rel="stylesheet" href="{{STATIC_URL}}css/homepage.css" />
+         <link rel="stylesheet" href="{{STATIC_URL}}css/layout.css" />
+
         <link rel="stylesheet" href="{{ STATIC_URL }}pinax/css/facebox.css" />
         <script src="{{STATIC_URL}}pinax/js/facebox.js" type="text/javascript"></script>        
         <style type="text/css" media="screen">
@@ -44,9 +46,23 @@
       
 
       
-        
-        
+
         <div id="tabhead">
+            <div class="logo" dir="ltr">
+	      <a href="{% url home %}">
+		<img src="{{ STATIC_URL }}images/logo.png" alt="Rogue Planning"/>
+	      </a>
+	    </div>
+            <div class="login">
+              <a class="promo" href="#overview" rel="facebox">Introductory Video</a>
+              | <a href="{% url acct_login %}">Login</a> 
+	      | <a href="{% url acct_signup %}">Sign Up</a>
+	      | <a href="/forum/">Help</a>
+	    </div>
+        </div>
+        
+        
+<!--        <div id="tabhead">
            
             <a href="/">ScrumDo</a>
             <a href="/forum/">Help Forums</a>
@@ -57,7 +73,7 @@
             <a href="/account/signup/">Sign Up</a>
               
           
-        </div>
+        </div>-->
         
         <div id="hilightArea" class="clearfix">
           <div id="hilightContent">

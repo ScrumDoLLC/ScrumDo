@@ -16,9 +16,6 @@
 {% block head_title %}{{ project.name }}{% endblock %}
     
 
-{% block panel %}
-{% include "projects/panel.html" %}  
-{% endblock %}
 
 
 {% block add_story %}
@@ -30,48 +27,30 @@
 {% endblock %}
 
 {% block body %}
-    
-
-                
         {% if user.is_authenticated %}
-            <div>
-                
-                
-                
-                  {% for iteration in project.get_current_iterations %}
-                    <h1>{{ iteration.name }} </h1> 
-                    <i>{{iteration.start_date|date:"M d, Y"}} - {{iteration.end_date|date:"M d, Y"}}</i>
-                    {% if iteration.points_log.count %}
-                      <div id="iterationBurndown_{{iteration.id}}" style="width:100%;height:300px;"></div>  
-                    {% else %}
-                      <img src="/site_media/static/images/burndown.png">
-                    {% endif %}
-                  {% endfor %}
-                    
-                  <h1>Overall Project</h1>
-                   
-                  {% if project.points_log.count %}
-                     <div id="overallBurndown" style="width:100%;height:300px;"></div>
-                  {% else %}
-                    <img src="/site_media/static/images/burndown.png">
-                  {% endif %}
-                   
-                    
-   
-            </div>
-        {% endif %}
+{% for iteration in project.get_current_iterations %}
+<h1>{% iteration_name iteration %}</h1>
+<em>{{iteration.start_date|date:"M d, Y"}} - {{iteration.end_date|date:"M d, Y"}}</em>
+<br/>
+{% if iteration.points_log.count %}
+<div id="iterationBurndown_{{iteration.id}}" style="width:540px;height:300px;"></div>  
+{% else %}
+<img src="/site_media/static/images/burndown.png">
+{% endif %}
+{% endfor %}
 
-        
+<h1>Overall Project</h1>
+{% if project.points_log.count %}
+<div id="overallBurndown" style="width:540px;height:300px;"></div>
+{% else %}
+<img src="/site_media/static/images/burndown.png" />
+{% endif %}
+
+{% endif %}
 {% endblock %}
 
 {% block extra_body %}
     <script type="text/javascript">
-      
-      
-    
-
-    
-    
         $(document).ready(function() {
                   
                 var options = {

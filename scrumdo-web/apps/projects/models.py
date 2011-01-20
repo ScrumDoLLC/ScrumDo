@@ -147,6 +147,12 @@ class Project(Group):
             return True
         else:
             return False
+
+    def get_num_stories(self):
+      return Story.objects.filter(project=self).count()
+    
+    def get_num_iterations(self):
+      return Iteration.objects.filter(project=self).count()
     
     def get_url_kwargs(self):
         return {'group_slug': self.slug}

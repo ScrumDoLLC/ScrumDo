@@ -8,9 +8,8 @@ from django.shortcuts import render_to_response, get_object_or_404
 @login_required
 def user_activities(request, page):
   activities = SubjectActivity.getActivitiesForUser(request.user)
-  activities.reverse() # why is this not working?
   
-  paginator = Paginator(activities, 5)
+  paginator = Paginator(activities, 10)
   page_obj = paginator.page(page)
 
   return render_to_response("activities/activity_list.html", {

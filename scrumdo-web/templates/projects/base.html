@@ -2,73 +2,165 @@
 {% load projects_tags %}
 {% load iteration_tags %}
 {% load i18n %}
+{% load theme_tags %}
+{% load extra_tagging_tags %}
+{% load avatar_tags %}
 
 {% block body_class %}projects{% endblock %}
 
 {% block extra_head %}
   <script src="{{ STATIC_URL }}js/burndown.js" type="text/javascript"></script>  
+  <script src="{{ STATIC_URL }}js/project.js" type="text/javascript"></script>  
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/project.css" />
 {% endblock %}
 
-{% block subnav %}
-    <ul>
-        {% if user.is_authenticated %}
-          {% if project %}
-            <li><a href="{% url project_detail project.slug %} ">Project Summary<!--{{project.name}}--></a></li>
-            <!--<li><a href="{% url iteration project.slug project.get_default_iteration.id %} ">Backlog</a></li>-->
-<!--            <li><a href="#iteration_header_list" rel="facebox">Iterations</a></li>-->
-            <li><a href="{% url stories project.slug %}">Iteration Planning</a></li>
-            <li><a href="{% url project_history project.slug %}">History</a></li>
-            <li><a href="{% url project_prediction project.slug %}">Predictions</a></li>
-          {% else %}
-              <li><a href="{% url home %} ">{% trans "Your Projects" %}</a></li>
-              <li><a href="{% url project_create %}">{% trans "Create a Project" %}</a></li>
-          {% endif %}        
-        {% endif %}
-    </ul>
-    
-    {% if project %}
-<!--      <div id="tools_list" style="display:none">
-          {% canwrite project %}
-          <li>
-              <img src="{{ STATIC_URL }}images/iteration_planning.png">
-              <a href="{% url stories project.slug %}">Iteration Planning</a><br/>
-              Easily rank your stories and move them into an iteration.
-          </li>
-          {% endcanwrite %}
-          <li>
-              <img src="{{ STATIC_URL }}images/project_history.png">
-              <a href="{% url project_history project.slug %}">Project History</a><br/>
-              See how much you've completed in past iterations.
-          </li>  
-          <li>
-              <img src="{{ STATIC_URL }}images/predictions.png">
-              <a href="{% url project_prediction project.slug %}">Predictions</a><br/>
-              Make predictions of what work will get done when based on your ranking and velocity.
-          </li>          
-          {% canwrite project %}              
-          <li>
-              <img src="{{ STATIC_URL }}images/comingSoon.png">
-              <a href="#">Sizing</a><br/>
-              Coming Soon: Easily size stories.
-          </li>        
-          {% endcanwrite %}
-        </ul>
-      </div>-->
-    
-    
-      <div id="iteration_header_list" style="display:none">
-        <div class="iteration_header_list" style="width: 600px;">
-        {% for iteration in project.iterations.all %}
-      
-        <div class="iteration_header_list_detail">
-          {% if iteration.stories.count %}<b>{{iteration.stories.count}} Stories</b>{%endif%}
-          {% if iteration.start_date %}<i>{{iteration.start_date|date:"M d, Y"}} - {{iteration.end_date|date:"M d, Y"}}</i>{% endif %}        
-        </div>
-        <h2>{% iteration_name iteration %}</h2>
-        <hr/>
-        {% endfor %}
-        </div>
-      </div>
+{% block panel %}
+  <div id="panel">
+    {% if user.is_authenticated %}
+    <div class="box">
+      <div class="box-title">
+	<a href="{% url project_detail project.slug %} ">{{ project.name }}</a>
+	{% isadmin project %}                  
+	<a title="{% trans "Settings" %}" href="{% url project_admin project.slug %}" >{% silk "cog" %}</a><br/>
+	{% endisadmin %}
+	<div class="feed"><a title="Feed of recent activity." target="_blank" href="/feeds/project/{{ project.pk }}">{% silk "feed" %}</a></div>
+      </div><!--box-heading--> 
+      <div class="box-content">
+	{{ project.description }}
+	<br/>
+	{% show_tags_for project %}
+	<br/>
+      </div><!--box-content-->
+    </div><!--box-->
+
+    <div class="box">
+      <div class="box-title">Tools</div>
+      <div class="box-content">
+	<a title="Easily rank your stories and move them into an iteration." href="{% url stories project.slug %}">{% silk "date" %} Iteration Planning</a><br/>
+	<a title="See how much you've completed in past iterations." href="{% url project_history project.slug %}">{% silk "report" %} History</a><br/>
+	<a title="Make predictions of what work will get done when based on your ranking and velocity." href="{% url project_prediction project.slug %}">{% silk "find" %} Predictions</a><br/>
+	<span title="Coming Soon: Easily size stories.">{% silk "time" %} Sizing</span><br/>
+	<a title="{% trans "Extras" %}" href="{% url project_extras_url project.slug %}" >{% silk "plugin" %} Extras</a><br/>
+      </div><!--box-content-->
+    </div><!--box-->
+
+    {% if iterationinfo %}
+    {% if daysLeft %}
+    <div class="box">
+      <div class="box-title">Iteration {{ iteration.name }}</div>
+      <div class="box-content">
+	{% silk "hourglass" %} {{ daysLeft }} Day{{ daysLeft|pluralize }} Left
+      </div><!--box-content-->
+    </div><!--box-->
+    {% endif %}
+
+    {% canwrite project %}
+    <div class="box">
+      <div class="box-title">Iteration Actions</div>
+      <div class="box-content">
+	{% if iteration.locked %}
+	{% canwrite project %}
+        <a rel="facebox" href="{% url unlock_iteration iteration.project.slug iteration.id %}">{% silk "lock_open" %} Unlock Iteration</a><br/>
+	{% endcanwrite %}
+	{% endif %}    
+	<a href="#iterationDetails" rel="facebox">{% silk "table_edit" %} Edit Details</a><br/>
+	<a href="{% url stories iteration.project.slug  %}?iteration={{iteration.id}}">{% silk "layout_add" %} Add From Backlog</a><br/>
+	<a rel="facebox" href="{% url iteration_export iteration.project.slug iteration.id %}">{% silk "lorry" %} Export</a><br/>
+	{% canwrite project %}
+	<a rel="facebox" href="{% url iteration_import iteration.project.slug iteration.id %}">{% silk "wand" %} Import</a><br/>
+	{% endcanwrite %}
+      </div><!--box-content-->
+    </div><!--box-->
+    {% endcanwrite %}
+    {% endif %}
+    <div class="box">
+      <div class="box-title">
+	{% if iterationinfo %}Other {% endif %}Iterations
+	{% canwrite project %}
+	<a title="Add New Iteration" href="{% url iteration_create project.slug %}">{% silk "add" %}</a>   
+	{% endcanwrite %} 
+	<div class="feed"><a title="Constantly updating feed of whatever your current iteration is" target="_blank" href="/feeds/current/{{ project.pk }}">{% silk "feed" %}</a></div>
+      </div><!--box-title-->
+      {% for iteration in project.iterations.all %}
+      <div class="box-content">
+	{% iteration_name iteration %}{% if iteration.stories.count %} <span class="subtitle">({{iteration.stories.count}})</span>{% endif %}
+	<div class="feed"><a title="Feed of activity in {{ iteration.name }}." target="_blank" href="/feeds/iteration/{{ project.pk }}/{{ iteration.pk }}">{% silk "feed" %}</a></div>
+      </div><!--box-content-->
+      {% endfor %}
+    </div><!--box-->
     {% endif %}
     
+    <div class="box">
+      <div class="box-title">Stats <span title="Stats about your project including your velocity, total stories, and iterations left, if available.">{% silk "help" %}</span></div>
+      <div class="box-content">
+	{% if project.velocity %}
+	<span title="Velocity is calculated on a nightly basis.  It represents how many points per iteration your team has completed.  It's averaged over the past several iterations.<br/><br/>  You can change how this stat is calculated from the gear icon next to the project name.">{% silk "car" %} Velocity: <b>{{project.velocity}}</b></span> <br/>
+	{% endif %}
+	<span title="The total number of stories in this project.">{% silk "book" %} Stories: <b>{{ project.stories.count }}</b></span> <br/>
+	{% if project.iterations_left %}
+	<span title="If you continue working at the stated velocity, and you complete all of the stories in the project not yet marked as done, it will take you this many iterations to complete the project.">{% silk "calculator" %} Iterations Left: <b>{{ project.iterations_left }}</b></span><br/>
+	{% endif %}
+      </div><!--box-content-->
+    </div><!--box-->
+    
+    {% if project.organization %}    
+    <div class="project_stats box">        
+      <div class="box-title">
+	Organization
+      </div><!--box-title-->
+      <div class="box-content">
+	<div class="title">
+	  <a href="{% url organization_detail organization_slug=project.organization.slug %}">
+	    {% silk "building" %} {{project.organization.name}}
+	  </a>
+	</div>
+	{% for team in project.teams.all %}
+	<div class="team">
+	  <a href="{% url organization_detail organization_slug=project.organization.slug %}">
+	    {% silk "group" %} {{ team.name }} 
+	    <span class="subtitle">({{ team.members.count }})</span>
+	  </a>
+
+	</div><!--team-->
+	{% endfor %}
+      </div><!--box-content-->
+    </div><!--box-->
+    {% endif %}
+
+    <div class="members box">
+      <div class="box-title">{% trans "Members" %}</div>
+      <div class="box-content">
+	<table width="100%" >
+	  {% for member in project.members.all %}
+	  {% if forloop.counter0|divisibleby:"2" %}<tr>{% endif %}
+	    <td>
+              <div class="avatar">{% avatar member.user 16 %}</div>
+              <div class="details"><a href="{% url profile_detail member.user.username %}" title="{{ member.user.username }}">{{ member.user.username }}</a></div>
+	    </td>
+	    {% if forloop.counter0|add:"1"|divisibleby:"2" %}</tr>{% endif %}
+	  {% endfor %}
+	  {% if project.members.all|length|divisibleby:"2" %}{% else %}</tr>{% endif %}
+</table>
+{% isadmin project %} 
+{% if adduser_form %}
+<form id="add-member" method="POST" action="">
+  {{ adduser_form.non_field_errors }}
+  {{ adduser_form.recipient }}    {{adduser_form.recipient.errors}}
+  <p><input type="hidden" name="action" value="add" />
+    <button type="submit">Add Member</button></p>
+</form>
+{% endif %}
+{% endisadmin %}
+</div><!--box-content-->
+</div><!--box-->
+
+
+<div class="box">
+  <div class="box-content">
+    {% trans "Slug:" %} <tt>{{ project.slug }}</tt><br />
+    {% trans "Creator:" %} <a href="{% url profile_detail project.creator.username %}">{{ project.creator }}</a><br />
+    {% trans "Created:" %} {{ project.created|date }}
+  </div><!--box-content-->
+</div><!--box-->
+</div><!--panel-->
 {% endblock %}

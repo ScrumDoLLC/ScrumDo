@@ -3,7 +3,7 @@
 {% load theme_tags %}
 {% load projects_tags %}
 
-<div id="story_area" style="width:950px">
+<div id="story_area">
 
 <form id="story_detail_form" method="POST" action="{% url story_form group_slug=project.slug story_id=story.id %}">
    {{ form.non_field_errors }}
@@ -41,10 +41,10 @@
      </table>
    </div>
    
-   <input type="hidden" name="return_type" value="{{return_type}}">
-   <input type="hidden" name="rank" value="{{ story.rank }}">
+   <input type="hidden" name="return_type" value="{{return_type}}" />
+   <input type="hidden" name="rank" value="{{ story.rank }}" />
    {% notlocked story %}
-     <INPUT  TYPE="image" SRC="/site_media/static/images/updateStoryButton.png" >
+   <input type="submit" value="Update Story" />
    {% endnotlocked %}
    
 
@@ -58,7 +58,7 @@
  
  {% notlocked story %}
    <form method="POST" id="deleteForm" action="{% url delete_story project.slug story.id %}">
-     <INPUT style="float:right ; margin-top: -25px; margin-right: 5px" TYPE="image" SRC="/site_media/static/images/deleteButton.png" >
+     <input style="float:right ; margin-top: -25px; margin-right: 5px" type="submit" value="Delete Story" />
    </form>
  {% endnotlocked %}
  
@@ -71,13 +71,10 @@
 </div>
 
 <script type="text/javascript" charset="utf-8">
-
-
-
       $("#story_area .commentForm").show();
       
       $("#story_detail_form").ajaxForm({        
-        success: function(responseText) { 
+        success: function(responseText) {
           $("#story_{{story.id}}").replaceWith(responseText);
           calculateBothPoints();
           $(document).trigger('close.facebox');   
@@ -101,7 +98,7 @@
           $form.hide();
         }
         
-      }); 
+      });
 
 </script>
 

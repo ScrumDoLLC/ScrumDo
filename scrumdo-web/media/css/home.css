@@ -1,0 +1,102 @@
+.box {
+    width: 298px;
+}
+
+
+.box-content .projectfeed {
+    text-align: right;
+    padding-top: 8px;
+    padding-right: 4px;
+}
+.box-content .project {
+    padding: 2px;
+    border-bottom: 1px solid #e1e1e1;
+    margin-top: -24px;
+    padding-right: 20px;
+    padding-left: 22px;
+    text-indent: -20px;
+}
+
+
+
+#projects-box p {
+    margin: 0px;
+    color: #b0b0b0;
+}
+
+#projects-box ul {
+    margin: 5px;
+    padding: 0px;
+}
+
+#projects-box .box-heading li {
+    display: inline;
+    padding: 10px;
+}
+
+
+#projects-box a:hover, #projects-box a.active {
+    text-decoration: underline;
+}
+
+
+#organizations-box ul {
+    margin: 0px;
+}
+
+#organizations-box p {
+    margin: 0px;
+    padding-left: 10px;
+}
+
+#organizations-box .project {
+    padding-left: 42px;
+}
+
+.greeting {
+    padding: 10px;
+    font-size: 16px;
+    
+}
+
+.newsfeed {
+    margin-top: 10px;
+    margin-left: 50px;
+    width: 498px;
+}
+
+.newsfeed #top {
+    background: url("/site_media/static/images/layout/newsfeed-top.gif") no-repeat 0px 0px;
+    font-size: 20px;
+    font-weight: bold;
+    height: 20px;
+    padding: 10px;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.newsfeed #bottom {
+    background: url("/site_media/static/images/layout/newsfeed-bottom.gif") no-repeat 0px 0px;
+    height: 10px;
+    
+}
+
+.newsfeed .activity {
+    padding: 10px;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.newsfeed .activity .icon, .newsfeed .activity .avatar, .newsfeed .activity .details {
+    display: inline-block;
+}
+
+.newsfeed .activity .icon {
+    padding-right: 10px;
+}
+
+.newsfeed .activity .action {
+    font-weight: bold
+}
+
+.newsfeed .activity abbr {
+    color: #b0b0b0;
+}
