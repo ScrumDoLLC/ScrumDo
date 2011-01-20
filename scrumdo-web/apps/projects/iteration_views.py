@@ -93,6 +93,27 @@ def iteration_create(request, group_slug=None):
 
  return render_to_response('projects/new_iteration.html', { 'project':project, 'form': form,  }, context_instance=RequestContext(request))
 
+
+# Deletes an iteration.  No further confirmation, but it will only do it if the iteration
+# is empty. Also, some confirmation client-side.
+@login_required
+def delete_iteration( request, group_slug, iteration_id ):
+   iteration = get_object_or_404( Iteration, id=iteration_id )  
+   if request.method == "POST":
+      write_access_or_403(iteration.project,request.user)
+      # dont think this signal exists.
+      # signals.iteration_deleted.send( sender=request, iteration=iteration, user=request.user )
+      stories = Story.objects.filter(iteration = iteration)
+      if not stories:
+         iteration.delete()
+         iteration.activity_signal.send(sender=Iteration, news=request.user.username + " deleted\"" +iteration.name + "\" in project\"" +iteration.project.name, user=request.user,action="deleted" ,object=iteration.name, story = None, context=iteration.project.slug)
+         request.user.message_set.create(message="Iteration deleted.") 
+         return HttpResponseRedirect( reverse('project_detail', kwargs={'group_slug':iteration.project.slug}) ) # Redirect after POST, to the only logical place
+      else:
+         request.user.message_set.create(message="Iteration not empty, could not be deleted.")
+   return HttpResponseRedirect( reverse('iteration', kwargs={'group_slug':iteration.project.slug, 'iteration_id':iteration.id }) ) #redirect to same iteration+display msg., as delete failed
+
+
 @login_required
 def unlock_iteration(request, group_slug, iteration_id):
   project = get_object_or_404(Project, slug=group_slug)  
