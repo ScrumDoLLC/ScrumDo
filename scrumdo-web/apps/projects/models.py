@@ -66,7 +66,7 @@ class Project(Group):
     default_iteration = None
     
     use_assignee = models.BooleanField( default=False )
-    use_acceptance = models.BooleanField( default=False )
+    # This field is not used -- use_acceptance = models.BooleanField( default=False )
     use_extra_1 = models.BooleanField( default=False )    
     use_extra_2 = models.BooleanField( default=False )    
     use_extra_3 = models.BooleanField( default=False )    
@@ -74,6 +74,7 @@ class Project(Group):
     extra_2_label = models.CharField(  max_length=25, blank=True, null=True)    
     extra_3_label = models.CharField(  max_length=25, blank=True, null=True)    
     
+    velocity_type = models.PositiveIntegerField( default=1 )
     velocity = models.PositiveIntegerField( null=True )
     velocity_iteration_span = models.PositiveIntegerField( null=True ) 
     
@@ -218,6 +219,7 @@ class Story( models.Model ):
       ('40', '40'), 
       ('100', '100'), 
       ('Inf', 'Infinite')  )
+   
   STATUS_CHOICES = (
       (1, "TODO"),
       (2, "In Progress"),
