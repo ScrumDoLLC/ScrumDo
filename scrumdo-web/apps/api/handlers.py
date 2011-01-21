@@ -19,4 +19,4 @@ class ProjectHandler(BaseHandler):
            else:
                return rc.FORBIDDEN
        else:
-           return map(lambda pm: pm.project, ProjectMember.objects.filter(user=request.user))
+           return [pm.project for pm in ProjectMember.objects.filter(user=request.user)]
