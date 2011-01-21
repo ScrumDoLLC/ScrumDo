@@ -1,0 +1,12 @@
+{% extends "site_base.html" %}
+
+{% block head_title %}ScrumDo Tutorial Part {{ page }}{% endblock %}
+
+{% block panel %}
+{% if prev %}
+<a href="{% url tutorial_page prev %}">Previous</a>
+{% endif %}
+{% if next %}
+<a href="{% url tutorial_page next %}">Next</a>
+{% endif %}
+{% endblock %}

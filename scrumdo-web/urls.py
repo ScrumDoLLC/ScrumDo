@@ -66,6 +66,7 @@ urlpatterns = patterns('',
     (r'^projects/', include('projects.urls')),    
     (r'^activities/', include('activities.urls')),    
     (r'^organization/', include('organizations.urls')),    
+    (r'^tutorial/', include('tutorial.urls')),
     (r'^admin/(.*)', admin.site.root),
 )
 

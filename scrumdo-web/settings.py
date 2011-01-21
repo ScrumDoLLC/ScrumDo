@@ -193,6 +193,7 @@ INSTALLED_APPS = (
     'forum',
     'extras',
     'activities',
+    'tutorial',
 #    'debug_toolbar',
 )
 
