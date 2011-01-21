@@ -20,7 +20,7 @@
       <img title="Move To Another Iteration" src="/site_media/static/pinax/images/silk/icons/page_white_go.png" />
     </a>
     <a onclick="jQuery('#todoButtons_{{story.id}}').show(); return false;" href="#">
-      <img title="Set Status" src="/site_media/static/pinax/images/silk/icons/tag_blue.png" />
+      <img title="Set Status" src="/site_media/static/pinax/images/silk/icons/tag_red.png" />
     </a>
     {% endnotlocked %}
     <a onclick="jQuery.facebox({ ajax: '/projects/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=block'}, 'edit_story'); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=block">

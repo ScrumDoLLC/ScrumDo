@@ -17,7 +17,7 @@
     <a class="hoverDetails" story_id="{{ story.id }}" href="#">{% silk "magnifier" %}</a>
     {% notlocked story %}
     <a onclick="jQuery('#todoButtons_{{story.id}}').show(); return false;" href="#">
-      <img title="Set Status" src="/site_media/static/pinax/images/silk/icons/tag_blue.png" />
+      <img title="Set Status" src="/site_media/static/pinax/images/silk/icons/tag_red.png" />
     </a>
     {% endnotlocked %}
     <a onclick="jQuery.facebox({ ajax: '/projects/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=mini'}, 'edit_story'); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=mini">
