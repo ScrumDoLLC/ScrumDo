@@ -53,15 +53,15 @@ def organization(request, organization_slug):
         adduser_form.save(request.user)
         request.user.message_set.create(message="Member added to team.")               
         adduser_form=AddUserForm(team=team)
-    if action == "addProject":
+    elif action == "addProject":
       project = get_object_or_404( Project, id=request.POST.get("project") )
       team.projects.add(project)
       team.save()
-    if action == "removeProject":
+    elif action == "removeProject":
       project = Project.objects.filter(id=request.POST.get("project_id"))[0]
       team.projects.remove(project)
       team.save()
-    if action == "removeUser":
+    elif action == "removeUser":
       user = User.objects.filter(id=request.POST.get("user_id"))[0]
       if user == request.user and team.access_type=="admin":
         request.user.message_set.create(message="Can't remove yourself from the team admin group.")               

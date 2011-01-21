@@ -9,8 +9,7 @@
 
 {% block head_title %}{{organization.name}}{% endblock %}
 
-{% block body %}      
-
+{% block body %}
 <div id="side">
   <div class="box">
     <div class="box-top">
@@ -33,8 +32,8 @@
     <div class="box-content">
       {% for project in organization.projects.all %}
       <div class="project">
-	<a href="{% url project_detail project.slug %}">{% silk "database_table" %} {{project.name}}</a><br/>
-	{{ project.stories.count }} stor{{ project.stories.count|pluralize:"y,ies" }}, {{ project.iterations.count }} iteration{{ project.iterations.count|pluralize }}
+	<a href="{% url project_detail project.slug %}">{% silk "database_table" %} {{project.name}}</a>
+	<div class="subtitle">{{ project.stories.count }} stor{{ project.stories.count|pluralize:"y,ies" }}, {{ project.iterations.count }} iteration{{ project.iterations.count|pluralize }}</div>
       </div><!--project-->
       {% endfor %}
     </div><!--box-content-->
