@@ -43,12 +43,14 @@ class SiteStats( models.Model ):
   date = models.DateField( auto_now=True );
   
 class PointsLog( models.Model ):
+    
   date = models.DateField( auto_now=True );
   points_claimed = models.IntegerField();
   points_total = models.IntegerField();
   content_type = models.ForeignKey(ContentType)
   object_id = models.PositiveIntegerField()
-  related_object = generic.GenericForeignKey('content_type', 'object_id')
+  related_object = generic.GenericForeignKey('content_type', 'object_id')  
+  
   def timestamp(self):
     return int((time.mktime(self.date.timetuple()) - time.timezone)*1000)
   class Meta:
@@ -57,6 +59,14 @@ class PointsLog( models.Model ):
   
   
 class Project(Group):    
+  
+    POINT_CHOICES_FIBO = ( ('?', '?'), ('0', '0'), ('0.5','0.5'), ('1', '1'),  ('2', '2'),  ('3', '3'),  ('5', '5'), ('8', '8'), ('13', '13'), ('20', '20'), ('40', '40'), ('100', '100'), ('Inf', 'Infinite') )
+    POINT_CHOICES_MINIMAL = ( ('?', '?'), ('0', '0'),  ('1', '1'),  ('2', '2'),  ('3', '3'),  ('4', '4'), ('5', '5') )
+    POINT_CHOICES_MAX = ( ('?', '?'), ('0', '0'), ('0.5','0.5'), ('1', '1'),  ('2', '2'),  ('3', '3'),   ('4', '4'), ('5', '5'),  ('6', '6'),  ('7', '7'), ('8', '8'),  ('9', '9'),  ('10', '10'), ('15', '15'), ('25', '25'), ('50', '50'), ('100', '100'), ('Inf', 'Infinite') )
+  
+    POINT_RANGES = [POINT_CHOICES_FIBO, POINT_CHOICES_MINIMAL, POINT_CHOICES_MAX]
+  
+  
     member_users = models.ManyToManyField(User, through="ProjectMember", verbose_name=_('members'))
     
     # private means only members can see the project
@@ -75,6 +85,8 @@ class Project(Group):
     extra_3_label = models.CharField(  max_length=25, blank=True, null=True)    
     
     velocity_type = models.PositiveIntegerField( default=1 )
+    point_scale_type = models.PositiveIntegerField( default=0 )
+    
     velocity = models.PositiveIntegerField( null=True )
     velocity_iteration_span = models.PositiveIntegerField( null=True ) 
     
@@ -83,6 +95,9 @@ class Project(Group):
     organization = models.ForeignKey(Organization,related_name="projects", null=True, blank=True)
 
 
+    def getPointScale( self ):
+      return self.POINT_RANGES[ self.point_scale_type ]
+      
     def getNextId( self ):
       if self.stories.count() == 0:
         return 1
@@ -204,31 +219,9 @@ class Story( models.Model ):
   STATUS_DOING = 2
   STATUS_REVIEWING = 3
   STATUS_DONE = 4
-  
-  POINT_CHOICES = (
-      ('?', '?'), 
-      ('0', '0'),
-      ('0.5','0.5'),      
-      ('1', '1'),
-      ('2', '2'),
-      ('3', '3'), 
-      ('5', '5'), 
-      ('8', '8'), 
-      ('13', '13'), 
-      ('20', '20'), 
-      ('40', '40'), 
-      ('100', '100'), 
-      ('Inf', 'Infinite')  )
-   
-  STATUS_CHOICES = (
-      (1, "TODO"),
-      (2, "In Progress"),
-      (3, "Reviewing"),
-      (4, "Done")   )
-  STATUS_REVERSE = {"TODO":STATUS_TODO,
-                    "In Progress":STATUS_DOING,
-                    "Reviewing":STATUS_REVIEWING,
-                    "Done":STATUS_DONE }
+       
+  STATUS_CHOICES = ( (1, "TODO"), (2, "In Progress"),  (3, "Reviewing"), (4, "Done")   )
+  STATUS_REVERSE = {"TODO":STATUS_TODO,  "In Progress":STATUS_DOING,  "Reviewing":STATUS_REVIEWING,  "Done":STATUS_DONE }
   
   rank = models.IntegerField() 
   summary = models.TextField( )
@@ -238,7 +231,7 @@ class Story( models.Model ):
   created = models.DateTimeField(_('created'), default=datetime.now)
   modified = models.DateTimeField(_('modified'), default=datetime.now) 
   assignee = models.ForeignKey(User, related_name="assigned_stories", verbose_name=_('assignee'), null=True, blank=True)  
-  points = models.CharField('points', max_length=3, default="?", choices=POINT_CHOICES ,blank=True)
+  points = models.CharField('points', max_length=3, default="?", blank=True)
   iteration = models.ForeignKey( Iteration , related_name="stories")
   project = models.ForeignKey( Project , related_name="stories")
   status = models.IntegerField( max_length=2, choices=STATUS_CHOICES, default=1 )
@@ -252,8 +245,10 @@ class Story( models.Model ):
   activity_signal.connect(SubjectActivity.activity_handler)
 
 
-  def points_value(self):
-    
+  def getPointScale( self ):
+    return Project.POINT_RANGES[ self.project.point_scale_type ]
+
+  def points_value(self):    
     # the float() method understands inf!
     if self.points.lower() == "inf" :
       return 0

@@ -127,7 +127,8 @@ def project_admin( request, group_slug ):
         story.project = project
         story.creator = request.user
         story.save()     
-        request.user.message_set.create(message="Options Saved.")               
+        request.user.message_set.create(message="Project options Saved.")              
+        return HttpResponseRedirect(reverse("project_detail",kwargs={'group_slug':project.slug}))
     if request.POST.get("action") == "moveToOrganization":
       organization = get_object_or_404( Organization, id=request.POST.get("organization_id",""))
       project.organization = organization

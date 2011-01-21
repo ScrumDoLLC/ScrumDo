@@ -27,9 +27,10 @@
            <tr><td style="font-weight:bold">Description:</td><td>{{form.description}} {{form.description.errors}}</td></tr>
          </table>
          <h2>Point Scale</h2>
-         
-         <input type="radio" checked name="dummy"> <b>Modified Fibonacci</b> - ?, 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100, Infinity <br/><br/>
-         <i>We will be adding alternate point scales in the future</i>
+         <p>Select the point scale to use when sizing stories.</p>
+         <label><input type="radio" {% ifequal project.point_scale_type 0 %}checked{% endifequal %} value="0" name="point_scale_type"> <b>Modified Fibonacci</b> - ?, 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100, Infinity</label> 
+         <label><input type="radio" {% ifequal project.point_scale_type 1 %}checked{% endifequal %} value="1" name="point_scale_type"> <b>Simplified</b> - ?, 0, 1, 2, 3, 4, 5</label> 
+         <label><input type="radio" {% ifequal project.point_scale_type 2 %}checked{% endifequal %} value="2" name="point_scale_type"> <b>Natural</b> - ?, 0, 0.5, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 25, 50, 100, Infinity</label> 
          
          
          <h2>Optional Fields</h2>
