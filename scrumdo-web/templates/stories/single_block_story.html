@@ -5,7 +5,7 @@
 {% load avatar_tags %}
 
 <li class="story_block gripper_{% ifequal story.status 1 %}todo{% endifequal %}{% ifequal story.status 3 %}reviewing{% endifequal %}{% ifequal story.status 2 %}doing{% endifequal %}{% ifequal story.status 4 %}done{% endifequal %}" story_id="{{story.id}}" id="story_{{story.id}}" rank="{{ story.rank }}" >
-  <div class="pointsBox">{{ story.points }}</div>
+  <div class="pointsBox">{{ story.getPointsLabel }}</div>
   <div class="todoButtons todoButtons_block" id="todoButtons_{{story.id}}">
     <a onclick=" setStatusTodo({{story.id}}) ; return false;" href="#" id="todo">{% silk "note" %} Todo</a>
     <a onclick=" setStatusDoing({{story.id}}) ; return false;" href="#" id="doing">{% silk "overlays" %} Doing</a>

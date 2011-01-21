@@ -62,7 +62,7 @@ class AddStoryForm( forms.ModelForm ):
   tags = forms.CharField( required=False )
   general_rank = forms.CharField( required=False, widget=forms.RadioSelect(choices=RANK_CHOICES), initial=2)
   def __init__(self, project, *args, **kwargs):    
-    super(StoryForm, self).__init__(*args, **kwargs)      
+    super(AddStoryForm, self).__init__(*args, **kwargs)      
     self.fields["points"].choices = project.getPointScale()    
     self.fields["points"].widget = forms.RadioSelect(choices=project.getPointScale())
     self.fields["summary"].widget = forms.TextInput()
@@ -80,7 +80,7 @@ class AddStoryForm( forms.ModelForm ):
     self.fields["tags"].initial = self.instance.tags  
   def save(self,  **kwargs):
     self.instance.tags = self.cleaned_data["tags"]
-    return super(StoryForm, self).save(**kwargs)  
+    return super(AddStoryForm, self).save(**kwargs)  
   class Meta:
       model = Story
       fields = ('summary', 'detail', 'tags', 'points' , 'extra_1','extra_2','extra_3','assignee')

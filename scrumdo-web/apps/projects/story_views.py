@@ -223,7 +223,7 @@ def handleAddStory( request , project ):
       Various views have an add story form on them.  This method handles that,
       and returns a new StoryForm object the view can use. """
   if request.method == "POST" and request.POST.get("action") == "addStory":
-    form = StoryForm(project, request.POST) # A form bound to the POST data
+    form = AddStoryForm(project, request.POST) # A form bound to the POST data
     if form.is_valid(): # All validation rules pass
       story = form.save( commit=False )
       story.local_id = project.getNextId()
@@ -245,7 +245,7 @@ def handleAddStory( request , project ):
       request.user.message_set.create(message="Story #%d created." % story.local_id )
     else:
       return form
-  return StoryForm( project )
+  return AddStoryForm( project )
       
 
 # The iteration planning tool.  It can also handle the add story form.

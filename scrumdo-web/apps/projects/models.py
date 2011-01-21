@@ -63,8 +63,9 @@ class Project(Group):
     POINT_CHOICES_FIBO = ( ('?', '?'), ('0', '0'), ('0.5','0.5'), ('1', '1'),  ('2', '2'),  ('3', '3'),  ('5', '5'), ('8', '8'), ('13', '13'), ('20', '20'), ('40', '40'), ('100', '100'), ('Inf', 'Infinite') )
     POINT_CHOICES_MINIMAL = ( ('?', '?'), ('0', '0'),  ('1', '1'),  ('2', '2'),  ('3', '3'),  ('4', '4'), ('5', '5') )
     POINT_CHOICES_MAX = ( ('?', '?'), ('0', '0'), ('0.5','0.5'), ('1', '1'),  ('2', '2'),  ('3', '3'),   ('4', '4'), ('5', '5'),  ('6', '6'),  ('7', '7'), ('8', '8'),  ('9', '9'),  ('10', '10'), ('15', '15'), ('25', '25'), ('50', '50'), ('100', '100'), ('Inf', 'Infinite') )
+    POINT_CHOICES_SIZES = ( ('?', '?'), ('1', 'XS'), ('5', 'S'), ('10','M'), ('15', 'L'),  ('25', 'XL')  )
   
-    POINT_RANGES = [POINT_CHOICES_FIBO, POINT_CHOICES_MINIMAL, POINT_CHOICES_MAX]
+    POINT_RANGES = [POINT_CHOICES_FIBO, POINT_CHOICES_MINIMAL, POINT_CHOICES_MAX, POINT_CHOICES_SIZES]
   
   
     member_users = models.ManyToManyField(User, through="ProjectMember", verbose_name=_('members'))
@@ -244,6 +245,12 @@ class Story( models.Model ):
   activity_signal = django.dispatch.Signal(providing_args=["news", "user","action", "story", "context"])
   activity_signal.connect(SubjectActivity.activity_handler)
 
+
+  def getPointsLabel(self):
+    result = filter( lambda v: v[0]==self.points, self.getPointScale() )
+    if len(result) > 0:
+      return result[0][1]
+    return self.points
 
   def getPointScale( self ):
     return Project.POINT_RANGES[ self.project.point_scale_type ]
