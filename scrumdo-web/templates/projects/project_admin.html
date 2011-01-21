@@ -36,9 +36,8 @@
          <p>Optional fields are special, structured fields that not all users need nor want.  They're off by default.</p>
           <table class="projectOptionsForm">
             <tr><td style="font-weight:bold">{{form.use_assignee}} Track Assignee {{form.use_assignee.errors}}</td><td><i>Adds an Assignee field to stories, so you can track who is currently responsible.</i></td></tr>            
-            <!--<tr><td style="font-weight:bold">{{form.use_acceptance}} Acceptance Criteria {{form.use_acceptance.errors}}</td><td><i>Adds a series of fields for storing acceptance criteria in a structured way.</i></td></tr>-->
           </table>
-          <input type="hidden" name="use_acceptance" value="">
+
           <input type="hidden" name="action" value="updateProject">
           <h2>Custom Fields</h2>
           <p>Custom fields are free-input text boxes that accompany each story.  To use one, turn it on by selecting the checkbox, and give it a name in the text input.</p>
@@ -121,6 +120,13 @@
          <form class="delete_form" id="delete_project_form" action="{% url project_delete project.slug %}" method="POST" style="display: none;">
              <input type="submit" value="{% trans "Delete Project" %}" /><br/> All content will be removed as soon as you push this button.<br/>It's permanent and irreversable.
         </form>
+        
+      <script type="text/javascript" charset="utf-8">
+          {% if GOOGLE_ANALYTICS %}     
+             _gaq.push(['_trackEvent',"ViewPage", "ProjectAdmin"]); 
+          {% endif %}      
+        
+      </script>
   
 {% endblock %}
 

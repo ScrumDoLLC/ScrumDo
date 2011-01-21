@@ -242,6 +242,10 @@ function moveCurrentlyOpenStoryToIteration( iteration_id )
 		$("#story_" + current_story_popup).hide(true);              
 	    }
 	});
+
+      {% if GOOGLE_ANALYTICS %}     
+         _gaq.push(['_trackEvent',"MoveToIteration", "{{current_view}}", "", 1]); 
+      {% endif %}
       
 }
     
@@ -257,6 +261,11 @@ function setStatusReviewing( storyID )
 		setUpStoryLinks();
 	    }
 	});
+	
+	
+	{% if GOOGLE_ANALYTICS %}     
+     _gaq.push(['_trackEvent',"SetStatusPopup", "{{current_view}}", "Review", 1]); 
+  {% endif %}
 }
 function setStatusTodo( storyID )
 {
@@ -270,6 +279,10 @@ function setStatusTodo( storyID )
 		setUpStoryLinks();
 	    }
 	});
+	
+	{% if GOOGLE_ANALYTICS %}     
+     _gaq.push(['_trackEvent',"SetStatusPopup", "{{current_view}}", "Todo", 1]); 
+  {% endif %}
 }     
 
 
@@ -285,6 +298,10 @@ function setStatusDoing( storyID )
 		setUpStoryLinks();
 	    }
 	});
+	
+	{% if GOOGLE_ANALYTICS %}     
+     _gaq.push(['_trackEvent',"SetStatusPopup", "{{current_view}}", "Doing", 1]); 
+  {% endif %}
 }
 
 
@@ -300,6 +317,10 @@ function setStatusDone( storyID )
 		setUpStoryLinks();
 	    }
 	});
+	
+	{% if GOOGLE_ANALYTICS %}     
+     _gaq.push(['_trackEvent',"SetStatusPopup", "{{current_view}}", "Done", 1]); 
+  {% endif %}
 }
 
      
@@ -327,6 +348,10 @@ $(document).ready(function() {
 	{% if iteration.points_log.count %}      
 	generateBurnDown( "#iterationBurndown", "{{project.slug}}" , "{{iteration.id}}" , 0);         
 	{% endif %}
+
+    {% if GOOGLE_ANALYTICS %}     
+        _gaq.push(['_trackEvent',"ViewPage", "Iteration", "", 1]); 
+    {% endif %}     
     });
 </script>
     

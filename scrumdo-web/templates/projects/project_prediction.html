@@ -97,6 +97,11 @@
       {
         window.location.reload();
       }
+      
+      {% if GOOGLE_ANALYTICS %}     
+         _gaq.push(['_trackEvent',"ViewPage", "Prediction"]); 
+      {% endif %}
+      
     
     </script>
     

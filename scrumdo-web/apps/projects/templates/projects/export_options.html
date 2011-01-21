@@ -14,4 +14,14 @@
 
 <script type="text/javascript" charset="utf-8">
   $("#project_form").submit(function(){$(document).trigger('close.facebox');})
+  
+  
+   {%if GOOGLE_ANALYTICS %}     
+      <script type="text/javascript" charset="utf-8">
+        _gaq.push(['_trackEvent',"ViewPage", "Export Options"]); 
+      </script>
+   {% endif %}    
+  
+  
+  
 </script>

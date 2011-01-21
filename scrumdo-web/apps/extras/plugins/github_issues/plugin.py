@@ -56,7 +56,7 @@ class GitHubIssuesExtra( ScrumdoProjectExtra ):
         # dict of options for later retrieval by getConfiguration
         self.saveConfiguration( project.slug, configuration )        
         
-        if configuration["upload"]:
+        if configuration.get("upload"):
           # Need to queue an intial action to upload our project.
           self.manager.queueSyncAction(self.getSlug(), project, SyncronizationQueue.ACTION_INITIAL_SYNC)
           
@@ -74,12 +74,12 @@ class GitHubIssuesExtra( ScrumdoProjectExtra ):
     """Called when a story is deleted in a project that this extra is associated with.  """
     configuration = self.getConfiguration( project.slug )  
 
-    if not configuration['delete']:          
+    if not configuration.get('delete'):          
       return # Not configured to delete stories.            
 
-    repository = configuration['repository']
+    repository = configuration.get('repository')
     logging.debug("Attempting to delete GitHub issue %s" % external_id)   
-    github = kwargs.get( "github", Github(username=configuration['username'], api_token=configuration['password'],requests_per_second=1) )
+    github = kwargs.get( "github", Github(username=configuration.get('username'), api_token=configuration.get('password'),requests_per_second=1) )
     issue = github.issues.close( repository, external_id )        
 
         
@@ -92,13 +92,13 @@ class GitHubIssuesExtra( ScrumdoProjectExtra ):
 
     configuration = self.getConfiguration( project.slug )  
 
-    if not configuration['upload']:    
+    if not configuration.get('upload'):    
       # Not configured to upload new stories.
       return
 
-    repository = configuration['repository']
+    repository = configuration.get('repository')
     logging.debug("Attempting to create GitHub issue for story %d" % story.id)   
-    github = kwargs.get( "github", Github(username=configuration['username'], api_token=configuration['password'],requests_per_second=1) )
+    github = kwargs.get( "github", Github(username=configuration.get('username'), api_token=configuration.get('password'),requests_per_second=1) )
     issue = github.issues.open( repository, story.summary, story.detail )
     link = ExternalStoryMapping( story=story,     
                                  extra_slug=self.getSlug(),
@@ -118,7 +118,7 @@ class GitHubIssuesExtra( ScrumdoProjectExtra ):
   def getShortStatus(self, project):
     try:
       configuration = self.getConfiguration( project.slug )     
-      return configuration["status"]
+      return configuration.get("status")
     except:
       return "Not configured"
     
@@ -130,14 +130,14 @@ class GitHubIssuesExtra( ScrumdoProjectExtra ):
     configuration = self.getConfiguration( project.slug )   
 
     # The configuration view sets a download flag to true/false depending on user input.
-    if not configuration["download"]:
+    if not configuration.get("download"):
       logging.debug("Not set to download stories, aborting.")
       return
     
     try:
       logging.debug("Retrieving remote issues")
-      github = Github(username=configuration['username'], api_token=configuration['password'],requests_per_second=1)
-      issues = github.issues.list(configuration['repository'], state="open")
+      github = Github(username=configuration.get('username'), api_token=configuration.get('password'),requests_per_second=1)
+      issues = github.issues.list(configuration.get('repository'), state="open")
     except:
       logging.warn("Failed to retrieve remote GitHub issues for project %s" % project.slug)
       configuration["status"] = "Failed to load your GitHub issues"
@@ -154,7 +154,7 @@ class GitHubIssuesExtra( ScrumdoProjectExtra ):
     for issue in issues:
       story = self._getStory( issue.number, queue_stories, project_stories)
       if story == None:
-        self._createStoryForIssue( issue, project , configuration['repository'])
+        self._createStoryForIssue( issue, project , configuration.get('repository'))
       else:                                                      
         if story.summary != issue.title or story.detail != issue.body :
           logging.debug("Updating story %d." % story.id )
@@ -171,7 +171,7 @@ class GitHubIssuesExtra( ScrumdoProjectExtra ):
   def initialSync( self, project):
     logging.debug("Performing initial GitHub issues syncronization.")
     configuration = self.getConfiguration( project.slug )   
-    if configuration['upload']:
+    if configuration.get('upload'):
       try:
         self._initialUpload( project, configuration)
       except:                                                      
@@ -188,10 +188,11 @@ class GitHubIssuesExtra( ScrumdoProjectExtra ):
     logging.debug("GitHub issues::storyUpdated")
     configuration = self.getConfiguration( project.slug )   
 
-    # The configuration view sets a download flag to true/false depending on user input.
-    if not configuration["upload"]:
-      logging.debug("Not set to upload stories, aborting.")
-      return                                  
+    # I think we should update stories if an external link exists, no matter how it got there.
+    # # The configuration view sets a download flag to true/false depending on user input.
+    # if not configuration.get("upload"):
+    #   logging.debug("Not set to upload stories, aborting.")
+    #   return                                  
     
     link = self._getExternalLink( story )
     
@@ -200,8 +201,8 @@ class GitHubIssuesExtra( ScrumdoProjectExtra ):
       return
     
     # Grab the github client passed in kwargs, if none, create one.
-    github = kwargs.get( "github", Github(username=configuration['username'], api_token=configuration['password'],requests_per_second=1) )                                                                        
-    github.issues.edit( configuration['repository'], link.external_id, story.summary, story.detail )
+    github = kwargs.get( "github", Github(username=configuration.get('username'), api_token=configuration.get('password'),requests_per_second=1) )                                                                        
+    github.issues.edit( configuration.get('repository'), link.external_id, story.summary, story.detail )
 
 
   def storyStatusChange( self, project, story, **kwargs):
@@ -209,7 +210,7 @@ class GitHubIssuesExtra( ScrumdoProjectExtra ):
     configuration = self.getConfiguration( project.slug )   
 
     # The configuration view sets a download flag to true/false depending on user input.
-    if not configuration["upload"]:
+    if not configuration.get("upload"):
       logging.debug("Not set to upload stories, aborting.")
       return                                  
     
@@ -219,13 +220,13 @@ class GitHubIssuesExtra( ScrumdoProjectExtra ):
       logging.debug("Story not associated with external story, aborting.")
       return
     # Grab the github client passed in kwargs, if none, create one.
-    github = kwargs.get( "github", Github(username=configuration['username'], api_token=configuration['password'],requests_per_second=1) )                                                                        
+    github = kwargs.get( "github", Github(username=configuration.get('username'), api_token=configuration.get('password'),requests_per_second=1) )                                                                        
     
     if story.status == Story.STATUS_DONE:
-      github.issues.close( configuration['repository'], link.external_id )
+      github.issues.close( configuration.get('repository'), link.external_id )
     else:
       # All other scrumdo statuses map to open on github issues.
-      github.issues.reopen( configuration['repository'], link.external_id )
+      github.issues.reopen( configuration.get('repository'), link.external_id )
       
 
 
@@ -262,7 +263,7 @@ class GitHubIssuesExtra( ScrumdoProjectExtra ):
     
   def _initialUpload(self, project, configuration):
     configuration = self.getConfiguration( project.slug )
-    github = Github(username=configuration['username'], api_token=configuration['password'],requests_per_second=1)
+    github = Github(username=configuration.get('username'), api_token=configuration.get('password'),requests_per_second=1)
     for story in project.stories.all():
       self.storyCreated(project, story, github=github)
 

@@ -210,3 +210,7 @@
 .button.small:active { padding: 4px 7px 2px; background-position: 0 top; }
 .button.large { font-size: 125%; padding: 7px 12px; }
 .button.large:active { padding: 8px 12px 6px; background-position: 0 top; }
+
+.storyLink {
+  color: #0000EA;
+}

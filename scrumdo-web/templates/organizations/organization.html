@@ -117,4 +117,10 @@
   {% endfor %}        
   <div class="box-bottom"></div>
 </div><!--box-->
+
+    <script type="text/javascript" charset="utf-8">
+      {% if GOOGLE_ANALYTICS %}     
+         _gaq.push(['_trackEvent',"ViewPage", "Organization"]); 
+      {% endif %}      
+    </script>
 {% endblock %}

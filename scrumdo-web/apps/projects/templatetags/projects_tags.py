@@ -18,8 +18,31 @@
 
 from django import template
 from projects.forms import ProjectForm
+from projects.models import Story
 from projects.access import has_write_access, has_admin_access, has_read_access
+from django.template.defaultfilters import stringfilter
+import re
 register = template.Library()
+
+
+@stringfilter
+def link_stories(value, project):
+
+  def replaceLink( value ):
+    try:
+      local_id = value.group(1)
+      story = Story.objects.get( project=project, local_id=int(local_id) )  
+      return "<a class='storyLink' onclick=\"jQuery.facebox({ ajax: '/projects/project/%s/story/%d?return_type=block'}); return false;\" >%s</a>" % (project.slug, story.id, value.group(0))
+    except:
+      return value.group(0)
+  
+  return re.sub(r'[sS]tory #([0-9]+)', replaceLink , value)
+  
+link_stories.is_safe=True
+
+# <a onclick="jQuery.facebox({ ajax: '/projects/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=mini'}); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}"><img title="Story Details" src="/site_media/static/pinax/images/silk/icons/magnifier.png" /></a>
+register.filter('link_stories', link_stories)
+
 
 @register.inclusion_tag("projects/project_item.html", takes_context=True)
 def show_project(context, project):

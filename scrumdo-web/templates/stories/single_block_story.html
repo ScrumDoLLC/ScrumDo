@@ -2,6 +2,7 @@
 {% load theme_tags %}
 {% load comments_tag %}
 {% load projects_tags %}
+{% load avatar_tags %}
 
 <li class="story_block gripper_{% ifequal story.status 1 %}todo{% endifequal %}{% ifequal story.status 3 %}reviewing{% endifequal %}{% ifequal story.status 2 %}doing{% endifequal %}{% ifequal story.status 4 %}done{% endifequal %}" story_id="{{story.id}}" id="story_{{story.id}}" rank="{{ story.rank }}" >
   <div class="pointsBox">{{ story.points }}</div>
@@ -24,10 +25,11 @@
     {% endnotlocked %}
     <a onclick="jQuery.facebox({ ajax: '/projects/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=block'}, 'edit_story'); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=block">
       <img title="Edit Story" src="/site_media/static/pinax/images/silk/icons/pencil.png" /></a></span>
-  <h1><span style="color:#cccccc;">#{{story.local_id}}</span> {{ story.summary }}</h1>
+    
+  <h1><span style="color:#cccccc;">#{{story.local_id}}</span> {{ story.summary|escape|link_stories:story.project|safe }}</h1>
 
 
-  {{ story.detail }}
+  {{ story.detail|escape|link_stories:story.project|safe }}
   
 
 
@@ -41,8 +43,15 @@
   
 {% comments story %}
 
+
+
 {% for link in story.external_links.all %}
   <br/><a href="{{ link.external_url }}">{{ link.external_url }}</a>
 {% endfor %}
+
+
+{% if story.assignee and story.project.use_assignee %}
+  Assigned: <b>{{story.assignee}}</b> {% avatar story.assignee 22 %}
+{% endif %}
     
 </li>  

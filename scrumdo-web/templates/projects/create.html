@@ -54,4 +54,11 @@
         <p>{% blocktrans %}<a href="{{ signup_url }}">Sign up</a> and <a href="{{ login_url }}">log in </a> to create your own project or join an existing one.{% endblocktrans %}</p>
     {% endif %}
     
+    
+    <script type="text/javascript" charset="utf-8">
+      {% if GOOGLE_ANALYTICS %}     
+         _gaq.push(['_trackEvent',"ViewPage", "Project Creation", "", 1]); 
+      {% endif %}      
+    </script>
+    
 {% endblock %}

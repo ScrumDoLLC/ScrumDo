@@ -261,6 +261,7 @@ def stories(request, group_slug):
   return render_to_response("stories/iteration_planning.html", {
     "add_story_form": form,
     "project": project,
+    "current_view":"iteration_planning",
     "default_iteration_id": int(request.GET.get("iteration","-1"))
 
   }, context_instance=RequestContext(request))

@@ -78,6 +78,11 @@
           $("#story_{{story.id}}").replaceWith(responseText);
           calculateBothPoints();
           $(document).trigger('close.facebox');   
+          
+          {% if GOOGLE_ANALYTICS %}     
+             _gaq.push(['_trackEvent',"EditStory", "{{current_view}}", "", 1]); 
+          {% endif %}
+          
         }});
         
       $("#deleteForm").ajaxForm({

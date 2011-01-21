@@ -18,7 +18,13 @@
 {% block body %}
   <script type="text/javascript" charset="utf-8">
     graph_count = 0;  
+    {% if GOOGLE_ANALYTICS %}     
+       _gaq.push(['_trackEvent',"View Page", "History"]); 
+    {% endif %}
   </script>
   <h1>Project History</h1>
   {% include "projects/project_history_item.html" %}  
+  
+  
+  
 {% endblock %}

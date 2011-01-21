@@ -306,6 +306,10 @@
     loadIterationFromChooser(); 
     $("#loadingIcon").hide();
     $(".hoverDetails").hover( displayStoryHover, hideStoryHover );
+    
+    {% if GOOGLE_ANALYTICS %}     
+       _gaq.push(['_trackEvent',"ViewPage", "IterationPlanning", "", 1]); 
+    {% endif %}
   } ); 
 </script>
 

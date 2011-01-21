@@ -1,5 +1,5 @@
 <div id="story_form">
-  <form method="POST">
+  <form method="POST" id="addStoryForm">
     {{ add_story_form.non_field_errors }}
     {{add_story_form.summary}}    {{add_story_form.summary.errors}} <button id="add_button" type="submit">Add Story</button><!-- <INPUT TYPE="Submit">Add Story</input>--><!--SRC="/site_media/static/images/addStoryButton.png"-->
      <br/>
@@ -38,6 +38,13 @@
   
     story_form_expanded = false;
     $(document).ready(function() {
+      
+      
+      
+    {% if GOOGLE_ANALYTICS %}     
+      $("#addStoryForm").submit( function() { _gaq.push(['_trackEvent',"AddStory", "{{current_view}}", "", 1]); } );           
+    {% endif %}
+      
       $('#id_summary').keyup( function(self) 
             { 
                 if( $(this).val().length > 0 )
