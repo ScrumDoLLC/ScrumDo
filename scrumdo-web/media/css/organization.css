@@ -16,6 +16,9 @@
     border-bottom: 1px solid #e1e1e1;
 }
 
+.projects-box .project .subtitle {
+    margin-left: 5px;
+}
 .teams-box {
     margin-left: 100px;
 }

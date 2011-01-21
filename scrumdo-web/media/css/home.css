@@ -17,6 +17,9 @@
     text-indent: -20px;
 }
 
+.box-content .project .subtitle {
+    margin-left: 15px;
+}
 
 
 #projects-box p {
@@ -29,11 +32,25 @@
     padding: 0px;
 }
 
+#projects-box .box-top {
+    border-bottom: 1px solid #e1e1e1;
+}
+
+#projects-box .box-heading {
+    margin-top: 10px;
+    background-color: #fafafa;
+}
+
 #projects-box .box-heading li {
     display: inline;
     padding: 10px;
 }
 
+
+#projects-box .box-bottom {
+    margin-top: 10px;
+    border-top: 1px solid #e1e1e1;
+}
 
 #projects-box a:hover, #projects-box a.active {
     text-decoration: underline;

@@ -144,21 +144,22 @@ h1 a {
     border-right: 1px solid #e1e1e1;
     background-color: #fff;
     min-height: 33px;
+    position: relative;
 }
 
 
 
 .gripper_reviewing {
-    border-left: 4px solid #5a1964;
+    border-left: 6px solid #ff7f0e;
 }
 .gripper_todo {
-    border-left: 4px solid #444;
+    border-left: 6px solid #444;
 }
 .gripper_doing {
-    border-left: 4px solid #448cca;
+    border-left: 6px solid #448cca;
 }
 .gripper_done {
-    border-left: 4px solid #8dc73e;
+    border-left: 6px solid #8dc73e;
 }
 
 .showFilter {
@@ -186,9 +187,10 @@ h1 a {
     border: 1px solid #e1e1e1;
     background-color: #fafafa;
     padding: 5px;
-    width: 23 0px;
+    width: 230px;
     z-index: 50;
     position: absolute;
+    right: 10px;
     margin-top: 0px;
     display: none;
 }
@@ -208,7 +210,7 @@ h1 a {
 }
 
 .todoButtons #review {
-    border-bottom: 4px solid #5a1964;
+    border-bottom: 4px solid #ff7f0e;
 }
 .todoButtons #todo {
     border-bottom: 4px solid #444;

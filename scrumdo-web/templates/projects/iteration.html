@@ -71,8 +71,18 @@
       <form method="POST" action="">
         {{ iteration_form|as_uni_form }}
         <br/>
-        <input type="submit" value="Save">
+        <input style="float:right;" type="submit" value="Save">
       </form>
+    </div>
+
+    <div id="deleteIteration" style="display: none">
+      <form method="POST" id="deleteForm" action="{% url delete_iteration project.slug iteration.id %}">
+	<strong>Are you sure you want to delete this iteration?</strong>
+	<input type="submit" style="display: inline; " value="Yes" />
+	<button><a style="text-decoration: none; color: #000" href="{% url iteration project.slug iteration.id %}">No</a></button>
+	<br/>
+      </form>
+      <p>Note: Iterations can only be deleted when they contain no stories.</p>
     </div>
     
     <div id="story_hover_window" >
@@ -123,6 +133,8 @@ $(document).ready(function () {
 					      $("ul").sortable("disable");
 					  }
 				  });
+            
+
     });
 
 {# This is the method that handles the user-drop event and records that fact on the server. #}
@@ -143,6 +155,7 @@ function updateStoryPosition(event, ui)
 		calculateBothPoints();
 		$("#loadingIcon").hide();          
 	    }
+
 	});
 }
         

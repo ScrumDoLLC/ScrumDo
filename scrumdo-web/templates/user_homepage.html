@@ -28,47 +28,48 @@
       <div class="title">
 	Projects 
 	<span class="subtitle">({{ num_projects }})</span>      
-	<a title="Projects are used to organize your work. Click between Your Projects and Other Projects to view projects you have created or projects you did not create, but have access to.">{% silk "help" %}</a>
+	<a title="Projects are used to organize your work.">{% silk "help" %}</a>
       </div>
       <div class="buttons">
 	<a title="Add New Project" href="{% url project_create %}">{% silk "add" %}</a>
       </div><!--buttons-->
     </div><!--box-top-->
     <div class="box-heading">
-      <p>Find a project...</p>
-      <ul>
-	<li><a id="your-projects-button" class="active">Your Projects</a></li>
-	{% if member_projects %}
-	<li><a id="other-projects-button">Other Projects</a></li>
-	{% endif %}
-      </ul>
+      You Created
     </div><!--box-heading-->
     <div class="box-content">
       <div id="your-projects">
 	{% for project in my_projects %}  
 	{% ifequal None project.organization %}
-      <div class="projectfeed">
-	<a title="Subscribe to project activity." target="_blank" href="/feeds/project/{{ project.pk }}">{% silk "feed" %}</a>
-      </div><!--projectfeed-->
+	<div class="projectfeed">
+	  <a title="Subscribe to project activity." target="_blank" href="/feeds/project/{{ project.pk }}">{% silk "feed" %}</a>
+	</div><!--projectfeed-->
 	<div class="project">
-  	  {% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a><br/><span class="subtitle">({{ project.get_num_iterations }} iteration{{ project.get_num_iterations|pluralize }}, {{ project.get_num_stories }} stor{{ project.get_num_stories|pluralize:"y,ies" }})</span>
+  	  {% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a> 
+	  <div class="subtitle">{{ project.get_num_iterations }} iteration{{ project.get_num_iterations|pluralize }}, {{ project.get_num_stories }} stor{{ project.get_num_stories|pluralize:"y,ies" }}</div>
 	</div><!--project-->
 	{% endifequal %}
 	{% endfor %}
       </div><!--your-projects-->
-      {% if member_projects %}
-      <div id="other-projects" class="hidden">
+    </div><!--box-content-->
+    {% if member_projects %}    
+    <div class="box-heading">
+      Others Created
+    </div><!--box-heading-->
+    <div class="box-content">
+      <div id="other-projects">
 	{% for project in member_projects %}  
       <div class="projectfeed">
 	<a title="Subscribe to project activity." target="_blank" href="/feeds/project/{{ project.pk }}">{% silk "feed" %}</a>
       </div><!--projectfeed-->
 	<div class="project">
-          {% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a><br/><span class="subtitle">({{ project.get_num_iterations }} iteration{{ project.get_num_iterations|pluralize }}, {{ project.get_num_stories }} stor{{ project.get_num_stories|pluralize:"y,ies" }})</span>
+          {% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a> 
+	  <div class="subtitle">{{ project.get_num_iterations }} iteration{{ project.get_num_iterations|pluralize }}, {{ project.get_num_stories }} stor{{ project.get_num_stories|pluralize:"y,ies" }}, created by <a href="{% url profile_detail project.creator.username %}" title="{{ project.creator.username }}">{{ project.creator.username }}</a>.</div>
 	</div><!--project-->
 	{% endfor %}
       </div><!--other-projects-->
-      {% endif %}
     </div><!--box-content-->
+      {% endif %}
     <div class="box-bottom"></div>
   </div><!--projects-box-->
 
@@ -99,7 +100,9 @@
 	<a title="Subscribe to project activity." target="_blank" href="/feeds/project/{{ project.pk }}">{% silk "feed" %}</a>
       </div><!--projectfeed-->
       <div class="project">
-	{% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a><br/><span class="subtitle">({{ project.get_num_iterations }} iteration{{ project.get_num_iterations|pluralize }}, {{ project.get_num_stories }} stor{{ project.get_num_stories|pluralize:"y,ies" }})</span>      </div>
+	{% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a> 
+	<div class="subtitle">{{ project.get_num_iterations }} iteration{{ project.get_num_iterations|pluralize }}, {{ project.get_num_stories }} stor{{ project.get_num_stories|pluralize:"y,ies" }}</div>
+      </div><!--project-->
       {% endcanread %}
       {% endfor %}
     </div><!--box-content-->
@@ -116,8 +119,6 @@
   <p>
     <div id="feedContent">
       {% include "activities/activity_list.html" %}
-    </div>
-    <div id="feedAnchor">
     </div>
 {% comment %}
   {% for act in my_activities %}
@@ -141,109 +142,3 @@
   <div id="bottom"></div>
 </div><!--newsfeed-->
 
-<script type="text/javascript">
-
-// this code from:
-// http://www.palewire.com/posts/2010/11/07/django-recipe-twitter-style-infinite-scroll/
-
-// Scroll globals
-var pageNum = 1;
-var hasNextPage = {{ activities_next_page|lower }}; // Indicates whether to expect another page after this one
-var baseUrl = '/activities/user/';
-
-
-// loadOnScroll handler
-var loadOnScroll = function() {
-   // If the current scroll position is past out cutoff point...
-    if ($(window).scrollTop() > $(document).height() - ($(window).height()*3)) {
-        // temporarily unhook the scroll event watcher so we don't call a bunch of times in a row
-        $(window).unbind();
-        // execute the load function below that will visit the JSON feed and stuff data into the HTML
-        loadItems();
-    }
-};
-
-var loadItems = function() {
-    // If the next page doesn't exist, just quit now 
-    if (hasNextPage === false) {
-        return false
-    }
-    // Update the page number
-    pageNum = pageNum + 1;
-    // Configure the url we're about to hit
-    var url = baseUrl + pageNum;
-    $.ajax({
-        url: url, 
-        success: function(html) {
-            // Update global next page variable
-            // Pop all our items out into the page
-            $("#feedContent").append(html);
-        },
-        error: function () {
-        hasNextPage = false;
-},
-        complete: function(html, textStatus){
-            // Turn the scroll monitor back on
-            $(window).bind('scroll', loadOnScroll);
-            activateLinks();
-        }
-    });
-};
-
-
-
-function like(activity_id) {
-      $.ajax({
-        url: "/activities/like/"+activity_id,
-        data:{},
-        success: function(html){
-          $("#"+activity_id+"like").html(html);  
-        }
-      });
-
-}
-    function loadNewsFeed()
-    {
-      $("#loadingIcon").show();
-      $("#feedContent").html("");
-      var n;
-      for(n = 1; n <= pageNum; n++) {
-      $.ajax({
-        url: "/activities/user/1",
-        data:{},
-        success: function(html){
-          $("#feedContent").append(html);
-            $(window).bind('scroll', loadOnScroll);
-          activateLinks();
-        }
-      });
-   }
-          $("#loadingIcon").hide();
-
-}
-    
-
- function activateLinks () {
-     $(".commentLink").click( function() 
-        {                    
-            $(this).parent().children(".commentForm").show();
-            $(this).hide();
-            return false;
-        } );
-
-        $(".commentForm form").ajaxForm(function () 
-           { loadNewsFeed(); activateLinks();});
-
-        $(".responses form").ajaxForm(function () {
-		      loadNewsFeed(); activateLinks();});
-
-}
-
-
-  $(document).ready(function() {
-   $(window).bind('scroll', loadOnScroll);
-          activateLinks();
-
-         })     
-
-</script>

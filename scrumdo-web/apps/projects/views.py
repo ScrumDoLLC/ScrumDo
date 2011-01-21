@@ -96,14 +96,16 @@ def home( request ):
           member_projects.append( membership.project )
       except:
         pass
-    
+      
+    num_projects = len(member_projects) + len(filter(lambda p: p.organization == None, my_projects))
+      
     return render_to_response("homepage.html", {
        "my_projects":my_projects,
        "my_organizations": organizations,
        "activities": activities,
        "activities_next_page":next_page,
        "member_projects":member_projects,
-       "num_projects":(len (my_projects + member_projects)),
+       "num_projects":num_projects,
        "now": datetime.datetime.now()
       }, context_instance=RequestContext(request))
   else:
