@@ -17,6 +17,9 @@
     text-indent: -20px;
 }
 
+.box-content .project .subtitle {
+    margin-left: 15px;
+}
 
 
 #projects-box p {

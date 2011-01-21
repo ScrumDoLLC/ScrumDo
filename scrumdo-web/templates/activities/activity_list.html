@@ -16,8 +16,14 @@
        {% ifequal act.action "worked on" %}
        {% silk "script_add" %}
        {% endifequal %}
+       {% ifequal act.action "created" %}
+       {% silk "script_add" %}
+       {% endifequal %}
        {% ifequal act.action "edited" %}
        {% silk "script_edit" %}
+       {% endifequal %}
+       {% ifequal act.action "deleted" %}
+       {% silk "script_delete" %}
        {% endifequal %}
        {% ifequal act.action "reordered" %}
        {% silk "script_go" %}

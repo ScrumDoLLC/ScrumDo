@@ -51,7 +51,7 @@
 	<a title="Subscribe to project activity." target="_blank" href="/feeds/project/{{ project.pk }}">{% silk "feed" %}</a>
       </div><!--projectfeed-->
 	<div class="project">
-  	  {% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a> <span class="subtitle">({{ project.get_num_iterations }} iteration{{ project.get_num_iterations|pluralize }}, {{ project.get_num_stories }} stor{{ project.get_num_stories|pluralize:"y,ies" }})</span>
+  	  {% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a> <div class="subtitle">({{ project.get_num_iterations }} iteration{{ project.get_num_iterations|pluralize }}, {{ project.get_num_stories }} stor{{ project.get_num_stories|pluralize:"y,ies" }})</div>
 	</div><!--project-->
 	{% endifequal %}
 	{% endfor %}
@@ -63,7 +63,7 @@
 	<a title="Subscribe to project activity." target="_blank" href="/feeds/project/{{ project.pk }}">{% silk "feed" %}</a>
       </div><!--projectfeed-->
 	<div class="project">
-          {% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a> <span class="subtitle">({{ project.get_num_iterations }} iteration{{ project.get_num_iterations|pluralize }}, {{ project.get_num_stories }} stor{{ project.get_num_stories|pluralize:"y,ies" }})</span>
+          {% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a> <div class="subtitle">({{ project.get_num_iterations }} iteration{{ project.get_num_iterations|pluralize }}, {{ project.get_num_stories }} stor{{ project.get_num_stories|pluralize:"y,ies" }})</div>
 	</div><!--project-->
 	{% endfor %}
       </div><!--other-projects-->
@@ -99,7 +99,7 @@
 	<a title="Subscribe to project activity." target="_blank" href="/feeds/project/{{ project.pk }}">{% silk "feed" %}</a>
       </div><!--projectfeed-->
       <div class="project">
-	{% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a> <span class="subtitle">({{ project.get_num_iterations }} iteration{{ project.get_num_iterations|pluralize }}, {{ project.get_num_stories }} stor{{ project.get_num_stories|pluralize:"y,ies" }})</span>      </div>
+	{% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a> <div class="subtitle">({{ project.get_num_iterations }} iteration{{ project.get_num_iterations|pluralize }}, {{ project.get_num_stories }} stor{{ project.get_num_stories|pluralize:"y,ies" }})</div>      </div>
       {% endcanread %}
       {% endfor %}
     </div><!--box-content-->
