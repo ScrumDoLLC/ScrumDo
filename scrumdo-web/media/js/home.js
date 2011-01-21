@@ -102,20 +102,6 @@ $(document).ready(function() {
 
 
 
-var currentButton = "#your-projects-button";
-var currentBox = "#your-projects";
-
-function swap(buttonName, boxName) {
-    if (currentButton != buttonName) {
-	$(currentButton).removeClass("active");
-	$(currentBox).hide();
-	$(buttonName).addClass("active");
-	$(boxName).show();
-	currentButton = buttonName;
-	currentBox = boxName;
-    }
-}
-
 $(document).ready(function () {
 	$(".box-heading li a").hover(function() {
 		$(this).css("cursor","pointer");
@@ -124,7 +110,5 @@ $(document).ready(function () {
 	$(".buttons a").tipTip({"defaultPosition":"bottom","delay":100});
 	$(".box-top .title a").tipTip({"defaultPosition":"bottom","delay":100});
 	
-	$("#your-projects-button").click(function () { swap("#your-projects-button", "#your-projects");});
-	$("#other-projects-button").click(function () { swap("#other-projects-button", "#other-projects");});
 	$("#announcements-box .buttons a").click(function () {$("#announcements-box").fadeOut()});
     });
