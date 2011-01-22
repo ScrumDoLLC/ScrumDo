@@ -71,7 +71,7 @@ def calculateAverage( iteration_points ):
   if len( iteration_points ) == 0:
     return 0
   total = sum( iteration_points )
-  print "%d / %d" % (total, len(iteration_points))
+  #print "%d / %d" % (total, len(iteration_points))
   return total / len( iteration_points )
   
   
@@ -91,7 +91,7 @@ def calculateProject( project ):
   
   calculateProjectVelocity( project , total_project_points)
       
-  print "%d / %s " % (project.velocity,  project.name );
+  #print "%d / %s " % (project.velocity,  project.name );
   
   for iteration in project.iterations.filter( start_date__lte=tomorrow, end_date__gte=yesterday):
     if( iteration != project.get_default_iteration() ):    
