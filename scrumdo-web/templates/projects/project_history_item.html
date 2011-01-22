@@ -1,18 +1,35 @@
+{% load humanize %}
 
-<h1>{{ project.name }}</h1>
 
   <div id="projectBurndown_{{project.id}}" style="width:100%;height:150px;"></div>  
 
+
+      <hr/>
+
   {% for iteration in project.iterations.all %}
     {% if not iteration.default_iteration %}
-    <h2>{{iteration.name}}</h2>
 
+    <div class="iteration_history">
+      
+           
+      
+      <div class="iteration_history_summary">
+        <h1>{{iteration.name}}</h1>
+        {% if iteration.start_date %}<i>{{iteration.start_date|date:"M d, Y"}} - {{iteration.end_date|date:"M d, Y"}}</i>{% endif %}
+        <div class="iteration_history_points">
+          <h1>{{iteration.completed_points|floatformat}}</h1>
+          Points Completed
+        </div>
+      </div>
     
-    {% if iteration.start_date %}<i>{{iteration.start_date|date:"M d, Y"}} - {{iteration.end_date|date:"M d, Y"}}</i>{% endif %}        
-    <div id="iterationBurndown_{{iteration.id}}" style="width:100%;height:120px;"></div>  
+      <div class="history_burndown" id="iterationBurndown_{{iteration.id}}" ></div>
+        
+
+    </div>
+
+    <hr/>
+    
     {% endif %}
-    
-    
   {% endfor %}
 
 <script type="text/javascript" charset="utf-8">  

@@ -19,6 +19,63 @@ def calculatePoints( stories ):
   #print (points_total, points_claimed)
   return (points_total, points_claimed)
 
+def calculateProjectVelocity( project, total_project_points ):
+  today = date.today()
+  # Loop through all completed iterations and gather info
+  iteration_points = []
+  for iteration in project.iterations.filter( end_date__lte=today):
+    if not iteration.default_iteration and iteration.include_in_velocity:
+      points = 0
+      for story in iteration.stories.all():
+        if story.status == Story.STATUS_DONE:
+          try:
+            points += story.points_value()
+          except ValueError:
+            pass # probably ? or infinity
+      iteration_points.append( points )
+  
+  velocity = 0
+  if project.velocity_type == project.VELOCITY_TYPE_AVERAGE:
+    velocity = calculateAverage( iteration_points )
+  elif project.velocity_type == project.VELOCITY_TYPE_AVERAGE_5:
+    velocity = calculateAverageLastN( iteration_points , 5)
+  elif project.velocity_type == project.VELOCITY_TYPE_AVERAGE_3:
+    velocity = calculateAverageLastN( iteration_points , 3)
+  else:
+    velocity = calculateMedian( iteration_points )
+  
+  project.velocity = velocity
+  if project.velocity > 0:
+    project.iterations_left = int( total_project_points / project.velocity)
+
+  project.save();
+  
+
+def calculateMedian( iteration_points ):
+  if len(iteration_points) == 0:
+    return 0
+  sorted_list = sorted( iteration_points )
+  return sorted_list[ int(len( iteration_points ) / 2 ) ]
+  
+  
+  
+def calculateAverageLastN( iteration_points , n):
+  if len(iteration_points) <= n:
+    return calculateAverage( iteration_points )
+  total = sum( iteration_points[-n:] )
+  return total / n
+  
+  
+  
+def calculateAverage( iteration_points ):
+  if len( iteration_points ) == 0:
+    return 0
+  total = sum( iteration_points )
+  print "%d / %d" % (total, len(iteration_points))
+  return total / len( iteration_points )
+  
+  
+  
 
 def calculateProject( project ):
   stories = project.stories.all();
@@ -31,31 +88,10 @@ def calculateProject( project ):
   yesterday = today - timedelta( days=1 )
   tomorrow = today +  timedelta( days=1 )  
   points_total = 0
-  iterations_total = 0  
   
-  
-  # calculate the project velocity...
-  for iteration in project.iterations.filter( end_date__lte=today):
-    if not iteration.default_iteration and iteration.include_in_velocity:
-      iterations_total += 1
-      for story in iteration.stories.all():
-        if story.status == Story.STATUS_DONE:
-          try:
-            points_total += story.points_value()
-          except ValueError:
-            pass # probably ? or infinity
-  
-  if iterations_total > 0:
-    project.velocity = int(points_total / iterations_total)
-    if project.velocity > 0:
-      project.iterations_left = int( total_project_points / project.velocity)
-  else:
-    project.velocity = 0
-    project.iterations_left = None;
-  
-  project.save();
+  calculateProjectVelocity( project , total_project_points)
       
-  #print "%d / %d / %d / %s " % (project.velocity, log.points_total, log.points_claimed, project.name );
+  print "%d / %s " % (project.velocity,  project.name );
   
   for iteration in project.iterations.filter( start_date__lte=tomorrow, end_date__gte=yesterday):
     if( iteration != project.get_default_iteration() ):    

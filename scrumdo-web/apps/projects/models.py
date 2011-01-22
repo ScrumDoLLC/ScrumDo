@@ -63,9 +63,13 @@ class Project(Group):
     POINT_CHOICES_FIBO = ( ('?', '?'), ('0', '0'), ('0.5','0.5'), ('1', '1'),  ('2', '2'),  ('3', '3'),  ('5', '5'), ('8', '8'), ('13', '13'), ('20', '20'), ('40', '40'), ('100', '100'), ('Inf', 'Infinite') )
     POINT_CHOICES_MINIMAL = ( ('?', '?'), ('0', '0'),  ('1', '1'),  ('2', '2'),  ('3', '3'),  ('4', '4'), ('5', '5') )
     POINT_CHOICES_MAX = ( ('?', '?'), ('0', '0'), ('0.5','0.5'), ('1', '1'),  ('2', '2'),  ('3', '3'),   ('4', '4'), ('5', '5'),  ('6', '6'),  ('7', '7'), ('8', '8'),  ('9', '9'),  ('10', '10'), ('15', '15'), ('25', '25'), ('50', '50'), ('100', '100'), ('Inf', 'Infinite') )
-    POINT_CHOICES_SIZES = ( ('?', '?'), ('1', 'XS'), ('5', 'S'), ('10','M'), ('15', 'L'),  ('25', 'XL')  )
-  
+    POINT_CHOICES_SIZES = ( ('?', '?'), ('1', 'XS'), ('5', 'S'), ('10','M'), ('15', 'L'),  ('25', 'XL')  )  
     POINT_RANGES = [POINT_CHOICES_FIBO, POINT_CHOICES_MINIMAL, POINT_CHOICES_MAX, POINT_CHOICES_SIZES]
+    
+    VELOCITY_TYPE_AVERAGE = 0
+    VELOCITY_TYPE_AVERAGE_5 = 1
+    VELOCITY_TYPE_MEDIAN = 2
+    VELOCITY_TYPE_AVERAGE_3 = 3
   
   
     member_users = models.ManyToManyField(User, through="ProjectMember", verbose_name=_('members'))
@@ -195,7 +199,13 @@ class Iteration( models.Model):
   def isCurrent(self):
     today = date.today()
     return self.start_date <= today and self.end_date >= today
-      
+  
+  def total_points(self) :    
+    return sum( map( lambda story: story.points_value(), self.stories.all() ) )
+
+  def completed_points(self) :    
+    return sum( map( lambda story: (story.points_value() if story.status==Story.STATUS_DONE else 0), self.stories.all() ) )
+
   
   def stats():
     points = 0
