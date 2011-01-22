@@ -32,6 +32,9 @@ def calculateProject( project ):
   tomorrow = today +  timedelta( days=1 )  
   points_total = 0
   iterations_total = 0  
+  
+  
+  # calculate the project velocity...
   for iteration in project.iterations.filter( end_date__lte=today):
     if not iteration.default_iteration and iteration.include_in_velocity:
       iterations_total += 1

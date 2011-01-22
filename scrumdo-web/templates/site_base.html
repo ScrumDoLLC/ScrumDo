@@ -14,7 +14,7 @@
 {% block login %}
     
     {% if user.is_authenticated %}
-        {% openid_icon openid user %}<b><a href="{% url home %}">{{ user }}</a></b> | <a href="{% url acct_email %}">{% trans "Account" %} {% trans "Settings" %}</a> | <a href="{% url forum_index %}">Help</a> | <a href="/openid/logout/?next={% url acct_logout %}">{% trans "Logout" %}</a>{% if user.is_staff %} | <a href="/admin/">{% trans "Admin" %}</a>{% endif %}
+        {% openid_icon openid user %}<b><a href="{% url home %}">{{ user }}</a></b> | <a href="{% url acct_email %}">{% trans "Account" %} {% trans "Settings" %}</a> | <a href="{{ SUPPORT_URL }}">Help</a> | <a href="/openid/logout/?next={% url acct_logout %}">{% trans "Logout" %}</a>{% if user.is_staff %} | <a href="/admin/">{% trans "Admin" %}</a>{% endif %}
     {% else %}
         <a href="{% url acct_login %}">Login<!--<img src="{{ STATIC_URL }}images/loginButton.png">--></a> {% ifsetting ACCOUNT_OPEN_SIGNUP %} | <a href="{% url acct_signup %}">Sign Up<!--<img src="{{ STATIC_URL }}images/signUpButton.png">--></a>{% endifsetting %}
     {% endif %}
@@ -34,8 +34,10 @@
 
 {% block footer %}
 <div class="footer">
-  <a href="{% url forum_index %}">Forums</a> <br/> ScrumDo LLC     {% trans "&copy; 2011 " %} <br/> The name ScrumDo is registered trademark of ScrumDo, LLC.<br/>
+  <a href="{{ SUPPORT_URL }}">Help / Support</a> <br/> ScrumDo LLC     {% trans "&copy; 2011 " %} <br/> The name ScrumDo is registered trademark of ScrumDo, LLC.<br/>
 </div>
 
-
 {% endblock %}
+
+
+
