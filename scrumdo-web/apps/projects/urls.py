@@ -53,6 +53,7 @@ urlpatterns += patterns('projects.iteration_views',
 
 urlpatterns += patterns('projects.story_views',
     url(r'^project/(?P<group_slug>[-\w]+)/stories/$', 'stories', name="stories"),
+    url(r'^project/(?P<group_slug>[-\w]+)/stories/createAsync$', 'ajax_add_story', name="ajax_add_story"),    
     url(r'^project/(?P<group_slug>[-\w]+)/stories/(?P<iteration_id>[-\w]+)$', 'stories_iteration', name="stories_iteration"),
     url(r'^project/(?P<group_slug>[-\w]+)/story/(?P<story_id>[-\w]+)/pretty', 'pretty_print_story'),
     url(r'^project/(?P<group_slug>[-\w]+)/story/(?P<story_id>[-\w]+)/set_todo', 'set_story_status', {'status':1}),

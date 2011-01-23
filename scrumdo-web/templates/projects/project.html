@@ -73,6 +73,20 @@
 
 {% block extra_body %}
     <script type="text/javascript">
+    
+        function updateStoryList() // occurs when the add story ajax form is successful.
+        {
+          try
+          {
+            var val = parseInt( $("#story_count").text() )
+            $("#story_count").text( (val + 1) + "" )
+          }
+          catch( err )
+          {  // ignore errors
+          }
+          
+        }
+    
         $(document).ready(function() {
                   
                 var options = {
@@ -102,6 +116,7 @@
                {% endif %}           
                
         });
+        function calculateBothPoints() {} // need this for the story popup - TODO: do this better.
     </script>
     
 {% endblock %}

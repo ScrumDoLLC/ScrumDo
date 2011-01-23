@@ -97,7 +97,7 @@
 	{% if project.velocity %}
 	<span title="Velocity is calculated on a nightly basis.  It represents how many points per iteration your team has completed.  It's averaged over the past several iterations.<br/><br/>  You can change how this stat is calculated from the gear icon next to the project name.">{% silk "car" %} Velocity: <b>{{project.velocity}}</b></span> <br/>
 	{% endif %}
-	<span title="The total number of stories in this project.">{% silk "book" %} Stories: <b>{{ project.stories.count }}</b></span> <br/>
+	<span title="The total number of stories in this project.">{% silk "book" %} Stories: <b id="story_count">{{ project.stories.count }}</b></span> <br/>
 	{% if project.iterations_left %}
 	<span title="If you continue working at the stated velocity, and you complete all of the stories in the project not yet marked as done, it will take you this many iterations to complete the project.">{% silk "calculator" %} Iterations Left: <b>{{ project.iterations_left }}</b></span><br/>
 	{% endif %}

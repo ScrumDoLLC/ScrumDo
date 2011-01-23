@@ -215,3 +215,7 @@
   color: #0000EA;
   cursor: pointer;
 }
+
+#createdStories {
+	margin: 0px;
+}

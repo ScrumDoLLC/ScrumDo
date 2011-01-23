@@ -1,5 +1,8 @@
 <div id="story_form">
-  <form method="POST" id="addStoryForm">
+  <ul id="createdStories">
+    
+  </ul>
+  <form method="POST" id="addStoryForm" >
     {{ add_story_form.non_field_errors }}
     {{add_story_form.summary}}    {{add_story_form.summary.errors}} <button id="add_button" type="submit">Add Story</button><!-- <INPUT TYPE="Submit">Add Story</input>--><!--SRC="/site_media/static/images/addStoryButton.png"-->
      <br/>
@@ -37,13 +40,36 @@
 <script type="text/javascript" charset="utf-8">
   
     story_form_expanded = false;
+
+
+    function updateStoryListInternal( newStory )
+    {
+      
+      $("#createdStories").append( newStory );
+            
+      // Clear the form...
+      $(':input','#addStoryForm').not(':button, :submit, :reset, :hidden, :radio').val('');       
+       
+       $("#id_summary").focus();
+      
+      if(typeof updateStoryList == 'function') 
+      {
+        // The page hosting this form can define an updateStoryList method to be notified when
+        // stories are added.
+         updateStoryList();
+      }
+      {% if GOOGLE_ANALYTICS %}     
+        _gaq.push(['_trackEvent',"AddStory", "{{current_view}}", "", 1]);      
+      {% endif %}
+      story_form_expanded = false;
+      
+    }
+
     $(document).ready(function() {
+            
       
-      
-      
-    {% if GOOGLE_ANALYTICS %}     
-      $("#addStoryForm").submit( function() { _gaq.push(['_trackEvent',"AddStory", "{{current_view}}", "", 1]); } );           
-    {% endif %}
+      $("#addStoryForm").ajaxForm({ url:"{% url ajax_add_story project.slug %}",
+                                    success:updateStoryListInternal });
       
       $('#id_summary').keyup( function(self) 
             { 

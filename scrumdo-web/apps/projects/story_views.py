@@ -108,7 +108,7 @@ def reorder_story( request, group_slug, story_id):
     story.save()
     
     stories = project.stories.all().filter(iteration=iteration).order_by("rank")
-    story.activity_signal.send(sender=Story, news=request.user.username + " reordered story \"" +story.summary + "\" in iteration\"" +iteration.name+"\" for project " +project.name, user=request.user, story=story, action="reordered" ,object=story.summary, context=project.slug)
+    story.activity_signal.send(sender=Story, news=request.user.username + " reordered story \"" +story.summary + "\" in iteration\"" +iteration.name+"\" for project " +project.name, user=request.user, story=story, action="reordered" ,object=story.summary[:90], context=project.slug)
 
     
     if request.POST.get("action","") == "reorder" :
@@ -218,6 +218,43 @@ def stories_iteration(request, group_slug, iteration_id):
   }, context_instance=RequestContext(request))
 
 
+def ajax_add_story( request, group_slug):
+  project = get_object_or_404(Project, slug=group_slug)  
+
+  if request.method == "POST" and request.POST.get("action") == "addStory":
+    form = AddStoryForm(project, request.POST) # A form bound to the POST data
+    if form.is_valid(): # All validation rules pass
+      story = _handleAddStoryInternal( form , project, request)
+      return render_to_response("stories/story_added.html", {"story": story}, context_instance=RequestContext(request))
+  
+  # A story wasn't created...
+  return HttpResponse("")    
+
+
+
+
+def _handleAddStoryInternal( form , project, request):
+  story = form.save( commit=False )
+  story.local_id = project.getNextId()
+  story.project = project
+  story.creator = request.user
+  iteration_id = request.POST.get("iteration",None)
+  if iteration_id != None:
+    iteration = get_object_or_404(Iteration, id=iteration_id)
+    if iteration.project != project:
+      # Shenanigans!
+      raise PermissionDenied()
+    story.iteration = iteration
+  else:
+    story.iteration = project.get_default_iteration()
+  story.rank = _calculate_rank( story.iteration, int(form.cleaned_data['general_rank']) )
+  logger.info("New Story %s" % story.summary)
+  story.save()
+  story.activity_signal.send(sender=Story, news=request.user.username + " created story\"" +story.summary + "\" in \"" +project.name+"\"", user=request.user,action="created" ,object=story.summary[:90], story=story, context=project.slug)
+  request.user.message_set.create(message="Story #%d created." % story.local_id )
+  return story
+
+
 def handleAddStory( request , project ):
   """ Handles the add story form.  
       Various views have an add story form on them.  This method handles that,
@@ -225,24 +262,7 @@ def handleAddStory( request , project ):
   if request.method == "POST" and request.POST.get("action") == "addStory":
     form = AddStoryForm(project, request.POST) # A form bound to the POST data
     if form.is_valid(): # All validation rules pass
-      story = form.save( commit=False )
-      story.local_id = project.getNextId()
-      story.project = project
-      story.creator = request.user
-      iteration_id = request.POST.get("iteration",None)
-      if iteration_id != None:
-        iteration = get_object_or_404(Iteration, id=iteration_id)
-        if iteration.project != project:
-          # Shenanigans!
-          raise PermissionDenied()
-        story.iteration = iteration
-      else:
-        story.iteration = project.get_default_iteration()
-      story.rank = _calculate_rank( story.iteration, int(form.cleaned_data['general_rank']) )
-      logger.info(story.summary)
-      story.save()
-      story.activity_signal.send(sender=Story, news=request.user.username + " created story\"" +story.summary + "\" in \"" +project.name+"\"", user=request.user,action="created" ,object=story.summary, story=story, context=project.slug)
-      request.user.message_set.create(message="Story #%d created." % story.local_id )
+      _handleAddStoryInternal( form , project, request)
     else:
       return form
   return AddStoryForm( project )
