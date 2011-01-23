@@ -312,7 +312,7 @@ def delete(request, group_slug=None, redirect_url=None):
     project = get_object_or_404(Project, slug=group_slug)
     admin_access_or_403(project, request.user )
     if not redirect_url:
-        redirect_url = reverse('project_list')
+        redirect_url = reverse('home')
     
 
     project.delete()
