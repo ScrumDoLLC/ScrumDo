@@ -98,7 +98,7 @@ def home( request ):
         pass
       
     num_projects = len(member_projects) + len(filter(lambda p: p.organization == None, my_projects))
-      
+    blank_state = True if (num_projects + len(organizations)) == 0 else False
     return render_to_response("homepage.html", {
        "my_projects":my_projects,
        "my_organizations": organizations,
@@ -106,7 +106,8 @@ def home( request ):
        "activities_next_page":next_page,
        "member_projects":member_projects,
        "num_projects":num_projects,
-       "now": datetime.datetime.now()
+       "now": datetime.datetime.now(),
+       "blank_state" : blank_state
       }, context_instance=RequestContext(request))
   else:
     return render_to_response("unauthenticated_homepage.html", context_instance=RequestContext(request))
