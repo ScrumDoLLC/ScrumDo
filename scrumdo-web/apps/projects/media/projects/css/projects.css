@@ -219,3 +219,7 @@
 #createdStories {
 	margin: 0px;
 }
+
+#createdStories li {
+	margin-bottom: 5px;
+}
