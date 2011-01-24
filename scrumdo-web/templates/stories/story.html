@@ -3,7 +3,7 @@
 {% load theme_tags %}
 {% load projects_tags %}
 
-<div id="story_area">
+<div id="story_area" style="width: 840px;">
 
 <form id="story_detail_form" method="POST" action="{% url story_form group_slug=project.slug story_id=story.id %}">
    {{ form.non_field_errors }}
@@ -27,7 +27,7 @@
       {% if project.use_assignee %}
         <tr><td>Assigned To:&nbsp;</td><td>{{form.assignee}}  {{form.assignee.errors}} </td></tr>
       {% endif %}
-      <tr><td>Backlog&nbsp;Position:&nbsp;</td><td>{{form.general_rank}}  {{form.general_rank.errors}} </td></tr>
+      <!-- <tr><td>Backlog&nbsp;Position:&nbsp;</td><td>{{form.general_rank}}  {{form.general_rank.errors}} </td></tr> -->
    
       {% if project.use_extra_1 %}
         <tr><td>{{project.extra_1_label}}:&nbsp;</td><td>{{form.extra_1}}  {{form.extra_1.errors}} </td></tr>

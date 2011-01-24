@@ -27,30 +27,66 @@
 {% endblock %}
 
 {% block body %}
-        {% if user.is_authenticated %}
-{% for iteration in project.get_current_iterations %}
-<h1>{% iteration_name iteration %}</h1>
-<em>{{iteration.start_date|date:"M d, Y"}} - {{iteration.end_date|date:"M d, Y"}}</em>
-<br/>
-{% if iteration.points_log.count %}
-<div id="iterationBurndown_{{iteration.id}}" style="width:540px;height:300px;"></div>  
-{% else %}
-<img src="/site_media/static/images/burndown.png">
-{% endif %}
-{% endfor %}
 
-<h1>Overall Project</h1>
-{% if project.points_log.count %}
-<div id="overallBurndown" style="width:540px;height:300px;"></div>
-{% else %}
-<img src="/site_media/static/images/burndown.png" />
-{% endif %}
+{% ifequal project.stories.count 0 %}
+  <div class="empty_state_box">
+    <h1>Getting Started</h1>
 
-{% endif %}
+    <h2>Project Options</h2>
+    <p>Use the {% silk "cog" %} settings link on the right to define custom fields, set your velocity calculation method, and choose your point range.</p>
+    
+    <h2>Add a story</h2>
+    <p>Use the form at the top of this page to add a new story to your backlog.</p>
+
+    <h2>Create a new iteration</h2>
+    <p>Use the {% silk "add" %} icon next to "Iterations" on the right to add an iteration.</p>
+
+    <h2>Invite a collaborator</h2></a>
+    <p>Type a username and click add member in the "Members" section to the right.</p>
+
+
+    <b>Tip:</b> Burn Up charts are updated nightly.
+  </div>
+{% endifequal %}
+
+    {% for iteration in project.get_current_iterations %}
+      <h1>{% iteration_name iteration %}</h1>
+      <em>{{iteration.start_date|date:"M d, Y"}} - {{iteration.end_date|date:"M d, Y"}}</em>
+      <br/>
+      {% if iteration.points_log.count %}
+        <div id="iterationBurndown_{{iteration.id}}" style="width:540px;height:300px;"></div>  
+      {% else %}
+        <img src="/site_media/static/images/burndown.png">
+      {% endif %}
+    {% endfor %}
+
+    <h1>Overall Project</h1>
+    {% if project.points_log.count %}
+      <div id="overallBurndown" style="width:540px;height:300px;"></div>
+    {% else %}
+      <img src="/site_media/static/images/burndown.png" />
+    {% endif %}
+
+
+    
 {% endblock %}
 
 {% block extra_body %}
     <script type="text/javascript">
+    
+        function updateStoryList() // occurs when the add story ajax form is successful.
+        {
+          try
+          {
+            var val = parseInt( $("#story_count").text() )
+            $("#story_count").text( (val + 1) + "" )
+          }
+          catch( err )
+          {  // ignore errors
+          }
+          
+        }
+    
         $(document).ready(function() {
                   
                 var options = {
@@ -80,6 +116,7 @@
                {% endif %}           
                
         });
+        function calculateBothPoints() {} // need this for the story popup - TODO: do this better.
     </script>
     
 {% endblock %}
