@@ -2,11 +2,21 @@
 
 {% block head_title %}ScrumDo Tutorial Part {{ page }}{% endblock %}
 
+{% block extra_head %}
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/tutorial.css" />
+{% endblock %}
+
 {% block panel %}
-{% if prev %}
-<a href="{% url tutorial_page prev %}">Previous</a>
-{% endif %}
-{% if next %}
-<a href="{% url tutorial_page next %}">Next</a>
-{% endif %}
+<div id="panel">
+  <div class="box">
+    <div class="box-title">
+      Tutorial {{ name|capfirst }}
+    </div><!--box-title-->
+    {% for page_url, page_name in pages %}
+    <div class="box-content{% ifequal page_url this.0 %} active{% endifequal %}" >
+      <a href="{% url tutorial_page name page_url %}">{{ page_name }}</a>
+    </div><!--box-content-->
+    {% endfor %}
+  </div><!--box-->
+</div><!--panel-->
 {% endblock %}
