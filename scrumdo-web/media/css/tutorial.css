@@ -2,3 +2,13 @@
 #panel .box .active {
     border-left: 4px solid #00c700;
 }
+
+
+#body img {
+    border: 5px solid #e1e1e1;
+}
+
+p {
+    line-height: 1.7em;
+    font-size: 1.2em;
+}

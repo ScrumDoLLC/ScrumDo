@@ -10,7 +10,7 @@
 <div id="panel">
   <div class="box">
     <div class="box-title">
-      Tutorial {{ name|capfirst }}
+      Tutorial for {{ name|capfirst }}
     </div><!--box-title-->
     {% for page_url, page_name in pages %}
     <div class="box-content{% ifequal page_url this.0 %} active{% endifequal %}" >

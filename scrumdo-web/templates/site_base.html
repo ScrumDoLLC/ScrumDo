@@ -2,6 +2,7 @@
 
 {% load i18n %}
 {% load openid_tags %}
+{% load theme_tags %}
 {% load ifsetting_tag %}
 
 {% block extra_head_base %}
@@ -14,7 +15,7 @@
 {% block login %}
     
     {% if user.is_authenticated %}
-        {% openid_icon openid user %}<b><a href="{% url home %}">{{ user }}</a></b> | <a href="{% url acct_email %}">{% trans "Account" %} {% trans "Settings" %}</a> | <strong><a href="{% url tutorial_page "scrumdo" "start" %}">Tutorial</a></strong> | <a href="{{ SUPPORT_URL }}">Help</a> | <a href="/openid/logout/?next={% url acct_logout %}">{% trans "Logout" %}</a>{% if user.is_staff %} | <a href="/admin/">{% trans "Admin" %}</a>{% endif %}
+        {% openid_icon openid user %}<b><a href="{% url home %}">{{ user }}</a></b> | <a href="{% url acct_email %}">{% trans "Account" %} {% trans "Settings" %}</a> | <strong><a href="{% url tutorial_page "scrumdo" "start" %}">Tutorial</a></strong> {% silk "new" %} | <a href="{{ SUPPORT_URL }}">Help</a> | <a href="/openid/logout/?next={% url acct_logout %}">{% trans "Logout" %}</a>{% if user.is_staff %} | <a href="/admin/">{% trans "Admin" %}</a>{% endif %}
     {% else %}
         <a href="{% url acct_login %}">Login<!--<img src="{{ STATIC_URL }}images/loginButton.png">--></a> {% ifsetting ACCOUNT_OPEN_SIGNUP %} | <a href="{% url acct_signup %}">Sign Up<!--<img src="{{ STATIC_URL }}images/signUpButton.png">--></a>{% endifsetting %}
     {% endif %}
