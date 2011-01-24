@@ -120,6 +120,11 @@
   var default_iteration = "{{ project.get_default_iteration.id }}";
   
   
+  function updateStoryList()
+  {
+    $(".filterForm").submit();
+  }
+  
   {# Method to calculate the number of points in an iteration #}
   function calculatePoints( iteration_list, iteration_points)
   {
@@ -128,7 +133,7 @@
     question = 0;
     $(iteration_list).children("li").each(function(index)
       {
-        points = $(this).children("div.pointsBox").text();
+        points = $(this).children("div.pointsBox").attr("point_value");
         if( points == "?")
         {
           question++;
@@ -229,7 +234,8 @@
         {
           $("#backlog_column").html(html);  
           $(document).trigger('close.facebox');   
-          $("#loadingIcon").hide();            
+          $("#loadingIcon").hide();       
+          calculatePoints("#backlog_column","#backlog_points");     
         }
       });
   

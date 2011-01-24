@@ -10,9 +10,9 @@
     background: #fafafa;
     margin: 10px;
     padding: 10px;
-    width: 50%;
-/*    width: 550px;*/
-    margin-left: 100px;
+
+    max-width: 950px;
+    margin-left: 50px;
     margin-right: 180px;
     border-radius: 3px;
     -webkit-border-radius: 3px;
