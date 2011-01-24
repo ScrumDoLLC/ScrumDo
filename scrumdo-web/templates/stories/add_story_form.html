@@ -1,49 +1,76 @@
-<div id="story_form">
-  <form method="POST" id="addStoryForm">
-    {{ add_story_form.non_field_errors }}
-    {{add_story_form.summary}}    {{add_story_form.summary.errors}} <button id="add_button" type="submit">Add Story</button><!-- <INPUT TYPE="Submit">Add Story</input>--><!--SRC="/site_media/static/images/addStoryButton.png"-->
-     <br/>
-    <div id="story_details">
-      <table>
-        <tr><td>Detail:</td><td>{{add_story_form.detail}}    {{add_story_form.detail.errors}} </td></tr>
-        <tr><td>Tags:</td><td>{{add_story_form.tags}} {{add_story_form.tags.errors}} </td></tr>
-        <tr><td>Points:&nbsp;</td><td>{{add_story_form.points}}  {{add_story_form.points.errors}} </td></tr>
-        {% if project.use_assignee %}
-          <tr><td>Assigned To:&nbsp;</td><td>{{add_story_form.assignee}}  {{add_story_form.assignee.errors}} </td></tr>
-        {% endif %}
-        <tr><td>Backlog&nbsp;Position:&nbsp;</td><td>{{add_story_form.general_rank}}  {{add_story_form.general_rank.errors}} </td></tr>
+<div style="margin-left:auto; margin-right:auto;">
+  <div id="story_form">
+    <ul id="createdStories">
+    
+    </ul>
+    <form method="POST" id="addStoryForm" >
+      {{ add_story_form.non_field_errors }}
+      {{add_story_form.summary}}    {{add_story_form.summary.errors}} <button id="add_button" type="submit">Add Story</button><!-- <INPUT TYPE="Submit">Add Story</input>--><!--SRC="/site_media/static/images/addStoryButton.png"-->
+       <br/>
+      <div id="story_details">
+        <table>
+          <tr><td>Detail:</td><td>{{add_story_form.detail}}    {{add_story_form.detail.errors}} </td></tr>
+          <tr><td>Tags:</td><td>{{add_story_form.tags}} {{add_story_form.tags.errors}} </td></tr>
+          <tr><td>Points:&nbsp;</td><td>{{add_story_form.points}}  {{add_story_form.points.errors}} </td></tr>
+          {% if project.use_assignee %}
+            <tr><td>Assigned To:&nbsp;</td><td>{{add_story_form.assignee}}  {{add_story_form.assignee.errors}} </td></tr>
+          {% endif %}
+          <tr><td>Backlog&nbsp;Position:&nbsp;</td><td>{{add_story_form.general_rank}}  {{add_story_form.general_rank.errors}} </td></tr>
      
-        {% if project.use_extra_1 %}
-          <tr><td>{{project.extra_1_label}}:&nbsp;</td><td>{{add_story_form.extra_1}}  {{add_story_form.extra_1.errors}} </td></tr>
-        {% endif %}
-        {% if project.use_extra_2 %}
-          <tr><td>{{project.extra_2_label}}:&nbsp;</td><td>{{add_story_form.extra_2}}  {{add_story_form.extra_2.errors}} </td></tr>
-        {% endif %}
-        {% if project.use_extra_3 %}
-          <tr><td>{{project.extra_3_label}}:&nbsp;</td><td>{{add_story_form.extra_3}}  {{add_story_form.extra_3.errors}} </td></tr>
-        {% endif %}
-       </table>
-    </div>
+          {% if project.use_extra_1 %}
+            <tr><td>{{project.extra_1_label}}:&nbsp;</td><td>{{add_story_form.extra_1}}  {{add_story_form.extra_1.errors}} </td></tr>
+          {% endif %}
+          {% if project.use_extra_2 %}
+            <tr><td>{{project.extra_2_label}}:&nbsp;</td><td>{{add_story_form.extra_2}}  {{add_story_form.extra_2.errors}} </td></tr>
+          {% endif %}
+          {% if project.use_extra_3 %}
+            <tr><td>{{project.extra_3_label}}:&nbsp;</td><td>{{add_story_form.extra_3}}  {{add_story_form.extra_3.errors}} </td></tr>
+          {% endif %}
+         </table>
+      </div>
     
-      <input type="hidden" name="action" value="addStory" />
+        <input type="hidden" name="action" value="addStory" />
     
-    {% if iteration %}
-      <input type="hidden" name="iteration" value="{{ iteration.id }}" />
-    {% endif %}
+      {% if iteration %}
+        <input type="hidden" name="iteration" value="{{ iteration.id }}" />
+      {% endif %}
     
-  </form>
+    </form>
+   </div>
  </div>
- 
 <script type="text/javascript" charset="utf-8">
   
     story_form_expanded = false;
+
+
+    function updateStoryListInternal( newStory )
+    {
+      
+      $("#createdStories").append( newStory );
+            
+      // Clear the form...
+      $(':input','#addStoryForm').not(':button, :submit, :reset, :hidden, :radio').val('');       
+       
+       $("#id_summary").focus();
+      
+      if(typeof updateStoryList == 'function') 
+      {
+        // The page hosting this form can define an updateStoryList method to be notified when
+        // stories are added.
+         updateStoryList();
+      }
+      {% if GOOGLE_ANALYTICS %}     
+        _gaq.push(['_trackEvent',"AddStory", "{{current_view}}", "", 1]);      
+      {% endif %}
+      story_form_expanded = false;
+      
+    }
+
     $(document).ready(function() {
+            
       
-      
-      
-    {% if GOOGLE_ANALYTICS %}     
-      $("#addStoryForm").submit( function() { _gaq.push(['_trackEvent',"AddStory", "{{current_view}}", "", 1]); } );           
-    {% endif %}
+      $("#addStoryForm").ajaxForm({ url:"{% url ajax_add_story project.slug %}",
+                                    success:updateStoryListInternal });
       
       $('#id_summary').keyup( function(self) 
             { 

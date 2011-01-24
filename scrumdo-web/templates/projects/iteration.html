@@ -123,7 +123,7 @@ $(document).ready(function () {
     
 	$(".filterForm").ajaxForm(
 				  {
-				      beforeSend: function() { $("#loadingIcon").show();},
+				    beforeSend: function() { $("#loadingIcon").show();},
 					  success: function(html)
 					  {
 					      $("#story_list").html(html);  
@@ -304,6 +304,10 @@ function setStatusDoing( storyID )
   {% endif %}
 }
 
+function updateStoryList()
+{
+  loadIteration( "{{ iteration.id }}","","")  ;
+}
 
 function setStatusDone( storyID )
 {

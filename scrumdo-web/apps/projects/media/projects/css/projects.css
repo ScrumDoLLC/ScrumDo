@@ -213,4 +213,13 @@
 
 .storyLink {
   color: #0000EA;
+  cursor: pointer;
+}
+
+#createdStories {
+	margin: 0px;
+}
+
+#createdStories li {
+	margin-bottom: 5px;
 }

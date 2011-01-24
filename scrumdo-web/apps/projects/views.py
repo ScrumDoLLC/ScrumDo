@@ -98,7 +98,7 @@ def home( request ):
         pass
       
     num_projects = len(member_projects) + len(filter(lambda p: p.organization == None, my_projects))
-      
+    blank_state = True if (num_projects + len(organizations)) == 0 else False
     return render_to_response("homepage.html", {
        "my_projects":my_projects,
        "my_organizations": organizations,
@@ -106,7 +106,8 @@ def home( request ):
        "activities_next_page":next_page,
        "member_projects":member_projects,
        "num_projects":num_projects,
-       "now": datetime.datetime.now()
+       "now": datetime.datetime.now(),
+       "blank_state" : blank_state
       }, context_instance=RequestContext(request))
   else:
     return render_to_response("unauthenticated_homepage.html", context_instance=RequestContext(request))
@@ -129,7 +130,8 @@ def project_admin( request, group_slug ):
         story.project = project
         story.creator = request.user
         story.save()     
-        request.user.message_set.create(message="Options Saved.")               
+        request.user.message_set.create(message="Project options Saved.")              
+        return HttpResponseRedirect(reverse("project_detail",kwargs={'group_slug':project.slug}))
     if request.POST.get("action") == "moveToOrganization":
       organization = get_object_or_404( Organization, id=request.POST.get("organization_id",""))
       project.organization = organization
@@ -310,7 +312,7 @@ def delete(request, group_slug=None, redirect_url=None):
     project = get_object_or_404(Project, slug=group_slug)
     admin_access_or_403(project, request.user )
     if not redirect_url:
-        redirect_url = reverse('project_list')
+        redirect_url = reverse('home')
     
 
     project.delete()

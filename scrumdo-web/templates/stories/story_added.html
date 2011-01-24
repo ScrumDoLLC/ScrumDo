@@ -1,0 +1,5 @@
+<li>
+  Created <a onclick="jQuery.facebox({ ajax: '/projects/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=block'}, 'edit_story'); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=block">
+  story #{{story.local_id}}</a>. {{ story.summary }}<br/>
+  <i>{{story.detail}}</i>
+</li>
