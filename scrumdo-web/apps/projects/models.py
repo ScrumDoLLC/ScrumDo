@@ -33,7 +33,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 
 from organizations.models import Organization
-from activities.models import SubjectActivity
+from activities.models import Activity, StoryActivity, IterationActivity
 import django.dispatch
 
 class SiteStats( models.Model ):
@@ -191,8 +191,8 @@ class Iteration( models.Model):
   points_log = generic.GenericRelation( PointsLog )
   locked = models.BooleanField( default=False )
   
-  activity_signal = django.dispatch.Signal(providing_args=["news", "user","action","context"])
-  activity_signal.connect(SubjectActivity.activity_handler)
+  activity_signal = django.dispatch.Signal(providing_args=["user","action","project"])
+  activity_signal.connect(IterationActivity.activity_handler)
 
   include_in_velocity = models.BooleanField(_('include_in_velocity'), default=True)
   
@@ -252,8 +252,8 @@ class Story( models.Model ):
 
   tags_to_delete = []
   tags_to_add = []
-  activity_signal = django.dispatch.Signal(providing_args=["news", "user","action", "story", "context"])
-  activity_signal.connect(SubjectActivity.activity_handler)
+  activity_signal = django.dispatch.Signal(providing_args=["user","action", "project", "story"])
+  activity_signal.connect(StoryActivity.activity_handler)
 
 
   def getPointsLabel(self):

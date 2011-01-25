@@ -3,7 +3,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.syndication.feeds import Feed
 from django.shortcuts import get_object_or_404
 from projects.models import Project, ProjectMember, Iteration, Story
-from activities.models import SubjectActivity
+from activities.models import Activity, StoryActivity, IterationActivity
 
 class ProjectStories(Feed):
     def get_object(self,primarykey):
@@ -27,8 +27,16 @@ class ProjectStories(Feed):
         return "Recent work in all iterations of project."
  
     def items(self, obj):
-        activities = SubjectActivity.objects.filter(story__project = obj)
-        return activities[:30]
+        activities = Activity.objects.filter(project = obj)
+        return [activity.mergeChildren() for activity in activities[:30]]
+
+def getIterationsStories(iterations):
+    activities = []
+    for iteration in iterations:
+        activities.extend(StoryActivity.objects.filter(story__iteration=iteration))
+        activities.extend(IterationActivity.objects.filter(iteration=iteration))
+    return sorted(activities[:30], lambda a: a.created)
+    
 
 
 class ProjectCurrentStories(ProjectStories):
@@ -37,11 +45,7 @@ class ProjectCurrentStories(ProjectStories):
  
     def items(self, obj):
         iterations = obj.get_current_iterations()
-        activities = []
-        for iteration in iterations:
-            activities.extend(SubjectActivity.objects.filter(story__iteration=iteration))
-        return activities[:30]
-
+        return getIterationsStories(iterations)
 
 class ProjectIterationStories(Feed):
     def get_object(self,project_and_iteration):
@@ -66,5 +70,4 @@ class ProjectIterationStories(Feed):
         return "Stories in Iteration %s of project." % obj[1].name
  
     def items(self, obj):
-        activities = SubjectActivity.objects.filter(story__iteration=obj[1])
-        return activities
+        return getIterationsStories([obj[1]])

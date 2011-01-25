@@ -4,41 +4,85 @@ import datetime
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import  User
 
-class SubjectActivity( models.Model ):	
-  news = models.TextField(_('news'))
+class ActivityAction(models.Model):
+  name = models.TextField(_("action"), max_length=100)
+
+class ActivityLike(models.Model):
+  user = models.ForeignKey(User)
+  activity = models.ForeignKey("Activity")
+
+  @staticmethod
+  def alreadyLiked(user, activity):
+    try:
+      ActivityLike.objects.get(user=user, activity=activity)
+      return True
+    except:
+      return False
+
+class Activity(models.Model):
   user = models.ForeignKey(User,related_name="ActivityByUser", null=True, blank=True)
-  action = models.CharField(_("action"), max_length=100)
-  object = models.CharField(_("object"), max_length=100)
-  story = models.ForeignKey("projects.Story",related_name="ActivityByStory", null=True, blank=True)
-  like = models.IntegerField(default=0)
-  context = models.CharField(_("context") , max_length=100)
+  action = models.ForeignKey(ActivityAction, related_name="ActivityAction")
+  project = models.ForeignKey("projects.Project", related_name="ActivityByProject")
   created = models.DateTimeField(_('created'), default=datetime.datetime.now)
+
+  def numLikes(self):
+    return ActivityLike.objects.filter(activity=self).count()
 
   # Returns all activities for user
   @staticmethod
   def getActivitiesForUser( userl ):
-    return SubjectActivity.objects.filter( user = userl ).distinct().order_by('created').reverse()
+    # is there a better way to do this? importing here is really bad, but can't import at top.
+    import projects, organizations
+    user_projects = [pm.project for pm in projects.models.ProjectMember.objects.filter(user=userl).select_related()]
+    team_projects = [team.projects.all() for team in organizations.team_models.Team.objects.filter(members=userl)]
+    for project_list in team_projects:
+      user_projects = user_projects + list(project_list)
 
-  @staticmethod
-  def activity_handler(sender, **kwargs):
-    changeActivity = SubjectActivity(news=kwargs['news'], user=kwargs['user'],action=kwargs['action'],object=kwargs['object'], story=kwargs['story'], context=kwargs['context'])
-    changeActivity.save()
+#    activities = []
+#    for project in user_projects:
+    activities = [act.mergeChildren() for act in list(Activity.objects.filter(project__in = user_projects).order_by('created').reverse())]
+    return activities
+
+  def mergeChildren(self):
+    """ this function replaces itself with it's child if the child exists. """
+    try:
+      self.storyactivity
+      return self.storyactivity
+    except:
+      pass
+    try:
+      self.iterationactivity
+      return self.iterationactivity
+    except:
+      pass
+    return self
 
   @staticmethod
   def purgeMonthOld():
     today = datetime.date.today()
     mdiff = datetime.timedelta(days=-30)
     date_30days_Agoago = today + mdiff
-    SubjectActivity.objects.filter(created__lte=date_30days_Agoago).delete()
+    Activity.objects.filter(created__lte=date_30days_Agoago).delete()
 
-    
-  # TODO: why is this not getting called
-  def is_news_none():
-    if news == None:
-       print 'News is none'
-       return True
-    else:
-       print 'News is set'
-       return False
 
+class StoryActivity(Activity):
+  story = models.ForeignKey("projects.Story", related_name="StoryActivities")
+  status = models.CharField("status", max_length=20, null=True)
+
+  @staticmethod
+  def activity_handler(sender, **kwargs):
+    status = None
+    if "status" in kwargs:
+      status = kwargs['status']
+    storyActivity = StoryActivity(user=kwargs['user'],action=ActivityAction.objects.get(name=kwargs['action']),story=sender, project=kwargs['project'], status=status)
+    storyActivity.save()
+
+
+class IterationActivity(Activity):
+  iteration = models.ForeignKey("projects.Iteration", related_name="IterationActivities")
+
+  @staticmethod
+  def activity_handler(sender, **kwargs):
+    iterationActivity = IterationActivity(user=kwargs['user'],action=ActivityAction.objects.get(name=kwargs['action']),iteration=sender, project=kwargs['project'])
+    iterationActivity.save()
 

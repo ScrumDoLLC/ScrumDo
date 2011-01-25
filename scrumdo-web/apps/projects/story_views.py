@@ -57,6 +57,8 @@ def set_story_status( request, group_slug, story_id, status):
   story.status = status;
   story.save();         
   signals.story_status_changed.send( sender=request, story=story, user=request.user )
+  statuses = [None, "TODO", "In Progress", "Reviewing", "Done"]
+  story.activity_signal.send(sender=story, user=request.user, story=story, action="changed status", status=statuses[status], project=story.project)
   if( request.POST.get("return_type","mini") == "mini"):
     return render_to_response("stories/single_mini_story.html", {
         "story": story,
@@ -76,6 +78,7 @@ def delete_story( request, group_slug, story_id ):
     story = get_object_or_404( Story, id=story_id )  
     write_access_or_403(story.project,request.user)
     signals.story_deleted.send( sender=request, story=story, user=request.user )
+    story.activity_signal.send(sender=story, user=request.user, story=story, action="deleted", project=story.project)
     story.sync_queue.clear()
     story.delete()            
     
@@ -108,7 +111,7 @@ def reorder_story( request, group_slug, story_id):
     story.save()
     
     stories = project.stories.all().filter(iteration=iteration).order_by("rank")
-    story.activity_signal.send(sender=Story, news=request.user.username + " reordered story \"" +story.summary + "\" in iteration\"" +iteration.name+"\" for project " +project.name, user=request.user, story=story, action="reordered" ,object=story.summary[:90], context=project.slug)
+    story.activity_signal.send(sender=story, user=request.user, story=story, action="reordered", project=project)
 
     
     if request.POST.get("action","") == "reorder" :
@@ -165,6 +168,7 @@ def story( request, group_slug, story_id ):
     if form.is_valid(): # All validation rules pass
       story = form.save(  )      
       signals.story_updated.send( sender=request, story=story, user=request.user )
+      story.activity_signal.send(sender=story, user=request.user, story=story, action="edited", project=project)
 
     if( request.POST['return_type'] == 'mini'):
       return render_to_response("stories/single_mini_story.html", {
@@ -250,7 +254,7 @@ def _handleAddStoryInternal( form , project, request):
   story.rank = _calculate_rank( story.iteration, int(form.cleaned_data['general_rank']) )
   logger.info("New Story %s" % story.summary)
   story.save()
-  story.activity_signal.send(sender=Story, news=request.user.username + " created story\"" +story.summary + "\" in \"" +project.name+"\"", user=request.user,action="created" ,object=story.summary[:90], story=story, context=project.slug)
+  story.activity_signal.send(sender=story, user=request.user, action="created", story=story, project=project)
   request.user.message_set.create(message="Story #%d created." % story.local_id )
   return story
 
