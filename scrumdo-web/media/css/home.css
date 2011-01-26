@@ -97,6 +97,14 @@
     
 }
 
+.newsfeed a {
+    color: #666;
+}
+
+.newsfeed a:hover {
+    color: #000;
+}
+
 .newsfeed .activity {
     padding: 10px;
     border-bottom: 1px solid #e1e1e1;
@@ -104,6 +112,10 @@
 
 .newsfeed .activity .icon, .newsfeed .activity .avatar, .newsfeed .activity .details {
     display: inline-block;
+}
+
+.newsfeed .context {
+    margin-left: 55px;
 }
 
 .newsfeed .activity .icon {
