@@ -21,7 +21,7 @@ class ProjectStories(Feed):
         return obj.get_absolute_url()
 
     def item_link(self, obj):
-        return obj.story.iteration.get_absolute_url()
+        return obj.get_absolute_url()
 
     def description(self, obj):
         return "Recent work in all iterations of project."
@@ -35,7 +35,8 @@ def getIterationsStories(iterations):
     for iteration in iterations:
         activities.extend(StoryActivity.objects.filter(story__iteration=iteration))
         activities.extend(IterationActivity.objects.filter(iteration=iteration))
-    return sorted(activities[:30], lambda a: a.created)
+    print activities
+    return sorted(activities[:30], lambda a,b: cmp(a.created,b.created))
     
 
 

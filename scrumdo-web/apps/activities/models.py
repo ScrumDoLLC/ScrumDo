@@ -69,6 +69,9 @@ class StoryActivity(Activity):
   story = models.ForeignKey("projects.Story", related_name="StoryActivities")
   status = models.CharField("status", max_length=20, null=True)
 
+  def get_absolute_url(self):
+    return (self.story.iteration.get_absolute_url() + "#story_" + str(self.story.id))
+
   @staticmethod
   def activity_handler(sender, **kwargs):
     status = None
@@ -80,6 +83,9 @@ class StoryActivity(Activity):
 
 class IterationActivity(Activity):
   iteration = models.ForeignKey("projects.Iteration", related_name="IterationActivities")
+
+  def get_absolute_url(self):
+    return self.iteration.get_absolute_url()
 
   @staticmethod
   def activity_handler(sender, **kwargs):
