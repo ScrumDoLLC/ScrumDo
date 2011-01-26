@@ -90,20 +90,7 @@
   width: 90%;
 }
 
-#story_hover_window {
-   display:none;  
-   position:fixed;
-   height:400px;
-   width:500px;
-   background:#FFFFFF;  
-   border:2px solid #cecece;  
-   z-index:1000;  
-   padding:12px;  
-   font-size:13px;
-   -moz-box-shadow: 0 0 1em #888;
-   -webkit-box-shadow: 0 0 1em #888;
-   overflow: hidden;
- }
+
 
 .projectOptionsForm tr td:first-child {
   width: 200px;

@@ -47,7 +47,7 @@
     {% if iterationinfo %}
     {% if daysLeft %}
     <div class="box">
-      <div class="box-title">Iteration {{ iteration.name }}</div>
+      <div class="box-title">{{ iteration.name }} <a href="{% url iteration_report project.slug iteration.id %}"></a></div>
       <div class="box-content">
 	{% silk "hourglass" %} {{ daysLeft }} Day{{ daysLeft|pluralize }} Left
       </div><!--box-content-->

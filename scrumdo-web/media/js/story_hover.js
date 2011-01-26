@@ -10,9 +10,6 @@
 var popupStatus = 0;  
 function displayStoryHover(event)
 {
-
-    if(popupStatus==0)
-	{ 
 	    var left_coord = event.pageX - ($("#story_hover_window").width() + 40);
 	    if( left_coord < 0 )
 		{
@@ -30,8 +27,9 @@ function displayStoryHover(event)
 			type: "GET",
 			success: function(data) { $("#story_hover_window").html(data); }
 		});
-	    popupStatus = 1;           
-	}      
+		
+		
+	return false;
 }
  
 function hideStoryHover()
