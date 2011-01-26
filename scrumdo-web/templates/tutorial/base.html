@@ -1,9 +1,16 @@
 {% extends "site_base.html" %}
 
+{% load theme_tags %}
+
 {% block head_title %}ScrumDo Tutorial Part {{ page }}{% endblock %}
 
 {% block extra_head %}
   <link rel="stylesheet" href="{{ STATIC_URL }}css/tutorial.css" />
+  <script type="text/javascript">
+    /* this provides the icon for navigation */
+    var arrow_up = '{% silk "arrow_up" %}';
+  </script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/tutorial.js"></script>
 {% endblock %}
 
 {% block panel %}
@@ -19,4 +26,14 @@
     {% endfor %}
   </div><!--box-->
 </div><!--panel-->
+{% endblock %}
+
+{% block body %}
+
+<div id="menu">
+<span>Page Contents: </span>
+</div><!--menu-->
+
+{% block tutorial_body %}
+{% endblock %}
 {% endblock %}
