@@ -24,7 +24,7 @@ def like_activity(request, activity_id):
   activity = get_object_or_404(Activity, id=activity_id)
   if not ActivityLike.alreadyLiked(request.user, activity):
     activitylike = ActivityLike(user=request.user,activity=activity)
-    activity.save()
+    activitylike.save()
 
   return render_to_response("activities/like_activity.html", {
     "likes": activity.numLikes(),

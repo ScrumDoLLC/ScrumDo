@@ -40,7 +40,7 @@
 {% comment %}  {% endifnotequal %} {% endcomment %}
 
   <div class="context">
-    in  {{ act|activity_context }}, <abbr>about {{ act.created|timesince }} ago  &nbsp;&nbsp; {#| &nbsp; <span id="{{act.id}}like"> {{ act.like }}</span> <a href="#" onclick="like({{act.id}})">Likes</a>#}
+    in  {{ act|activity_context }}, <abbr>about {{ act.created|timesince }} ago  &nbsp;&nbsp; | &nbsp; <span id="{{act.id}}like"> {{ act.numLikes }}</span> <a href="#" onclick="like({{act.id}})">Likes</a>
   </abbr>
   </div>
 {# {% comments act %} #}
