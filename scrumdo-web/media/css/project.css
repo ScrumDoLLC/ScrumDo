@@ -26,7 +26,7 @@
 }
 
 #story_form #id_detail {
-    width: 90%;
+    width: 94%;
 }
 
 #story_form #add_button {
@@ -69,6 +69,7 @@
 
 #story_details table tr td {
   padding-bottom: 3px;
+  padding-right: 2px;
 }
 
 #story_details ul {
