@@ -47,7 +47,9 @@ urlpatterns += patterns('projects.iteration_views',
     url(r'^project/(?P<group_slug>[-\w]+)/iteration/(?P<iteration_id>[-\w]+)/unlock$', 'unlock_iteration', name="unlock_iteration"),        
     url(r'^project/(?P<group_slug>[-\w]+)/iteration/(?P<iteration_id>[-\w]+)/import$', 'iteration_import', name="iteration_import"),            
     url(r'^project/(?P<group_slug>[-\w]+)/iteration/(?P<iteration_id>[-\w]+)/export$', 'iteration_export', name="iteration_export"),        
+    url(r'^project/(?P<group_slug>[-\w]+)/iteration/(?P<iteration_id>[-\w]+)/report$', 'iteration_report', name="iteration_report"),
     url(r'^project/(?P<group_slug>[-\w]+)/iteration/(?P<iteration_id>[-\w]+)$', 'iteration', name="iteration"),
+    
 )
 
 

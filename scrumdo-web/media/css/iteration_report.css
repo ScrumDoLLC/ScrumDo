@@ -1,0 +1,42 @@
+/* @override http://localhost:8000/site_media/static/css/iteration_report.css */
+
+body {
+	font: 14px "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	padding: 0px;
+	}
+
+h1 {
+	width: 100%;
+	
+	
+	padding: 4px 10px;
+	margin-bottom: 5px;
+	margin-left: 0px;
+	border-style: none;
+}
+h2 {
+	width: 100%;
+	
+	
+	padding: 4px 10px 4px 0;
+	margin-bottom: 5px;
+	border-top-style: solid;
+	border-top-width: 1px;
+	border-bottom-width: 1px;
+	border-bottom-style: none;
+}
+
+#stats {
+	width: 100%;
+	text-align: center;
+}
+
+#footer {
+		
+       position: fixed;
+       bottom: 0;
+       width: 100%;
+       text-align: center;
+	font-style: italic;
+	color: #a5a5a5;
+}

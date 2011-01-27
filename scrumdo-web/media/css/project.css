@@ -12,8 +12,6 @@
     padding: 10px;
 
     max-width: 950px;
-    margin-left: 50px;
-    margin-right: 200px;
     border-radius: 3px;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
@@ -26,7 +24,7 @@
 }
 
 #story_form #id_detail {
-    width: 90%;
+    width: 94%;
 }
 
 #story_form #add_button {
@@ -69,6 +67,7 @@
 
 #story_details table tr td {
   padding-bottom: 3px;
+  padding-right: 2px;
 }
 
 #story_details ul {
@@ -90,20 +89,7 @@
   width: 90%;
 }
 
-#story_hover_window {
-   display:none;  
-   position:fixed;
-   height:400px;
-   width:500px;
-   background:#FFFFFF;  
-   border:2px solid #cecece;  
-   z-index:1000;  
-   padding:12px;  
-   font-size:13px;
-   -moz-box-shadow: 0 0 1em #888;
-   -webkit-box-shadow: 0 0 1em #888;
-   overflow: hidden;
- }
+
 
 .projectOptionsForm tr td:first-child {
   width: 200px;

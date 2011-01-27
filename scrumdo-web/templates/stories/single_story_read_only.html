@@ -1,7 +1,10 @@
 {% load markup %}
-<h2>#{{story.local_id}} {{story.summary}}</h2>
-{{story.detail|default_if_none:""|markdown}}<br/>
-{{story.extra_1|default_if_none:""|markdown}}<br/>
-{{story.extra_2|default_if_none:""|markdown}}<br/>
-{{story.extra_3|default_if_none:""|markdown}}<br/>
+{% load projects_tags %}
+<div style="width:700px">
+<h2>#{{story.local_id}} {{story.summary|link_stories:story.project|urlify2|safe }}</h2>
+{{story.detail|default_if_none:""|markdown|link_stories:story.project|urlify2|safe }}<br/>
+{{story.extra_1|default_if_none:""|markdown|link_stories:story.project|urlify2|safe }}<br/>
+{{story.extra_2|default_if_none:""|markdown|link_stories:story.project|urlify2|safe }}<br/>
+{{story.extra_3|default_if_none:""|markdown|link_stories:story.project|urlify2|safe }}<br/>
 {{story.assignee|default_if_none:""}}<br/>
+</div>

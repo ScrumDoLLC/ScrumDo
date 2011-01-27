@@ -24,6 +24,12 @@ from django.template.defaultfilters import stringfilter
 import re
 register = template.Library()
 
+urlfinder = re.compile('(http:\/\/\S+)')
+
+
+@register.filter("urlify2")
+def urlify2(value):
+    return urlfinder.sub(r'<a target="_blank" href="\1">\1</a>', value)
 
 @stringfilter
 def link_stories(value, project):
