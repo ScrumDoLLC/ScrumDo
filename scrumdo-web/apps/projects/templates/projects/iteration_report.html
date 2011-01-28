@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" xml:lang="en" lang="en">
+  <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>ScrumDo : {{project.name}}</title>
+        <!--[if IE]><style>
+            div {
+                zoom: 1; /* trigger hasLayout */
+            }
+        </style><![endif]-->
+        <link rel="stylesheet" href="{{STATIC_URL}}css/iteration_report.css" />
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js" type="text/javascript"></script>
+        <script src="/site_media/static/js/jquery.flot.min.js" type="text/javascript"></script> 
+        <script src="/site_media/static/js/burndown.js" type="text/javascript"></script>        
+  </head>
+  <body>
+    <h1>{{project.name}} - {{ iteration.name }}</h1>
+    {% if iteration.start_date %}<i>{{iteration.start_date|date:"M d, Y"}} - {{iteration.end_date|date:"M d, Y"}}</i><br/><br/>{% endif %}
+    <div id="stats">Total Points: {{ iteration.total_points|floatformat }} - 
+    Completed Points: {{ iteration.completed_points|floatformat }} - 
+    Number of Stories: {{ iteration.stories.count }} </div>
+
+    
+    {% if iteration.points_log.count %}
+      <div id="iterationBurndown" style="width:600px;height:200px;"></div>  
+    {% endif %}
+
+    
+    <h2>Completed:</h2>
+    {% for story in iteration.stories.all %}
+      {% ifequal story.status 4 %}
+       #{{story.local_id}} - {{story.summary}} ({{story.getPointsLabel}})<br/>
+      {% endifequal %}
+    {% endfor %}
+    <h2>Reviewing:</h2>
+    {% for story in iteration.stories.all %}
+      {% ifequal story.status 3 %}
+       #{{story.local_id}} - {{story.summary}} ({{story.getPointsLabel}})<br/>
+      {% endifequal %}
+    {% endfor %}
+    <h2>In Progress:</h2>
+    {% for story in iteration.stories.all %}
+      {% ifequal story.status 2 %}
+       #{{story.local_id}} - {{story.summary}} ({{story.getPointsLabel}})<br/>
+      {% endifequal %}
+    {% endfor %}    
+    <h2>Todo:</h2>
+    {% for story in iteration.stories.all %}
+      {% ifequal story.status 1 %}
+       #{{story.local_id}} - {{story.summary}} ({{story.getPointsLabel}})<br/>
+      {% endifequal %}
+    {% endfor %}    
+    
+    <br/><br/>
+    <div id="footer">Iteration report by ScrumDo.com</div>
+    
+    <script type="text/javascript" charset="utf-8">
+      generateBurnDown( "#iterationBurndown", "{{project.slug}}" , "{{iteration.id}}" , 0);         
+    </script>
+  </body>
+</html>

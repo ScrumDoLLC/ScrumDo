@@ -286,7 +286,7 @@ class Story( models.Model ):
 
   @tags.setter
   def tags(self, value):
-    print "TAGS SET " + value
+    #print "TAGS SET " + value
     input_tags = re.split('[, ]+', value)
     self.tags_to_delete = []
     self.tags_to_add = []
