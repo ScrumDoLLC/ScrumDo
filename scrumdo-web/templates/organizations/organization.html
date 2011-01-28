@@ -27,7 +27,7 @@
   </div><!--box-->
   <div class="projects-box box">
     <div class="box-top">
-      <div class="title">Projects</div>
+      <div class="title">Projects <a href="{% url project_create%}?org={{organization.id}}">{% silk "add" %}</a></div>
     </div><!--box-top-->
     <div class="box-content">
       {% for project in organization.projects.all %}
@@ -43,7 +43,7 @@
 
 <div class="teams-box box">
   <div class="box-top">
-    <div class="title">Teams</div>
+    <div class="title">Teams <a href="{% url team_create organization.slug %}">{% silk "add" %}</a></div>
   </div><!--box-top-->
   {% for team,adduser_form in organization_teams %}
   <div class="box-content">

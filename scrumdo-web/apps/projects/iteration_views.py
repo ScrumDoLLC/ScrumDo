@@ -161,6 +161,13 @@ def iteration_import(request, group_slug, iteration_id):
   return render_to_response('projects/import_options.html', { 'project':project, 'iteration':iteration, 'form': form,  }, context_instance=RequestContext(request))
 
 @login_required
+def iteration_report(request, group_slug, iteration_id):
+  project = get_object_or_404(Project, slug=group_slug)  
+  iteration = get_object_or_404(Iteration, id=iteration_id)  
+  read_access_or_403(project,request.user)
+  return render_to_response('projects/iteration_report.html', { 'project':project, 'iteration':iteration  }, context_instance=RequestContext(request))
+
+@login_required
 def iteration_export(request, group_slug, iteration_id):
   project = get_object_or_404(Project, slug=group_slug)  
   iteration = get_object_or_404(Iteration, id=iteration_id)  

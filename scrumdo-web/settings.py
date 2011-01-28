@@ -190,7 +190,6 @@ INSTALLED_APPS = (
     'activities',
     'django_extensions',
     'django_evolution',
-    'forum',
     'extras',
     'activities',
 #    'debug_toolbar',
@@ -237,6 +236,8 @@ GOOGLE_ANALYTICS_ACCOUNT = ""
 CACHE_BACKEND = 'locmem://'
 
 INTERNAL_IPS = ('127.0.0.1',)
+
+SUPPORT_URL = "http://support.scrumdo.com/"
 
 SCRUMDO_EXTRAS = ("extras.plugins.github_issues.GitHubIssuesExtra",
                   "extras.plugins.example.ExampleExtra",)

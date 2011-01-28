@@ -15,13 +15,12 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-
 from django.conf.urls.defaults import *
 from django.conf import settings
 import views
 import feeds
 
-from django.views.generic.simple import direct_to_template
+from django.views.generic.simple import direct_to_template, redirect_to
 
 from django.contrib import admin
 admin.autodiscover()
@@ -52,7 +51,7 @@ urlpatterns = patterns('',
     url(r'^admin/invite_user/$', 'signup_codes.views.admin_invite_user', name="admin_invite_user"),
     url(r'^account/signup/$', signup_view, name="acct_signup"),
     (r'^extras/', include('extras.urls')),    
-    (r'^forum/', include('forum.urls')),
+    (r'^forum/', 'django.views.generic.simple.redirect_to', {'url':'http://support.scrumdo.com/'}),
     (r'^feeds/(?P<url>.*)/$', 'django.contrib.syndication.views.feed', {'feed_dict': feeds}),
     (r'^about/', include('about.urls')),
     (r'^account/', include('account.urls')),

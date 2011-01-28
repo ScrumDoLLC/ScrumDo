@@ -47,12 +47,15 @@ urlpatterns += patterns('projects.iteration_views',
     url(r'^project/(?P<group_slug>[-\w]+)/iteration/(?P<iteration_id>[-\w]+)/unlock$', 'unlock_iteration', name="unlock_iteration"),        
     url(r'^project/(?P<group_slug>[-\w]+)/iteration/(?P<iteration_id>[-\w]+)/import$', 'iteration_import', name="iteration_import"),            
     url(r'^project/(?P<group_slug>[-\w]+)/iteration/(?P<iteration_id>[-\w]+)/export$', 'iteration_export', name="iteration_export"),        
+    url(r'^project/(?P<group_slug>[-\w]+)/iteration/(?P<iteration_id>[-\w]+)/report$', 'iteration_report', name="iteration_report"),
     url(r'^project/(?P<group_slug>[-\w]+)/iteration/(?P<iteration_id>[-\w]+)$', 'iteration', name="iteration"),
+    
 )
 
 
 urlpatterns += patterns('projects.story_views',
     url(r'^project/(?P<group_slug>[-\w]+)/stories/$', 'stories', name="stories"),
+    url(r'^project/(?P<group_slug>[-\w]+)/stories/createAsync$', 'ajax_add_story', name="ajax_add_story"),    
     url(r'^project/(?P<group_slug>[-\w]+)/stories/(?P<iteration_id>[-\w]+)$', 'stories_iteration', name="stories_iteration"),
     url(r'^project/(?P<group_slug>[-\w]+)/story/(?P<story_id>[-\w]+)/pretty', 'pretty_print_story'),
     url(r'^project/(?P<group_slug>[-\w]+)/story/(?P<story_id>[-\w]+)/set_todo', 'set_story_status', {'status':1}),
