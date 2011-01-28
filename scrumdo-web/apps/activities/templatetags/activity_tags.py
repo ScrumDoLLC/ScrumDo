@@ -20,7 +20,6 @@ def activity_action(activity):
 def activity_object(activity):
     if isinstance(activity,StoryActivity):
         return mark_safe("<a href='%s#story_%s'>" % (reverse("iteration", args=[activity.project.slug, activity.story.iteration.id]), activity.story.id) + activity.story.summary + "</a>")
-        return ("Story " + activity.story.summary)
     elif isinstance(activity,IterationActivity):
         if activity.numstories:
             # this is a reorder activity

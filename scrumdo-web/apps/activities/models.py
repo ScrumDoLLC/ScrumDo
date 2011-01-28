@@ -43,7 +43,7 @@ class Activity(models.Model):
     activities = [act.mergeChildren() for act in list(Activity.objects.filter(project__in = user_projects).order_by('created').reverse())]
 
     def combine(u, a, it, stories):
-      if it and a.name == "reordered" and len(stories) > 1:
+      if a.name == "reordered" and len(stories) > 1:
         return [IterationActivity(project = it.project, user=u, iteration=it, created=stories[0].created, action=a, numstories=len(stories))]
       #to add other combinations, simply add elif clauses here
       else:
@@ -52,7 +52,7 @@ class Activity(models.Model):
     # this groups the stories by user, action, and iteration if it is a story
     groups = groupby(activities, lambda act: (act.user, act.action, not isinstance(act, StoryActivity) or act.story.iteration))
     # this goes through the groupings and combines them if necessary
-    newactivities = reduce(lambda x,y: x+y, [combine(u,a,it,list(stories)) for (u,a,it),stories in groups])
+    newactivities = reduce(lambda x,y: x+y, [combine(u,a,it or stories[0].iteration,list(stories)) for (u,a,it),stories in groups])
 
     return newactivities
 
