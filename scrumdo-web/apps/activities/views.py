@@ -10,7 +10,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 def user_activities(request, page):
   # get all the user's projects
   activities = Activity.getActivitiesForUser(request.user)
-  
+
   paginator = Paginator(activities, 10)
   page_obj = paginator.page(page)
 
