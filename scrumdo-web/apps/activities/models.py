@@ -38,6 +38,10 @@ class Activity(models.Model):
     team_projects = [team.projects.all() for team in organizations.team_models.Team.objects.filter(members=userl)]
     for project_list in team_projects:
       user_projects = user_projects + list(project_list)
+
+    # the preceding code has been factored out in api branch, 
+    # once that (and this) are merged in, should be replaced with:
+    # user_projects = projects.ProjectMember.getProjectsForUser(userl)
       
     # now get all the stories for the projects a user is interested in
     activities = [act.mergeChildren() for act in list(Activity.objects.filter(project__in = user_projects).order_by('created').reverse())]
