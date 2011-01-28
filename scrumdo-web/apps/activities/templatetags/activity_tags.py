@@ -18,19 +18,23 @@ def activity_action(activity):
 
 @register.filter
 def activity_object(activity):
+    def iteration_name(iteration):
+        if iteration.name == "Backlog":
+            return "Backlog"
+        else:
+            return "Iteration %s" % iteration.name
+    def iteration_link(iteration):
+        return reverse("iteration", args=[iteration.project.slug, iteration.id])
     if isinstance(activity,StoryActivity):
-        return mark_safe("<a href='%s#story_%s'>" % (reverse("iteration", args=[activity.project.slug, activity.story.iteration.id]), activity.story.id) + activity.story.summary + "</a>")
+        s = activity.story
+        return mark_safe(("<a href='%s#story_%s'>" % (iteration_link(s.iteration), s.id)) + s.summary + ("</a> in <a href='%s'>" % iteration_link(s.iteration)) + iteration_name(s.iteration) + "</a>")
     elif isinstance(activity,IterationActivity):
         if activity.numstories:
             # this is a reorder activity
             start = "in "
         else:
             start = ""
-        if activity.iteration.name == "Backlog":
-            name = "Backlog"
-        else:
-            name = "Iteration %s" % activity.iteration.name
-        return mark_safe(start + "<a href='%s'>" % (reverse("iteration", args=[activity.project.slug, activity.iteration.id])) + name + "</a>")
+        return mark_safe(start + "<a href='%s'>" % (reverse("iteration", args=[activity.project.slug, activity.iteration.id])) + iteration_name(activity.iteration) + "</a>")
     else:
         return mark_safe("<a href='%s'>" % (reverse("project_detail", args=[activity.project.slug])) + activity.project.name + "</a>")
 
