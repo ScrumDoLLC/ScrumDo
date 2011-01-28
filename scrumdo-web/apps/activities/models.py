@@ -42,51 +42,16 @@ class Activity(models.Model):
     # now get all the stories for the projects a user is interested in
     activities = [act.mergeChildren() for act in list(Activity.objects.filter(project__in = user_projects).order_by('created').reverse())]
 
-    def combinereorders(reorders):
-      # multiple reorders, turn into an iteration activity.
-      # this is a change that is not saved to db. it could be, (easily)
-      # but it seems to make sense to keep the level of detail available 
-      # in case we want to utilize knowledge about all the reorders later
-      iteration = reorders[0].story.iteration
-      created = reorders[0].created # we take the most recent date
-      project = reorders[0].project
-      user = reorders[0].user
-      action = ActivityAction.objects.get(name="reordered")
-      return IterationActivity(project = project, user=user, iteration=iteration, created=created, action=action, numstories=len(reorders))
-
-    # compact multiple reorder activities into one iteration activity
-    reorders = []
-    newactivities = []
-    for a in activities:
-      if isinstance(a, StoryActivity) and a.action == ActivityAction.objects.get(name="reordered"):
-        if len(reorders) == 0 or (reorders[0].user == a.user and reorders[0].story.iteration == a.story.iteration):
-          # this reorder fits our current iteration and user, so append it to the stack
-          reorders.append(a)
-        else:
-          # this reorder does not match, so combine and start again
-          if len(reorders) == 1:
-            newactivities.extend(reorders)
-          else:
-            newactivities.append(combinereorders(reorders))
-          reorders = [a]
+    def combinereorders(u, a, it, stories):
+      if it and len(stories) > 1:
+        return [IterationActivity(project = it.project, user=u, iteration=it, created=stories[0].created, action=a, numstories=len(stories))]
       else:
-        if len(reorders) == 0:
-          # no reorders to think about
-          pass
-        elif len(reorders) == 1:
-          # if only one reorder happened in a row, then it is its own story
-          newactivities.extend(reorders)
-          reorders = []
-        else:
-          newactivities.append(combinereorders(reorders))
-          reorders = []
-        # regardless of whether there were reorders, stick this non-reorder on the list
-        newactivities.append(a)
+        return stories
 
-    if len(reorders) == 1:
-      newactivities.extend(reorders)
-    elif len(reorders) > 1:
-      newactivities.append(combinereorders(reorders))
+    # this groups the stories by user, action, and iteration if it is a story
+    groups = groupby(activities, lambda act: (act.user, act.action, not isinstance(act, StoryActivity) or act.story.iteration))
+    # this goes through the groupings and combines them if they are reorders
+    newactivities = reduce(lambda x,y: x+y, [combinereorders(u,a,it,list(stories)) for (u,a,it),stories in groups])
 
     return newactivities
 
