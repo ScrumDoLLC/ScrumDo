@@ -20,11 +20,10 @@ from django.contrib.auth.models import  User
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
 
-import datetime
-
 from django.core.exceptions import ObjectDoesNotExist
 
 from projects.models import Project
+
 from organizations.models import Organization
 
 class Team(models.Model):   
