@@ -17,21 +17,27 @@
 {% block panel %}
   <div id="panel">
     {% if user.is_authenticated %}
+    
     <div class="box">
       <div class="box-title">
-	<a href="{% url project_detail project.slug %} ">{{ project.name }}</a>
-	<div class="feed"><a title="Feed of recent activity." target="_blank" href="/feeds/project/{{ project.pk }}">{% silk "feed" %}</a></div>
+      	<a title="{{ project.description }}" href="{% url project_detail project.slug %} ">{{ project.name }}</a>
+      	<div class="feed"><a title="Feed of recent activity." target="_blank" href="/feeds/project/{{ project.pk }}">{% silk "feed" %}</a></div>
       </div><!--box-heading--> 
-      <div class="box-content">
-	{{ project.description }}
-	<br/>
-	{% show_tags_for project %}
-	<br/>
+       <div class="box-content">
+      	{% if project.velocity %}
+      	<span title="Velocity is calculated on a nightly basis.  It represents how many points per iteration your team has completed.  It's averaged over the past several iterations.<br/><br/>  You can change how this stat is calculated from the gear icon next to the project name.">{% silk "car" %} Velocity: <b>{{project.velocity}}</b></span> <br/>
+      	{% endif %}
+      	<span title="The total number of stories in this project.">{% silk "book" %} Stories: <b id="story_count">{{ project.stories.count }}</b></span> <br/>
+      	{% if project.iterations_left %}
+      	<span title="If you continue working at the stated velocity, and you complete all of the stories in the project not yet marked as done, it will take you this many iterations to complete the project.">{% silk "calculator" %} Iterations Left: <b>{{ project.iterations_left }}</b></span><br/>
+      	{% endif %}
       </div><!--box-content-->
     </div><!--box-->
 
+
+    
     <div class="box">
-      <div class="box-title">Tools</div>
+      <div class="box-title">Project Tools</div>
       <div class="box-content">
 	<a title="Easily rank your stories and move them into an iteration." href="{% url stories project.slug %}">{% silk "date" %} Iteration Planning</a><br/>
 	<a title="See how much you've completed in past iterations." href="{% url project_history project.slug %}">{% silk "report" %} History</a><br/>
@@ -44,19 +50,25 @@
       </div><!--box-content-->
     </div><!--box-->
 
-    {% if iterationinfo %}
-    {% if daysLeft %}
-    <div class="box">
-      <div class="box-title">{{ iteration.name }} <a href="{% url iteration_report project.slug iteration.id %}"></a></div>
-      <div class="box-content">
-	{% silk "hourglass" %} {{ daysLeft }} Day{{ daysLeft|pluralize }} Left
-      </div><!--box-content-->
-    </div><!--box-->
-    {% endif %}
+    {% if iterationinfo %}                                  
+      <div class="box">
+        <div class="box-title">
+        	<a href="{% url project_detail project.slug %} ">{{ iteration.name }}</a>        	
+        </div><!--box-heading--> 
+         <div class="box-content">
+           {% if daysLeft %}
+           	{% silk "hourglass" %} {{ daysLeft }} Day{{ daysLeft|pluralize }} Left<br/>
+           {% endif %}
+
+        	<span title="The total number of stories in this iteration.">{% silk "note" %} Stories: <b>{{iteration.stories.count}}</b></span> <br/>
+        	<span title="The total number of points across all the stories in this iteration.">{% silk "chart_bar" %} Points: <b>{{iteration.total_points|floatformat}}</b></span> <br/>
+        	<span title="The completed points of this iteration.">{% silk "accept" %} Points Completed: <b>{{iteration.completed_points|floatformat}}</b></span> <br/>
+        </div><!--box-content-->
+      </div><!--box-->
 
     {% canwrite project %}
     <div class="box">
-      <div class="box-title">Iteration Actions</div>
+      <div class="box-title">Iteration Tools</div>
       <div class="box-content">
 	{% if iteration.locked %}
 	{% canwrite project %}
@@ -91,18 +103,7 @@
     </div><!--box-->
     {% endif %}
     
-    <div class="box">
-      <div class="box-title">Stats <span title="Stats about your project including your velocity, total stories, and iterations left, if available.">{% silk "help" %}</span></div>
-      <div class="box-content">
-	{% if project.velocity %}
-	<span title="Velocity is calculated on a nightly basis.  It represents how many points per iteration your team has completed.  It's averaged over the past several iterations.<br/><br/>  You can change how this stat is calculated from the gear icon next to the project name.">{% silk "car" %} Velocity: <b>{{project.velocity}}</b></span> <br/>
-	{% endif %}
-	<span title="The total number of stories in this project.">{% silk "book" %} Stories: <b id="story_count">{{ project.stories.count }}</b></span> <br/>
-	{% if project.iterations_left %}
-	<span title="If you continue working at the stated velocity, and you complete all of the stories in the project not yet marked as done, it will take you this many iterations to complete the project.">{% silk "calculator" %} Iterations Left: <b>{{ project.iterations_left }}</b></span><br/>
-	{% endif %}
-      </div><!--box-content-->
-    </div><!--box-->
+
     
     {% if project.organization %}    
     <div class="project_stats box">        
