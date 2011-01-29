@@ -40,6 +40,10 @@
     {% endfor %}
     </div>
   {% endif %}
+
+{% if story.assignee and story.project.use_assignee %}
+  <br/>Assigned: <b>{{story.assignee}}</b> {% avatar story.assignee 20 %}
+{% endif %}
   
 {% comments story %}
 
@@ -50,8 +54,5 @@
 {% endfor %}
 
 
-{% if story.assignee and story.project.use_assignee %}
-  Assigned: <b>{{story.assignee}}</b> {% avatar story.assignee 22 %}
-{% endif %}
     
 </li>  
