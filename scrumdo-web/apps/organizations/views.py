@@ -32,6 +32,8 @@ from organizations.forms import *;
 from organizations.models import *;
 from organizations.team_models import *;
 
+import organizations.signals as signals
+
 @login_required
 def organization(request, organization_slug):
   organization = get_object_or_404(Organization, slug=organization_slug)
@@ -113,11 +115,14 @@ def organization_create(request):
       default_team.members.add(request.user)
       default_team.save()
       
+      signals.organization_created.send( sender=request, organization=organization )
+      
       request.user.message_set.create(message="Organization Created.")               
       return HttpResponseRedirect(reverse("organization_detail",  kwargs={'organization_slug':organization.slug}))
-  else:
-    organizations = Organization.getOrganizationsForUser( request.user )
+  else:    
     form = OrganizationForm()  
+  
+  organizations = Organization.getOrganizationsForUser( request.user )
     
   return render_to_response("organizations/create_organization.html", { 
       "organizations": organizations,
