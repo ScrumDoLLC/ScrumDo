@@ -34,6 +34,9 @@ PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 # tells Pinax to use the default theme
 PINAX_THEME = 'default'
 
+# An extra path to look for scrumdo extras on.
+EXTRA_PATH = False
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
