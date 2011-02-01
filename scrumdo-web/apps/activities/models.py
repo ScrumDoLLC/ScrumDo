@@ -53,12 +53,13 @@ class Activity(models.Model):
       else:
         return stories
 
-    # this groups the stories by user, action, and iteration if it is a story
-    groups = groupby(activities, lambda act: (act.user, act.action, not isinstance(act, StoryActivity) or act.story.iteration))
-    # this goes through the groupings and combines them if necessary
-    newactivities = reduce(lambda x,y: x+y, [combine(u,a,it or stories[0].iteration,list(stories)) for (u,a,it),stories in groups])
-
-    return newactivities
+    if len(activities) > 0:
+      # this groups the stories by user, action, and iteration if it is a story
+      groups = groupby(activities, lambda act: (act.user, act.action, not isinstance(act, StoryActivity) or act.story.iteration))
+      # this goes through the groupings and combines them if necessary
+      return reduce(lambda x,y: x+y, [combine(u,a,it or stories[0].iteration,list(stories)) for (u,a,it),stories in groups])
+    else:
+      return []
 
   def mergeChildren(self):
     """ this function replaces itself with it's child if the child exists. """
