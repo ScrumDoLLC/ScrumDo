@@ -83,6 +83,7 @@
 	<a rel="facebox" href="{% url iteration_export iteration.project.slug iteration.id %}">{% silk "lorry" %} Export</a><br/>
 	{% canwrite project %}
 	<a rel="facebox" href="{% url iteration_import iteration.project.slug iteration.id %}">{% silk "wand" %} Import</a><br/>
+	<a target="_blank" href="{% url iteration_report iteration.project.slug iteration.id %}">{% silk "page_white_text" %} Printer-friendly Report</a><br/>
 	<a title="Iterations can only be deleted when they contain no stories." href="#deleteIteration" rel="facebox">{% silk "delete" %} Delete Iteration</a><br/>
 	{% endcanwrite %}
       </div><!--box-content-->
