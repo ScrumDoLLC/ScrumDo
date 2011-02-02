@@ -192,6 +192,7 @@ INSTALLED_APPS = (
     'django_evolution',
     'extras',
     'activities',
+    'poker',
 #    'debug_toolbar',
 )
 
