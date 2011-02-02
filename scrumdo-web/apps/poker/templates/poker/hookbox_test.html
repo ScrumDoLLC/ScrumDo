@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load uni_form %}
+{% load avatar_tags %}
+{% load threadedcommentstags %}
+{% load pagination_tags %}
+{% load extra_tagging_tags %}
+{% load projects_tags %}
+{% load group_tags %}
+{% load topics_tags %}
+{% load wiki_tags %}
+{% load theme_tags %}
+{% load iteration_tags %}
+
+{% block extra_head %}
+  <script src="{{hookbox_server}}/static/hookbox.min.js" type="text/javascript" charset="utf-8" />    
+{% endblock %}
+
+{% block extra_panel %}
+  Side panel stuff
+{% endblock %}
+
+{% block body %}
+  
+  <h2>Status:</h2>
+  <div id="status_div"></div>
+  <h2>Response:</h2>
+  <div id="text_div"></div>
+  
+  <div id="presence_div"></div>
+  
+  <a href="#" id="estimate_5_link">5 Points</a> | 
+  <a href="#" id="estimate_10_link">10 Points</a>
+  
+  <script type="text/javascript" charset="utf-8">
+    var conn = hookbox.connect('{{hookbox_server}}')
+    conn.onOpen = function() { $("#status_div").text("Connection open") }
+    conn.onError = function(err) { $("#status_div").text(err.msg); }
+
+
+    conn.subscribe("{{poker_session_id}}");
+
+    var subscription = null;
+    conn.onSubscribed = function(channelName, _subscription) {
+      subscription = _subscription;
+      $("#status_div").text("Subscribed to {{poker_session_id}}"); 
+      $("#presence_div").text( subscription.presence );
+
+      subscription.onPublish = function(args) {
+        $("#text_div").text(args.user + " " + args.payload.estimate)
+      }    
+    }
+    
+
+    function send_estimate(val)
+    {
+      conn.publish('{{poker_session_id}}', {story_id: "blah", estimate:val});
+    }
+    
+    $("#estimate_5_link").click( function() {send_estimate(5); return false;} )
+    $("#estimate_10_link").click( function() {send_estimate(10); return false;} )
+    
+
+    
+  </script>
+{% endblock %}

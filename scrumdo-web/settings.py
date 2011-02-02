@@ -244,6 +244,9 @@ SCRUMDO_EXTRAS = ("extras.plugins.github_issues.GitHubIssuesExtra",
                   "extras.plugins.example.ExampleExtra",)
 
 
+HOOKBOX_HOST = "http://localhost:8001"
+HOOKBOX_SECRET = "juy789"
+
 # local_settings.py can be used to override environment-specific settings
 # like database and email that differ between development and production.
 try:

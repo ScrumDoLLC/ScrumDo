@@ -4,8 +4,15 @@ from django.shortcuts import render_to_response, get_object_or_404
 from projects.access import *
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
-
+from django.core.exceptions import PermissionDenied
 from projects.story_views import handleAddStory
+
+from django.conf import settings
+import json
+import pprint
+import logging
+logger = logging.getLogger(__name__)
+pp = pprint.PrettyPrinter(indent=4)
 
 @login_required
 def play(request, project_slug ):
@@ -18,4 +25,63 @@ def play(request, project_slug ):
 @login_required
 def control(request, project_slug ):
   pass
+
+
+def hookbox_test(request):
+  # For this to work you need hookbox installed and running with a command similar to:
+  # hookbox -s juy789 --cbhost=localhost --cbport=8000 --cbpath=/poker/hookbox_callback
   
+  hookbox_server = settings.HOOKBOX_HOST
+ 
+  return render_to_response("poker/hookbox_test.html",  {"poker_session_id":"test-poker","hookbox_server":hookbox_server } ,context_instance=RequestContext(request) )
+  
+def hookbox_callback_connect( request ):
+  logger.debug("Hookbox connect callback")  
+  pp.pprint(request.POST)  
+  if request.POST.get("secret") != settings.HOOKBOX_SECRET:
+    raise PermissionDenied()
+  # Occurs when someone joins, you should handle authorization here.
+  return HttpResponse( json.dumps([ True, { "history_size" : 1,
+                                            "reflective" : True,
+                                            "name" : "test",
+                                            "presenceful" : True } ]) )
+                                          
+def hookbox_callback_create_channel(request):
+   logger.debug("Hookbox create channel callback")  
+   pp.pprint(request.POST)  
+   if request.POST.get("secret") != settings.HOOKBOX_SECRET:
+     raise PermissionDenied()   
+   # here is where you can handle the first person joining a planning poker session
+   return HttpResponse(json.dumps([ True, {} ]) )   
+                                        
+def hookbox_callback_subscribe (request):
+  logger.debug("Hookbox subscribe callback")  
+  pp.pprint(request.POST)  
+  if request.POST.get("secret") != settings.HOOKBOX_SECRET:
+    raise PermissionDenied()  
+  # Occurs when someone joins / rejoins
+  return HttpResponse(json.dumps([ True, {} ]) )
+
+def hookbox_callback_unsubscribe (request):
+  logger.debug("Hookbox unsubscribe callback")  
+  pp.pprint(request.POST)  
+  if request.POST.get("secret") != settings.HOOKBOX_SECRET:
+    raise PermissionDenied()  
+  # Occurs when someone leaves - not sure how reliable this is.
+  return HttpResponse(json.dumps([ True, {} ]) )
+
+def hookbox_callback_publish (request):
+  logger.debug("Hookbox publish callback")  
+  pp.pprint(request.POST)  
+  if request.POST.get("secret") != settings.HOOKBOX_SECRET:
+    raise PermissionDenied()  
+  # Called when a client calls the .publish method
+  # This is where we should handle user input
+  return HttpResponse(json.dumps([ True, {} ])  )
+  
+  
+def hookbox_callback_disconnect( request ):
+  pass
+  
+def hookbox_callback_destroy_channel(request):
+  pass
