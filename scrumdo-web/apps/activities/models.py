@@ -55,7 +55,7 @@ class Activity(models.Model):
 
     if len(activities) > 0:
       # this groups the stories by user, action, and iteration if it is a story
-      groups = groupby(activities, lambda act: (act.user, act.action, not isinstance(act, StoryActivity) or act.story.iteration))
+      groups = groupby(activities, lambda act: (act.user, act.action, not isinstance(act, StoryActivity) or not act.story or act.story.iteration))
       # this goes through the groupings and combines them if necessary
       return reduce(lambda x,y: x+y, [combine(u,a,it or stories[0].iteration,list(stories)) for (u,a,it),stories in groups])
     else:
@@ -84,7 +84,10 @@ class Activity(models.Model):
 
 
 class StoryActivity(Activity):
-  story = models.ForeignKey("projects.Story", related_name="StoryActivities")
+  story = models.ForeignKey("projects.Story", related_name="StoryActivities", null = True)
+  # in the case of a deleted story, store it's name:
+  story_name = models.TextField("story_name", null=True)
+  # if it is a change status, record what it was changed to
   status = models.CharField("status", max_length=20, null=True)
 
   def get_absolute_url(self):
@@ -95,20 +98,39 @@ class StoryActivity(Activity):
     status = None
     if "status" in kwargs:
       status = kwargs['status']
-    storyActivity = StoryActivity(user=kwargs['user'],action=ActivityAction.objects.get(name=kwargs['action']),story=sender, project=kwargs['project'], status=status)
+    action = ActivityAction.objects.get(name=kwargs['action'])
+    story_name = None
+    story = sender
+    if action.name == "deleted":
+      # we want to save the name of the story
+      # and set the story to none, because otherwise the activity will be deleted
+      story_name = sender.summary
+      story = None
+    storyActivity = StoryActivity(user=kwargs['user'],action=action,story=story, story_name = story_name, project=kwargs['project'], status=status)
     storyActivity.save()
 
 
 class IterationActivity(Activity):
-  iteration = models.ForeignKey("projects.Iteration", related_name="IterationActivities")
+  iteration = models.ForeignKey("projects.Iteration", related_name="IterationActivities", null=True)
   # for activities that involve manipulation of many stories in a given iteration, note how many
-  numstories = models.IntegerField(null=True)
+  numstories = models.IntegerField("numstories",null=True)
+  # for deleting, save the name of the iteration
+  iteration_name = models.CharField("iteration_name", max_length=100, null=True)
 
   def get_absolute_url(self):
     return self.iteration.get_absolute_url()
 
   @staticmethod
   def activity_handler(sender, **kwargs):
-    iterationActivity = IterationActivity(user=kwargs['user'],action=ActivityAction.objects.get(name=kwargs['action']),iteration=sender, project=kwargs['project'])
+    iteration_name = None
+    iteration = sender
+    action = ActivityAction.objects.get(name=kwargs['action'])
+    if action.name == "deleted":
+      # we want to save the name of the iteration
+      # and set the iteration to none, because otherwise the activity will be deleted
+      iteration_name = sender.summary
+      iteration = None
+
+    iterationActivity = IterationActivity(user=kwargs['user'],action=action,iteration=iteration, project=kwargs['project'])
     iterationActivity.save()
 
