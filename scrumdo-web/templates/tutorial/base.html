@@ -5,12 +5,8 @@
 {% block head_title %}ScrumDo Tutorial Part {{ page }}{% endblock %}
 
 {% block extra_head %}
-  <link rel="stylesheet" href="{{ STATIC_URL }}css/tutorial.css" />
-  <script type="text/javascript">
-    /* this provides the icon for navigation */
-    var arrow_up = '{% silk "arrow_up" %}';
-  </script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/tutorial.js"></script>
+  <link rel="stylesheet" media="all" href="{{ STATIC_URL }}css/tutorial.css" />
+  <link rel="stylesheet" media="print" href="{{ STATIC_URL }}css/tutorial-print.css" />
 {% endblock %}
 
 {% block panel %}
@@ -24,16 +20,26 @@
       <a href="{% url tutorial_page name page_url %}">{{ page_name }}</a>
     </div><!--box-content-->
     {% endfor %}
+    <div class="box-content{% ifequal "print" this.0 %} active{% endifequal %}">
+      <a href="{% url tutorial_print name %}">{% silk "printer" %} Print Version</a>
+    </div><!--box-content-->
   </div><!--box-->
 </div><!--panel-->
 {% endblock %}
 
 {% block body %}
+{# put script here to in print version it is overridden and never runs #}
+  <script type="text/javascript">
+    /* this provides the icon for navigation */
+    var arrow_up = '{% silk "arrow_up" %}';
+  </script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/tutorial.js"></script>
+
 
 <div id="menu">
 <span>Page Contents: </span>
 </div><!--menu-->
 
-{% block tutorial_body %}
-{% endblock %}
+{% include page_template %}
+
 {% endblock %}

@@ -1,8 +1,5 @@
-{% extends "tutorial/base.html" %}
-
 {% load theme_tags %}
 
-{% block tutorial_body %}
 <h2 alt="Setup">Organization Setup: Answering the question "Who are we?"</h2>
 <p>
 <img src="{{ STATIC_URL }}images/tutorial/organization.png" alt="Organization Overview" />
@@ -34,4 +31,3 @@ Teams allow you to easily designate who in your organization has control over wh
 <p>
   No, since the advantage to teams is that they allow you to give privileges in bulk - if each individual could gain different privileges, it would be no easier than controlling permissions per user. However, members can belong to multiple teams, so you could designate multiple teams with the same members but different permissions in order to assign them to different projects at different levels.
 </p>
-{% endblock %}

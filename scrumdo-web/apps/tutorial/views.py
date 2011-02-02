@@ -10,8 +10,7 @@ from os.path import isfile, join
 tutorials = { "scrumdo":[("start","What Is ScrumDo?"), 
                          ("organizations", "Organizations"), 
                          ("projects", "Projects"), 
-                         ("iterations", "Iteration Planning"), 
-                         ("letsdoit", "Let's Do It")],
+                         ("iterations", "Iteration Planning"),],
               "scrum":[("start", "Start"), 
                        ("roles", "Roles"), 
                        ("backlog", "Backlog"), 
@@ -39,8 +38,21 @@ def tutorial(request, name, page="start"):
     if not tutorials.has_key(name) or not list_has_key(tutorials[name], page) :
         raise Http404
 
-    return render_to_response(mk_path(page), {
+    return render_to_response("tutorial/base.html", {
+            "page_template": mk_path(page),
             "name": name, 
             "this": list_get(tutorials[name], page),
             "pages": tutorials[name], 
     }, context_instance=RequestContext(request))
+
+def tutorial_print(request, name):
+    if not tutorials.has_key(name):
+        raise Http404
+
+    return render_to_response(join("tutorial", name, "print.html"), {
+            "page_templates" : map(lambda (x,y): join("tutorial", name, x + ".html"), tutorials[name]),
+            "name":name,
+            "this": ("print", "Print Version"),
+            "pages": tutorials[name],
+            }, 
+                              context_instance=RequestContext(request))
