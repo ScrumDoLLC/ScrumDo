@@ -33,6 +33,8 @@ import datetime
 import math
 import logging
 
+from projects.limits import user_limit
+
 logger = logging.getLogger(__name__)
 
 
@@ -358,10 +360,14 @@ def project(request, group_slug=None, form_class=ProjectUpdateForm, adduser_form
         project_form = form_class(instance=project)
     if action == "add":
         write_access_or_403(project, request.user )
-        adduser_form = adduser_form_class(request.POST, project=project)
-        if adduser_form.is_valid():
-            adduser_form.save(request.user)
-            adduser_form = adduser_form_class(project=project) # clear form
+        if user_limit.increaseAllowed( organization=project.organization, user=request.user ):                  
+          adduser_form = adduser_form_class(request.POST, project=project)
+          if adduser_form.is_valid():
+              adduser_form.save(request.user)
+              adduser_form = adduser_form_class(project=project) # clear form
+        else:
+          request.user.message_set.create(message="Upgrade your account to add additional users.")              
+          adduser_form = adduser_form_class(project=project)
     else:
         adduser_form = adduser_form_class(project=project)
     
