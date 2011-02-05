@@ -1,90 +1,85 @@
-/* @override http://localhost:8000/site_media/static/css/organization.css */
+.organization-description {
+    text-indent: 10px;
+}
 
-#organization_header {
-	background-color: #F8F8F8;
-	border: 1px solid #d5d8d9;
-    border-radius: 3px;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    -o-border-radius: 3px;
-    -khtml-border-radius: 3px;
+.projects-box, .teams-box {
+    width: 298px;
+    margin-top: 20px;
+}
+
+.projects-box .box-top, .teams-box .box-top {
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.projects-box .project {
+    padding: 5px;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.projects-box .project .subtitle {
+    margin-left: 5px;
+}
+.teams-box {
+    margin-left: 100px;
+}
+
+.teams-box .team-title {
+    padding: 5px;
+    background-color: #fafafa;
+}
+
+.teams-box .box-content {
     margin-top: 10px;
-    width: 800px;
+    border-top: 1px solid #e1e1e1;
+    border-bottom: 1px solid #e1e1e1;
+    padding: 0px;
 }
 
-#organization_header .title a {
-    color: #3a3a3a;
-    font-size: 20px;
-    font-weight: bold;
-    text-align: left;
-    padding-top: 10px;
-    padding-left: 15px;	
-    text-decoration: none;
-
+.teams-box .box-bottom {
+    margin-top: 10px;
+    border-top: 1px solid #e1e1e1;
 }
 
-#organization_header .settings {
-	float: right;
+.teams-box .subtitle {
+    padding-left: 10px;
 }
 
-#organization_header .settings img {
-		vertical-align: top;
-}
-#organization_header .settings a {
-	text-decoration: none;
-	vertical-align: middle;
+.teams-box .team-projects, .teams-box .team-members {
+    border-top: 1px solid #e1e1e1;
 }
 
-.projects-box {
-	width: 392px;
-	border: 1px solid #d0d0d0;
-    border-radius: 3px;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    -o-border-radius: 3px;
-    -khtml-border-radius: 3px;
-	margin-left: 10px;
-	display: inline-block;
-	vertical-align: top;
+.teams-box .project, .teams-box .member {
+    padding: 5px;
+    padding-left: 10px;
+    border-bottom: 1px solid #e1e1e1;
 }
 
-.projects-box-top {
-	background-color: #f8f8f8;
-	border-bottom: 1px solid #d5d8d9;
+.teams-box #add_project_form, .teams-box #add-member {
+    padding: 5px;
+    padding-left: 10px;
 }
 
-.bottom_project_row img {
-	vertical-align: top;
-}
-.bottom_project_row a {
-	vertical-align: middle;
-}
-.bottom_project_row {
-	background-color: #f8f8f8;
-
+.teams-box #add-member #id_recipient {
+    width: 150px;
+    height: 15px;
 }
 
-.projects-box h1 {
-    color: #3a3a3a;
-    font-size: 20px;
-    font-weight: bold;
-    text-align: left;
-    padding-left: 15px;
-    margin: 0px;
-	padding-top: 3px;
-	padding-bottom: 3px;
+#side {
+    margin-right: 20px;
 }
 
-.project {
-	border-bottom: 1px solid #d3d5d5;
-	padding: 3px 3px 3px 7px;
+#side .box .box-top .title {
+    z-index: 1;
+    height: 
+}
+#side .box .box-top .settings {
+    text-align: right;
+    margin-top: -20px;
+    margin-right: 5px;
+    z-index: 2;
 }
 
-.project a {
-	text-decoration: none;
-    color: #000;
-}
-
-.teams {
-  float: left; 
+.memberDeleteButton {
+  float: right;
+  margin-top: 9px;
 }
