@@ -1,24 +1,42 @@
 {% load theme_tags %}
-{% load extras_tags %}
-{% load organizations_tags %}
 {% load i18n %}
 
 <div id="panel">
   <div class="box">
-
+    {% if organization %}
     <div class="box-title">
-      {% if organization %}All {% endif %}Organizations
+      <a href="{% url organization_detail organization.slug %}">{{ organization.name }}</a>
+    </div><!--box-title-->
+    <div class="box-content">
+      {% trans "Slug:" %} <tt>{{ organization.slug }}</tt><br />
+      {% trans "Creator:" %} <a href="{% url profile_detail organization.creator.username %}">{{ project.creator }}</a><br />
+      {% trans "Created:" %} {{ organization.created|date }}
+    </div><!--box-content-->
+    <div class="box-title">
+      Tools
+    </div><!--box-title-->
+    <div class="box-content">
+      <a href="{% url project_create  %}?org={{organization.id}}">{% silk "database_table" %} New Project</a>
+    </div><!--box-content-->
+    <div class="box-content">
+      <a href="{% url team_create organization.slug %}">{% silk "group" %} New Team</a>
+    </div><!--box-content-->
+    {% endif %}
+    <div class="box-title">
+      {% if organization %}Other {% endif %}Organizations
       <a href="{% url organization_create %}">{% silk "add" %}</a>
     </div><!--box-title-->
-    {% for organization in organizations %}
+    {% for org in organizations %}
+    {% ifnotequal org organization %}
     <div class="box-content">
       {% silk "building" %}
-      <a href="{% url organization_detail organization.slug %}">{{ organization.name}}</a>
+      <a href="{% url organization_detail organization.slug %}">{{ org.name}}</a>
       <div class="subtitle organization-description">
-	{{organization.projects.count}} Project{{ organization.projects.count|pluralize }}, 
-	{{organization.teams.count}} Team{{ organization.teams.count|pluralize }}
+	{{org.projects.count}} Project{{ org.projects.count|pluralize }}, 
+	{{org.teams.count}} Team{{ org.teams.count|pluralize }}
       </div>
     </div><!--box-content-->
+    {% endifnotequal %}
     {% endfor %}
     
     {% if not organizations%}
