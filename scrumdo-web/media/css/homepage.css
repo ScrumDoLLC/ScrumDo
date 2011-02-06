@@ -44,6 +44,15 @@ img {
 	margin-left: 6px;
 }
 
+#body #middleColumn2 {
+	width: 500px;
+	display: inline-block;	
+	vertical-align: top;
+	margin-right: 19px;
+	margin-left: 6px;
+}
+
+
 .infoBlob h1 {
 	margin: 0px;
 	

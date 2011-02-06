@@ -28,10 +28,10 @@ from projects.models import Project
 from organizations.models import Organization
 
 class Team(models.Model):   
-  ACCESS_CHOICES = (
+  ACCESS_CHOICES = [
       ('read', 'Read Only'), 
       ('write', 'Read / Write'),
-      ('admin', 'Administrator') )
+      ('admin', 'Administrator') ]
   members = models.ManyToManyField(User, verbose_name=_('members'))
   projects = models.ManyToManyField(Project, verbose_name=_('projects'), related_name="teams")
   
@@ -39,3 +39,4 @@ class Team(models.Model):
   
   name = models.CharField( max_length=65 )
   access_type = models.CharField( max_length=25 , default="read", choices=ACCESS_CHOICES)
+  

@@ -58,7 +58,16 @@ class Organization(models.Model):
   #   return Organization.objects.filter( teams__members = user ).exclude(teams__access_type = "read").distinct().order_by("name")
 
 
-    
+  def memberCount(self):
+    members = []
+    for team in self.teams.all():
+      for member in team.members.all():
+        if members.count(member) == 0:
+          members.append(member)
+    return len(members)
+      
+      
+      
   def get_url_kwargs(self):
       return {'organization_slug': self.slug}
 

@@ -4,10 +4,17 @@ class Limit(object) :
   def addHandler(self, handler ):
     self.handlers.append( handler )
   
+  def stats(self, **kwargs ):
+    for handler in self.handlers:
+      if handler.canHandle( **kwargs ):
+        return handler.stats( **kwargs )
+    return (0,0,False)
+    
+  
   def increaseAllowed(self, **kwargs ):
     for handler in self.handlers:
-      if not handler( **kwargs ):
-        return False
+      if handler.canHandle( **kwargs ):
+        return handler.increaseAllowed( **kwargs )
     return True
     
   def __init__(self, *args, **kwargs):
