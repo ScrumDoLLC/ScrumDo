@@ -2,7 +2,7 @@ from django import template
 from django.core.urlresolvers import reverse
 from django.utils.safestring import mark_safe
 
-from activities.models import Activity, StoryActivity, IterationActivity
+from activities.models import Activity, StoryActivity, IterationActivity, DeletedActivity
 
 register = template.Library()
 
@@ -26,20 +26,17 @@ def activity_object(activity):
     def iteration_link(iteration):
         return reverse("iteration", args=[iteration.project.slug, iteration.id])
     if isinstance(activity,StoryActivity):
-        if activity.action.name == "deleted":
-            return mark_safe(activity.story_name)
-        else:
-            s = activity.story
-            return mark_safe(("<a href='%s#story_%s'>" % (iteration_link(s.iteration), s.id)) + s.summary + ("</a> in <a href='%s'>" % iteration_link(s.iteration)) + iteration_name(s.iteration) + "</a>")
+        s = activity.story
+        return mark_safe(("<a href='%s#story_%s'>" % (iteration_link(s.iteration), s.id)) + s.summary + ("</a> in <a href='%s'>" % iteration_link(s.iteration)) + iteration_name(s.iteration) + "</a>")
     elif isinstance(activity,IterationActivity):
         if activity.numstories:
             # this is a reorder activity
             start = "in "
-        elif activity.action.name == "deleted":
-            return mark_safe(activity.iteration_name)
         else:
             start = ""
         return mark_safe(start + "<a href='%s'>" % (reverse("iteration", args=[activity.project.slug, activity.iteration.id])) + iteration_name(activity.iteration) + "</a>")
+    elif isinstance(activity,DeletedActivity):
+        return mark_safe(activity.name)
     else:
         return mark_safe("<a href='%s'>" % (reverse("project_detail", args=[activity.project.slug])) + activity.project.name + "</a>")
 

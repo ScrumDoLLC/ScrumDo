@@ -64,13 +64,15 @@ class Activity(models.Model):
   def mergeChildren(self):
     """ this function replaces itself with it's child if the child exists. """
     try:
-      self.storyactivity
       return self.storyactivity
     except:
       pass
     try:
-      self.iterationactivity
       return self.iterationactivity
+    except:
+      pass
+    try:
+      return self.deletedactivity
     except:
       pass
     return self
@@ -84,9 +86,7 @@ class Activity(models.Model):
 
 
 class StoryActivity(Activity):
-  story = models.ForeignKey("projects.Story", related_name="StoryActivities", null = True)
-  # in the case of a deleted story, store it's name:
-  story_name = models.TextField("story_name", null=True)
+  story = models.ForeignKey("projects.Story", related_name="StoryActivities")
   # if it is a change status, record what it was changed to
   status = models.CharField("status", max_length=20, null=True)
 
@@ -99,38 +99,66 @@ class StoryActivity(Activity):
     if "status" in kwargs:
       status = kwargs['status']
     action = ActivityAction.objects.get(name=kwargs['action'])
-    story_name = None
     story = sender
     if action.name == "deleted":
-      # we want to save the name of the story
-      # and set the story to none, because otherwise the activity will be deleted
+      # we want to create a DeletedActivity with the name of the story
       story_name = sender.summary
-      story = None
-    storyActivity = StoryActivity(user=kwargs['user'],action=action,story=story, story_name = story_name, project=kwargs['project'], status=status)
+      storyActivity = DeletedActivity(user=kwargs['user'],action=action,name=story_name, project=kwargs['project'])
+    else:
+      storyActivity = StoryActivity(user=kwargs['user'],action=action,story=story, project=kwargs['project'], status=status)
     storyActivity.save()
 
 
 class IterationActivity(Activity):
-  iteration = models.ForeignKey("projects.Iteration", related_name="IterationActivities", null=True)
+  iteration = models.ForeignKey("projects.Iteration", related_name="IterationActivities")
   # for activities that involve manipulation of many stories in a given iteration, note how many
   numstories = models.IntegerField("numstories",null=True)
-  # for deleting, save the name of the iteration
-  iteration_name = models.CharField("iteration_name", max_length=100, null=True)
 
   def get_absolute_url(self):
     return self.iteration.get_absolute_url()
 
   @staticmethod
   def activity_handler(sender, **kwargs):
-    iteration_name = None
     iteration = sender
     action = ActivityAction.objects.get(name=kwargs['action'])
     if action.name == "deleted":
-      # we want to save the name of the iteration
-      # and set the iteration to none, because otherwise the activity will be deleted
+      # we want to create a DeletedActivity with the name of the iteration
       iteration_name = sender.summary
-      iteration = None
-
-    iterationActivity = IterationActivity(user=kwargs['user'],action=action,iteration=iteration, project=kwargs['project'])
+      iterationActivity = DeletedActivity(user=kwargs['user'],action=action,name=iteration_name, project=kwargs['project'])
+    else:
+      iterationActivity = IterationActivity(user=kwargs['user'],action=action,iteration=iteration, project=kwargs['project'])
     iterationActivity.save()
+
+class DeletedActivity(Activity):
+  """ For an activity about a story that was deleted, archive it's name. The current behavior is that all other activities about the deleted story or iteration are not saved, because since this is not an undoable operation, there doesn't seem to be much value in keeping them. But, we do want to know that the story was deleted, hence this model. """
+  name = models.TextField("name")
+
+
+# this model is not used, but because of bugs in django/pinax, if we remove it it causes all sorts of errors:
+class SubjectActivity( models.Model ):	
+  news = models.TextField(_('news'))
+  user = models.ForeignKey(User,related_name="OldActivityByUser", null=True, blank=True)
+  action = models.CharField(_("action"), max_length=100)
+  object = models.CharField(_("object"), max_length=100)
+  story = models.ForeignKey("projects.Story",related_name="OldActivityByStory", null=True, blank=True)
+  like = models.IntegerField(default=0)
+  context = models.CharField(_("context") , max_length=100)
+  created = models.DateTimeField(_('created'), default=datetime.datetime.now)
+
+  # Returns all activities for user
+  @staticmethod
+  def getActivitiesForUser( userl ):
+    return SubjectActivity.objects.filter( user = userl ).distinct().order_by('created').reverse()
+
+  @staticmethod
+  def activity_handler(sender, **kwargs):
+    changeActivity = SubjectActivity(news=kwargs['news'], user=kwargs['user'],action=kwargs['action'],object=kwargs['object'], story=kwargs['story'], context=kwargs['context'])
+    changeActivity.save()
+
+  @staticmethod
+  def purgeMonthOld():
+    today = datetime.date.today()
+    mdiff = datetime.timedelta(days=-30)
+    date_30days_Agoago = today + mdiff
+    SubjectActivity.objects.filter(created__lte=date_30days_Agoago).delete()
 
