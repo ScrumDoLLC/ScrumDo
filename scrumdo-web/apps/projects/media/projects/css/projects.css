@@ -196,6 +196,12 @@
     padding: 6px 10px 4px;
 }
 
+.button img {
+  vertical-align: middle;
+  margin-left: -4px;
+  margin-top: -2px;
+}
+
 .button:visited { color:#fff; }
 
 .button.red { background-color: #e50000; }

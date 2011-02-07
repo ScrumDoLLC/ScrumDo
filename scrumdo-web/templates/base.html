@@ -1,14 +1,9 @@
-{% load i18n %}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+{% load i18n %}<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}" xml:lang="{{ LANGUAGE_CODE }}" lang="{{ LANGUAGE_CODE }}">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <title>{% if SITE_NAME %}{{ SITE_NAME }} : {% endif %}{% block head_title %}{% endblock %}</title>
-        <!--[if IE]><style>
-            div {
-                zoom: 1; /* trigger hasLayout */
-            }
-        </style><![endif]-->
+
         
         
         <!--
@@ -36,7 +31,7 @@
         
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js" type="text/javascript"></script>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script>
-	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.tipTip.js"></script>
+	      <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.tipTip.js"></script>
         <script src="{{ STATIC_URL }}js/jquery.form.js" type="text/javascript"></script>        
         <script src="{{ STATIC_URL }}js/jquery.center.js" type="text/javascript"></script>        
         <script src="{{ STATIC_URL }}js/jquery.flot.min.js" type="text/javascript"></script>        
@@ -65,6 +60,12 @@
 
         </script>
       {% endif %}
+      
+      <!--[if IE]><style>
+          div {
+              zoom: 1; /* trigger hasLayout */
+          }
+      </style><![endif]-->
     </head>
     
     <body class="{% block body_class %}{% endblock %}">
@@ -79,9 +80,7 @@
         <a href="http://www.apple.com/safari/">Safari</a></center>
       </div>  
       <![endif]-->
-<!--      <div class="ribbon">
-        Beta
-      </div>-->
+
 
       
         {% if site_wide_announcements %}

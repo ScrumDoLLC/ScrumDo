@@ -9,7 +9,7 @@ body {
 	margin: 0;
 	color: #333;
 	font-family: "Helvetica Neue", "Arial", "sans-serif";
-	font-size: 10pt;
+	font-size: 12px;
 }
 
 a, a:visited {
@@ -55,7 +55,6 @@ img {
 
 .infoBlob h1 {
 	margin: 0px;
-	
 }
 .infoBlob {
 	width: 330px;
@@ -81,7 +80,7 @@ img {
 }
 
 #higlightContentText h1 {
-	font: bold 41px Helvetica, Geneva, sans-serif;
+	font: bold 36px Helvetica, Geneva, sans-serif;
 	letter-spacing: -2px;
 	color: #000;
 	margin-top: 9px;
@@ -90,6 +89,7 @@ img {
 }
 
 #higlightContentText h2 {
+  font-size: 20px;
 	margin-top: 9px;
 	margin-bottom: 0px;
 	text-shadow: #eee 1px 1px 1px;
@@ -103,6 +103,7 @@ img {
 #higlightContentText h3 {
 	margin-top: 9px;
 	color: #424343;
+	font-size: 18px;
 	font-family: "Lucida Grande", Lucida, Verdana, "Arial", sans-serif;
 	font-weight: normal;
 	font-style: normal;
