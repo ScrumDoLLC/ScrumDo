@@ -1,9 +1,12 @@
 from django.db import models
+from django.contrib.contenttypes.models import ContentType
 import datetime
 from itertools import groupby
 
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import  User
+
+from threadedcomments.models import ThreadedComment
 
 class ActivityAction(models.Model):
   name = models.TextField(_("action"), max_length=100)
@@ -75,6 +78,10 @@ class Activity(models.Model):
       return self.deletedactivity
     except:
       pass
+    try:
+      return self.commentactivity
+    except:
+      pass
     return self
 
   @staticmethod
@@ -108,6 +115,26 @@ class StoryActivity(Activity):
       storyActivity = StoryActivity(user=kwargs['user'],action=action,story=story, project=kwargs['project'], status=status)
     storyActivity.save()
 
+
+class CommentActivity(Activity):
+  story = models.ForeignKey("projects.Story", related_name="StoryCommentActivities")
+  comment = models.TextField()
+
+  def get_absolute_url(self):
+    return (self.story.iteration.get_absolute_url() + "#story_" + str(self.story.id))
+
+  @staticmethod
+  def activity_handler(sender, **kwargs):
+    action = ActivityAction.objects.get(name="commented")
+    t_comment = kwargs['instance']
+    from projects.models import Story
+    # check if this is a comment on a story, the only kind we know how to deal with, and that its a new comment.
+    if t_comment.content_type.id == ContentType.objects.get_for_model(Story).id and kwargs['created']:
+      story = Story.objects.get(id=t_comment.object_id)
+      commentActivity = CommentActivity(user=t_comment.user,action=action,story=story,project=story.project,comment=t_comment.comment)
+      commentActivity.save()
+
+models.signals.post_save.connect(CommentActivity.activity_handler, sender=ThreadedComment)
 
 class IterationActivity(Activity):
   iteration = models.ForeignKey("projects.Iteration", related_name="IterationActivities")

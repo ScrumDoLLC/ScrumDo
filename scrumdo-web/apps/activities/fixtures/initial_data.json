@@ -40,5 +40,12 @@
 	"fields": {
 	    "name": "reordered"
 	}
+    },
+    { 
+    	"model": "activities.activityaction",
+	"pk": 7,
+	"fields": {
+	    "name": "commented"
+	}
     }
-]	  
+]
