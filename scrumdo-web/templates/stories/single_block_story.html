@@ -14,7 +14,7 @@
   </div>
 
   <span class="storyIcons">
-    <a class="hoverDetails" rel="facebox" href="/projects/project/{{story.project.slug}}/story/{{story.id}}/pretty"><img title="Quick View" src="{{STATIC_URL}}pinax/images/silk/icons/magnifier.png" /></a>
+    <a class="hoverDetails" onclick="jQuery.facebox({ ajax: '/projects/project/{{story.project.slug}}/story/{{story.id}}/pretty'}, 'pretty_print'); return false;" href="/projects/project/{{story.project.slug}}/story/{{story.id}}/pretty"><img title="Quick View" src="{{STATIC_URL}}pinax/images/silk/icons/magnifier.png" /></a>
     {% notlocked story %}
     <a story_id="{{ story.id }}" class="moveIterationIcon"  href="#">
       <img title="Move To Another Iteration" src="/site_media/static/pinax/images/silk/icons/page_white_go.png" />
@@ -40,6 +40,10 @@
     {% endfor %}
     </div>
   {% endif %}
+
+{% if story.assignee and story.project.use_assignee %}
+  <br/>Assigned: <b>{{story.assignee}}</b> {% avatar story.assignee 20 %}
+{% endif %}
   
 {% comments story %}
 
@@ -50,8 +54,5 @@
 {% endfor %}
 
 
-{% if story.assignee and story.project.use_assignee %}
-  Assigned: <b>{{story.assignee}}</b> {% avatar story.assignee 22 %}
-{% endif %}
     
 </li>  

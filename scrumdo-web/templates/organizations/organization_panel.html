@@ -23,18 +23,20 @@
     </div><!--box-content-->
     {% endif %}
     <div class="box-title">
-      {% if organization %}All {% endif %}Organizations
+      {% if organization %}Other {% endif %}Organizations
       <a href="{% url organization_create %}">{% silk "add" %}</a>
     </div><!--box-title-->
-    {% for organization in organizations %}
+    {% for org in organizations %}
+    {% ifnotequal org organization %}
     <div class="box-content">
       {% silk "building" %}
-      <a href="{% url organization_detail organization.slug %}">{{ organization.name}}</a>
+      <a href="{% url organization_detail organization.slug %}">{{ org.name}}</a>
       <div class="subtitle organization-description">
-	{{organization.projects.count}} Project{{ organization.projects.count|pluralize }}, 
-	{{organization.teams.count}} Team{{ organization.teams.count|pluralize }}
+	{{org.projects.count}} Project{{ org.projects.count|pluralize }}, 
+	{{org.teams.count}} Team{{ org.teams.count|pluralize }}
       </div>
     </div><!--box-content-->
+    {% endifnotequal %}
     {% endfor %}
     
     {% if not organizations%}

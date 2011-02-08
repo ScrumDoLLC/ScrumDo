@@ -245,11 +245,12 @@ p.what_next {
 	http://localhost:8000/site_media/static/pinax/css/topics.css
 	http://localhost:8000/site_media/static/css/combined.css
 */
+
 #facebox {
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 100;
+  z-index: 1000;
   text-align: left;
 }
 
@@ -828,3 +829,54 @@ div.footer {
     text-align: center;
     height:60px;   /* Height of the footer */
 }
+
+.subscription_table {
+	width: 100%;
+	background-color: #fffeff;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.subscription_table {
+	width: 100%;
+	background-color: #fffeff;
+	border-bottom: 1px solid #d6d6d6;
+}
+
+.subscription_table td {
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-left: 4px;
+	text-align: center;
+	padding-right: 4px;
+}
+
+.subscription_table tr {
+	height: 30px;
+	border-top: 1px solid #d6d6d6;
+	border-left: 1px solid #d6d6d6;
+	border-right: 1px solid #d6d6d6;	
+}
+.subscription_table tr:nth-child(even) {
+	background: #eee;
+}
+
+.no_organization_warning {
+	width: 70%;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 15px;
+	background-color: #fdfddc;
+	margin-bottom: 15px;
+	font-size: 11pt;
+	margin-top: 15px;
+}
+
+
+
+
+
+
+
+
+
