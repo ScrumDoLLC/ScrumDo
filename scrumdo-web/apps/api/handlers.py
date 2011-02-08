@@ -1,7 +1,7 @@
 from piston.handler import BaseHandler
 from piston.utils import rc
 from projects.models import Project,ProjectMember,Story,Iteration
-from activities.models import SubjectActivity
+from activities.models import Activity, StoryActivity, IterationActivity, DeletedActivity
 
 class ProjectHandler(BaseHandler):
    allowed_methods = ('GET',)
@@ -61,4 +61,13 @@ class StoryHandler(BaseHandler):
         else:
            story.delete()
            return rc.DELETED
+
+
+class NewsfeedHandler(BaseHandler):
+   allowed_methods = ('GET',)
+   model = Activity  
+
+   def read(self, request, num=20):
+      """ returns a given user's newsfeed stories (optional param specifying how many """
+      return Activity.getActivitiesForUser(request.user)[:int(num)]
 
