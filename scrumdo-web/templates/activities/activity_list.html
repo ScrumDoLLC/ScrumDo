@@ -2,6 +2,7 @@
 {% load avatar_tags %}
 {% load comments_tag %}
 {% load theme_tags %}
+{% load activity_tags %}
 
 {% if not activities %}
 <div class="activity">
@@ -13,37 +14,35 @@
   {% for act in activities %}
    <div class="activity">
      <div class="icon">
-       {% ifequal act.action "worked on" %}
+       {% ifequal act.action.name "worked on" %}
        {% silk "script_add" %}
        {% endifequal %}
-       {% ifequal act.action "created" %}
+       {% ifequal act.action.name "changed status" %}
        {% silk "script_add" %}
        {% endifequal %}
-       {% ifequal act.action "edited" %}
+       {% ifequal act.action.name "created" %}
+       {% silk "script_add" %}
+       {% endifequal %}
+       {% ifequal act.action.name "edited" %}
        {% silk "script_edit" %}
        {% endifequal %}
-       {% ifequal act.action "deleted" %}
+       {% ifequal act.action.name "deleted" %}
        {% silk "script_delete" %}
        {% endifequal %}
-       {% ifequal act.action "reordered" %}
+       {% ifequal act.action.name "reordered" %}
        {% silk "script_go" %}
        {% endifequal %}
      </div>
-     <div class="avatar"><a href="{% url profile_detail act.user.username %}" title="{{ act.user.username }}">{% avatar act.user 32 %} </a> <a href="{% url profile_detail act.user.username %}" title="{{ act.user.username }}">{{ act.user.username }}</a></div>
+     <div class="avatar"><a href="{% url profile_detail act.user.username %}" title="{{ act.user.username }}">{% avatar act.user 16 %} </a> <a href="{% url profile_detail act.user.username %}" title="{{ act.user.username }}">{{ act.user.username }}</a></div>
 
-{% comment %}  {% ifnotequal None act.news %}
-  {{act.news}}
-
-  {% else %}
-{% endcomment %}
-
- <div class="details"><span class="action">{{  act.action }}</span> {{ act.object}} in  {{ act.context}}</div>
+ <div class="details"><span class="action">{{  act|activity_action }}</span> {{ act|activity_object }}</div>
 
 {% comment %}  {% endifnotequal %} {% endcomment %}
 
-  <abbr>
-  about {{ act.created|timesince }} ago  &nbsp;&nbsp; {#| &nbsp; <span id="{{act.id}}like"> {{ act.like }}</span> <a href="#" onclick="like({{act.id}})">Likes</a>#}
+  <div class="context">
+    {{ act|activity_context }}, <abbr>about {{ act.created|timesince }} ago, <span id="{{act.id}}like"> {{ act.numLikes }}</span> <a href="#" onclick="like({{act.id}})">Like{{act.numLikes|pluralize}}</a>
   </abbr>
+  </div>
 {# {% comments act %} #}
 </div><!--activity-->
 

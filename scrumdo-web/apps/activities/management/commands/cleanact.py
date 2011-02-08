@@ -2,7 +2,7 @@
 from optparse import make_option
 import datetime
 from  django.core.management.base import BaseCommand
-from activities.models import SubjectActivity
+from activities.models import Activity
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
@@ -12,11 +12,11 @@ class Command(BaseCommand):
     )
 
 
-    help = 'Purge old Subject Activities'
+    help = 'Purge old Activities'
 
     def handle(self, *app_labels, **options):
         self.purge(*app_labels, **options)
 
     def purge(self, *app_labels, **options):
         print 'Purging Activities'
-        SubjectActivity.purgeMonthOld()
+        Activity.purgeMonthOld()

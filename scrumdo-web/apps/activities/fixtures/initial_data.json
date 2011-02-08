@@ -1,0 +1,44 @@
+[
+    {
+      "model": "activities.activityaction",
+      "pk": 1,
+      "fields": {
+	  "name": "worked on"
+      }
+    },
+    { 
+	"model": "activities.activityaction",
+	"pk": 2,
+	"fields": {
+	    "name": "changed status"
+	}
+    },
+    { 
+	"model": "activities.activityaction",
+	"pk": 3,
+	"fields": {
+	    "name": "created"
+	}
+    },
+    { 
+	"model": "activities.activityaction",
+	"pk": 4,
+	"fields": {
+	    "name": "edited"
+	}
+    },
+    { 
+	"model": "activities.activityaction",
+	"pk": 5,
+	"fields": {
+	    "name": "deleted"
+	}
+    },
+    { 
+	"model": "activities.activityaction",
+	"pk": 6,
+	"fields": {
+	    "name": "reordered"
+	}
+    }
+]	  

@@ -109,8 +109,12 @@ function loadIteration( iterationID , tags, search)
 		    search:search},
 		success: function(html){
 		$("#story_list").html(html);  
-		$("#story_list").attr("iteration_id", iterationID);      
+		$("#story_list").attr("iteration_id", iterationID);
 		$("#loadingIcon").hide();
+                /* if we came here with the name of a specific story in the url, scroll to it */
+                if ($(window.location.hash).offset()) {
+                     $("html,body").animate({scrollTop: $(window.location.hash).offset().top})
+                }
 		setUpStoryLinks();          
 	    }
 	});
