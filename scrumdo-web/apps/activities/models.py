@@ -133,32 +133,3 @@ class DeletedActivity(Activity):
   """ For an activity about a story that was deleted, archive it's name. The current behavior is that all other activities about the deleted story or iteration are not saved, because since this is not an undoable operation, there doesn't seem to be much value in keeping them. But, we do want to know that the story was deleted, hence this model. """
   name = models.TextField("name")
 
-
-# this model is not used, but because of bugs in django/pinax, if we remove it it causes all sorts of errors:
-class SubjectActivity( models.Model ):	
-  news = models.TextField(_('news'))
-  user = models.ForeignKey(User,related_name="OldActivityByUser", null=True, blank=True)
-  action = models.CharField(_("action"), max_length=100)
-  object = models.CharField(_("object"), max_length=100)
-  story = models.ForeignKey("projects.Story",related_name="OldActivityByStory", null=True, blank=True)
-  like = models.IntegerField(default=0)
-  context = models.CharField(_("context") , max_length=100)
-  created = models.DateTimeField(_('created'), default=datetime.datetime.now)
-
-  # Returns all activities for user
-  @staticmethod
-  def getActivitiesForUser( userl ):
-    return SubjectActivity.objects.filter( user = userl ).distinct().order_by('created').reverse()
-
-  @staticmethod
-  def activity_handler(sender, **kwargs):
-    changeActivity = SubjectActivity(news=kwargs['news'], user=kwargs['user'],action=kwargs['action'],object=kwargs['object'], story=kwargs['story'], context=kwargs['context'])
-    changeActivity.save()
-
-  @staticmethod
-  def purgeMonthOld():
-    today = datetime.date.today()
-    mdiff = datetime.timedelta(days=-30)
-    date_30days_Agoago = today + mdiff
-    SubjectActivity.objects.filter(created__lte=date_30days_Agoago).delete()
-
