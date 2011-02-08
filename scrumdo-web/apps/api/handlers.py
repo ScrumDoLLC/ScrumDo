@@ -14,8 +14,6 @@ class ProjectHandler(BaseHandler):
        projects if org_slug is specified
        else all projects authenticated user has access to.
        """
-       print "org: %r" % org
-       print "user: %r" % user
        if slug and (not org):
           p = Project.objects.get(slug=slug)
           if p.hasReadAccess(request.user):
@@ -63,3 +61,4 @@ class StoryHandler(BaseHandler):
         else:
            story.delete()
            return rc.DELETED
+
