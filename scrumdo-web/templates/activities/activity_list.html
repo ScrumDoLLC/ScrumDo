@@ -32,6 +32,12 @@
        {% ifequal act.action.name "reordered" %}
        {% silk "script_go" %}
        {% endifequal %}
+       {% ifequal act.action.name "commented" %}
+       {% silk "script_palette" %}
+       {% endifequal %}
+       {% ifequal act.action.name "changed point value" %}
+       {% silk "script_code_red" %}
+       {% endifequal %}
      </div>
      <div class="avatar"><a href="{% url profile_detail act.user.username %}" title="{{ act.user.username }}">{% avatar act.user 16 %} </a> <a href="{% url profile_detail act.user.username %}" title="{{ act.user.username }}">{{ act.user.username }}</a></div>
 

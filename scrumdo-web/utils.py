@@ -1,12 +1,13 @@
 from django.db.models import fields
 
-# from  http://www.indirecthit.com/2008/04/29/django-difference-between-two-model-instances/
-def get_changes_between_models(model1, model2, excludes = []):
+def model_differences(m1, m2, excludes = [], dicts=False):
+    """ this function takes two models and compares them. 
+    optionally takes two dicts created by running model_instance.__dict__ """
     changes = {}
-    for field in model1._meta.fields:
-        if not (isinstance(field, (fields.AutoField, fields.related.RelatedField)) 
-                or field.name in excludes):
-            if field.value_from_object(model1) != field.value_from_object(model2):
-                changes[field.verbose_name] = (field.value_from_object(model1),
-                                               field.value_from_object(model2))
+    if not dicts:
+        m1 = m1.__dict__
+        m2 = m2.__dict__
+    for k in m1:
+        if m1[k] != m2[k] and not k in excludes:
+            changes[k] = (m1[k], m2[k])
     return changes

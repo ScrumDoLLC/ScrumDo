@@ -4,7 +4,7 @@ from django.utils.safestring import mark_safe
 from django.utils.html import escape
 
 
-from activities.models import Activity, StoryActivity, IterationActivity, DeletedActivity, CommentActivity
+from activities.models import Activity, StoryActivity, IterationActivity, DeletedActivity, CommentActivity, PointsChangeActivity
 
 register = template.Library()
 
@@ -51,6 +51,8 @@ def activity_object(activity):
         return mark_safe(activity.name)
     elif isinstance(activity,CommentActivity):
         return mark_safe("<em>" + escape(activity.comment) + "</em>")
+    elif isinstance(activity,PointsChangeActivity):
+        return mark_safe("from <strong>" + escape(activity.old) + "</strong> to <strong>" + escape(activity.new) + "</strong> for " + story_link(activity.story))
     else:
         return mark_safe("<a href='%s'>" % (reverse("project_detail", args=[activity.project.slug])) + activity.project.name + "</a>")
 

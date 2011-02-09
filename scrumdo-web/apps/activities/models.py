@@ -75,6 +75,10 @@ class Activity(models.Model):
       return self.commentactivity
     except:
       pass
+    try:
+      return self.pointschangeactivity
+    except:
+      pass
     return self
 
   @staticmethod
@@ -95,6 +99,9 @@ class StoryActivity(Activity):
 
   @staticmethod
   def activity_handler(sender, **kwargs):
+    if "pointschange" in kwargs:
+      # this is a pointschanged activity
+      return PointsChangeActivity.activity_handler(sender, **kwargs)
     status = None
     if "status" in kwargs:
       status = kwargs['status']
@@ -128,6 +135,20 @@ class CommentActivity(Activity):
       commentActivity.save()
 
 models.signals.post_save.connect(CommentActivity.activity_handler, sender=ThreadedComment)
+
+class PointsChangeActivity(Activity):
+  story = models.ForeignKey("projects.Story", related_name="StoryPointsChangeActivities")
+  old = models.CharField('points', max_length=3)
+  new = models.CharField('points', max_length=3)
+
+  def get_absolute_url(self):
+    return (self.story.iteration.get_absolute_url() + "#story_" + str(self.story.id))
+
+  @staticmethod
+  def activity_handler(sender, **kwargs):
+    pointsChangeActivity = PointsChangeActivity(user=kwargs['user'],action=ActivityAction.objects.get(name=kwargs['action']),story=kwargs['story'], project=kwargs['project'], old=kwargs['old'], new=kwargs['new'])
+    pointsChangeActivity.save()
+
 
 class IterationActivity(Activity):
   iteration = models.ForeignKey("projects.Iteration", related_name="IterationActivities")

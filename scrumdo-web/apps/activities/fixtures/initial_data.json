@@ -47,5 +47,12 @@
 	"fields": {
 	    "name": "commented"
 	}
+    },
+    { 
+    	"model": "activities.activityaction",
+	"pk": 8,
+	"fields": {
+	    "name": "changed point value"
+	}
     }
 ]

@@ -46,6 +46,8 @@ import projects.signals as signals
 
 import logging
 
+import utils
+
 logger = logging.getLogger(__name__)
 
 # View called via ajax on the iteration or iteration planning pages.  Meant to set the status of 
@@ -153,22 +155,33 @@ def _calculate_rank( iteration, general_rank ):
 
 
 # Returns the edit-story form, with minimal html wrapper.  This is useful for displaying within
-# a facebox popup.  
+# a facebox popup.
 # One place it's used is on the iteration page when you click the magnifying glass for a story.
 @login_required
-def story( request, group_slug, story_id ):
+def story(request, group_slug, story_id):
   story = get_object_or_404( Story, id=story_id )
   project = get_object_or_404( Project, slug=group_slug )
   return_type = request.GET.get("return_type","mini")
 
   if request.method == 'POST': # If the form has been submitted...
+    old_story = story.__dict__.copy() 
     write_access_or_403(project,request.user)
     form = StoryForm( project, request.POST, project, instance=story) # A form bound to the POST data    
 
     if form.is_valid(): # All validation rules pass
-      story = form.save(  )      
+      story = form.save()
+      diffs = utils.model_differences(old_story, story.__dict__, dicts=True)
+      activities = 0
+      if diffs.has_key("points"):
+        story.activity_signal.send(sender=story, user=request.user, story=story, pointschange=True, action="changed point value", project=project, old=diffs['points'][0], new=diffs['points'][1])
+        activities = activities + 1
+      # to do other stories based on specific changes, simply add more if clauses like the one above
+
+      if len(diffs) > activities:
+        # this means that we have not accounted for all the changes above, so add a generic story edited activity
+        story.activity_signal.send(sender=story, user=request.user, story=story, action="edited", project=project)
+
       signals.story_updated.send( sender=request, story=story, user=request.user )
-      story.activity_signal.send(sender=story, user=request.user, story=story, action="edited", project=project)
 
     if( request.POST['return_type'] == 'mini'):
       return render_to_response("stories/single_mini_story.html", {
