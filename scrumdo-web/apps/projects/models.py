@@ -346,6 +346,8 @@ class StoryTagging( models.Model ):
   def name(self):
     return self.tag.name
 
+from organizations.team_models import Team
+
 class ProjectMember(models.Model):
     project = models.ForeignKey(Project, related_name="members", verbose_name=_('project'))
     user = models.ForeignKey(User, related_name="projects", verbose_name=_('user'))
@@ -354,5 +356,12 @@ class ProjectMember(models.Model):
     away_message = models.CharField(_('away_message'), max_length=500)
     away_since = models.DateTimeField(_('away since'), default=datetime.now)
 
+    @staticmethod
+    def getProjectsForUser(user):
+      """ This gets all a user's projects, including ones they have access to via teams. """
+      user_projects = [pm.project for pm in ProjectMember.objects.filter(user=user).select_related()]
+      team_projects = [team.projects.all() for team in Team.objects.filter(members=user)]
+      for project_list in team_projects:
+        user_projects = user_projects + list(project_list)
+      return user_projects
 
-from organizations.team_models import *
