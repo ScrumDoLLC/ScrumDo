@@ -8,6 +8,8 @@ from django.contrib.auth.models import  User
 
 from threadedcomments.models import ThreadedComment
 
+from utils import allinstances, instanceof
+
 class ActivityAction(models.Model):
   name = models.TextField(_("action"), max_length=100)
 
@@ -42,16 +44,19 @@ class Activity(models.Model):
     # now get all the stories for the projects a user is interested in
     activities = [act.mergeChildren() for act in list(Activity.objects.filter(project__in = user_projects).order_by('created').reverse())]
 
-    def combine(u, a, it, stories):
-      if a.name == "reordered" and len(stories) > 1:
-        return [IterationActivity(project = it.project, user=u, iteration=it, created=stories[0].created, action=a, numstories=len(stories))]
+    def combine(u, a, it, acts):
+      if a.name == "reordered" and len(acts) > 1:
+        return [IterationActivity(project = it.project, user=u, iteration=it, created=acts[0].created, action=a, numstories=len(acts))]
+      elif allinstances(acts, StoryActivity):
+        # if they are the same action about the same story, together, only show the most recent one
+        return [list(acts)[0] for (st,s),acts in groupby(acts, lambda act: (act.story, act.status))]
       #to add other combinations, simply add elif clauses here
       else:
-        return stories
+        return acts
 
     if len(activities) > 0:
-      # this groups the stories by user, action, and iteration if it is a story
-      groups = groupby(activities, lambda act: (act.user, act.action, not isinstance(act, StoryActivity) or not act.story or act.story.iteration))
+      # this groups the stories by user, action, and iteration if it is not an iteration activity
+      groups = groupby(activities, lambda act: (act.user, act.action, not instanceof(act, [StoryActivity, CommentActivity, PointsChangeActivity]) or act.story.iteration))
       # this goes through the groupings and combines them if necessary
       return reduce(lambda x,y: x+y, [combine(u,a,it or stories[0].iteration,list(stories)) for (u,a,it),stories in groups])
     else:
