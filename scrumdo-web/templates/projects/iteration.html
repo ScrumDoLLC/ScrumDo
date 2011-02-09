@@ -93,7 +93,7 @@
 {% block extra_body %}
 
 
-<script stc="{{ STATIC_URL }}js/iteration.js" type="text/javascript"></script>
+{% include "projects/iteration_js.html" %} {# include this way to be able to use template tags #}
 <script type="text/javascript">
 
 var project_slug = "{{ iteration.project.slug }}";
@@ -248,85 +248,11 @@ function moveCurrentlyOpenStoryToIteration( iteration_id )
       {% endif %}
       
 }
-    
-function setStatusReviewing( storyID )
-{
-    $(".todoButtons").hide();
-    $.ajax({
-	    url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_reviewing",      
-		type: "POST",
-		data: ({return_type : "block"}),            
-		success: function(responseText) {        
-		$("#story_" + storyID).replaceWith(responseText);
-		setUpStoryLinks();
-	    }
-	});
-	
-	
-	{% if GOOGLE_ANALYTICS %}     
-     _gaq.push(['_trackEvent',"SetStatusPopup", "{{current_view}}", "Review", 1]); 
-  {% endif %}
-}
-function setStatusTodo( storyID )
-{
-    $(".todoButtons").hide();
-    $.ajax({
-	    url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_todo",      
-		type: "POST",
-		data: ({return_type : "block"}),            
-		success: function(responseText) {        
-		$("#story_" + storyID).replaceWith(responseText);
-		setUpStoryLinks();
-	    }
-	});
-	
-	{% if GOOGLE_ANALYTICS %}     
-     _gaq.push(['_trackEvent',"SetStatusPopup", "{{current_view}}", "Todo", 1]); 
-  {% endif %}
-}     
-
-
-function setStatusDoing( storyID )
-{
-    $(".todoButtons").hide();    
-    $.ajax({
-	    url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_doing",      
-		type: "POST",
-		data: ({return_type : "block"}),                        
-		success: function(responseText) {        
-		$("#story_" + storyID).replaceWith(responseText);
-		setUpStoryLinks();
-	    }
-	});
-	
-	{% if GOOGLE_ANALYTICS %}     
-     _gaq.push(['_trackEvent',"SetStatusPopup", "{{current_view}}", "Doing", 1]); 
-  {% endif %}
-}
 
 function updateStoryList()
 {
   loadIteration( "{{ iteration.id }}","","")  ;
 }
-
-function setStatusDone( storyID )
-{
-    $(".todoButtons").hide();    
-    $.ajax({
-	    url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_done",      
-		type: "POST",
-		data: ({return_type : "block"}),                        
-		success: function(responseText) {        
-		$("#story_" + storyID).replaceWith(responseText);
-		setUpStoryLinks();
-	    }
-	});
-	
-	{% if GOOGLE_ANALYTICS %}     
-     _gaq.push(['_trackEvent',"SetStatusPopup", "{{current_view}}", "Done", 1]); 
-  {% endif %}
-}
-
      
 $(document).ready(function() {
          

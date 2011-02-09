@@ -80,7 +80,9 @@ def home( request ):
   if request.user.is_authenticated():
     organizations = Organization.getOrganizationsForUser(request.user)
     activities = Activity.getActivitiesForUser(request.user)
-    
+
+    assigned_stories = Story.getAssignedStories(request.user)
+
     paginator = Paginator(activities, 10)
     page_obj = paginator.page(1)
     activities = page_obj.object_list
@@ -104,6 +106,8 @@ def home( request ):
        "my_organizations": organizations,
        "activities": activities,
        "activities_next_page":next_page,
+       "assigned_stories": assigned_stories,
+       "return_type" : "queue", # for the queue mini stories
        "member_projects":member_projects,
        "num_projects":num_projects,
        "now": datetime.datetime.now(),

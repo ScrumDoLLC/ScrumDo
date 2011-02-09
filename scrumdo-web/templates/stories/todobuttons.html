@@ -1,0 +1,5 @@
+{% load theme_tags %}
+<a onclick="setStatus({{story.id}}, '{{story.project.slug}}', 'todo', '{{return_type}}') ; return false;" href="#" id="todo">{% silk "note" %} Todo</a>
+<a onclick="setStatus({{story.id}}, '{{story.project.slug}}', 'doing', '{{return_type}}') ; return false;" href="#" id="doing">{% silk "overlays" %} Doing</a>
+<a onclick="setStatus({{story.id}}, '{{story.project.slug}}', 'reviewing', '{{return_type}}') ; return false;" href="#" id="review">{% silk "paste_plain" %} Review</a>
+<a onclick="setStatus({{story.id}}, '{{story.project.slug}}', 'done', '{{return_type}}') ; return false;" href="#" id="done">{% silk "tick" %} Done</a>

@@ -123,33 +123,6 @@ h1 a {
     min-height: 100px;
 }
 
-.story_block, .story_small {
-    padding: 3px;
-    margin: 0px;
-    padding-left: 10px;
-    list-style-type: none;
-    border-bottom: 1px solid #e1e1e1;
-    border-right: 1px solid #e1e1e1;
-    background-color: #fff;
-    min-height: 33px;
-    position: relative;
-}
-
-
-
-.gripper_reviewing {
-    border-left: 6px solid #ff7f0e;
-}
-.gripper_todo {
-    border-left: 6px solid #444;
-}
-.gripper_doing {
-    border-left: 6px solid #448cca;
-}
-.gripper_done {
-    border-left: 6px solid #8dc73e;
-}
-
 .showFilter {
     display: block;
     text-align: right;

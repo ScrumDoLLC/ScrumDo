@@ -22,6 +22,7 @@ from tagging.fields import TagField
 from tagging.models import Tag
 import tagging
 import re
+from itertools import groupby
 
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import  User
@@ -257,7 +258,16 @@ class Story( models.Model ):
 
   @staticmethod
   def getAssignedStories(user):
-    return Story.objects.filter(assignee=user)
+    projects = ProjectMember.getProjectsForUser(user)
+    assigned_stories = []
+    for project in projects:
+      if project.use_assignee:
+        project_stories = []
+        iterations = project.get_current_iterations()
+        for iteration in iterations:
+          project_stories = project_stories + list(Story.objects.filter(iteration=iteration, assignee=user))
+        assigned_stories = assigned_stories + [(project, project_stories)]
+    return assigned_stories
 
   def getPointsLabel(self):
     result = filter( lambda v: v[0]==self.points, self.getPointScale() )
@@ -366,5 +376,5 @@ class ProjectMember(models.Model):
       team_projects = [team.projects.all() for team in Team.objects.filter(members=user)]
       for project_list in team_projects:
         user_projects = user_projects + list(project_list)
-      return user_projects
+      return list(set(user_projects))
 

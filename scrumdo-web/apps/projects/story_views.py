@@ -64,6 +64,12 @@ def set_story_status( request, group_slug, story_id, status):
   if( request.POST.get("return_type","mini") == "mini"):
     return render_to_response("stories/single_mini_story.html", {
         "story": story,
+        "return_type": "mini",
+      }, context_instance=RequestContext(request))
+  if( request.POST.get("return_type","mini") == "queue"):
+    return render_to_response("stories/single_queue_story.html", {
+        "story": story,
+        "return_type": "queue",
       }, context_instance=RequestContext(request))
   return render_to_response("stories/single_block_story.html", {
       "story": story,
@@ -185,11 +191,18 @@ def story(request, group_slug, story_id):
 
     if( request.POST['return_type'] == 'mini'):
       return render_to_response("stories/single_mini_story.html", {
-          "story": story,         
+          "story": story,
+          "return_type": return_type,
         }, context_instance=RequestContext(request))
     if( request.POST['return_type'] == 'block'):
       return render_to_response("stories/single_block_story.html", {
           "story": story,         
+          "return_type": return_type,
+        }, context_instance=RequestContext(request))
+    if( request.POST['return_type'] == 'queue'):
+      return render_to_response("stories/single_queue_story.html", {
+          "story": story,
+          "return_type": return_type,
         }, context_instance=RequestContext(request))
   
   else:

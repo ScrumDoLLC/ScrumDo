@@ -1,0 +1,96 @@
+<script type="text/javascript">
+function setStatus(storyID, project_slug, status, return_type)
+{
+    $(".todoButtons").hide();
+    $.ajax({
+	    url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_" + status,
+		type: "POST",
+		data: ({return_type : return_type}),
+		success: function(responseText) {
+		$("#story_" + storyID).replaceWith(responseText);
+		setUpStoryLinks();
+	    }
+	});
+	
+	
+	{% if GOOGLE_ANALYTICS %}     
+     _gaq.push(['_trackEvent',"SetStatusPopup", "{{current_view}}", status, 1]); 
+  {% endif %}
+}
+
+/*
+function setReviewing( storyID, project_slug, return_type )
+{
+    $(".todoButtons").hide();
+    $.ajax({
+	    url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_reviewing",      
+		type: "POST",
+		data: ({return_type : return_type}),            
+		success: function(responseText) {        
+		$("#story_" + storyID).replaceWith(responseText);
+		setUpStoryLinks();
+	    }
+	});
+	
+	
+	{% if GOOGLE_ANALYTICS %}     
+     _gaq.push(['_trackEvent',"SetStatusPopup", "{{current_view}}", "Review", 1]); 
+  {% endif %}
+}
+function setTodo( storyID, project_slug, return_type )
+{
+    $(".todoButtons").hide();
+    $.ajax({
+	    url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_todo",      
+		type: "POST",
+		data: ({return_type : return_type}),            
+		success: function(responseText) {        
+		$("#story_" + storyID).replaceWith(responseText);
+		setUpStoryLinks();
+	    }
+	});
+	
+	{% if GOOGLE_ANALYTICS %}     
+     _gaq.push(['_trackEvent',"SetStatusPopup", "{{current_view}}", "Todo", 1]); 
+  {% endif %}
+}     
+
+
+function setDoing( storyID, project_slug, return_type )
+{
+    $(".todoButtons").hide();    
+    $.ajax({
+	    url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_doing",      
+		type: "POST",
+		data: ({return_type : return_type}),                        
+		success: function(responseText) {        
+		$("#story_" + storyID).replaceWith(responseText);
+		setUpStoryLinks();
+	    }
+	});
+	
+	{% if GOOGLE_ANALYTICS %}     
+     _gaq.push(['_trackEvent',"SetStatusPopup", "{{current_view}}", "Doing", 1]); 
+  {% endif %}
+}
+
+
+function setDone( storyID, project_slug, return_type )
+{
+    $(".todoButtons").hide();    
+    $.ajax({
+	    url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_done",      
+		type: "POST",
+		data: ({return_type : return_type }),                        
+		success: function(responseText) {        
+		$("#story_" + storyID).replaceWith(responseText);
+		setUpStoryLinks();
+	    }
+	});
+	
+	{% if GOOGLE_ANALYTICS %}     
+     _gaq.push(['_trackEvent',"SetStatusPopup", "{{current_view}}", "Done", 1]); 
+  {% endif %}
+}
+*/
+</script>
