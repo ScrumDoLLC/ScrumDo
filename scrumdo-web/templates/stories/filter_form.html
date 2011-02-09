@@ -11,7 +11,10 @@
       <!-- <input type="radio" name="order_by" value="modified" > Last Modified <br/>                 -->
       <input type="radio" name="order_by" value="status" > Status <br/></td></tr>
       <tr><td>Tags:</td><td><input type="text" name="tags" id="tags_input"></tr>
-     
+      {% if project.use_assignee %}
+      <tr><td>Only My Assigned Stories:</td><td><input type="checkbox" name="only_assigned" /></td></tr>
+      {% endif %}
+
     </table>
     <input type="hidden" name="display_type" value="block">
     <input type="submit" value="Filter" id="filter_button">

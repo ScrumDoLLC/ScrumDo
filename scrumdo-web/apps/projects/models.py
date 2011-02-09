@@ -255,6 +255,9 @@ class Story( models.Model ):
   activity_signal = django.dispatch.Signal(providing_args=["user","action", "project", "story"])
   activity_signal.connect(StoryActivity.activity_handler)
 
+  @staticmethod
+  def getAssignedStories(user):
+    return Story.objects.filter(assignee=user)
 
   def getPointsLabel(self):
     result = filter( lambda v: v[0]==self.points, self.getPointScale() )

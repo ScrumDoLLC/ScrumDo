@@ -215,18 +215,22 @@ def stories_iteration(request, group_slug, iteration_id):
   display_type = request.GET.get("display_type","mini")
   text_search = request.GET.get("search","")
   tags_search = request.GET.get("tags","")
+  only_assigned = request.GET.get("only_assigned", False)
 
   tags_list = re.split('[, ]+', tags_search)
 
   # There's probably a better way to set up these filters...
   if text_search and tags_search:
-    stories = iteration.stories.filter(story_tags__tag__name__in=tags_list).extra( where = ["MATCH(summary, detail, extra_1, extra_2, extra_3) AGAINST (%s IN BOOLEAN MODE)"], params=[text_search]).distinct()
+    stories = iteration.stories.filter(story_tags__tag__name__in=tags_list).extra( where = ["MATCH(summary, detail, extra_1, extra_2, extra_3) AGAINST (%s IN BOOLEAN MODE)"], params=[text_search]).distinct().order_by(order_by)
   elif tags_search:
     stories = iteration.stories.filter(story_tags__tag__name__in=tags_list).distinct().order_by(order_by)
   elif text_search:
     stories = iteration.stories.extra( where = ["MATCH(summary, detail, extra_1, extra_2, extra_3) AGAINST (%s IN BOOLEAN MODE)"], params=[text_search]).order_by(order_by)
   else:
     stories = iteration.stories.order_by(order_by)
+
+  if only_assigned:
+      stories = stories.filter(assignee=request.user)
 
   return render_to_response("stories/mini_story_list.html", {
     "stories": stories,
