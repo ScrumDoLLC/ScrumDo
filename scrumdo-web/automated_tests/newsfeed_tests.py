@@ -25,7 +25,7 @@ class NewsfeedTests(unittest.TestCase):
         sel.wait_for_page_to_load("30000")
         sel.type("id_summary", "Test story from automated tests")
         sel.click(u"//*[@id='add_button']")
-        sel.wait_for_element_present(u"//*[@id='createdStories']/li")
+        sel.do_command('waitForElementPresent', ("//*[@id='createdStories']/li", ))
         sel.click(u"link=selenium_user")
         sel.wait_for_page_to_load("30000")
         try: self.failUnless(sel.is_text_present("Test story from automated tests"))
