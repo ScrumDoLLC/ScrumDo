@@ -265,7 +265,7 @@ class Story( models.Model ):
         project_stories = []
         iterations = project.get_current_iterations()
         for iteration in iterations:
-          project_stories = project_stories + list(Story.objects.filter(iteration=iteration, assignee=user))
+          project_stories = project_stories + list(Story.objects.filter(iteration=iteration, assignee=user).exclude(status=4))
         assigned_stories = assigned_stories + [(project, project_stories)]
     return assigned_stories
 

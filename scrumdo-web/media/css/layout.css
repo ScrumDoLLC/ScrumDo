@@ -219,3 +219,45 @@
 .gripper_done {
     border-left: 6px solid #8dc73e;
 }
+
+
+
+.todoButtons {
+    border: 1px solid #e1e1e1;
+    background-color: #fafafa;
+    padding: 5px;
+    width: 230px;
+    z-index: 50;
+    position: absolute;
+    right: 10px;
+    margin-top: 0px;
+    display: none;
+}
+
+.todoButtons_block {
+    margin-left: 500px;
+}
+
+.todoButtons_mini {
+    margin-left: 100px;
+}
+
+.todoButtons a {
+    text-decoration: none;
+    color: #000;
+    padding-bottom: 1px;
+}
+
+.todoButtons #review {
+    border-bottom: 4px solid #ff7f0e;
+}
+.todoButtons #todo {
+    border-bottom: 4px solid #444;
+}
+.todoButtons #doing {
+    border-bottom: 4px solid #448cca;
+}
+.todoButtons #done {
+    border-bottom: 4px solid #8dc73e;
+}
+
