@@ -46,6 +46,8 @@ import projects.signals as signals
 
 import logging
 
+import utils
+
 logger = logging.getLogger(__name__)
 
 # View called via ajax on the iteration or iteration planning pages.  Meant to set the status of 
@@ -57,9 +59,17 @@ def set_story_status( request, group_slug, story_id, status):
   story.status = status;
   story.save();         
   signals.story_status_changed.send( sender=request, story=story, user=request.user )
+  statuses = [None, "TODO", "In Progress", "Reviewing", "Done"]
+  story.activity_signal.send(sender=story, user=request.user, story=story, action="changed status", status=statuses[status], project=story.project)
   if( request.POST.get("return_type","mini") == "mini"):
     return render_to_response("stories/single_mini_story.html", {
         "story": story,
+        "return_type": "mini",
+      }, context_instance=RequestContext(request))
+  if( request.POST.get("return_type","mini") == "queue"):
+    return render_to_response("stories/single_queue_story.html", {
+        "story": story,
+        "return_type": "queue",
       }, context_instance=RequestContext(request))
   return render_to_response("stories/single_block_story.html", {
       "story": story,
@@ -76,6 +86,7 @@ def delete_story( request, group_slug, story_id ):
     story = get_object_or_404( Story, id=story_id )  
     write_access_or_403(story.project,request.user)
     signals.story_deleted.send( sender=request, story=story, user=request.user )
+    story.activity_signal.send(sender=story, user=request.user, story=story, action="deleted", project=story.project)
     story.sync_queue.clear()
     story.delete()            
     
@@ -108,7 +119,7 @@ def reorder_story( request, group_slug, story_id):
     story.save()
     
     stories = project.stories.all().filter(iteration=iteration).order_by("rank")
-    story.activity_signal.send(sender=Story, news=request.user.username + " reordered story \"" +story.summary + "\" in iteration\"" +iteration.name+"\" for project " +project.name, user=request.user, story=story, action="reordered" ,object=story.summary[:90], context=project.slug)
+    story.activity_signal.send(sender=story, user=request.user, story=story, action="reordered", project=project)
 
     
     if request.POST.get("action","") == "reorder" :
@@ -150,29 +161,48 @@ def _calculate_rank( iteration, general_rank ):
 
 
 # Returns the edit-story form, with minimal html wrapper.  This is useful for displaying within
-# a facebox popup.  
+# a facebox popup.
 # One place it's used is on the iteration page when you click the magnifying glass for a story.
 @login_required
-def story( request, group_slug, story_id ):
+def story(request, group_slug, story_id):
   story = get_object_or_404( Story, id=story_id )
   project = get_object_or_404( Project, slug=group_slug )
   return_type = request.GET.get("return_type","mini")
 
   if request.method == 'POST': # If the form has been submitted...
+    old_story = story.__dict__.copy() 
     write_access_or_403(project,request.user)
     form = StoryForm( project, request.POST, project, instance=story) # A form bound to the POST data    
 
     if form.is_valid(): # All validation rules pass
-      story = form.save(  )      
+      story = form.save()
+      diffs = utils.model_differences(old_story, story.__dict__, dicts=True)
+      activities = 0
+      if diffs.has_key("points"):
+        story.activity_signal.send(sender=story, user=request.user, story=story, pointschange=True, action="changed point value", project=project, old=diffs['points'][0], new=diffs['points'][1])
+        activities = activities + 1
+      # to do other stories based on specific changes, simply add more if clauses like the one above
+
+      if len(diffs) > activities:
+        # this means that we have not accounted for all the changes above, so add a generic story edited activity
+        story.activity_signal.send(sender=story, user=request.user, story=story, action="edited", project=project)
+
       signals.story_updated.send( sender=request, story=story, user=request.user )
 
     if( request.POST['return_type'] == 'mini'):
       return render_to_response("stories/single_mini_story.html", {
-          "story": story,         
+          "story": story,
+          "return_type": return_type,
         }, context_instance=RequestContext(request))
     if( request.POST['return_type'] == 'block'):
       return render_to_response("stories/single_block_story.html", {
           "story": story,         
+          "return_type": return_type,
+        }, context_instance=RequestContext(request))
+    if( request.POST['return_type'] == 'queue'):
+      return render_to_response("stories/single_queue_story.html", {
+          "story": story,
+          "return_type": return_type,
         }, context_instance=RequestContext(request))
   
   else:
@@ -198,18 +228,22 @@ def stories_iteration(request, group_slug, iteration_id):
   display_type = request.GET.get("display_type","mini")
   text_search = request.GET.get("search","")
   tags_search = request.GET.get("tags","")
+  only_assigned = request.GET.get("only_assigned", False)
 
   tags_list = re.split('[, ]+', tags_search)
 
   # There's probably a better way to set up these filters...
   if text_search and tags_search:
-    stories = iteration.stories.filter(story_tags__tag__name__in=tags_list).extra( where = ["MATCH(summary, detail, extra_1, extra_2, extra_3) AGAINST (%s IN BOOLEAN MODE)"], params=[text_search]).distinct()
+    stories = iteration.stories.filter(story_tags__tag__name__in=tags_list).extra( where = ["MATCH(summary, detail, extra_1, extra_2, extra_3) AGAINST (%s IN BOOLEAN MODE)"], params=[text_search]).distinct().order_by(order_by)
   elif tags_search:
     stories = iteration.stories.filter(story_tags__tag__name__in=tags_list).distinct().order_by(order_by)
   elif text_search:
     stories = iteration.stories.extra( where = ["MATCH(summary, detail, extra_1, extra_2, extra_3) AGAINST (%s IN BOOLEAN MODE)"], params=[text_search]).order_by(order_by)
   else:
     stories = iteration.stories.order_by(order_by)
+
+  if only_assigned:
+      stories = stories.filter(assignee=request.user)
 
   return render_to_response("stories/mini_story_list.html", {
     "stories": stories,
@@ -250,7 +284,7 @@ def _handleAddStoryInternal( form , project, request):
   story.rank = _calculate_rank( story.iteration, int(form.cleaned_data['general_rank']) )
   logger.info("New Story %s" % story.summary)
   story.save()
-  story.activity_signal.send(sender=Story, news=request.user.username + " created story\"" +story.summary + "\" in \"" +project.name+"\"", user=request.user,action="created" ,object=story.summary[:90], story=story, context=project.slug)
+  story.activity_signal.send(sender=story, user=request.user, story=story, action="created", project=project)
   request.user.message_set.create(message="Story #%d created." % story.local_id )
   return story
 

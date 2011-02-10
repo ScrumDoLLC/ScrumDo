@@ -1,3 +1,8 @@
+#queue {
+    width: 200px;
+    float: right;
+}
+
 .box {
     width: 298px;
 }
@@ -21,7 +26,6 @@
     margin-left: 15px;
 }
 
-
 #projects-box p {
     margin: 0px;
     color: #b0b0b0;
@@ -32,11 +36,16 @@
     padding: 0px;
 }
 
-#projects-box .box-top {
+#queue-box .box-top, #projects-box .box-top {
     border-bottom: 1px solid #e1e1e1;
 }
 
-#projects-box .box-heading {
+#queue-box .box-content {
+   border-bottom: 1px solid #e1e1e1;
+   padding: 3px;
+}
+
+#queue-box .box-heading, #projects-box .box-heading {
     margin-top: 10px;
     background-color: #fafafa;
 }
@@ -47,7 +56,7 @@
 }
 
 
-#projects-box .box-bottom {
+#queue-box .box-bottom, #projects-box .box-bottom {
     margin-top: 10px;
     border-top: 1px solid #e1e1e1;
 }
@@ -79,22 +88,28 @@
 .newsfeed {
     margin-top: 10px;
     margin-left: 50px;
-    width: 498px;
+    width: 350px;
 }
 
 .newsfeed #top {
-    background: url("/site_media/static/images/layout/newsfeed-top.gif") no-repeat 0px 0px;
     font-size: 20px;
     font-weight: bold;
     height: 20px;
-    padding: 10px;
-    border-bottom: 1px solid #e1e1e1;
+    padding: 5px;
 }
 
 .newsfeed #bottom {
     background: url("/site_media/static/images/layout/newsfeed-bottom.gif") no-repeat 0px 0px;
     height: 10px;
     
+}
+
+.newsfeed a {
+    color: #666;
+}
+
+.newsfeed a:hover {
+    color: #000;
 }
 
 .newsfeed .activity {
@@ -104,6 +119,10 @@
 
 .newsfeed .activity .icon, .newsfeed .activity .avatar, .newsfeed .activity .details {
     display: inline-block;
+}
+
+.newsfeed .context {
+    margin-left: 55px;
 }
 
 .newsfeed .activity .icon {

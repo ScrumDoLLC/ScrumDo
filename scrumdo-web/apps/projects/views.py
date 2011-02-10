@@ -51,7 +51,7 @@ from projects.access import *
 from projects.models import Project, ProjectMember, Iteration, Story
 from projects.forms import *
 from organizations.models import Organization
-from activities.models import SubjectActivity
+from activities.models import Activity, StoryActivity, IterationActivity
 import datetime
 
 from story_views import handleAddStory
@@ -81,7 +81,9 @@ def home( request ):
 
   if request.user.is_authenticated():
     organizations = Organization.getOrganizationsForUser(request.user)
-    activities = SubjectActivity.getActivitiesForUser(request.user)
+    activities = Activity.getActivitiesForUser(request.user)
+
+    assigned_stories = Story.getAssignedStories(request.user)
 
     paginator = Paginator(activities, 10)
     page_obj = paginator.page(1)
@@ -106,6 +108,8 @@ def home( request ):
        "my_organizations": organizations,
        "activities": activities,
        "activities_next_page":next_page,
+       "assigned_stories": assigned_stories,
+       "return_type" : "queue", # for the queue mini stories
        "member_projects":member_projects,
        "num_projects":num_projects,
        "now": datetime.datetime.now(),

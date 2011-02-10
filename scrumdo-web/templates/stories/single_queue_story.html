@@ -4,8 +4,6 @@
 {% load avatar_tags %}
 
 <li class="story_small gripper_{% ifequal story.status 1 %}todo{% endifequal %}{% ifequal story.status 2 %}doing{% endifequal %}{% ifequal story.status 3 %}reviewing{% endifequal %}{% ifequal story.status 4 %}done{% endifequal %}" story_id="{{story.id}}" id="story_{{story.id}}" rank="{{ story.rank }}" >
-  <div class="pointsBox" point_value="{{ story.points }}">{{ story.getPointsLabel }}</div>
-
   <div class="todoButtons todoButtons_mini" id="todoButtons_{{story.id}}">
     {% include "stories/todobuttons.html" %}
   </div>
@@ -17,24 +15,14 @@
       <img title="Set Status" src="/site_media/static/pinax/images/silk/icons/tag_red.png" />
     </a>
     {% endnotlocked %}
-    <a onclick="jQuery.facebox({ ajax: '/projects/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=mini'}, 'edit_story'); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=mini">
-      <img title="Edit Story" src="/site_media/static/pinax/images/silk/icons/pencil.png" /></a></span>
-  <h1><span style="color:#cccccc;">#{{story.local_id}}</span> {{ story.summary }}</h1>
+    <a onclick="jQuery.facebox({ ajax: '/projects/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=queue'}, 'edit_story'); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=queue">
+      <img title="Edit Story" src="/site_media/static/pinax/images/silk/icons/pencil.png" /></a>
+    <strong>{{ story.getPointsLabel }}</strong>
+</span>
+  <h1><a href="{% url iteration story.project.slug story.iteration.id %}#story_{{ story.id }}">{{ story.summary }}</a></h1>
 
   {% filter truncatewords:"20" %}
     {{ story.detail }}
   {% endfilter %} 
-     
-  {% if story.story_tags.all %}
-    <div class="tagsBox">{% silk "tag_blue" %}
-    {% for tag in story.story_tags.all %}
-       {{ tag.name }} 
-    {% endfor %}
-    </div>
-  {% endif %}
-  {% if story.assignee and story.project.use_assignee %}
-    Assigned: <b>{{story.assignee}}</b> {% avatar story.assignee 22 %}
-  {% endif %}
-  
 
 </li>  
