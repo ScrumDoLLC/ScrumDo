@@ -49,7 +49,7 @@ def tutorial_print(request, name):
     if not tutorials.has_key(name):
         raise Http404
 
-    return render_to_response(join("tutorial", name, "print.html"), {
+    return render_to_response("tutorial/print.html", {
             "page_templates" : map(lambda (x,y): join("tutorial", name, x + ".html"), tutorials[name]),
             "name":name,
             "this": ("print", "Print Version"),
