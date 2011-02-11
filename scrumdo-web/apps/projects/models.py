@@ -22,6 +22,7 @@ from tagging.fields import TagField
 from tagging.models import Tag
 import tagging
 import re
+from itertools import groupby
 
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import  User
@@ -33,7 +34,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 
 from organizations.models import Organization
-from activities.models import SubjectActivity
+from activities.models import Activity, StoryActivity, IterationActivity
 import django.dispatch
 
 class SiteStats( models.Model ):
@@ -191,8 +192,8 @@ class Iteration( models.Model):
   points_log = generic.GenericRelation( PointsLog )
   locked = models.BooleanField( default=False )
   
-  activity_signal = django.dispatch.Signal(providing_args=["news", "user","action","context"])
-  activity_signal.connect(SubjectActivity.activity_handler)
+  activity_signal = django.dispatch.Signal(providing_args=["user","action","project"])
+  activity_signal.connect(IterationActivity.activity_handler)
 
   include_in_velocity = models.BooleanField(_('include_in_velocity'), default=True)
   
@@ -252,9 +253,21 @@ class Story( models.Model ):
 
   tags_to_delete = []
   tags_to_add = []
-  activity_signal = django.dispatch.Signal(providing_args=["news", "user","action", "story", "context"])
-  activity_signal.connect(SubjectActivity.activity_handler)
+  activity_signal = django.dispatch.Signal(providing_args=["user","action", "project", "story"])
+  activity_signal.connect(StoryActivity.activity_handler)
 
+  @staticmethod
+  def getAssignedStories(user):
+    projects = ProjectMember.getProjectsForUser(user)
+    assigned_stories = []
+    for project in projects:
+      if project.use_assignee:
+        project_stories = []
+        iterations = project.get_current_iterations()
+        for iteration in iterations:
+          project_stories = project_stories + list(Story.objects.filter(iteration=iteration, assignee=user).exclude(status=4))
+        assigned_stories = assigned_stories + [(project, project_stories)]
+    return assigned_stories
 
   def getPointsLabel(self):
     result = filter( lambda v: v[0]==self.points, self.getPointScale() )
@@ -346,6 +359,8 @@ class StoryTagging( models.Model ):
   def name(self):
     return self.tag.name
 
+from organizations.team_models import Team
+
 class ProjectMember(models.Model):
     project = models.ForeignKey(Project, related_name="members", verbose_name=_('project'))
     user = models.ForeignKey(User, related_name="projects", verbose_name=_('user'))
@@ -354,5 +369,12 @@ class ProjectMember(models.Model):
     away_message = models.CharField(_('away_message'), max_length=500)
     away_since = models.DateTimeField(_('away since'), default=datetime.now)
 
+    @staticmethod
+    def getProjectsForUser(user):
+      """ This gets all a user's projects, including ones they have access to via teams. """
+      user_projects = [pm.project for pm in ProjectMember.objects.filter(user=user).select_related()]
+      team_projects = [team.projects.all() for team in Team.objects.filter(members=user)]
+      for project_list in team_projects:
+        user_projects = user_projects + list(project_list)
+      return list(set(user_projects))
 
-from organizations.team_models import *

@@ -3,10 +3,12 @@
 {% load avatar_tags %}
 
 <script type="text/javascript" src="{{ STATIC_URL }}js/home.js"></script>
+{% include "projects/iteration_js.html" %} {# include this way to be able to use template tags, for the story queue functionality #}
 <link rel="stylesheet" href="{{ STATIC_URL }}css/home.css" />
 
 <div id="side">
 
+{% comment %}
   <div id="announcements-box" class="box">
     <div class="box-top">
       <div class="title">
@@ -22,7 +24,9 @@
     </div><!--box-heading-->
     <div class="box-bottom"></div>
   </div><!--announcements-box-->
-  
+{% endcomment %}
+
+
   <div id="projects-box" class="box">
     <div class="box-top">
       <div class="title">
@@ -45,7 +49,7 @@
 	  <a title="Subscribe to project activity." target="_blank" href="/feeds/project/{{ project.pk }}">{% silk "feed" %}</a>
 	</div><!--projectfeed-->
 	<div class="project">
-  	  {% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a> 
+  	  <a href="{% url project_detail project.slug %}">{% silk "database_table" %} {{project.name}}</a> 
 	  <div class="subtitle">{{ project.get_num_iterations }} iteration{{ project.get_num_iterations|pluralize }}, {{ project.get_num_stories }} stor{{ project.get_num_stories|pluralize:"y,ies" }}</div>
 	</div><!--project-->
 	{% endifequal %}
@@ -86,6 +90,11 @@
 	<a title="Add New Organization" href="{% url organization_create %}">{% silk "add" %}</a>
       </div><!--buttons-->
     </div><!--box-top-->
+    {% if not my_organizations %}
+    <div class="box-heading">
+      You are not currently a member of any organizations.
+    </div><!--box-heading-->
+    {% endif %}
     {% for org in my_organizations %}  
     <div class="box-heading">
       {% silk "building" %} <a href="{% url organization_detail org.slug %}">{{org.name}}</a> - {{org.teams.count}} Team{{ org.teams.count|pluralize }}
@@ -134,14 +143,47 @@
 
 {% endif %}
 
+{% if assigned_stories %}
+<div id="queue">
+  <div id="queue-box" class="box">
+    <div class="box-top">
+      <div class="title">
+	Story Queue
+	<a title="The Story Queue shows you the stories that have been assigned to you and are in the current iteration of a project. If a project is not showing up here, it is because the project is not set to track stories by assigning.">{% silk "help" %}</a>
+      </div><!--title-->
+    </div><!--box-top-->
+    {% for project,stories in assigned_stories %}
+    <div class="box-heading">
+      <a href="{% url project_detail project.slug %}">{% silk "database_table" %} {{ project.name }}</a>
+    </div><!--box-heading-->
+    {% if not stories %}
+    <div class="box-content">
+      No incomplete stories assigned currently.
+    </div><!--box-content-->
+    {% endif %}
+    {% for story in stories %}
+    <div class="box-content">
+      {% include "stories/single_queue_story.html" %}
+    </div><!--box-content-->
+    {% endfor %}
+    {% endfor %}
+    <div class="box-bottom"></div>
+  </div><!--box-->
+</div><!--queue-->
+{% endif %}
+
 <div class="newsfeed">
   <img style="float:right; display: none" src="{{ STATIC_URL }}images/ajax-loader.gif" id="loadingIcon">
-  <div id="top">News Feed</div>
+  <div class="box-top">
+    <div class="title">
+      News Feed
+    </div><!--title-->
+  </div><!--box-top-->
   <p>
     <div id="feedContent">
       {% include "activities/activity_list.html" %}
     </div>
-  <div id="bottom"></div>
+  <div class="box-bottom"></div>
 </div><!--newsfeed-->
 
 

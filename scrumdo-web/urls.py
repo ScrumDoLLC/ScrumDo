@@ -64,6 +64,7 @@ urlpatterns = patterns('',
     (r'^organization/', include('organizations.urls')),    
     (r'^tutorial/', include('tutorial.urls')),
     (r'^admin/(.*)', admin.site.root),
+    (r'^api/', include('api.urls')),
 )
 
 if settings.SERVE_MEDIA:
