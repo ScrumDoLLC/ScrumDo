@@ -90,6 +90,11 @@
 	<a title="Add New Organization" href="{% url organization_create %}">{% silk "add" %}</a>
       </div><!--buttons-->
     </div><!--box-top-->
+    {% if not my_organizations %}
+    <div class="box-heading">
+      You are not currently a member of any organizations.
+    </div><!--box-heading-->
+    {% endif %}
     {% for org in my_organizations %}  
     <div class="box-heading">
       {% silk "building" %} <a href="{% url organization_detail org.slug %}">{{org.name}}</a> - {{org.teams.count}} Team{{ org.teams.count|pluralize }}
@@ -138,6 +143,7 @@
 
 {% endif %}
 
+{% if assigned_stories %}
 <div id="queue">
   <div id="queue-box" class="box">
     <div class="box-top">
@@ -146,11 +152,6 @@
 	<a title="The Story Queue shows you the stories that have been assigned to you and are in the current iteration of a project. If a project is not showing up here, it is because the project is not set to track stories by assigning.">{% silk "help" %}</a>
       </div><!--title-->
     </div><!--box-top-->
-    {% if not assigned_stories %}
-    <div class="box-heading">
-      No projects you are a member of are tracking stories based on assignment.
-    </div><!--box-heading-->
-    {% else %}
     {% for project,stories in assigned_stories %}
     <div class="box-heading">
       <a href="{% url project_detail project.slug %}">{% silk "database_table" %} {{ project.name }}</a>
@@ -166,10 +167,10 @@
     </div><!--box-content-->
     {% endfor %}
     {% endfor %}
-    {% endif %}
     <div class="box-bottom"></div>
   </div><!--box-->
 </div><!--queue-->
+{% endif %}
 
 <div class="newsfeed">
   <img style="float:right; display: none" src="{{ STATIC_URL }}images/ajax-loader.gif" id="loadingIcon">
