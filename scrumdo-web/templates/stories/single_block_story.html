@@ -3,6 +3,8 @@
 {% load comments_tag %}
 {% load projects_tags %}
 {% load avatar_tags %}
+{% load attachments_tags %}
+{% load story_tags %}
 
 <li class="story_block gripper_{% ifequal story.status 1 %}todo{% endifequal %}{% ifequal story.status 3 %}reviewing{% endifequal %}{% ifequal story.status 2 %}doing{% endifequal %}{% ifequal story.status 4 %}done{% endifequal %}" story_id="{{story.id}}" id="story_{{story.id}}" rank="{{ story.rank }}" >
   <div class="pointsBox">{{ story.getPointsLabel }}</div>
@@ -50,6 +52,17 @@
   <br/><a href="{{ link.external_url }}">{{ link.external_url }}</a>
 {% endfor %}
 
+<br/>
+Attachments <a title="Attach a file" href="#addFileStory_{{ story.id }}" rel="facebox">{% silk "add" %}</a>:
+{% get_attachments_for story as "story_files" %}
+{% if not story_files %}
+<em>None.</em>
+{% endif %}
+{% for file in story_files %}
+  <em><a href="{{ file.attachment_file.url }}" target="_blank">{{ file.filename }}</a> {% story_attachment_delete_link story file %}</em>,  
+{% endfor %}
 
-    
+  <div class="addFileStory" id="addFileStory_{{ story.id }}" style="display:none">
+    {% story_attachment_form story %}
+  </div>
 </li>  

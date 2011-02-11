@@ -5,6 +5,8 @@
 {% load theme_tags %}
 {% load extra_tagging_tags %}
 {% load avatar_tags %}
+{% load attachments_tags %}
+
 
 {% block body_class %}projects{% endblock %}
 
@@ -160,6 +162,40 @@
 </div><!--box-content-->
 </div><!--box-->
 
+{% if project.organization %}
+
+    <div class="box">
+      <div class="box-title">{% trans "Organization Files" %} <a title="Attach a file" href="#addFileOrganization" rel="facebox">{% silk "add" %}</a></div>
+      {% get_attachments_for project.organization as "organization_files" %}
+      {% if not organization_files %}
+      <div class="box-content">No files.</div>
+      {% endif %}
+      {% for file in organization_files %}
+      <div class="box-content">
+	<a href="{{ file.attachment_file.url }}" target="_blank">{% silk "package" %} {{ file.filename }}</a>
+	{% attachment_delete_link file %}
+      </div><!--box-content-->
+      {% endfor %}
+    </div><!--box-->
+
+    <div id="addFileOrganization" style="display:none">
+      {% attachment_form project.organization %}
+    </div>
+{% endif %}
+
+<div class="box">
+  <div class="box-title">{% trans "Project Files" %} <a title="Attach a file" href="#addFileProject" rel="facebox">{% silk "add" %}</a></div>
+  {% get_attachments_for project as "project_files" %}
+  {% if not project_files %}
+  <div class="box-content">No files.</div>
+  {% endif %}
+  {% for file in project_files %}
+  <div class="box-content">
+    <a href="{{ file.attachment_file.url }}" target="_blank">{% silk "package" %} {{ file.filename }}</a>
+    {% attachment_delete_link file %}
+  </div><!--box-content-->
+  {% endfor %}
+</div><!--box-->
 
 <div class="box">
   <div class="box-content">
@@ -169,4 +205,9 @@
   </div><!--box-content-->
 </div><!--box-->
 </div><!--panel-->
+
+<div id="addFileProject" style="display:none">
+  {% attachment_form project %}
+</div>
+
 {% endblock %}

@@ -18,12 +18,17 @@
 
 from django.contrib import admin
 from projects.models import Project, Iteration, SiteStats, Story, StoryTag
+from attachments.admin import AttachmentInlines
 
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug', 'creator', 'created')
+    inlines = [AttachmentInlines]
+
+class StoryAdmin(admin.ModelAdmin):
+    inlines = [AttachmentInlines]
 
 admin.site.register(Project, ProjectAdmin)
+admin.site.register(Story, StoryAdmin)  
 admin.site.register(Iteration)
 admin.site.register(SiteStats )
-admin.site.register(Story )
 admin.site.register(StoryTag )

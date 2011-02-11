@@ -1,5 +1,6 @@
 {% load theme_tags %}
 {% load i18n %}
+{% load attachments_tags %}
 
 <div id="panel">
   <div class="box">
@@ -9,7 +10,7 @@
     </div><!--box-title-->
     <div class="box-content">
       {% trans "Slug:" %} <tt>{{ organization.slug }}</tt><br />
-      {% trans "Creator:" %} <a href="{% url profile_detail organization.creator.username %}">{{ project.creator }}</a><br />
+      {% trans "Creator:" %} <a href="{% url profile_detail organization.creator.username %}">{{ organization.creator }}</a><br />
       {% trans "Created:" %} {{ organization.created|date }}
     </div><!--box-content-->
     <div class="box-title">
@@ -21,6 +22,24 @@
     <div class="box-content">
       <a href="{% url team_create organization.slug %}">{% silk "group" %} New Team</a>
     </div><!--box-content-->
+
+    <div class="box">
+      <div class="box-title">{% trans "Organization Files" %} <a title="Attach a file" href="#addFileOrganization" rel="facebox">{% silk "add" %}</a></div>
+      {% get_attachments_for organization as "organization_files" %}
+      {% if not organization_files %}
+      <div class="box-content">No files.</div>
+      {% endif %}
+      {% for file in organization_files %}
+      <div class="box-content">
+	<a href="{{ file.attachment_file.url }}" target="_blank">{% silk "package" %} {{ file.filename }}</a>
+	{% attachment_delete_link file %}
+      </div><!--box-content-->
+      {% endfor %}
+    </div><!--box-->
+
+    <div id="addFileOrganization" style="display:none">
+      {% attachment_form organization %}
+    </div>
     {% endif %}
     <div class="box-title">
       {% if organization %}Other {% endif %}Organizations
@@ -44,3 +63,5 @@
     {% endif %}
   </div><!--box-->
 </div><!--panel-->
+
+

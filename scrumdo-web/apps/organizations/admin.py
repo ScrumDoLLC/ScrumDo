@@ -19,6 +19,10 @@
 from django.contrib import admin
 from organizations.models import Organization
 from organizations.team_models import Team
+from attachments.admin import AttachmentInlines
 
-admin.site.register(Organization)
+class OrganizationAdmin(admin.ModelAdmin):
+    inlines = [AttachmentInlines]
+
+admin.site.register(Organization, OrganizationAdmin)
 admin.site.register(Team )
