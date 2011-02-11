@@ -56,11 +56,13 @@ logger = logging.getLogger(__name__)
 def set_story_status( request, group_slug, story_id, status):
   story = get_object_or_404( Story, id=story_id )
   write_access_or_403(story.project,request.user)
-  story.status = status;
-  story.save();         
-  signals.story_status_changed.send( sender=request, story=story, user=request.user )
-  statuses = [None, "TODO", "In Progress", "Reviewing", "Done"]
-  story.activity_signal.send(sender=story, user=request.user, story=story, action="changed status", status=statuses[status], project=story.project)
+  if story.status != status:
+      # the status was actually changes
+      story.status = status;
+      story.save();
+      signals.story_status_changed.send( sender=request, story=story, user=request.user )
+      statuses = [None, "TODO", "In Progress", "Reviewing", "Done"]
+      story.activity_signal.send(sender=story, user=request.user, story=story, action="changed status", status=statuses[status], project=story.project)
   if( request.POST.get("return_type","mini") == "mini"):
     return render_to_response("stories/single_mini_story.html", {
         "story": story,
