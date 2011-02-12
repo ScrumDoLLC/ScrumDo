@@ -83,5 +83,5 @@ class AddUserForm(forms.Form):
       new_member = User.objects.get(username__exact=self.cleaned_data['recipient'])
       self.team.members.add( new_member )
       self.team.save()     
-      user.message_set.create(message="added %s to team" % new_member)
+      user.message_set.create(message="Added %s to team" % new_member)
       

@@ -30,7 +30,7 @@
     {% ifnotequal org organization %}
     <div class="box-content">
       {% silk "building" %}
-      <a href="{% url organization_detail organization.slug %}">{{ org.name}}</a>
+      <a href="{% url organization_detail org.slug %}">{{ org.name}}</a>
       <div class="subtitle organization-description">
 	{{org.projects.count}} Project{{ org.projects.count|pluralize }}, 
 	{{org.teams.count}} Team{{ org.teams.count|pluralize }}
