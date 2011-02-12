@@ -6,7 +6,11 @@
   display: inline;
 }
 
-
 #facebox .close{
   top:3px;
+}
+
+.todoButtons {
+    width: 280px;
+    margin-bottom: 4px;   
 }
