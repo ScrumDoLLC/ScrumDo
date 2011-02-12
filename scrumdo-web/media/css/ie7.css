@@ -5,3 +5,8 @@
 #story_details ul li {  
   display: inline;
 }
+
+
+#facebox .close{
+  top:3px;
+}
