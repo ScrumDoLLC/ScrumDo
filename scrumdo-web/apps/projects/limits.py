@@ -35,7 +35,7 @@ org_user_limit         = Limit( providing_args=["organization","userToAdd"] )
 org_storage_limit      = Limit( providing_args=["organization"] )
 
 
-# Helper method:
+# Helper methods:
 def userIncreasedAlowed( project, user, userToAdd):
     if project.organization:
         return org_user_limit.increaseAllowed(userToAdd=userToAdd, organization=project.organization)

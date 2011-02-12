@@ -33,6 +33,7 @@ import datetime
 import math
 import logging
 
+from projects.limits import org_project_limit, personal_project_limit
 
 logger = logging.getLogger(__name__)
 
@@ -225,26 +226,40 @@ def create(request, form_class=ProjectForm, template_name="projects/create.html"
         project = project_form.save(commit=False)
         project.creator = request.user
         org_id = request.POST.get("organization","none")
-        
-        project.save()
+        organization = None
         if org_id != "none":
           organization = Organization.objects.filter( id=org_id )[0]
-          if organization and organization in admin_organizations: # make sure the specified organization is in the list of admin orgs, if not silently ignore it.
-            addProjectToOrganization(project, organization)       
         
-        # We better make the user a member of their own project.
-        project_member = ProjectMember(project=project, user=request.user)
-        project.members.add(project_member)
-        project_member.save()        
+        creationAllowed = True
         
-        # And lets make the default backlog iteration with no start/end dates.
-        default_iteration = Iteration( name='Backlog', detail='', default_iteration=True, project=project)
-        project.iterations.add(default_iteration)
-        default_iteration.save()        
+        if organization:
+            creationAllowed = org_project_limit.increaseAllowed(organization=organization)
+        else:
+            creationAllowed = personal_project_limit.increaseAllowed(user=request.user)
+            
+        if creationAllowed:
         
-        request.user.message_set.create(message="Project Created")
-        # Finished successfully creating a project, send the user to that page.
-        return HttpResponseRedirect(project.get_absolute_url())
+            project.save()
+        
+            if organization != None:
+              if organization in admin_organizations: # make sure the specified organization is in the list of admin orgs, if not silently ignore it.
+                addProjectToOrganization(project, organization)       
+        
+            # We better make the user a member of their own project.
+            project_member = ProjectMember(project=project, user=request.user)
+            project.members.add(project_member)
+            project_member.save()        
+        
+            # And lets make the default backlog iteration with no start/end dates.
+            default_iteration = Iteration( name='Backlog', detail='', default_iteration=True, project=project)
+            project.iterations.add(default_iteration)
+            default_iteration.save()        
+        
+            request.user.message_set.create(message="Project Created")
+            # Finished successfully creating a project, send the user to that page.
+            return HttpResponseRedirect(project.get_absolute_url())
+        else:
+            request.user.message_set.create(message="Upgrade your account to add more projects." )
 
     # If they got here from the organziation page, there will be an org get-param set stating what organization it was from.
     # we need that here so it's pre-selected in the form.
