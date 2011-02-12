@@ -72,6 +72,7 @@ class Project(Group):
     VELOCITY_TYPE_MEDIAN = 2
     VELOCITY_TYPE_AVERAGE_3 = 3
   
+    active = models.BooleanField( default=True )
   
     member_users = models.ManyToManyField(User, through="ProjectMember", verbose_name=_('members'))
     
@@ -368,7 +369,10 @@ class ProjectMember(models.Model):
     away = models.BooleanField(_('away'), default=False)
     away_message = models.CharField(_('away_message'), max_length=500)
     away_since = models.DateTimeField(_('away since'), default=datetime.now)
-
+    
+    def __str__(self):
+        return "ProjectMember: %s " % self.user.username
+        
     @staticmethod
     def getProjectsForUser(user):
       """ This gets all a user's projects, including ones they have access to via teams. """

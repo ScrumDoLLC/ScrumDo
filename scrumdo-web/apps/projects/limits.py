@@ -24,7 +24,21 @@ class Limit(object) :
 
 
 
-    
-project_limit      = Limit( providing_args=["organization","user"] )
-user_limit         = Limit( providing_args=["organization","user"] )
-organization_limit = Limit( providing_args=["organization","user"] )    
+# Limits related to a personal account:
+personal_project_limit      = Limit( providing_args=["user"] )
+personal_user_limit         = Limit( providing_args=["user","userToAdd"] )
+personal_storage_limit      = Limit( providing_args=["user"] )    
+
+# Limits related to an organization:
+org_project_limit      = Limit( providing_args=["organization"] )
+org_user_limit         = Limit( providing_args=["organization","userToAdd"] )
+org_storage_limit      = Limit( providing_args=["organization"] )
+
+
+# Helper method:
+def userIncreasedAlowed( project, user, userToAdd):
+    if project.organization:
+        return org_user_limit.increaseAllowed(userToAdd=userToAdd, organization=project.organization)
+    else:
+        return personal_user_limit.increaseAllowed(userToAdd=userToAdd, user=user)
+

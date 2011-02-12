@@ -24,7 +24,7 @@ from django.utils.translation import ugettext_lazy as _
 from projects.models import Project, ProjectMember, Iteration, Story
 from django.forms.extras.widgets import SelectDateWidget
 
-
+from projects.limits import userIncreasedAlowed
 
 
 if "notification" in settings.INSTALLED_APPS:
@@ -175,6 +175,7 @@ class AddUserForm(forms.Form):
     
     def __init__(self, *args, **kwargs):
         self.project = kwargs.pop("project")
+        self.user = kwargs.pop("user")
         super(AddUserForm, self).__init__(*args, **kwargs)
     
     def clean_recipient(self):
@@ -185,6 +186,9 @@ class AddUserForm(forms.Form):
         
         if ProjectMember.objects.filter(project=self.project, user=user).count() > 0:
             raise forms.ValidationError(_("User is already a member of this project."))      
+        
+        if not userIncreasedAlowed(self.project, self.user, user):
+            raise forms.ValidationError(_("Upgrade your account to add more users."))      
         
         return self.cleaned_data['recipient']
     
