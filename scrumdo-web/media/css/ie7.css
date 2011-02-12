@@ -1,0 +1,7 @@
+#story_form #add_button {    
+    vertical-align: text-bottom;
+}
+
+#story_details ul li {  
+  display: inline;
+}

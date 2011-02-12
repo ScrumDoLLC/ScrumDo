@@ -17,6 +17,8 @@
     -moz-border-radius: 3px;
     -o-border-radius: 3px;
     -khtml-border-radius: 3px;
+    
+    behavior: url(/site_media/static/css/PIE.htc);
 }
 
 #story_form #id_summary {
@@ -34,11 +36,13 @@
     background: -webkit-gradient(linear, left top, left bottom, from(#f1f1f1), to(#e1e1e1));
     background: -moz-linear-gradient(top,  #f1f1f1,  #e1e1e1);
     border: 1px solid #c8c8c8;
+    
     border-radius: 3px;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     -o-border-radius: 3px;
-    -khtml-border-radius: 3px;
+    -khtml-border-radius: 3px;    
+    
     font-size: 15px;
     letter-spacing: 0.5px;
     color: #222;
