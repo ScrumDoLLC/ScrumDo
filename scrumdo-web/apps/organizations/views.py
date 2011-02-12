@@ -41,8 +41,8 @@ def organization(request, organization_slug):
 
   teams = []
   for team in organization.teams.all():
-    teams.append((team, AddUserForm(team=team)))
-
+      teams.append((team, AddUserForm(team=team)))
+      
   # this used to live in team_views.py, but since the individual teams pages
   # have been consolodated, this post is now from the organization overview page
   if request.method == "POST":
@@ -71,10 +71,11 @@ def organization(request, organization_slug):
         team.members.remove(user);
         team.save()
 
+
   return render_to_response("organizations/organization.html", {    
       "organization": organization,
       "organization_teams": teams,
-      "organizations": organizations,
+      "organizations": organizations
     }, context_instance=RequestContext(request))
 
 
