@@ -92,13 +92,12 @@ h2 {
 	margin: 0px;
 }
 .ie6_warning {
-	min-height: 50px;
-	background-color: #8b1e17;
+	background-color: #333333;
 	color: white;
-	font-size: 16px;
-	padding: 10px;
-	border-style: solid;
-	border-color: #ff2600;
+	font-size: 14px;
+	padding: 6px;
+	border-style: none;
+	text-align: center;
 }
 /* CLEARS */
 

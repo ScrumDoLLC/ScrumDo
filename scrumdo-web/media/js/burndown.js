@@ -27,7 +27,7 @@ function plotBurndown( divID, series, options)
 {
   if(series[0].data.length > 0)
   {
-    $.plot($(divID), series, options);
+      $.plot($(divID), series, options);
   }
   else
   {
