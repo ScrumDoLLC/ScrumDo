@@ -221,7 +221,7 @@ def project_history( request, group_slug ):
 def create(request, form_class=ProjectForm, template_name="projects/create.html"):
     project_form = form_class(request.POST or None)
     admin_organizations = Organization.getOrganizationsForUser( request.user ) # The user can create projects in organizations the user is an admin in.    
-    
+
     if project_form.is_valid():
         project = project_form.save(commit=False)
         project.creator = request.user
@@ -264,10 +264,8 @@ def create(request, form_class=ProjectForm, template_name="projects/create.html"
     # If they got here from the organziation page, there will be an org get-param set stating what organization it was from.
     # we need that here so it's pre-selected in the form.
     organization = None
-    organizations = []
     if request.GET.get("org","") != "":
       organization = Organization.objects.filter(id=request.GET.get("org",""))[0]
-      organizations = Organization.getOrganizationsForUser( request.user )
     
     return render_to_response(template_name, {
         "project_form": project_form,

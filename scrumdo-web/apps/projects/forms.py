@@ -128,10 +128,10 @@ class ProjectForm(forms.ModelForm):
             raise forms.ValidationError(_("A project already exists with that slug."))
         return self.cleaned_data["slug"].lower()
     
-    def clean_name(self):
-        if Project.objects.filter(name__iexact=self.cleaned_data["name"]).count() > 0:
-            raise forms.ValidationError(_("A project already exists with that name."))
-        return self.cleaned_data["name"]
+    # def clean_name(self):
+    #     if Project.objects.filter(name__iexact=self.cleaned_data["name"]).count() > 0:
+    #         raise forms.ValidationError(_("A project already exists with that name."))
+    #     return self.cleaned_data["name"]
     
     class Meta:
         model = Project
