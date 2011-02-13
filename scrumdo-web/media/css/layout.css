@@ -175,21 +175,22 @@
 	width: 480px;
 	margin-left: -258px;	
 	border-radius: 10px;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  -o-border-radius: 10px;
-  -khtml-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -o-border-radius: 10px;
+    -khtml-border-radius: 10px;
 	
-  box-shadow: 0 0 2em #888;
-  -moz-box-shadow: 0 0 2em #888;
-  -webkit-box-shadow: 0 0 2em #888;
+    box-shadow: 0 0 2em #888;
+    -moz-box-shadow: 0 0 2em #888;
+    -webkit-box-shadow: 0 0 2em #888;
 	padding: 35px;
 	margin-top: 35px;
 	z-index: 2004;
 	position: absolute;
 	background-color: #fffeff;
 	left: 50%;
-
+    
+    behavior: url(/site_media/static/css/PIE.htc);
 }
 
 

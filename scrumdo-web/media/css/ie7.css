@@ -1,3 +1,7 @@
+body {
+    font-family: "Helvetica Neue", Helvetica, Verdana, Arial, sans-serif;
+    font-size: 12px;
+}
 #story_form #add_button {    
     vertical-align: text-bottom;
 }
@@ -21,3 +25,4 @@
   overflow: hidden;
   word-wrap: break-word;
 }
+
