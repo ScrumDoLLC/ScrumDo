@@ -29,7 +29,7 @@
         <link rel="stylesheet" href="{{ STATIC_URL }}css/tipTip.css" />
         <link rel="stylesheet" href="{{ STATIC_URL }}css/redmond/jquery-ui-1.8.6.custom.css" />
         
-        <!--[if IE 7]><link rel="stylesheet" href="{{ STATIC_URL }}css/ie7.css" /><![endif]-->         
+        
         
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js" type="text/javascript"></script>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script>
@@ -68,8 +68,9 @@
       <!--[if IE]><style>
           div {
               zoom: 1; /* trigger hasLayout */
-          }
-      </style><![endif]-->
+          }          
+      </style><![endif]-->      
+      <!--[if IE 7]><link rel="stylesheet" href="{{ STATIC_URL }}css/ie7.css" /><![endif]-->         
     </head>
     
     <body class="{% block body_class %}{% endblock %}">

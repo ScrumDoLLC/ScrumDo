@@ -93,7 +93,7 @@
 {% block extra_body %}
 
 
-{% include "projects/iteration_js.html" %} {# include this way to be able to use template tags #}
+
 <script type="text/javascript">
 
 var project_slug = "{{ iteration.project.slug }}";
@@ -105,7 +105,7 @@ function loadIteration( iterationID , tags, search)
     $.ajax({
 	    url: "/projects/project/" + project_slug + "/stories/" + iterationID,
 		data:{display_type:"block",
-		    tags:tags,
+		    tags:tags,		    
 		    search:search},
 		success: function(html){
 		$("#story_list").html(html);  

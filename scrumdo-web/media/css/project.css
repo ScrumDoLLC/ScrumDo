@@ -1,4 +1,7 @@
-/* @override http://localhost:8000/site_media/static/projects/css/projects.css */
+/* @override 
+	http://localhost:8000/site_media/static/projects/css/projects.css
+	http://localhost:8000/site_media/static/css/project.css
+*/
 
 .box-content .team {
     padding: 5px;
@@ -254,4 +257,3 @@ h1 a {
 .iteration_history_points h1 {
 	margin: 0px;
 }
-

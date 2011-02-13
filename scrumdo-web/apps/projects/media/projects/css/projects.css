@@ -174,13 +174,18 @@
     color: #fff;
     cursor: pointer;
     font-weight: bold;
+    text-decoration: none;	
+    
+    
     border-radius: 5px;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
+    
     text-shadow: 1px 1px #666;
-    text-decoration: none;	
     -moz-box-shadow: 1px 1px 3px #888;
     -webkit-box-shadow: 1px 1px 3px #888;
+    
+
 }
 
 .button:hover {
@@ -204,7 +209,7 @@
 
 .button:visited { color:#fff; }
 
-.button.red { background-color: #e50000; }
+.button.red { background-color: #e50000;  }
 .button.purple { background-color: #9400bf; }
 .button.green { background-color: #58aa00; }
 .button.orange { background-color: #ff9c00; }
