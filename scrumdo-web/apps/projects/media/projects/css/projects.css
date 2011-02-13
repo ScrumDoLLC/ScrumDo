@@ -234,3 +234,273 @@
 #createdStories li {
 	margin-bottom: 5px;
 }
+
+
+.box-content .team {
+    padding: 5px;
+    padding-left: 10px;
+}
+
+#story_form {
+    border: 1px solid #e1e1e1;
+    background: #fafafa;
+    margin: 10px;
+    padding: 10px;
+
+    max-width: 950px;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -o-border-radius: 3px;
+    -khtml-border-radius: 3px;
+    
+    behavior: url(/site_media/static/css/PIE.htc);
+}
+
+#story_form #id_summary {
+    width: 70%;
+}
+
+#story_form #id_detail {
+    width: 94%;
+}
+
+#story_form #add_button {
+    width: 25%;
+    height: 25px;
+    background-color: #e8e8e8;	
+    background: -webkit-gradient(linear, left top, left bottom, from(#f1f1f1), to(#e1e1e1));
+    background: -moz-linear-gradient(top,  #f1f1f1,  #e1e1e1);
+    border: 1px solid #c8c8c8;
+    
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -o-border-radius: 3px;
+    -khtml-border-radius: 3px;    
+    
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    color: #222;
+    text-shadow: #ccc 1px 1px 0px;
+    font-weight: bold;
+}
+
+#story_form #add_button:hover {
+    cursor: pointer;
+    background-color: #444;	
+    background: -webkit-gradient(linear, left top, left bottom, from(#666), to(#222));
+    background: -moz-linear-gradient(top,  #666,  #222);
+    border: 1px solid #000;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -o-border-radius: 3px;
+    -khtml-border-radius: 3px;
+    color: #fff;
+    text-shadow: #222 -1px -1px 0px;
+}
+
+#story_form #story_details {
+  display: none;
+}
+
+#story_details table tr td {
+  padding-bottom: 3px;
+  padding-right: 2px;
+}
+
+#story_details ul {
+  margin: 0px;
+  padding: 0px;
+}
+#story_details li {
+  list-style-type: none;
+  display: inline-block;
+  background-color: #ededed;
+  padding-top: 5px;
+  padding-bottom: 3px;
+  padding-right: 10px;
+  padding-left: 6px;
+  margin: 1px;
+}
+
+#story_area input[type='text'] {
+  width: 90%;
+}
+
+
+
+.projectOptionsForm tr td:first-child {
+  width: 200px;
+}
+
+.projectOptionsForm td {
+  padding-left: 10px;
+}
+
+#story_area textarea {
+  width: 90%;
+}
+
+#story_area {
+  max-height: 500px;
+  width: 500px;
+  overflow: auto;
+  overflow-x: hidden;
+  padding: 10px;
+}
+
+h1 a {
+    text-decoration: none;
+    color: #000;
+}
+
+#story_list, .story_list {
+    padding: 0px;
+    margin: 5px;
+    border-top: 1px solid #e1e1e1;
+    min-height: 100px;
+}
+
+.showFilter {
+    display: block;
+    text-align: right;
+    margin-top: -20px;
+    text-decoration: none;
+    color: #000;
+}
+
+#filterDialog {
+    border: 1px solid #e1e1e1;
+    background: #fafafa;
+    margin: 10px;
+    padding: 10px;
+    width: 80%;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -o-border-radius: 3px;
+    -khtml-border-radius: 3px;
+}
+
+
+#subIterationList {
+  background-color: #fff;
+  width: 100px;
+  position: absolute;
+  border-top: 1px solid #e1e1e1;
+  overflow: auto;
+  overflow-x: hidden;
+  z-index: 999;
+}
+
+#subIterationList div {
+  font-size: 14px;
+  padding: 5px;
+  background-color: #fafafa;
+  border-bottom: 1px solid #e1e1e1;
+  border-left: 1px solid #e1e1e1;
+  border-right: 1px solid #e1e1e1;
+}
+
+.projectOptionsForm tr {
+  height: 32px;
+}
+
+
+.tagsBox {
+  background-color: #fffeff;
+  border-left-style: none;
+  padding-left: 3px;
+  padding-right: 5px;
+  padding-bottom: 2px;
+  margin: 5px -2px -3px;
+}
+.pointsBox {
+  float: right;
+  padding: 3px 3px 5px;
+  background-color: #fef9dd;
+  font-size: 24px;
+  width: 35px;
+  height: 25px;
+  text-align: center;
+  vertical-align: middle;
+  margin-top: -2px;
+  margin-right: -2px;
+  border-left: 1px solid #c8caca;
+  border-bottom: 1px solid #c8caca;
+}
+.backlog {
+  border-left-style: dotted;
+  padding-left: 10px;
+  margin-left: 5px;
+}
+
+#addIterationButton button {
+  vertical-align: middle;
+  float: right;
+  position: relative;
+  bottom: 4px;
+}
+
+#addIterationButton {
+    text-decoration: none;
+}
+
+.iteration_history h2 {
+	margin-bottom: 0px;
+}
+
+.iteration_history {
+	height: 140px;
+	width: 100%;
+}
+
+
+.iteration_history_summary h1 {
+	margin-top: 5px;
+	margin-bottom: 0px;
+	
+}
+.iteration_history_summary {
+	height: 140px;		
+	width: 27%;	
+	float:left;left:5px;
+}
+
+.history_burndown {
+	width:70%;
+	height:140px;
+	float: right;
+	float:right;right:5px;
+}
+
+.iteration_history_points {
+	background-color: #eee;
+	text-align: center;	
+	margin-top: 5px;
+	margin-left: 10px;
+	margin-right: auto;
+
+	padding: 3px 9px;
+	display: inline-block;
+}
+
+.iteration_history_points h1 {
+	margin: 0px;
+}
+
+#hide-comments-box {	
+	text-align: center;
+	padding: 4px;
+	display: inline;
+	position: fixed;
+	bottom: 0;
+	right: 0;
+}
+
+#hide-comments-box a {
+	color: #5b5c5c;
+	text-decoration: none;
+}

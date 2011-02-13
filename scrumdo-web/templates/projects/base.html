@@ -8,10 +8,6 @@
 
 {% block body_class %}projects{% endblock %}
 
-{% block extra_head %}
-  <link rel="stylesheet" href="{{ STATIC_URL }}css/project.css" />
-{% endblock %}
-
 {% block panel %}
   <div id="panel">
     {% if user.is_authenticated %}
