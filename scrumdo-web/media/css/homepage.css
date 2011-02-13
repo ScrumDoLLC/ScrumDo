@@ -254,11 +254,11 @@ img {
   -webkit-box-shadow:0 0 18px rgba(0,0,0,0.4);
   -moz-box-shadow:0 0 18px rgba(0,0,0,0.4);
   box-shadow:0 0 18px rgba(0,0,0,0.4);
+  behavior: url(/site_media/static/css/PIE.htc);
 }
 
 #facebox .content {
   display:table;
-  width: 370px;
   padding: 10px;
   background: #fff;
   -webkit-border-radius:4px;
