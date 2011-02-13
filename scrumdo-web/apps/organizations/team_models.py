@@ -39,3 +39,6 @@ class Team(models.Model):
   name = models.CharField( max_length=65 )
   access_type = models.CharField( max_length=25 , default="read", choices=ACCESS_CHOICES)
   
+  def __unicode__(self):
+      return "[%s] %s" % (self.organization.name, self.name)
+  

@@ -71,6 +71,9 @@ class Organization(models.Model):
   def get_url_kwargs(self):
       return {'organization_slug': self.slug}
 
+  def __unicode__(self):
+      return "%s - %s" % (self.slug, self.name)
+
 
 
 
