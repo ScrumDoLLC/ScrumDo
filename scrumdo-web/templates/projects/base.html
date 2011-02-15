@@ -10,12 +10,6 @@
 
 {% block body_class %}projects{% endblock %}
 
-{% block extra_head %}
-  <script src="{{ STATIC_URL }}js/burndown.js" type="text/javascript"></script>  
-  <script src="{{ STATIC_URL }}js/project.js" type="text/javascript"></script>  
-  <link rel="stylesheet" href="{{ STATIC_URL }}css/project.css" />
-{% endblock %}
-
 {% block panel %}
   <div id="panel">
     {% if user.is_authenticated %}
@@ -206,8 +200,13 @@
 </div><!--box-->
 </div><!--panel-->
 
+<<<<<<< HEAD
 <div id="addFileProject" style="display:none">
   {% attachment_form project %}
 </div>
+=======
+<script src="{{ STATIC_URL }}js/burndown.js" type="text/javascript"></script>  
+<script src="{{ STATIC_URL }}js/project.js" type="text/javascript"></script>  
+>>>>>>> 2c4fcde3202725c29d3b5cb42b0f5ff32b28d732
 
 {% endblock %}

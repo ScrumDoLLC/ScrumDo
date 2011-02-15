@@ -250,6 +250,7 @@ def stories_iteration(request, group_slug, iteration_id):
   return render_to_response("stories/mini_story_list.html", {
     "stories": stories,
     "project":project,
+    "return_type":display_type,
     "display_type": display_type
   }, context_instance=RequestContext(request))
 
@@ -317,6 +318,7 @@ def stories(request, group_slug):
   return render_to_response("stories/iteration_planning.html", {
     "add_story_form": form,
     "project": project,
+    "return_type":"mini",
     "current_view":"iteration_planning",
     "default_iteration_id": int(request.GET.get("iteration","-1"))
 
