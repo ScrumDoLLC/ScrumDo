@@ -86,6 +86,7 @@
     </div>
     
 
+  <div id="hide-comments-box"><a href="#" id="hideComments">[Hide Comments]</a></div>
     
     
 {% endblock %}
@@ -93,7 +94,7 @@
 {% block extra_body %}
 
 
-{% include "projects/iteration_js.html" %} {# include this way to be able to use template tags #}
+
 <script type="text/javascript">
 
 var project_slug = "{{ iteration.project.slug }}";
@@ -105,7 +106,7 @@ function loadIteration( iterationID , tags, search)
     $.ajax({
 	    url: "/projects/project/" + project_slug + "/stories/" + iterationID,
 		data:{display_type:"block",
-		    tags:tags,
+		    tags:tags,		    
 		    search:search},
 		success: function(html){
 		$("#story_list").html(html);  
@@ -121,6 +122,10 @@ function loadIteration( iterationID , tags, search)
 }
 $(document).ready(function () {
 	$(".showFilter").click( function() { $("#filterDialog").toggle(); return false;} );
+
+  $("#hide-comments-box a").click( function(){
+      $(".responses").toggle();
+    } );
     
 	$(".filterForm").ajaxForm(
 				  {
@@ -199,12 +204,12 @@ function setUpStoryLinks()
 
     $(".commentForm form").ajaxForm(
 				    {          
-					success: function(responseText, statusText, xhr, obj) { $("#filter_button").submit();  }
+					    success: function(responseText, statusText, xhr, obj) { $("#filter_button").submit();  }
 				    });
           
     $(".responses form  ").ajaxForm(
 				    {          
-					success: function(responseText, statusText, xhr, obj) { $("#filter_button").submit();  }
+				     	success: function(responseText, statusText, xhr, obj) { $("#filter_button").submit();  }
 				    });
         
     $(".moveIterationIcon").click( function(event)
@@ -220,7 +225,7 @@ function setUpStoryLinks()
           
 				       $('body').one("click",function() {
 					       $("#subIterationList").fadeOut(100);
-					   });
+					     });
            
 				       return false;
 				   });
@@ -248,6 +253,8 @@ function moveCurrentlyOpenStoryToIteration( iteration_id )
       {% endif %}
       
 }
+
+
 
 function updateStoryList()
 {

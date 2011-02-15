@@ -42,6 +42,8 @@ class SiteStats( models.Model ):
   project_count = models.IntegerField();
   story_count = models.IntegerField();    
   date = models.DateField( auto_now=True );
+  def __unicode__(self):
+      return "%s %d/%d/%d" % (self.date, self.project_count, self.story_count, self.user_count)
   
 class PointsLog( models.Model ):
     
@@ -72,6 +74,7 @@ class Project(Group):
     VELOCITY_TYPE_MEDIAN = 2
     VELOCITY_TYPE_AVERAGE_3 = 3
   
+    active = models.BooleanField( default=True )
   
     member_users = models.ManyToManyField(User, through="ProjectMember", verbose_name=_('members'))
     
@@ -222,8 +225,8 @@ class Iteration( models.Model):
   class Meta:
     ordering = ["-default_iteration","end_date"];
   
-  def __str__(self):
-    return self.name
+  def __unicode__(self):
+    return "%s / %s" % (self.project.name, self.name)
 
 
 class Story( models.Model ):
@@ -319,7 +322,8 @@ class Story( models.Model ):
           found = True
       if not found :
         self.tags_to_delete.append( saved_tag ) 
-    
+  def __unicode__(self):
+      return "[%s/#%d] %s" % (self.project.name, self.local_id, self.summary)
   
 
 
@@ -351,7 +355,9 @@ models.signals.post_save.connect(tag_callback, sender=Story)
 class StoryTag( models.Model ):
   project = models.ForeignKey( Project , related_name="tags")
   name = models.CharField('name', max_length=32 )
-
+  def __unicode__(self):
+      return "[%s] %s" % ( self.project.name, self.name)
+      
 class StoryTagging( models.Model ):
   tag = models.ForeignKey( StoryTag , related_name="stories")
   story = models.ForeignKey( Story , related_name="story_tags")
@@ -368,7 +374,10 @@ class ProjectMember(models.Model):
     away = models.BooleanField(_('away'), default=False)
     away_message = models.CharField(_('away_message'), max_length=500)
     away_since = models.DateTimeField(_('away since'), default=datetime.now)
-
+    
+    def __str__(self):
+        return "ProjectMember: %s " % self.user.username
+        
     @staticmethod
     def getProjectsForUser(user):
       """ This gets all a user's projects, including ones they have access to via teams. """

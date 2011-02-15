@@ -92,13 +92,12 @@ h2 {
 	margin: 0px;
 }
 .ie6_warning {
-	min-height: 50px;
-	background-color: #8b1e17;
+	background-color: #333333;
 	color: white;
-	font-size: 16px;
-	padding: 10px;
-	border-style: solid;
-	border-color: #ff2600;
+	font-size: 14px;
+	padding: 6px;
+	border-style: none;
+	text-align: center;
 }
 /* CLEARS */
 
@@ -255,20 +254,23 @@ p.what_next {
 }
 
 
-#facebox .popup{
+#facebox .popup {
   position:relative;
   border:3px solid rgba(0,0,0,0);
-  -webkit-border-radius:5px;
-  -moz-border-radius:5px;
-  border-radius:5px;
+  
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  
   -webkit-box-shadow:0 0 18px rgba(0,0,0,0.4);
   -moz-box-shadow:0 0 18px rgba(0,0,0,0.4);
   box-shadow:0 0 18px rgba(0,0,0,0.4);
+  
+  behavior: url(/site_media/static/css/PIE.htc);
 }
 
 #facebox .content {
   display:table;
-  width: 370px;
   padding: 10px;
   background: #fff;
   -webkit-border-radius:4px;

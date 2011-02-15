@@ -3,7 +3,7 @@
 {% load theme_tags %}
 {% load uni_form %}
 
-<div id="organization_area">
+<div id="organization_area" style="width:550px;">
 
 <form id="organization_detail_form" class="uniForm" method="POST" action="{% url organization_edit organization.slug %}">
    {{ form.non_field_errors }}

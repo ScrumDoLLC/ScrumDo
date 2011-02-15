@@ -15,9 +15,12 @@
 
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js" type="text/javascript"></script>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script>       
-         <link rel="stylesheet" href="{{STATIC_URL}}css/homepage.css" />
-         <link rel="stylesheet" href="{{STATIC_URL}}css/layout.css" />
+        <link rel="stylesheet" href="{{STATIC_URL}}css/homepage.css" />
+        <link rel="stylesheet" href="{{STATIC_URL}}css/layout.css" />
 
+        <!--[if IE 7]>    
+          <link rel="stylesheet" href="{{STATIC_URL}}css/homepage-ie7.css" />
+        <![endif]-->
 
         <script src="{{ STATIC_URL }}js/facebox.js" type="text/javascript"></script>        
         <style type="text/css" media="screen">
@@ -179,7 +182,7 @@
                 <div class="featureBox"><a rel="facebox" href="{{STATIC_URL}}images/tour/burnUpCharts.png"><img src="{{STATIC_URL}}images/tour/burnUpCharts_tn.png"></a><br/>Automatically create burn up charts for your project and iterations.</div>            
                 <div class="featureBox"><a rel="facebox" href="{{STATIC_URL}}images/tour/planning.png"><img src="{{STATIC_URL}}images/tour/planning_tn.png"></a><br/>Drag and drop stories into your iterations.</div>
                 <div class="featureBox"><a rel="facebox" href="{{STATIC_URL}}images/tour/iteration.png"><img src="{{STATIC_URL}}images/tour/iteration_tn.png"></a><br/>View all the details about your iteration in one place.</div>
-                <div class="featureBox"><a rel="facebox" href="{{STATIC_URL}}images/tour/customFields.png"><img src="{{STATIC_URL}}images/tour/customFields_tn.png"></a><br/>Customize ScrumDo to support your workflow with custom fields.</div>
+                <div class="featureBox"><a rel="facebox" href="{{STATIC_URL}}images/tour/customFields.png"><img src="{{STATIC_URL}}images/tour/customFields_tn.png"></a><br/>Cutomize ScrumDo to support your workflow with custom fields.</div>
                 <div class="featureBox"><a rel="facebox" href="{{STATIC_URL}}images/tour/export.png"><img src="{{STATIC_URL}}images/tour/export_tn.png"></a><br/>Export to Excel, edit the stories, and then import your changes!</div>
                 <div class="featureBox"><a rel="facebox" href="{{STATIC_URL}}images/tour/history.png"><img src="{{STATIC_URL}}images/tour/history_tn.png"></a><br/>Look at how you've done in the past.</div>
                 <div class="featureBox"><a rel="facebox" href="{{STATIC_URL}}images/tour/predictions.png"><img src="{{STATIC_URL}}images/tour/predictions_tn.png"></a><br/>See into the future with the predictions tool.</div>

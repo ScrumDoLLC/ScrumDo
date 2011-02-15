@@ -30,7 +30,6 @@ from organizations.forms import *
 from organizations.models import *
 from organizations.team_models import *
 
-from organizations.forms import AddUserForm
 
 def _isAdmin( user, organization ):
   return Organization.objects.filter( teams__members = user , teams__access_type="admin", teams__organization=organization).count() > 0

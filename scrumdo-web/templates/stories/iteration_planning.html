@@ -173,7 +173,7 @@
         $("#iteration_column").attr("iteration_id", iterationID);      
         calculatePoints("#iteration_column","#iteration_points");
         $("#loadingIcon").hide();
-        $('a[rel*=facebox]').facebox();
+        //$('a[rel*=facebox]').facebox();
       }
     });
   }
@@ -233,7 +233,7 @@
           $(document).trigger('close.facebox');   
           $("#loadingIcon").hide();       
           calculatePoints("#backlog_column","#backlog_points");    
-          $('a[rel*=facebox]').facebox(); 
+          //$('a[rel*=facebox]').facebox(); 
         }
       });
   
@@ -250,7 +250,7 @@
       success: function(html){
         $("#backlog_column").append(html);
         calculatePoints("#backlog_column","#backlog_points");
-        $('a[rel*=facebox]').facebox();
+        //$('a[rel*=facebox]').facebox();
       }
     });
 
@@ -291,6 +291,11 @@
         $("#story_" + storyID).replaceWith(responseText);
       }
     });
+  }
+  
+  function setUpStoryLinks()
+  {
+    
   }
   
   function setStatusDone( storyID )

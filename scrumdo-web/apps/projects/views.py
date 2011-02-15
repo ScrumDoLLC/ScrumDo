@@ -33,6 +33,8 @@ import datetime
 import math
 import logging
 
+from projects.limits import org_project_limit, personal_project_limit
+
 logger = logging.getLogger(__name__)
 
 
@@ -219,39 +221,51 @@ def project_history( request, group_slug ):
 def create(request, form_class=ProjectForm, template_name="projects/create.html"):
     project_form = form_class(request.POST or None)
     admin_organizations = Organization.getOrganizationsForUser( request.user ) # The user can create projects in organizations the user is an admin in.    
-    
+
     if project_form.is_valid():
         project = project_form.save(commit=False)
         project.creator = request.user
         org_id = request.POST.get("organization","none")
-        
-        project.save()
+        organization = None
         if org_id != "none":
           organization = Organization.objects.filter( id=org_id )[0]
-          if organization and organization in admin_organizations: # make sure the specified organization is in the list of admin orgs, if not silently ignore it.
-            addProjectToOrganization(project, organization)       
         
-        # We better make the user a member of their own project.
-        project_member = ProjectMember(project=project, user=request.user)
-        project.members.add(project_member)
-        project_member.save()        
+        creationAllowed = True
         
-        # And lets make the default backlog iteration with no start/end dates.
-        default_iteration = Iteration( name='Backlog', detail='', default_iteration=True, project=project)
-        project.iterations.add(default_iteration)
-        default_iteration.save()        
+        if organization:
+            creationAllowed = org_project_limit.increaseAllowed(organization=organization)
+        else:
+            creationAllowed = personal_project_limit.increaseAllowed(user=request.user)
+            
+        if creationAllowed:
         
-        request.user.message_set.create(message="Project Created")
-        # Finished successfully creating a project, send the user to that page.
-        return HttpResponseRedirect(project.get_absolute_url())
+            project.save()
+        
+            if organization != None:
+              if organization in admin_organizations: # make sure the specified organization is in the list of admin orgs, if not silently ignore it.
+                addProjectToOrganization(project, organization)       
+        
+            # We better make the user a member of their own project.
+            project_member = ProjectMember(project=project, user=request.user)
+            project.members.add(project_member)
+            project_member.save()        
+        
+            # And lets make the default backlog iteration with no start/end dates.
+            default_iteration = Iteration( name='Backlog', detail='', default_iteration=True, project=project)
+            project.iterations.add(default_iteration)
+            default_iteration.save()        
+        
+            request.user.message_set.create(message="Project Created")
+            # Finished successfully creating a project, send the user to that page.
+            return HttpResponseRedirect(project.get_absolute_url())
+        else:
+            request.user.message_set.create(message="Upgrade your account to add more projects." )
 
     # If they got here from the organziation page, there will be an org get-param set stating what organization it was from.
     # we need that here so it's pre-selected in the form.
     organization = None
-    organizations = []
     if request.GET.get("org","") != "":
       organization = Organization.objects.filter(id=request.GET.get("org",""))[0]
-      organizations = Organization.getOrganizationsForUser( request.user )
     
     return render_to_response(template_name, {
         "project_form": project_form,
@@ -362,12 +376,12 @@ def project(request, group_slug=None, form_class=ProjectUpdateForm, adduser_form
         project_form = form_class(instance=project)
     if action == "add":
         write_access_or_403(project, request.user )
-        adduser_form = adduser_form_class(request.POST, project=project)
-        if adduser_form.is_valid():
+        adduser_form = adduser_form_class(request.POST, project=project, user=request.user)
+        if adduser_form.is_valid():              
             adduser_form.save(request.user)
-            adduser_form = adduser_form_class(project=project) # clear form
+            adduser_form = adduser_form_class(project=project, user=request.user) # clear form
     else:
-        adduser_form = adduser_form_class(project=project)
+        adduser_form = adduser_form_class(project=project, user=request.user)
     
     add_story_form = handleAddStory(request, project)
     
