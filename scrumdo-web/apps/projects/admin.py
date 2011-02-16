@@ -18,17 +18,15 @@
 
 from django.contrib import admin
 from projects.models import Project, Iteration, SiteStats, Story, StoryTag
-from attachments.admin import AttachmentInlines
+import settings
 
-class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'creator', 'created')
-    inlines = [AttachmentInlines]
 
-class StoryAdmin(admin.ModelAdmin):
-    inlines = [AttachmentInlines]
+if not "subscription" in settings.INSTALLED_APPS:
+    class ProjectAdmin(admin.ModelAdmin):
+        list_display = ('name', 'slug', 'creator', 'created')
+    admin.site.register(Story)  
+    admin.site.register(Project, ProjectAdmin)
 
-admin.site.register(Project, ProjectAdmin)
-admin.site.register(Story, StoryAdmin)  
 admin.site.register(Iteration)
 admin.site.register(SiteStats )
 admin.site.register(StoryTag )

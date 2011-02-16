@@ -19,10 +19,9 @@
 from django.contrib import admin
 from organizations.models import Organization
 from organizations.team_models import Team
-from attachments.admin import AttachmentInlines
+import settings
 
-class OrganizationAdmin(admin.ModelAdmin):
-    inlines = [AttachmentInlines]
+if not "subscription" in settings.INSTALLED_APPS:
+    admin.site.register(Organization)
 
-admin.site.register(Organization, OrganizationAdmin)
 admin.site.register(Team )

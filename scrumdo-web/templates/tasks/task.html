@@ -4,7 +4,6 @@
 {% load tasks_tags %}
 {% load comments_tag %}
 {% load uni_form %}
-{% load attachments_tags %}
 {% load group_tags %}
 {% load theme_tags %}
 
@@ -29,25 +28,8 @@
             
         </form>
     {% endif %}
-    
-    {% get_attachments_for task as "attachments" %}
-    {% if attachments %}
-    <h2>{% trans "Attachments" %}</h2>
-    
-    <ul>
-    {% for attachment in attachments %}
-        <li>
-            {% silk "attach" %}
-            <a href="{{ attachment.attachment_file.url }}">{{ attachment.filename }}</a>
-            - <span class="lighter">{{ attachment.created|date:_("DATETIME_FORMAT") }}</span>
-            {% attachment_delete_link attachment %}
-        </li>
-    {% endfor %}
-    </ul>
-    {% endif %}
-    
-    {% attachment_form task %}
-    
+
+	{% include "tasks/task_extra.html" %}
     <h2>{% trans "Comment" %}</h2>
     {% comments task %}
 {% endblock %}
