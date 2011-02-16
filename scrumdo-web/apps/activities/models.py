@@ -8,7 +8,7 @@ from django.contrib.auth.models import  User
 
 from threadedcomments.models import ThreadedComment
 
-from utils import allinstances, instanceof
+from activities.utils import allinstances, instanceof
 
 class ActivityAction(models.Model):
   name = models.TextField(_("action"), max_length=100)

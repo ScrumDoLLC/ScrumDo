@@ -46,7 +46,7 @@ import projects.signals as signals
 
 import logging
 
-import utils
+import activities.utils
 
 logger = logging.getLogger(__name__)
 
