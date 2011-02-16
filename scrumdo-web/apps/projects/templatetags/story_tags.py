@@ -16,11 +16,16 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 
-from django.contrib import admin
-from organizations.models import Organization, Team
-import settings
+from django import template
+from projects.models import Story
+from django.utils.safestring import mark_safe
+import re
+register = template.Library()
 
-if not "subscription" in settings.INSTALLED_APPS:
-    admin.site.register(Organization)
-
-admin.site.register(Team )
+@register.filter
+def show_points(story):
+    points = story.getPointsLabel()
+    if points == "Infinite":
+        return mark_safe("&infin;")
+    else:
+        return mark_safe(points)

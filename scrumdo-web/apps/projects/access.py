@@ -17,8 +17,8 @@
 
 
 from projects.models import Project
-from organizations.models import Organization
-from organizations.team_models import Team
+from organizations.models import Organization, Team
+
 from django.core.exceptions import PermissionDenied
 
 from django.core.cache import cache

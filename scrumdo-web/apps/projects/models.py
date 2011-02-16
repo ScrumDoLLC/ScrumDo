@@ -34,7 +34,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import admin
 
-from organizations.models import Organization
+from organizations.models import Organization, Team
 from activities.models import Activity, StoryActivity, IterationActivity
 import django.dispatch
 
@@ -362,7 +362,7 @@ class StoryTagging( models.Model ):
   def name(self):
     return self.tag.name
 
-from organizations.team_models import Team
+
 
 class ProjectMember(models.Model):
     project = models.ForeignKey(Project, related_name="members", verbose_name=_('project'))
