@@ -168,9 +168,11 @@ class IterationActivity(Activity):
     iteration = sender
     action = ActivityAction.objects.get(name=kwargs['action'])
     if action.name == "deleted":
+        return
       # we want to create a DeletedActivity with the name of the iteration
-      iteration_name = sender.summary
-      iterationActivity = DeletedActivity(user=kwargs['user'],action=action,name=iteration_name, project=kwargs['project'])
+      # 2/15/2010 - this wasn't working...
+      # iteration_name = sender.summary
+      # iterationActivity = DeletedActivity(user=kwargs['user'],action=action,name=iteration_name, project=kwargs['project'])
     else:
       iterationActivity = IterationActivity(user=kwargs['user'],action=action,iteration=iteration, project=kwargs['project'])
     iterationActivity.save()

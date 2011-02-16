@@ -28,7 +28,7 @@ from django.conf import settings
 
 from organizations.forms import *
 from organizations.models import *
-from organizations.team_models import *
+
 
 
 def _isAdmin( user, organization ):

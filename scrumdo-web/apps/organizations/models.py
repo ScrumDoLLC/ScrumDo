@@ -26,6 +26,23 @@ import datetime
 from django.core.exceptions import ObjectDoesNotExist
 
 
+
+class Team(models.Model):   
+  ACCESS_CHOICES = [
+      ('read', 'Read Only'), 
+      ('write', 'Read / Write'),
+      ('admin', 'Administrator') ]
+  members = models.ManyToManyField(User, verbose_name=_('members'))
+  projects = models.ManyToManyField("projects.Project", verbose_name=_('projects'), related_name="teams")
+  
+  organization = models.ForeignKey('Organization', related_name="teams")
+  
+  name = models.CharField( max_length=65 )
+  access_type = models.CharField( max_length=25 , default="read", choices=ACCESS_CHOICES)
+  
+  def __unicode__(self):
+      return "[%s] %s" % (self.organization.name, self.name)
+
 # Was going to make these pinax groups, but didn't want to bring over the slug based urls for teams, and turns out organizations don't 
 # actually have members if we go the team route.
 
