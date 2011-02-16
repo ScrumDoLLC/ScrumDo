@@ -32,7 +32,6 @@ from groups.base import Group
 from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
-from django.contrib import admin
 
 from organizations.models import Organization, Team
 from activities.models import Activity, StoryActivity, IterationActivity
