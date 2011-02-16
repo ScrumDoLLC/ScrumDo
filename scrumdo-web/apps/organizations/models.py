@@ -49,6 +49,8 @@ class Organization(models.Model):
   def getAdminOrganizationsForUser( user ):
     return Organization.objects.filter( teams__access_type="admin", teams__members = user ).distinct().order_by("name")
 
+  def hasAdminAccess( self, user ):
+    return (self.teams.filter( access_type="admin", members=user ).count() > 0)
 
   # returns all organizations the user has read/write access to
   # @staticmethod
@@ -56,9 +58,21 @@ class Organization(models.Model):
   #   return Organization.objects.filter( teams__members = user ).exclude(teams__access_type = "read").distinct().order_by("name")
 
 
-    
+  def memberCount(self):
+    members = []
+    for team in self.teams.all():
+      for member in team.members.all():
+        if members.count(member) == 0:
+          members.append(member)
+    return len(members)
+      
+      
+      
   def get_url_kwargs(self):
       return {'organization_slug': self.slug}
+
+  def __unicode__(self):
+      return "%s - %s" % (self.slug, self.name)
 
 
 

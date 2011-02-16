@@ -8,12 +8,6 @@
 
 {% block body_class %}projects{% endblock %}
 
-{% block extra_head %}
-  <script src="{{ STATIC_URL }}js/burndown.js" type="text/javascript"></script>  
-  <script src="{{ STATIC_URL }}js/project.js" type="text/javascript"></script>  
-  <link rel="stylesheet" href="{{ STATIC_URL }}css/project.css" />
-{% endblock %}
-
 {% block panel %}
   <div id="panel">
     {% if user.is_authenticated %}
@@ -39,7 +33,11 @@
     <div class="box">
       <div class="box-title">Project Tools</div>
       <div class="box-content">
-	<a title="Easily rank your stories and move them into an iteration." href="{% url stories project.slug %}">{% silk "date" %} Iteration Planning</a><br/>
+        {% if iterationinfo %}
+          <a title="Easily rank your stories and move them into an iteration." href="{% url stories project.slug  %}?iteration={{iteration.id}}">{% silk "date" %} Iteration Planning</a><br/>
+        {% else %}
+          <a title="Easily rank your stories and move them into an iteration." href="{% url stories project.slug %}">{% silk "date" %} Iteration Planning</a><br/>
+        {% endif %}
 	<a title="See how much you've completed in past iterations." href="{% url project_history project.slug %}">{% silk "report" %} History</a><br/>
 	<a title="Make predictions of what work will get done when based on your ranking and velocity." href="{% url project_prediction project.slug %}">{% silk "find" %} Predictions</a><br/>
 	<!-- <span title="Coming Soon: Easily size stories.">{% silk "time" %} Sizing</span><br/> -->
@@ -76,10 +74,10 @@
 	{% endcanwrite %}
 	{% endif %}    
 	<a href="#iterationDetails" rel="facebox">{% silk "table_edit" %} Edit Details</a><br/>
-	<a href="{% url stories iteration.project.slug  %}?iteration={{iteration.id}}">{% silk "layout_add" %} Add From Backlog</a><br/>
 	<a rel="facebox" href="{% url iteration_export iteration.project.slug iteration.id %}">{% silk "lorry" %} Export</a><br/>
 	{% canwrite project %}
 	<a rel="facebox" href="{% url iteration_import iteration.project.slug iteration.id %}">{% silk "wand" %} Import</a><br/>
+	<a target="_blank" href="{% url iteration_report iteration.project.slug iteration.id %}">{% silk "page_white_text" %} Printer-friendly Report</a><br/>
 	<a title="Iterations can only be deleted when they contain no stories." href="#deleteIteration" rel="facebox">{% silk "delete" %} Delete Iteration</a><br/>
 	{% endcanwrite %}
       </div><!--box-content-->
@@ -165,4 +163,8 @@
   </div><!--box-content-->
 </div><!--box-->
 </div><!--panel-->
+
+<script src="{{ STATIC_URL }}js/burndown.js" type="text/javascript"></script>  
+<script src="{{ STATIC_URL }}js/project.js" type="text/javascript"></script>  
+
 {% endblock %}

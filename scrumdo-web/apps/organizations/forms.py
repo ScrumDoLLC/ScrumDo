@@ -25,6 +25,8 @@ from organizations.models import Organization
 from organizations.team_models import Team
 from django.forms.extras.widgets import SelectDateWidget
 
+from projects.limits import org_user_limit
+
 class TeamForm(forms.ModelForm):
   class Meta:
       model = Team
@@ -71,6 +73,9 @@ class AddUserForm(forms.Form):
 
       if user in self.team.members.all():
          raise forms.ValidationError(_("User is already a member of this team."))
+      
+      if not org_user_limit.increaseAllowed(userToAdd=user, organization=self.team.organization):
+          raise forms.ValidationError(_("Upgrade your account to add more users."))      
 
       return self.cleaned_data['recipient']
 
@@ -78,5 +83,5 @@ class AddUserForm(forms.Form):
       new_member = User.objects.get(username__exact=self.cleaned_data['recipient'])
       self.team.members.add( new_member )
       self.team.save()     
-      user.message_set.create(message="added %s to team" % new_member)
+      user.message_set.create(message="Added %s to team" % new_member)
       

@@ -7,31 +7,23 @@
 <li class="story_block gripper_{% ifequal story.status 1 %}todo{% endifequal %}{% ifequal story.status 3 %}reviewing{% endifequal %}{% ifequal story.status 2 %}doing{% endifequal %}{% ifequal story.status 4 %}done{% endifequal %}" story_id="{{story.id}}" id="story_{{story.id}}" rank="{{ story.rank }}" >
   <div class="pointsBox">{{ story.getPointsLabel }}</div>
   <div class="todoButtons todoButtons_block" id="todoButtons_{{story.id}}">
-    <a onclick=" setStatusTodo({{story.id}}) ; return false;" href="#" id="todo">{% silk "note" %} Todo</a>
-    <a onclick=" setStatusDoing({{story.id}}) ; return false;" href="#" id="doing">{% silk "overlays" %} Doing</a>
-    <a onclick=" setStatusReviewing({{story.id}}) ; return false;" href="#" id="review">{% silk "paste_plain" %} Review</a>
-    <a onclick=" setStatusDone({{story.id}}) ; return false;" href="#" id="done">{% silk "tick" %} Done</a>
+    {% include "stories/todobuttons.html" %}
   </div>
 
   <span class="storyIcons">
     <a class="hoverDetails" onclick="jQuery.facebox({ ajax: '/projects/project/{{story.project.slug}}/story/{{story.id}}/pretty'}, 'pretty_print'); return false;" href="/projects/project/{{story.project.slug}}/story/{{story.id}}/pretty"><img title="Quick View" src="{{STATIC_URL}}pinax/images/silk/icons/magnifier.png" /></a>
     {% notlocked story %}
-    <a story_id="{{ story.id }}" class="moveIterationIcon"  href="#">
-      <img title="Move To Another Iteration" src="/site_media/static/pinax/images/silk/icons/page_white_go.png" />
-    </a>
-    <a onclick="jQuery('#todoButtons_{{story.id}}').show(); return false;" href="#">
-      <img title="Set Status" src="/site_media/static/pinax/images/silk/icons/tag_red.png" />
-    </a>
+    <a story_id="{{ story.id }}" class="moveIterationIcon"  href="#"><img title="Move To Another Iteration" src="/site_media/static/pinax/images/silk/icons/page_white_go.png" /></a>
+    <a onclick="setupAutoClose('#todoButtons_{{story.id}}'); jQuery('#todoButtons_{{story.id}}').show();  return false;" href="#"><img title="Set Status" src="/site_media/static/pinax/images/silk/icons/tag_red.png" /></a>
     {% endnotlocked %}
-    <a onclick="jQuery.facebox({ ajax: '/projects/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=block'}, 'edit_story'); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=block">
-      <img title="Edit Story" src="/site_media/static/pinax/images/silk/icons/pencil.png" /></a></span>
+    <a onclick="jQuery.facebox({ ajax: '/projects/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=block'}, 'edit_story'); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=block"><img title="Edit Story" src="/site_media/static/pinax/images/silk/icons/pencil.png" /></a></span>
     
   <h1><span style="color:#cccccc;">#{{story.local_id}}</span> {{ story.summary|escape|link_stories:story.project|safe }}</h1>
 
 
   {{ story.detail|escape|link_stories:story.project|safe }}
   
-
+    
 
   {% if story.story_tags.all %}
     <div class="tagsBox">{% silk "tag_blue" %}
@@ -40,6 +32,10 @@
     {% endfor %}
     </div>
   {% endif %}
+
+{% if story.assignee and story.project.use_assignee %}
+  <br/>Assigned: <b>{{story.assignee}}</b> {% avatar story.assignee 20 %}
+{% endif %}
   
 {% comments story %}
 
@@ -50,8 +46,5 @@
 {% endfor %}
 
 
-{% if story.assignee and story.project.use_assignee %}
-  Assigned: <b>{{story.assignee}}</b> {% avatar story.assignee 22 %}
-{% endif %}
     
 </li>  

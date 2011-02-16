@@ -94,6 +94,8 @@ function activateLinks () {
 
     */}
 
+function calculateBothPoints() {} // need this for the story popup - TODO: do this better.
+function setUpStoryLinks() {} // need this for the setstatus
 
 $(document).ready(function() {
 	$(window).bind('scroll', loadOnScroll);
