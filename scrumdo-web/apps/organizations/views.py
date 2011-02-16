@@ -27,10 +27,10 @@ from django.http import HttpResponse
 from django.core import serializers
 from django.conf import settings
 
-from organizations.forms import *;
+from organizations.forms import *
+from organizations.models import *
 
-from organizations.models import *;
-from organizations.team_models import *;
+from projects.models import Project
 
 import organizations.signals as signals
 

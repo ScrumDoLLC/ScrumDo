@@ -21,8 +21,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
-from organizations.models import Organization
-from organizations.team_models import Team
+from organizations.models import Organization, Team
 from django.forms.extras.widgets import SelectDateWidget
 
 from projects.limits import org_user_limit

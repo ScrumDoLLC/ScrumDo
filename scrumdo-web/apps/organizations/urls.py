@@ -17,8 +17,8 @@
 
 from django.conf.urls.defaults import *
 
-from organizations.models import Organization
-from organizations.team_models import Team
+from organizations.models import Organization, Team
+
 
 # from groups.bridge import ContentBridge
 # 
