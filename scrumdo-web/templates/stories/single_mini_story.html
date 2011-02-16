@@ -1,10 +1,11 @@
 {% load i18n %}
 {% load theme_tags %}
 {% load projects_tags %}
+{% load story_tags %}
 {% load avatar_tags %}
 
 <li class="story_small gripper_{% ifequal story.status 1 %}todo{% endifequal %}{% ifequal story.status 2 %}doing{% endifequal %}{% ifequal story.status 3 %}reviewing{% endifequal %}{% ifequal story.status 4 %}done{% endifequal %}" story_id="{{story.id}}" id="story_{{story.id}}" rank="{{ story.rank }}" >
-  <div class="pointsBox" point_value="{{ story.points }}">{{ story.getPointsLabel }}</div>
+  <div class="pointsBox" point_value="{{ story.points }}">{{ story|show_points }}</div>
 
   <div class="todoButtons todoButtons_block" id="todoButtons_{{story.id}}">
     {% include "stories/todobuttons.html" %}
