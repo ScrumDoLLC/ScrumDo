@@ -38,7 +38,10 @@
          <p>Optional fields are special, structured fields that not all users need nor want.  They're off by default.</p>
           <table class="projectOptionsForm">
             <tr><td style="font-weight:bold">{{form.use_assignee}} Track Assignee {{form.use_assignee.errors}}</td><td><i>Adds an Assignee field to stories, so you can track who is currently responsible.</i></td></tr>            
+            <tr><td style="font-weight:bold">{{form.use_tasks}} Enable Tasks {{form.use_tasks.errors}}</td><td><i>Allows you to create multiple tasks per story that can be assigned and tracked.</i></td></tr>            
           </table>
+          
+          
 
           <input type="hidden" name="action" value="updateProject">
           <h2>Custom Fields</h2>

@@ -1,0 +1,10 @@
+{% if story.project.use_tasks %}
+  {% for task in story.tasks.all %}
+   <div class="tasks_task"><input type="checkbox" {% if task.complete %}checked="checked"{% endif %}> {{task.summary}}</div>
+  {% endfor %}
+  
+  <div class="add_task">
+    <form style="display: none" class="tasks_add_task_form"><input type="hidden" name="story_id" value="{{story.id}}"><input class="task_summary_input" name="summary" style="width:500px;" type="text"> <input class="button" type="submit" value="Add Task"></form>
+    <div class="tasks_add_task_link"><a href="#">Add Task</a></div>
+  </div>
+{% endif %}

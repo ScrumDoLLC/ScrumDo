@@ -21,7 +21,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
-from projects.models import Project, ProjectMember, Iteration, Story
+from projects.models import Project, ProjectMember, Iteration, Story, Task
 from django.forms.extras.widgets import SelectDateWidget
 
 from projects.limits import userIncreasedAlowed
@@ -50,9 +50,18 @@ class IterationForm(forms.ModelForm):
 class ProjectOptionsForm(forms.ModelForm):
   class Meta:
       model = Project
-      fields = ('velocity_type','point_scale_type', 'use_extra_1', 'use_extra_2', 'use_extra_3',  'use_assignee', 'extra_1_label', 'extra_2_label', 'extra_3_label','name', 'description' )
+      fields = ('velocity_type','point_scale_type', 'use_extra_1', 'use_extra_2', 'use_extra_3', 'use_tasks', 'use_assignee', 'extra_1_label', 'extra_2_label', 'extra_3_label','name', 'description' )
 
-
+class TaskForm( forms.ModelForm ):
+    def __init__(self, project, *args, **kwargs):    
+        super(TaskForm, self).__init__(*args, **kwargs)      
+        members = project.all_member_choices()
+        members.insert(0,("","---------"))
+        self.fields["assignee"].choices = members        
+    class Meta:
+        model = Task
+        fields = ('complete','summary','assignee')
+        
 class AddStoryForm( forms.ModelForm ):
   RANK_CHOICES = (
       ('0', 'Top'), 
