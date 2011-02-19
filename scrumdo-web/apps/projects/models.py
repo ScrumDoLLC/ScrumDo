@@ -359,6 +359,10 @@ class Task( models.Model ):
     summary = models.TextField(blank=True)
     assignee = models.ForeignKey(User, related_name="assigned_tasks", verbose_name=_('assignee'), null=True, blank=True)  
     complete = models.BooleanField(default=False)
+    order = models.PositiveIntegerField( default=0 )
+    class Meta:
+        ordering = [ 'order' ]
+    
 
 class StoryTag( models.Model ):
   project = models.ForeignKey( Project , related_name="tags")

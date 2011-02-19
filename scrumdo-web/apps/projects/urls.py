@@ -70,6 +70,9 @@ urlpatterns += patterns('projects.story_views',
 
 urlpatterns += patterns('projects.task_views',
     url(r'^task/create$', 'create_task', name="create_task"),
+    url(r'^task/(?P<task_id>[0-9]+)/set_status$', 'set_task_status', name="set_task_status"),
+    url(r'^task/(?P<task_id>[0-9]+)/delete$', 'delete_task', name="delete_task"),
+    url(r'^task/(?P<task_id>[0-9]+)/edit$', 'edit_task', name="edit_task"),
 )
 
 # urlpatterns += bridge.include_urls('tasks.urls', r'^project/(?P<group_slug>[-\w]+)/tasks/')

@@ -194,17 +194,6 @@
 }
 
 
-.story_block, .story_small {
-    padding: 3px;
-    margin: 0px;
-    padding-left: 10px;
-    list-style-type: none;
-    border-bottom: 1px solid #e1e1e1;
-    border-right: 1px solid #e1e1e1;
-    background-color: #fff;
-    min-height: 33px;
-    position: relative;
-}
 
 
 

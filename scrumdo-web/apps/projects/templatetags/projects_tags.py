@@ -24,7 +24,7 @@ from django.template.defaultfilters import stringfilter
 import re
 register = template.Library()
 
-urlfinder = re.compile('(http:\/\/\S+)')
+urlfinder = re.compile('(http:\/\/[^\s<>]+)')
 
 
 @register.filter("urlify2")

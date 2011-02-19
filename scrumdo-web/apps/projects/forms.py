@@ -56,8 +56,9 @@ class TaskForm( forms.ModelForm ):
     def __init__(self, project, *args, **kwargs):    
         super(TaskForm, self).__init__(*args, **kwargs)      
         members = project.all_member_choices()
-        members.insert(0,("","---------"))
-        self.fields["assignee"].choices = members        
+        members.insert(0,("","Nobody"))
+        self.fields["assignee"].choices = members    
+        self.fields["summary"].widget = forms.widgets.TextInput(attrs={'size':'50'})         
     class Meta:
         model = Task
         fields = ('complete','summary','assignee')
