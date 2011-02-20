@@ -91,6 +91,8 @@ class Organization(models.Model):
   def __unicode__(self):
       return "%s - %s" % (self.slug, self.name)
 
+  def get_absolute_url(self):
+    return reverse("organization_detail", kwargs={"organization_slug":self.slug})
 
 
 

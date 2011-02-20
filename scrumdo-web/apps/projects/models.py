@@ -327,6 +327,9 @@ class Story( models.Model ):
   def __unicode__(self):
       return "[%s/#%d] %s" % (self.project.name, self.local_id, self.summary)
 
+  def get_absolute_url(self):
+    return (self.iteration.get_absolute_url() + "#story_" + str(self.id)) 
+
         
   
 def tag_callback(sender, instance, **kwargs):
