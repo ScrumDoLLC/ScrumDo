@@ -86,7 +86,7 @@
     </div>
     
 
-  <div id="hide-comments-box"><a href="#" id="hideComments">[Hide Comments]</a></div>
+
     
     
 {% endblock %}
@@ -130,9 +130,6 @@ function loadIteration( iterationID , tags, search)
 $(document).ready(function () {
 	$(".showFilter").click( function() { $("#filterDialog").toggle(); return false;} );
 
-  $("#hide-comments-box a").click( function(){
-      $(".responses").toggle();
-    } );
     
 	$(".filterForm").ajaxForm(
 				  {
@@ -198,48 +195,7 @@ $(document).bind('reveal.facebox', function() {
     });
     
     
-// When the story form is shown, this sets up some ajaxy links on it. 
-function setUpStoryLinks() 
-{
 
-    $(".commentLink").click( function() 
-			     {                    
-				 $(this).parent().children(".commentForm").show();
-				 $(this).hide();
-				 return false;
-			     } );
-
-    $(".commentForm form").ajaxForm(
-				    {          
-					    success: function(responseText, statusText, xhr, obj) { $("#filter_button").submit();  }
-				    });
-          
-    $(".responses form  ").ajaxForm(
-				    {          
-				     	success: function(responseText, statusText, xhr, obj) { $("#filter_button").submit();  }
-				    });
-        
-    $(".moveIterationIcon").click( function(event)
-				   {
-				       var pos = $(this).offset();  
-				       var width = $(this).width();
-            
-				       //show the menu directly over the placeholder
-				       $("#subIterationList").css( { "left": (pos.left + width) + "px", "top":pos.top + "px" } );
-				       $("#subIterationList").fadeIn(100);
-          
-				       current_story_popup = $(this).attr("story_id");
-          
-				       $('body').one("click",function() {
-					       $("#subIterationList").fadeOut(100);
-					     });
-           
-				       return false;
-				   });
-   // $(".hoverDetails").click( displayStoryHover );
-    //$('a[rel*=facebox]').facebox() ;
-    $(".storyIcons img").tipTip({ delay:100, edgeOffset:10});
-}
 
         
 function moveCurrentlyOpenStoryToIteration( iteration_id )

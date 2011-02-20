@@ -1,8 +1,10 @@
 {% load i18n %}
 {% load theme_tags %}
 {% load comments_tag %}
+{% load threadedcommentstags %}
 {% load projects_tags %}
 {% load story_tags %}
+{% load tasks_tags %}
 {% load avatar_tags %}
 
 <li class="story_block gripper_{% ifequal story.status 1 %}todo{% endifequal %}{% ifequal story.status 3 %}reviewing{% endifequal %}{% ifequal story.status 2 %}doing{% endifequal %}{% ifequal story.status 4 %}done{% endifequal %}" story_id="{{story.id}}" id="story_{{story.id}}" rank="{{ story.rank }}" >
@@ -26,19 +28,31 @@
   
     
 
-  {% if story.story_tags.all %}
-    <div class="tagsBox">{% silk "tag_blue" %}
-    {% for tag in story.story_tags.all %}
-       <a onclick="filterByTag('{{tag.name}}');  return false;" href="#">{{ tag.name }}</a> 
-    {% endfor %}
-    </div>
+
+<div class="story_footer">
+  {% if story.assignee and story.project.use_assignee %}
+      {% avatar story.assignee 20 %} <b>{{story.assignee}}</b> -
   {% endif %}
 
-{% if story.assignee and story.project.use_assignee %}
-  <br/>Assigned: <b>{{story.assignee}}</b> {% avatar story.assignee 20 %}
-{% endif %}
-  
+
+  {% if story.project.use_tasks %}
+    <a onClick="showTasksForStory({{story.id}}); return false;" href="#">{% task_counts story %} Tasks</a> -
+  {% endif %}
+    {% get_comment_count for story as comment_count %}
+    <a onClick="showCommentsForStory({{story.id}}); return false;" href="#">{{comment_count}} Comment{{comment_count|pluralize}}</a>
+
+  {% if story.story_tags.all %}  
+    {% for tag in story.story_tags.all %}
+       <div class="tagsBox">{% silk "tag_blue" %}<a onclick="filterByTag('{{tag.name}}');  return false;" href="#">{{ tag.name }}</a></div>
+    {% endfor %}
+  {% endif %}
+</div>
+
 {% comments story %}
+
+{% if story.project.use_tasks %}
+  {% include "stories/tasks_section.html" %}
+{% endif %}
 
 
 

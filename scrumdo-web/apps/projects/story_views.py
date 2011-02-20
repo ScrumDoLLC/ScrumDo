@@ -161,6 +161,14 @@ def _calculate_rank( iteration, general_rank ):
     return round( iteration.stories.all().count() / 2)
   return iteration.stories.all().count()+1
 
+@login_required
+def story_block(request, story_id):
+    story = get_object_or_404( Story, id=story_id )
+    read_access_or_403( story.project, request.user )
+    return render_to_response("stories/single_block_story.html", {
+        "story": story,         
+        "return_type": "block",
+      }, context_instance=RequestContext(request))
 
 # Returns the edit-story form, with minimal html wrapper.  This is useful for displaying within
 # a facebox popup.
@@ -234,19 +242,23 @@ def stories_iteration(request, group_slug, iteration_id):
 
   tags_list = re.split('[, ]+', tags_search)
 
-  # There's probably a better way to set up these filters...
-  if text_search and tags_search:
-    stories = iteration.stories.filter(story_tags__tag__name__in=tags_list).extra( where = ["MATCH(summary, detail, extra_1, extra_2, extra_3) AGAINST (%s IN BOOLEAN MODE)"], params=[text_search]).distinct().order_by(order_by)
-  elif tags_search:
-    stories = iteration.stories.filter(story_tags__tag__name__in=tags_list).distinct().order_by(order_by)
-  elif text_search:
-    stories = iteration.stories.extra( where = ["MATCH(summary, detail, extra_1, extra_2, extra_3) AGAINST (%s IN BOOLEAN MODE)"], params=[text_search]).order_by(order_by)
-  else:
-    stories = iteration.stories.order_by(order_by)
+  stories = None
 
-  if only_assigned:
-      stories = stories.filter(assignee=request.user)
+  if request.GET.get("clearButton") != "Clear Filter":
+            
+      # There's probably a better way to set up these filters...
+      if text_search and tags_search:
+        stories = iteration.stories.filter(story_tags__tag__name__in=tags_list).extra( where = ["MATCH(summary, detail, extra_1, extra_2, extra_3) AGAINST (%s IN BOOLEAN MODE)"], params=[text_search]).distinct().order_by(order_by)
+      elif tags_search:
+        stories = iteration.stories.filter(story_tags__tag__name__in=tags_list).distinct().order_by(order_by)
+      elif text_search:
+        stories = iteration.stories.extra( where = ["MATCH(summary, detail, extra_1, extra_2, extra_3) AGAINST (%s IN BOOLEAN MODE)"], params=[text_search]).order_by(order_by)
+      if only_assigned:
+          stories = stories.filter(assignee=request.user)
 
+  if stories == None:
+      stories = iteration.stories.order_by(order_by)
+      
   return render_to_response("stories/mini_story_list.html", {
     "stories": stories,
     "project":project,

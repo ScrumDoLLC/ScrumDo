@@ -85,6 +85,7 @@ class Project(Group):
     default_iteration = None
     
     use_assignee = models.BooleanField( default=False )
+    use_tasks = models.BooleanField( default=False )
     # This field is not used -- use_acceptance = models.BooleanField( default=False )
     use_extra_1 = models.BooleanField( default=False )    
     use_extra_2 = models.BooleanField( default=False )    
@@ -227,6 +228,9 @@ class Iteration( models.Model):
     return "%s / %s" % (self.project.name, self.name)
 
 
+    
+    
+    
 class Story( models.Model ):
   STATUS_TODO = 1
   STATUS_DOING = 2
@@ -346,7 +350,15 @@ def tag_callback(sender, instance, **kwargs):
 
 models.signals.post_save.connect(tag_callback, sender=Story)
 
-
+class Task( models.Model ):
+    story = models.ForeignKey(Story, related_name="tasks")
+    summary = models.TextField(blank=True)
+    assignee = models.ForeignKey(User, related_name="assigned_tasks", verbose_name=_('assignee'), null=True, blank=True)  
+    complete = models.BooleanField(default=False)
+    order = models.PositiveIntegerField( default=0 )
+    class Meta:
+        ordering = [ 'order' ]
+    
 
 class StoryTag( models.Model ):
   project = models.ForeignKey( Project , related_name="tags")
