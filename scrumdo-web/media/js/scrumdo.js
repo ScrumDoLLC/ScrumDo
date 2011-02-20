@@ -104,15 +104,7 @@ function showCommentsForStory( story_id , animate)
         });
         return false;
     });
-    
-    // $("#story_" + story_id + " .comment_section form").ajaxForm(
-    //    {
-    //        success: function(responseText, statusText, xhr, obj) {
-    //            reloadStory( obj.attr("obj_id") , true, false);
-    //        }
-    //    });
-    // 
-    //   
+      
 }
 
 function reloadStory( story_id , display_comments, display_tasks)
