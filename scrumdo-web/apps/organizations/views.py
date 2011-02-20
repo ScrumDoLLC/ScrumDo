@@ -55,9 +55,12 @@ def organization(request, organization_slug):
         adduser_form.save(request.user)        
         adduser_form=AddUserForm(team=team)
     elif action == "addProject":
-      project = get_object_or_404( Project, id=request.POST.get("project") )
-      team.projects.add(project)
-      team.save()
+        if not request.POST.get("project",None):
+            request.user.message_set.create(message="Please select a project to add to this team.")               
+        else:
+            project = get_object_or_404( Project, id=request.POST.get("project") )
+            team.projects.add(project)
+            team.save()
     elif action == "removeProject":
       project = Project.objects.filter(id=request.POST.get("project_id"))[0]
       team.projects.remove(project)
