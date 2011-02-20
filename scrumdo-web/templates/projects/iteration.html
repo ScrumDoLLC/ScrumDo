@@ -86,7 +86,7 @@
     </div>
     
 
-  <div id="hide-comments-box"><a href="#" id="hideComments">[Hide Comments]</a></div>
+
     
     
 {% endblock %}
@@ -123,9 +123,6 @@ function loadIteration( iterationID , tags, search)
 $(document).ready(function () {
 	$(".showFilter").click( function() { $("#filterDialog").toggle(); return false;} );
 
-  $("#hide-comments-box a").click( function(){
-      $(".responses").toggle();
-    } );
     
 	$(".filterForm").ajaxForm(
 				  {

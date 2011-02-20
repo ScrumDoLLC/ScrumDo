@@ -56,12 +56,15 @@ def create_task( request ):
     task_text = request.POST.get("summary")
     logger.debug("Adding task to story %d %s" % (story.id, task_text) )
     
-    task = Task(story=story, summary=task_text, assignee=assignee)
+    if story.tasks.count() > 0:
+        order = story.tasks.order_by("-order")[0].order + 1
+    else:
+        order = 0
+    
+    task = Task(story=story, summary=task_text, assignee=assignee, order=order)
     task.save()
     signals.task_created.send( sender=request, task=task, user=request.user )
-    return render_to_response("stories/single_block_story.html", {
-        "story": story,
-      }, context_instance=RequestContext(request))
+    return HttpResponse("OK")
 
 @login_required
 def set_task_status( request, task_id ):
@@ -75,9 +78,7 @@ def set_task_status( request, task_id ):
     task.complete = (status == "done")
     task.save()
     signals.task_status_changed.send( sender=request, task=task, user=request.user )
-    return render_to_response("stories/single_block_story.html", {
-        "story": task.story,
-      }, context_instance=RequestContext(request))
+    return HttpResponse("OK")
     
 @login_required
 def delete_task( request, task_id ):
@@ -88,9 +89,7 @@ def delete_task( request, task_id ):
     story = task.story
     task.delete()
     signals.task_deleted.send( sender=request, task=task, user=request.user )
-    return render_to_response("stories/single_block_story.html", {
-      "story": story,
-    }, context_instance=RequestContext(request))    
+    return HttpResponse("OK")  
 
 @login_required
 def edit_task(request, task_id):    
@@ -100,9 +99,7 @@ def edit_task(request, task_id):
     if request.method == "POST":
         form = TaskForm( task.story.project , request.POST, instance=task)
         form.save()
-        return render_to_response("stories/single_block_story.html", {
-          "story": task.story,
-        }, context_instance=RequestContext(request))    
+        return HttpResponse("OK") 
     else:    
         form = TaskForm( task.story.project , instance=task)
         return render_to_response("tasks/edit.html", {

@@ -159,6 +159,14 @@ def _calculate_rank( iteration, general_rank ):
     return round( iteration.stories.all().count() / 2)
   return iteration.stories.all().count()+1
 
+@login_required
+def story_block(request, story_id):
+    story = get_object_or_404( Story, id=story_id )
+    read_access_or_403( story.project, request.user )
+    return render_to_response("stories/single_block_story.html", {
+        "story": story,         
+        "return_type": "block",
+      }, context_instance=RequestContext(request))
 
 # Returns the edit-story form, with minimal html wrapper.  This is useful for displaying within
 # a facebox popup.

@@ -19,13 +19,13 @@
               <div class="bulk">
                   <div class="body">{{ response.comment|urlize|linebreaks }}</div>
                   {% ifequal user response.user %}
-                  <form method="POST" action="{% url tc_comment_delete response.id %}">
+                  <form obj_id="{{object.id}}" method="POST" action="{% url tc_comment_delete response.id %}">
                       <input type="submit" value="{% trans "Delete Post" %}" />
                       <input type="hidden" name="next" value="{{ request.path }}" />
                   </form>
                   {% endifequal %}
                   <a href="javascript:toggle_comment_form({{ response.id }})">{% trans "Reply to This Comment" %}</a>
-                  <form class="hidden" method="POST" action="{% get_comment_url object response %}" id="comment_form_{{ response.id }}">
+                  <form obj_id="{{object.id}}" class="hidden" method="POST" action="{% get_comment_url object response %}" id="comment_form_{{ response.id }}">
                       <table><tr><td><textarea id="id_comment" rows="10" cols="40" name="comment"></textarea></td></tr>
                       <tr><td><input type="submit" value="{% trans "Post Response" %}" /></td></tr></table>
                       <input type="hidden" name="next" value="{{ request.path }}" />
@@ -38,7 +38,7 @@
   {% if user.is_authenticated %}
   <div>
     <div class="commentForm" >
-        <form action="{% get_comment_url object %}" method="POST">
+        <form obj_id="{{object.id}}" action="{% get_comment_url object %}" method="POST">
             <table>
                 <tr><td><textarea id="id_comment" rows="3" cols="60" name="comment"></textarea></td></tr>
                 <tr><td><input class="button" type="submit" value="{% trans "Post Comment" %}" /></td></tr>

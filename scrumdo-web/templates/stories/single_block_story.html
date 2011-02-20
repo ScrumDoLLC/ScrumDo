@@ -47,11 +47,13 @@
   {% endif %}
 </div>
 
+{% comments story %}
+
 {% if story.project.use_tasks %}
   {% include "stories/tasks_section.html" %}
 {% endif %}
 
-{% comments story %}
+
 
 {% for link in story.external_links.all %}
   <br/><a href="{{ link.external_url }}">{{ link.external_url }}</a>

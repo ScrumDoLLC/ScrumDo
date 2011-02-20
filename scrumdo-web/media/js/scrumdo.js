@@ -32,8 +32,7 @@ function showTaskEditForm( task_id )
     		$("#edit_task_" + task_id).ajaxForm(
             {
                 success: function(responseText, statusText, xhr, obj) {
-                    $("#story_" + story_id).replaceWith( responseText );
-                    showTasksForStory( story_id , false);
+                    reloadStory(story_id, false, true);
                 }
             });
 	    }
@@ -42,13 +41,16 @@ function showTaskEditForm( task_id )
 
 function deleteTask( story_id, task_id )
 {
+    if( ! confirm("Do you wish to delete this task?") )
+    {
+        return;
+    }
+    
     $.ajax({
 	    url: "/projects/task/" + task_id + "/delete",
 		type: "POST",
 		success: function(responseText) {
-		$("#story_" + story_id).replaceWith(responseText);
-		setUpStoryLinks();
-		showTasksForStory( story_id , false);
+		    reloadStory(story_id, false, true);
 	    }
 	}); 
 }
@@ -61,9 +63,7 @@ function setTaskStatus(story_id, task_id, status)
 		type: "POST",
 		data: ({status : (status==1 ? "notdone" : "done" ) }),
 		success: function(responseText) {
-		$("#story_" + story_id).replaceWith(responseText);
-		setUpStoryLinks();
-		showTasksForStory( story_id , false);
+		    reloadStory(story_id, false, true);
 	    }
 	});
 }
@@ -90,7 +90,45 @@ function showCommentsForStory( story_id , animate)
     {
         $("#story_" + story_id + " .comment_section").toggle();    
     }
+    
+    $("#story_" + story_id + " .comment_section form").submit(function() {
+        form = $(this);
+        $.ajax({
+          type:"POST",
+          url: form.attr("action"),
+          data: form.serialize(),
+          success: function(responseText){
+             reloadStory(story_id, true, false);
+          }          
+        });
+        return false;
+    });
+    
+    // $("#story_" + story_id + " .comment_section form").ajaxForm(
+    //    {
+    //        success: function(responseText, statusText, xhr, obj) {
+    //            reloadStory( obj.attr("obj_id") , true, false);
+    //        }
+    //    });
+    // 
+    //   
 }
+
+function reloadStory( story_id , display_comments, display_tasks)
+{
+    $.ajax({
+	    url: "/projects/story/" + story_id,
+		type: "GET",
+		success: function(responseText) {
+    		$("#story_" + story_id).replaceWith(responseText);
+    		setUpStoryLinks();
+    		if( display_tasks ) { showTasksForStory( story_id , false);}
+    		if( display_comments ) { showCommentsForStory(story_id, false);}
+	    }
+	});
+    
+}
+
 
 // When a page loads one or more story blocks, this function gets called to set up all of the links
 // inside that block.  Since there might be a block already on screen that was previously set up, this
@@ -99,33 +137,8 @@ function showCommentsForStory( story_id , animate)
 function setUpStoryLinks() 
 {
 
-    // When the little comment icon is clicked, hide it and show the comment form
-    $(".commentLink").unbind("click");
-    $(".commentLink").click(function()
-    {
-        $(this).parent().children(".commentForm").show();
-        $(this).hide();
-        return false;
-    });
 
-    // When the comment form is submitted, invoke the filter button so the iteration reloads on the iteration page.
-    $(".commentForm form").unbind("submit");
-    $(".commentForm form").ajaxForm(
-    {
-        success: function(responseText, statusText, xhr, obj) {
-            $("#filter_button").submit();
-        }
-    });
-
-    // When the comment response form is submitted, invoke the filter button so the iteration reloads on the iteration page.
-    $(".responses form").unbind("submit");
-    $(".responses form").ajaxForm(
-    {
-        success: function(responseText, statusText, xhr, obj) {
-            $("#filter_button").submit();
-        }
-    });
-
+    
     $(".tasks_task").mouseenter(function() {      
       $(this).find(".task_controls").css("visibility","visible");
     }).mouseleave(function() {
@@ -164,31 +177,26 @@ function setUpStoryLinks()
         edgeOffset: 10
     });
     
-    // When someone clicks an add-task link, show the form.  
-    $(".tasks_add_task_link a").unbind("click");
-    $(".tasks_add_task_link a").click(function(){
-        $(this).parent().parent().children(".tasks_add_task_form").show();        
-        $(this).hide();
-        return false;
-    });
     
     // When someone uses the add task form, handle the result well.
     $(".tasks_add_task_form").unbind("submit");
     $(".tasks_add_task_form").submit(function(){
         form = $(this);        
         storyID = $(this).find("input[name='story_id']").val();
-        
+
         $.ajax({
           type:"POST",
           url: "/projects/task/create",
           data: form.serialize(),
           success: function(responseText){
-             $("#story_" + storyID).replaceWith(responseText);
-             setUpStoryLinks();
-             showTasksForStory( storyID , false);
-             $("#story_" + storyID).find(".tasks_add_task_link").hide();
-             $("#story_" + storyID).find(".tasks_add_task_form").show();       
-             $("#story_" + storyID).find(".tasks_add_task_form input[type='text']").focus();                    
+             reloadStory(storyID, false, true);
+             setTimeout( function()
+             {
+                 $("#story_" + storyID).find(".tasks_add_task_link").hide();
+                 $("#story_" + storyID).find(".tasks_add_task_form").show();       
+                 $("#story_" + storyID).find(".tasks_add_task_form input[type='text']").focus();                    
+                 
+             }, 100);
           }
         });
         
