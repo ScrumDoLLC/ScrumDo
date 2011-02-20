@@ -508,19 +508,6 @@ h1 a {
 	margin: 0px;
 }
 
-#hide-comments-box {	
-	text-align: center;
-	padding: 4px;
-	display: inline;
-	position: fixed;
-	bottom: 0;
-	right: 0;
-}
-
-#hide-comments-box a {
-	color: #5b5c5c;
-	text-decoration: none;
-}
 
 
 .tasks_task:hover {

@@ -91,6 +91,7 @@ function showCommentsForStory( story_id , animate)
         $("#story_" + story_id + " .comment_section").toggle();    
     }
     
+    $("#story_" + story_id + " .comment_section form").unbind("submit");
     $("#story_" + story_id + " .comment_section form").submit(function() {
         form = $(this);
         $.ajax({
