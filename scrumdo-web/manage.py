@@ -22,11 +22,7 @@ except ImportError:
 setup_environ(settings_mod)
 
 sys.path.insert(0, join(settings.PINAX_ROOT, "apps"))
-sys.path.insert(0, join(settings.PROJECT_ROOT, "apps"))
-
-if settings.EXTRA_PATH:
-  sys.path.insert(0, join(settings.EXTRA_PATH, "apps"))
-  sys.path.insert(0, join(settings.EXTRA_PATH, "plugins"))
+sys.path.insert(0, join(settings.PROJECT_ROOT, "apps"))  
 
 if __name__ == "__main__":
     execute_from_command_line()
