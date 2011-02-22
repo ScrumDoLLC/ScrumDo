@@ -57,7 +57,7 @@
 
 
 {% for link in story.external_links.all %}
-  <br/><a href="{{ link.external_url }}">{{ link.external_url }}</a>
+  <br/><a href="{{ link.external_url }}">{{ link.extra_slug }}</a>
 {% endfor %}
 
 {% include "stories/single_extra.html" %}
