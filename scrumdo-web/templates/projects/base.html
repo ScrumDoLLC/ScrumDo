@@ -53,6 +53,7 @@
 	{% isadmin project %}                  
 	<a title="{% trans "Project Administration / Settings" %}" href="{% url project_admin project.slug %}" >{% silk "cog" %} Settings</a><br/>
 	{% endisadmin %}
+	{% include "projects/tools_extra.html" %}
       </div><!--box-content-->
     </div><!--box-->
     {% endif %}
@@ -87,6 +88,7 @@
 	<a target="_blank" href="{% url iteration_report iteration.project.slug iteration.id %}">{% silk "page_white_text" %} Printer-friendly Report</a><br/>
 	<a title="Iterations can only be deleted when they contain no stories." href="#deleteIteration" rel="facebox">{% silk "delete" %} Delete Iteration</a><br/>
 	{% endcanwrite %}
+	{% include "projects/iteration_tools_extra.html" %}
       </div><!--box-content-->
     </div><!--box-->
     {% endcanwrite %}
