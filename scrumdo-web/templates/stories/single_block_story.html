@@ -46,6 +46,11 @@
        <div class="tagsBox">{% silk "tag_blue" %}<a onclick="filterByTag('{{tag.name}}');  return false;" href="#">{{ tag.name }}</a></div>
     {% endfor %}
   {% endif %}
+
+  {% for link in story.external_links.all %}
+   <div class="tagsBox">{% silk "link" %} <a href="{{ link.external_url }}">{{ link.extra_slug }}</a></div>
+  {% endfor %}
+
 </div>
 
 {% comments story %}
@@ -56,9 +61,6 @@
 
 
 
-{% for link in story.external_links.all %}
-  <br/><a href="{{ link.external_url }}">{{ link.extra_slug }}</a>
-{% endfor %}
 
 {% include "stories/single_extra.html" %}
 </li>  

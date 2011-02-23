@@ -42,19 +42,25 @@ class Command(BaseCommand):
   args = "pull"
   def handle(self, *args, **options):
     options, remainder = getopt.getopt(sys.argv[1:], 'p', ['pull'])
+    
     for arg in args:        
         if arg == "pull":            
-            setUpPullQueue()
-            return
+            if len(remainder) == 3:
+                setUpPullQueue( project_slug=remainder[2] )
+            else:
+                setUpPullQueue()
+                return
     processQueue()
 
 
-def setUpPullQueue():
-  logging.info("Setting up queue to pull all projects next time.")
-  mappings = ProjectExtraMapping.objects.all()
-  for mapping in mappings:
-    qItem = SyncronizationQueue(project=mapping.project, extra_slug=mapping.extra_slug, action=SyncronizationQueue.ACTION_SYNC_REMOTE) 
-    qItem.save()
+def setUpPullQueue( **kwargs ):
+    logging.info("Setting up queue to pull all projects next time.")
+    project_slug = kwargs.get("project_slug",None)
+    mappings = ProjectExtraMapping.objects.all()
+    for mapping in mappings:
+        if project_slug==None or project_slug==mapping.project.slug:      
+            qItem = SyncronizationQueue(project=mapping.project, extra_slug=mapping.extra_slug, action=SyncronizationQueue.ACTION_SYNC_REMOTE) 
+            qItem.save()
 
 
 def processQueue():    
@@ -72,7 +78,7 @@ def processQueue():
       action = queueItem.action
       extra_slug = queueItem.extra_slug
       action = queueItem.action
-      external_id = queueItem.action
+      external_id = queueItem.external_id
       
       extra = manager.getExtra( extra_slug )
       
