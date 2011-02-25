@@ -75,6 +75,7 @@ def processQueue():
     try:
       project = queueItem.project
       story = queueItem.story
+      task = queueItem.task
       action = queueItem.action
       extra_slug = queueItem.extra_slug
       action = queueItem.action
@@ -83,17 +84,25 @@ def processQueue():
       extra = manager.getExtra( extra_slug )
       
       if action == SyncronizationQueue.ACTION_SYNC_REMOTE:
-        extra.pullProject(project)        
+          extra.pullProject(project)        
       elif action == SyncronizationQueue.ACTION_STORY_UPDATED:
-        extra.storyUpdated(project,story)
+          extra.storyUpdated(project,story)
       elif action == SyncronizationQueue.ACTION_STORY_DELETED:
-        extra.storyDeleted(project,external_id)
+          extra.storyDeleted(project,external_id)
       elif action == SyncronizationQueue.ACTION_STORY_CREATED:
-        extra.storyCreated(project,story)    
-      elif action == SyncronizationQueue.ACTION_STATUS_CHANGED:
-        extra.storyStatusChange(project, story)
+          extra.storyCreated(project,story)    
+      elif action == SyncronizationQueue.ACTION_STORY_STATUS_CHANGED:
+          extra.storyStatusChange(project, story)
       elif action == SyncronizationQueue.ACTION_INITIAL_SYNC:
-        extra.initialSync( project )
+          extra.initialSync( project )
+      elif action == ACTION_TASK_UPDATED:
+          extra.taskUpdated(project, task)
+      elif action == ACTION_TASK_DELETED:
+          extra.taskDeleted(project, external_id)
+      elif action == ACTION_TASK_CREATED:
+          extra.taskCreated(project, task)
+      elif action == ACTION_TASK_STATUS_CHANGED:
+          extra.taskStatusChange(project, task)
     except RuntimeError:                                                 
       logger.error("RuntimeError occured while processing a syncronization queue item.")
       traceback.print_exc(file=sys.stdout)

@@ -123,42 +123,14 @@ class ScrumdoProjectExtra( ScrumdoExtra ):
     return "http://" + current_site.domain + "/extras/" + self.getSlug() + "/project/" +  project.slug + "/hook"
     
 
-
-
-# Organization based Extras are not yet ready to use...
-# 
-# class ScrumdoOrganizationExtra( ScrumdoExtra ):
-#   "Interface for extras that should be associated with an Organization"
-# 
-#   def syncronizeOrganization( organization ):
-#     "Should cause a full push/pull syncronization of this extra with whatever external source \
-#      there is.  This will be called on a scheduled basis for all active projects.  The organization \
-#      parameter be an apps.projects.models.Project object."
-# 
-#   def doOrganizationConfigration(request, organization ):
-#     "Should return a django style response that handles any configuration that this extra may need."
-# 
-#   def getShortStatus( organization ):
-#     "Should return a string representing the current status that this extra has for a given project.  \
-#     Examples: 'Successfully syncronized on 1/1/2010' or 'Syncronization last failed' or 'Everything OK' "
-# 
-# 
-#   def teamUpdated( organization, team ):
-#     "Called when a team is updated in a organization that this extra is associated with."
-# 
-#   def teamDeleted( organization, team):
-#     "Called when a team is deleted in a organization that this extra is associated with."
-# 
-#   def teamCreated( organization, team):
-#     "Called when a team is created in a organization that this extra is associated with."
-#     
-# 
-#   def projectUpdated( organization, project ):
-#     "Called when a project is updated in a organization that this extra is associated with."
-# 
-#   def projectDeleted( organization, project):
-#     "Called when a project is deleted in a organization that this extra is associated with."
-# 
-#   def projectCreated( organization, project):
-#     "Called when a project is created in a organization that this extra is associated with."
-
+  def taskUpdated(project, task):
+      pass
+    
+  def taskDeleted(project, external_id):
+      pass
+    
+  def taskCreated(project, task):
+      pass
+    
+  def taskStatusChange(project, task):
+      pass

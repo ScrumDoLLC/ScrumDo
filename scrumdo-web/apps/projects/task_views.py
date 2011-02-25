@@ -98,6 +98,7 @@ def edit_task(request, task_id):
     
     if request.method == "POST":
         form = TaskForm( task.story.project , request.POST, instance=task)
+        signals.task_updated.send( sender=request, task=task, user=request.user )
         form.save()
         return HttpResponse("OK") 
     else:    
