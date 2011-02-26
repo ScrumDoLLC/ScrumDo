@@ -87,8 +87,10 @@ def delete_task( request, task_id ):
     task = get_object_or_404(Task, id=task_id)
     write_access_or_403( task.story.project, request.user )
     story = task.story
-    task.delete()
     signals.task_deleted.send( sender=request, task=task, user=request.user )
+    task.sync_queue.clear()
+    task.delete()
+   
     return HttpResponse("OK")  
 
 @login_required

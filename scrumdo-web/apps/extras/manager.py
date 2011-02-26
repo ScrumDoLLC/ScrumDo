@@ -1,6 +1,7 @@
 from django.conf import settings
-from models import ProjectExtraMapping, ExtraConfiguration, SyncronizationQueue , ExternalStoryMapping, StoryQueue
+from models import ProjectExtraMapping, ExtraConfiguration, SyncronizationQueue , ExternalStoryMapping, StoryQueue, ExternalTaskMapping
 
+import sys, traceback
 import projects.signals as project_signals
 
 import logging
@@ -25,17 +26,24 @@ class ExtrasManager:
       logger.debug("Queuing a syncronization action %d, %s, %s" % (action,project.slug,extra_slug))
       queueObject = SyncronizationQueue( project=project, extra_slug=extra_slug, action=action)
       queueObject.story = kwargs.get("story",None)     
-      queueObject.task = kwargs.get("task",None)     
-      try:          
-          mapping = ExternalStoryMapping.objects.get(story=queueObject.story,extra_slug=extra_slug)
-          queueObject.external_id = mapping.external_id
-      except:
-          pass      
+      queueObject.task = kwargs.get("task",None)
+      if queueObject.task == None:
+          try:          
+              mapping = ExternalStoryMapping.objects.get(story=queueObject.story,extra_slug=extra_slug)
+              queueObject.external_id = mapping.external_id
+          except:
+              pass      
+      else:
+          try:
+              mapping = ExternalTaskMapping.objects.get(task=queueObject.task,extra_slug=extra_slug)
+              queueObject.external_id = mapping.external_id
+          except:
+              pass
       queueObject.save()
     
-  def queueSyncActions(self, project, action, **kwargs):
-    for mapping in project.extras.all():
-      self.queueSyncAction( mapping.extra_slug, project, action, **kwargs)
+  def queueSyncActions(self, project, action, **kwargs):      
+      for mapping in project.extras.all():
+          self.queueSyncAction( mapping.extra_slug, project, action, **kwargs)
   
   def getExtraConfigs( self , project):
     extras = self.extras.values();
@@ -117,7 +125,7 @@ class ExtrasManager:
   def onTaskDeleted(self, sender, **kwargs):                                                                  
       task = kwargs["task"]
       story = task.story
-      logger.debug("extras.ExtrasManager::onTaskDeleted(project=%s, story=%d)" % (story.project.slug, story.id))    
+      logger.debug("extras.ExtrasManager::onTaskDeleted(project=%s, task=%s)" % (story.project.slug, task))    
       self.queueSyncActions( story.project, SyncronizationQueue.ACTION_TASK_DELETED , story=story, task=task)
 
   def onTaskCreated(self, sender, **kwargs):                   

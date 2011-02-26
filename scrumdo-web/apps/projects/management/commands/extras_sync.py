@@ -95,13 +95,13 @@ def processQueue():
           extra.storyStatusChange(project, story)
       elif action == SyncronizationQueue.ACTION_INITIAL_SYNC:
           extra.initialSync( project )
-      elif action == ACTION_TASK_UPDATED:
+      elif action == SyncronizationQueue.ACTION_TASK_UPDATED:
           extra.taskUpdated(project, task)
-      elif action == ACTION_TASK_DELETED:
+      elif action == SyncronizationQueue.ACTION_TASK_DELETED:
           extra.taskDeleted(project, external_id)
-      elif action == ACTION_TASK_CREATED:
+      elif action == SyncronizationQueue.ACTION_TASK_CREATED:
           extra.taskCreated(project, task)
-      elif action == ACTION_TASK_STATUS_CHANGED:
+      elif action == SyncronizationQueue.ACTION_TASK_STATUS_CHANGED:
           extra.taskStatusChange(project, task)
     except RuntimeError:                                                 
       logger.error("RuntimeError occured while processing a syncronization queue item.")

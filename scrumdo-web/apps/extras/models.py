@@ -66,8 +66,6 @@ class SyncronizationQueue( models.Model ):
   external_id = models.CharField( max_length=40 , null=True)
   
   
-  
-  
 class ExternalStoryMapping( models.Model ):
   """ When a story is related to external, third party sites, this gives a way of associating a reference to that other site.
       For instance, we store the GitHub Issue ID for any story that was imported from GitHub issues, or exported to it.
@@ -77,6 +75,13 @@ class ExternalStoryMapping( models.Model ):
   external_id = models.CharField( max_length=40 )
   external_url = models.CharField( max_length=256, blank=True , null=True)
   extra_slug = models.CharField( max_length=20 )
+  
+class ExternalTaskMapping( models.Model ):
+    """ When a task is related to external, third party sites, this gives a way of associating a reference to that other site."""
+    task = models.ForeignKey(Task, related_name="external_links")
+    external_id = models.CharField( max_length=40 )
+    external_url = models.CharField( max_length=256, blank=True , null=True)
+    extra_slug = models.CharField( max_length=20 )  
 
   
 class ExtraConfiguration( models.Model ):
