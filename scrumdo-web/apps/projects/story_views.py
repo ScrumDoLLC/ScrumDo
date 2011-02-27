@@ -299,6 +299,7 @@ def _handleAddStoryInternal( form , project, request):
   story.rank = _calculate_rank( story.iteration, int(form.cleaned_data['general_rank']) )
   logger.info("New Story %s" % story.summary)
   story.save()
+  signals.story_created.send( sender=request, story=story, user=request.user )
   story.activity_signal.send(sender=story, user=request.user, story=story, action="created", project=project)
   request.user.message_set.create(message="Story #%d created." % story.local_id )
   return story

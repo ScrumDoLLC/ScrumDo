@@ -12,7 +12,7 @@ import logging
 from models import StoryQueue, ExternalStoryMapping
 logger = logging.getLogger(__name__)
 
-
+import signals
 
 
 
@@ -53,8 +53,11 @@ def import_story(request, project_slug, queue_id):
   mapping.save()
   request.user.message_set.create(message="Story imported.")
   
-  story.delete()
-  return story_queue(request,project_slug)
+  story.delete() # delete the story queue object since we just imported it.
+  
+  signals.story_imported.send( sender=request, story=new_story, user=request.user )
+  
+  return HttpResponseRedirect(reverse("story_queue_url", kwargs={'project_slug':project_slug} )) #story_queue(request,project_slug)
   
   
 def story_queue( request, project_slug):
