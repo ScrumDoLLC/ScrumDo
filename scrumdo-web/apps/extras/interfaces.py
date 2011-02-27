@@ -37,7 +37,9 @@ class ScrumdoExtra:
     except ObjectDoesNotExist:
       return {}
     return pickle.loads( base64.decodestring(config.configuration_pickle) )
-  
+
+  def isPremium(self):
+      return False
 
   def saveConfiguration(self, project_slug, configuration_object ):
     """ Saves a configuration object (usually a dictionary) to the ExtraConfiguration table. 

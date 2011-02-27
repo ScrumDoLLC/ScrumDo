@@ -1,11 +1,12 @@
 from django.conf import settings
-from models import ProjectExtraMapping, ExtraConfiguration, SyncronizationQueue , ExternalStoryMapping, StoryQueue, ExternalTaskMapping
-
+import logging
 import sys, traceback
+
 import projects.signals as project_signals
+import projects.limits as project_limits
 import extras.signals as extras_signals
 
-import logging
+from models import ProjectExtraMapping, ExtraConfiguration, SyncronizationQueue , ExternalStoryMapping, StoryQueue, ExternalTaskMapping
 
 logger = logging.getLogger(__name__)
 
@@ -47,15 +48,19 @@ class ExtrasManager:
           self.queueSyncAction( mapping.extra_slug, project, action, **kwargs)
   
   def getExtraConfigs( self , project):
-    extras = self.extras.values();
-    rv = []
-    for extra in extras:
-      config = {}
-      config["extra"] = extra
-      config["enabled"] = self.is_extra_enabled(project, extra.getSlug() )
-      config["status"] = extra.getShortStatus( project )
-      rv.append( config )
-    return rv
+      extras = self.extras.values();
+      rv = []
+      for extra in extras:
+          if extra.isPremium() and project.organization==None and not project_limits.personal_extra_limit.increaseAllowed(project=project):
+              continue
+          if extra.isPremium() and project.organization!=None and not project_limits.org_extra_limit.increaseAllowed(organization=project.organization):
+              continue
+          config = {}
+          config["extra"] = extra
+          config["enabled"] = self.is_extra_enabled(project, extra.getSlug() )
+          config["status"] = extra.getShortStatus( project )
+          rv.append( config )
+      return rv
 
   def syncronizeExtra(self, extra_slug, project ):              
     extra = self.getExtra( extra_slug )
