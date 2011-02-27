@@ -3,6 +3,7 @@ from models import ProjectExtraMapping, ExtraConfiguration, SyncronizationQueue 
 
 import sys, traceback
 import projects.signals as project_signals
+import extras.signals as extras_signals
 
 import logging
 
@@ -133,6 +134,12 @@ class ExtrasManager:
       story = task.story
       logger.debug("extras.ExtrasManager::onTaskCreated(project=%s, story=%d)" % (story.project.slug, story.id))
       self.queueSyncActions( story.project, SyncronizationQueue.ACTION_TASK_CREATED , story=story, task=task)
+      
+  def onStoryImported(self, sender, **kwargs):
+      story = kwargs["story"]
+      logger.debug("extras.ExtrasManager::onStoryCreated(project=%s, story=%d)" % (story.project.slug, story.id))
+      self.queueSyncActions( story.project, SyncronizationQueue.ACTION_STORY_IMPORTED , story=story)
+      
 
   def __init__(self, extras_settings):
     manager = self
@@ -146,6 +153,8 @@ class ExtrasManager:
     project_signals.task_status_changed.connect(self.onTaskStatusChanged, dispatch_uid="extra_signal_hookup")    
     project_signals.task_deleted.connect(self.onTaskDeleted, dispatch_uid="extra_signal_hookup")    
     project_signals.task_created.connect(self.onTaskCreated, dispatch_uid="extra_signal_hookup")
+    
+    extras_signals.story_imported.connect( self.onStoryImported, dispatch_uid="extra_signal_hookup")
         
     for extra in extras_settings:      
       extra_class = get_class( extra )

@@ -37,7 +37,8 @@ class ScrumdoExtra:
     except ObjectDoesNotExist:
       return {}
     return pickle.loads( base64.decodestring(config.configuration_pickle) )
-    
+  
+
   def saveConfiguration(self, project_slug, configuration_object ):
     """ Saves a configuration object (usually a dictionary) to the ExtraConfiguration table. 
         configuration_object must be pickleable """
@@ -122,6 +123,9 @@ class ScrumdoProjectExtra( ScrumdoExtra ):
     current_site = Site.objects.get_current()
     return "http://" + current_site.domain + "/extras/" + self.getSlug() + "/project/" +  project.slug + "/hook"
     
+  def storyImported(self, project, story):
+      "Occurs when a user imports a story from the story queue"
+      pass
 
   def taskUpdated(project, task):
       pass

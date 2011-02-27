@@ -103,6 +103,8 @@ def processQueue():
           extra.taskCreated(project, task)
       elif action == SyncronizationQueue.ACTION_TASK_STATUS_CHANGED:
           extra.taskStatusChange(project, task)
+      elif action == SyncronizationQueue.ACTION_STORY_IMPORTED:
+          extra.storyImported(project, story)
     except RuntimeError:                                                 
       logger.error("RuntimeError occured while processing a syncronization queue item.")
       traceback.print_exc(file=sys.stdout)
