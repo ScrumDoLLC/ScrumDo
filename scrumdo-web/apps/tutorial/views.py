@@ -10,7 +10,11 @@ from os.path import isfile, join
 tutorials = { "scrumdo":[("start","What Is ScrumDo?"), 
                          ("organizations", "Organizations"), 
                          ("projects", "Projects"), 
-                         ("iterations", "Iteration Planning"),],
+                         ("iterations", "Iteration Planning"),
+                         ("basecamp", "Basecamp Integration"),
+                         ],
+                         
+                         
               "scrum":[("start", "Start"), 
                        ("roles", "Roles"), 
                        ("backlog", "Backlog"), 
