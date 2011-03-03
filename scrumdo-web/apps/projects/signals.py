@@ -41,7 +41,7 @@ task_created = django.dispatch.Signal(providing_args=["task","user"])
 task_status_changed = django.dispatch.Signal(providing_args=["task","user"])
 
 # Signal dispatched when a task is edited
-task_edited = django.dispatch.Signal(providing_args=["task","user"])
+task_updated = django.dispatch.Signal(providing_args=["task","user"])
 
 # Signal dispatched when a task is deleted.
 # Note: it's already been deleted when this is dispatched.

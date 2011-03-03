@@ -3,7 +3,7 @@ from django.db import models
 import time
 
 from django.core.urlresolvers import reverse
-from projects.models import Project, Iteration, Story
+from projects.models import Project, Iteration, Story, Task
 
 
 # Determines which extras are active for which projects.
@@ -43,7 +43,12 @@ class SyncronizationQueue( models.Model ):
   ACTION_STORY_DELETED = 3
   ACTION_STORY_CREATED = 4
   ACTION_INITIAL_SYNC = 5
-  ACTION_STATUS_CHANGED = 6
+  ACTION_STORY_STATUS_CHANGED = 6
+  ACTION_TASK_UPDATED = 7
+  ACTION_TASK_DELETED = 8
+  ACTION_TASK_CREATED = 9
+  ACTION_TASK_STATUS_CHANGED = 10
+  ACTION_STORY_IMPORTED = 11
   
   ACTION_CHOICES = (
       (1, "SYNC_REMOTE"),
@@ -51,16 +56,20 @@ class SyncronizationQueue( models.Model ):
       (3, "STORY_DELETED"),
       (4, "STORY_CREATED"),
       (5, "INITIAL_SYNC"),
-      (6, "STATUS_CHANGED")   )
+      (6, "ACTION_STORY_STATUS_CHANGED"),
+      (7, "ACTION_TASK_UPDATED"),
+      (8, "ACTION_TASK_DELETED"),
+      (9, "ACTION_TASK_CREATED"),
+      (10, "ACTION_TASK_STATUS_CHANGED"),
+      (11, "ACTION_STORY_IMPORTED")   )
   
   project = models.ForeignKey(Project)
   story = models.ForeignKey(Story, null=True, related_name="sync_queue")
+  task = models.ForeignKey(Task, null=True, related_name="sync_queue")
   extra_slug = models.CharField(  max_length=25)
   action = models.IntegerField( max_length=2, choices=ACTION_CHOICES )
   queue_date = models.DateTimeField( default=datetime.now)
   external_id = models.CharField( max_length=40 , null=True)
-  
-  
   
   
 class ExternalStoryMapping( models.Model ):
@@ -72,6 +81,13 @@ class ExternalStoryMapping( models.Model ):
   external_id = models.CharField( max_length=40 )
   external_url = models.CharField( max_length=256, blank=True , null=True)
   extra_slug = models.CharField( max_length=20 )
+  
+class ExternalTaskMapping( models.Model ):
+    """ When a task is related to external, third party sites, this gives a way of associating a reference to that other site."""
+    task = models.ForeignKey(Task, related_name="external_links")
+    external_id = models.CharField( max_length=40 )
+    external_url = models.CharField( max_length=256, blank=True , null=True)
+    extra_slug = models.CharField( max_length=20 )  
 
   
 class ExtraConfiguration( models.Model ):

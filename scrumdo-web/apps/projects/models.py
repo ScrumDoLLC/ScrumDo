@@ -293,6 +293,13 @@ class Story( models.Model ):
     except:
       return 0
   
+  def getExternalLink(self, extra_slug):
+      try:
+          link = self.external_links.get( extra_slug="basecamp" )
+      except:
+          return None
+      return link
+  
   @property
   def tags(self):
     r = "";
@@ -359,6 +366,16 @@ class Task( models.Model ):
     assignee = models.ForeignKey(User, related_name="assigned_tasks", verbose_name=_('assignee'), null=True, blank=True)  
     complete = models.BooleanField(default=False)
     order = models.PositiveIntegerField( default=0 )
+    
+    def getExternalLink(self, extra_slug):
+        try:
+            link = self.external_links.get( extra_slug="basecamp" )
+        except:
+            return None
+        return link
+        
+    def __unicode__(self):
+        return "[%s/#%d] Task: %s" % (self.story.project.name, self.story.local_id, self.summary)
     class Meta:
         ordering = [ 'order' ]
     

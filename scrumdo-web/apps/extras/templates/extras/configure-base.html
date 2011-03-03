@@ -3,7 +3,9 @@
 {% load group_tags %}
 
 {% block body %}
-  <h1>Configure {{extra.getName}}</h1>
+  {% block heading %}
+    <h1>Configure {{extra.getName}}</h1>
+  {% endblock %}
 
 
   {% block configure_content %}

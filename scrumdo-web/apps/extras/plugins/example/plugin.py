@@ -39,3 +39,5 @@ class ExampleExtra( ScrumdoProjectExtra ):
 
   def unassociate( self, project):
     logging.info("Unassociated example extra with " + project.slug )
+    
+Plugin = ExampleExtra

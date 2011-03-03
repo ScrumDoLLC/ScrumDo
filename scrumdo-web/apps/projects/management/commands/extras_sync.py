@@ -42,19 +42,25 @@ class Command(BaseCommand):
   args = "pull"
   def handle(self, *args, **options):
     options, remainder = getopt.getopt(sys.argv[1:], 'p', ['pull'])
+    
     for arg in args:        
         if arg == "pull":            
-            setUpPullQueue()
-            return
+            if len(remainder) == 3:
+                setUpPullQueue( project_slug=remainder[2] )
+            else:
+                setUpPullQueue()
+                return
     processQueue()
 
 
-def setUpPullQueue():
-  logging.info("Setting up queue to pull all projects next time.")
-  mappings = ProjectExtraMapping.objects.all()
-  for mapping in mappings:
-    qItem = SyncronizationQueue(project=mapping.project, extra_slug=mapping.extra_slug, action=SyncronizationQueue.ACTION_SYNC_REMOTE) 
-    qItem.save()
+def setUpPullQueue( **kwargs ):
+    logging.info("Setting up queue to pull all projects next time.")
+    project_slug = kwargs.get("project_slug",None)
+    mappings = ProjectExtraMapping.objects.all()
+    for mapping in mappings:
+        if project_slug==None or project_slug==mapping.project.slug:      
+            qItem = SyncronizationQueue(project=mapping.project, extra_slug=mapping.extra_slug, action=SyncronizationQueue.ACTION_SYNC_REMOTE) 
+            qItem.save()
 
 
 def processQueue():    
@@ -69,25 +75,36 @@ def processQueue():
     try:
       project = queueItem.project
       story = queueItem.story
+      task = queueItem.task
       action = queueItem.action
       extra_slug = queueItem.extra_slug
       action = queueItem.action
-      external_id = queueItem.action
+      external_id = queueItem.external_id
       
       extra = manager.getExtra( extra_slug )
       
       if action == SyncronizationQueue.ACTION_SYNC_REMOTE:
-        extra.pullProject(project)        
+          extra.pullProject(project)        
       elif action == SyncronizationQueue.ACTION_STORY_UPDATED:
-        extra.storyUpdated(project,story)
+          extra.storyUpdated(project,story)
       elif action == SyncronizationQueue.ACTION_STORY_DELETED:
-        extra.storyDeleted(project,external_id)
+          extra.storyDeleted(project,external_id)
       elif action == SyncronizationQueue.ACTION_STORY_CREATED:
-        extra.storyCreated(project,story)    
-      elif action == SyncronizationQueue.ACTION_STATUS_CHANGED:
-        extra.storyStatusChange(project, story)
+          extra.storyCreated(project,story)    
+      elif action == SyncronizationQueue.ACTION_STORY_STATUS_CHANGED:
+          extra.storyStatusChange(project, story)
       elif action == SyncronizationQueue.ACTION_INITIAL_SYNC:
-        extra.initialSync( project )
+          extra.initialSync( project )
+      elif action == SyncronizationQueue.ACTION_TASK_UPDATED:
+          extra.taskUpdated(project, task)
+      elif action == SyncronizationQueue.ACTION_TASK_DELETED:
+          extra.taskDeleted(project, external_id)
+      elif action == SyncronizationQueue.ACTION_TASK_CREATED:
+          extra.taskCreated(project, task)
+      elif action == SyncronizationQueue.ACTION_TASK_STATUS_CHANGED:
+          extra.taskStatusChange(project, task)
+      elif action == SyncronizationQueue.ACTION_STORY_IMPORTED:
+          extra.storyImported(project, story)
     except RuntimeError:                                                 
       logger.error("RuntimeError occured while processing a syncronization queue item.")
       traceback.print_exc(file=sys.stdout)
