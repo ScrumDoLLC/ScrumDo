@@ -63,6 +63,7 @@ urlpatterns = patterns('',
     (r'^organization/', include('organizations.urls')),    
     (r'^admin/(.*)', admin.site.root),
     (r'^api/', include('api.urls')),
+    url(r'^usage', direct_to_template, {'template': 'usage_restrictions.html'}, name="usage"),
 )
 
 if settings.SERVE_MEDIA:
