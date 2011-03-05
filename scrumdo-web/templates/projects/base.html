@@ -62,9 +62,9 @@
 	<a title="See how much you've completed in past iterations." href="{% url project_history project.slug %}">{% silk "report" %} History</a><br/>
 	<a title="Make predictions of what work will get done when based on your ranking and velocity." href="{% url project_prediction project.slug %}">{% silk "find" %} Predictions</a><br/>
 	<!-- <span title="Coming Soon: Easily size stories.">{% silk "time" %} Sizing</span><br/> -->
-	<a title="{% trans "Third party plugins and extra functionality." %}" href="{% url project_extras_url project.slug %}" >{% silk "plugin" %} Extras</a><br/>
 	{% isadmin project %}                  
-	<a title="{% trans "Project Administration / Settings" %}" href="{% url project_admin project.slug %}" >{% silk "cog" %} Settings</a><br/>
+ 	 <a title="{% trans "Third party plugins and extra functionality." %}" href="{% url project_extras_url project.slug %}" >{% silk "plugin" %} Extras</a><br/>
+	 <a title="{% trans "Project Administration / Settings" %}" href="{% url project_admin project.slug %}" >{% silk "cog" %} Settings</a><br/>
 	{% endisadmin %}
 	{% include "projects/tools_extra.html" %}
       </div><!--box-content-->
