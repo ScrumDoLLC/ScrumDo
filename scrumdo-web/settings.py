@@ -243,7 +243,7 @@ CACHE_BACKEND = 'locmem://'
 
 INTERNAL_IPS = ('127.0.0.1',)
 
-
+BASE_URL="http://localhost:8000"
 
 SCRUMDO_EXTRAS = ("extras.plugins.github_issues.GitHubIssuesExtra",
                   "extras.plugins.example.ExampleExtra",)
