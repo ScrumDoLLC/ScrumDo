@@ -33,3 +33,16 @@ story_deleted = django.dispatch.Signal(providing_args=["story","user"])
 # Signal dispatched when a story is created
 # user = who did it, story = the story that changed.
 story_created = django.dispatch.Signal(providing_args=["story","user"])
+
+# Signal dispatched when a new task is created.
+task_created = django.dispatch.Signal(providing_args=["task","user"])
+
+# Signal dispatched when the status (done/not done) of a task changed.
+task_status_changed = django.dispatch.Signal(providing_args=["task","user"])
+
+# Signal dispatched when a task is edited
+task_updated = django.dispatch.Signal(providing_args=["task","user"])
+
+# Signal dispatched when a task is deleted.
+# Note: it's already been deleted when this is dispatched.
+task_deleted = django.dispatch.Signal(providing_args=["task","user"])

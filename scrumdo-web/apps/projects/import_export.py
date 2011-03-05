@@ -38,7 +38,7 @@ ezxf = xlwt.easyxf
 def exportIteration(iteration, format ):
   """ Exports an iteration, format should be xls, xml or csv. """
   logger.info("Exporting iteration %s %d" % (iteration.project.slug, iteration.id) )
-  if format.lower() == "xls":
+  if format.lower() == "xls" :
     return _exportExcel( iteration )
   elif format.lower() == "xml":
     return _exportXML( iteration )
@@ -55,6 +55,10 @@ def importIteration(iteration, file , user):
     return _importXMLIteration(iteration, file, user)
   elif m.group(1).lower() == "xls" :
     return _importExcelIteration(iteration, file, user)
+  elif m.group(1).lower() == "xlsx" :
+    logger.info("Tried to import xlsx file :(")
+    user.message_set.create(message="Please save your file as an .xls Excel file before importing.")               
+    return False
   else:
     # Assume CSV, hope for the best.
     return _importCSVIteration(iteration, file, user)
@@ -337,25 +341,28 @@ def _importXMLIteration(iteration, file, user):
   
 
 def _importCSVIteration(iteration, file, user):
-  import_file = csv.reader( file , delimiter=',' ,  quoting=csv.QUOTE_ALL, escapechar='\\' )
-  headers = None
-  import_data = []
-  count = 0
-  for row in import_file:    
+    import_file = csv.reader( file , delimiter=',' ,  quoting=csv.QUOTE_ALL, escapechar='\\' )
     try:
-      if headers == None:
-        headers = row
-      else:
-        import_row = {}
-        for idx,header in enumerate(headers):        
-          import_row[header] = row[idx]
-          #logger.debug("Import field %s as %s"%(header, row[idx]) )
-        count += 1
-        import_data.append( import_row )      
+        headers = None
+        import_data = []
+        count = 0
+        for row in import_file:    
+            try:
+                if headers == None:
+                    headers = row
+                else:
+                    import_row = {}
+                    for idx,header in enumerate(headers):        
+                        import_row[header] = row[idx]
+                        #logger.debug("Import field %s as %s"%(header, row[idx]) )
+                    count += 1
+                    import_data.append( import_row )      
+            except:
+              logger.warn("Failed to import CSV row")
     except:
-      logger.warn("Failed to import CSV row")
-  logger.info("Found %d rows in a CSV file" % count)
-  _importData( import_data, iteration, user )
+        logger.info("Failed to import CSV file")
+    logger.info("Found %d rows in a CSV file" % count)
+    _importData( import_data, iteration, user )
     
   
   

@@ -22,6 +22,7 @@ from tagging.fields import TagField
 from tagging.models import Tag
 import tagging
 import re
+from itertools import groupby
 
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import  User
@@ -32,8 +33,8 @@ from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 
-from organizations.models import Organization
-from activities.models import SubjectActivity
+from organizations.models import Organization, Team
+from activities.models import Activity, StoryActivity, IterationActivity
 import django.dispatch
 
 class SiteStats( models.Model ):
@@ -41,9 +42,10 @@ class SiteStats( models.Model ):
   project_count = models.IntegerField();
   story_count = models.IntegerField();    
   date = models.DateField( auto_now=True );
+  def __unicode__(self):
+      return "%s %d/%d/%d" % (self.date, self.project_count, self.story_count, self.user_count)
   
-class PointsLog( models.Model ):
-    
+class PointsLog( models.Model ):    
   date = models.DateField( auto_now=True );
   points_claimed = models.IntegerField();
   points_total = models.IntegerField();
@@ -71,6 +73,7 @@ class Project(Group):
     VELOCITY_TYPE_MEDIAN = 2
     VELOCITY_TYPE_AVERAGE_3 = 3
   
+    active = models.BooleanField( default=True )
   
     member_users = models.ManyToManyField(User, through="ProjectMember", verbose_name=_('members'))
     
@@ -81,6 +84,7 @@ class Project(Group):
     default_iteration = None
     
     use_assignee = models.BooleanField( default=False )
+    use_tasks = models.BooleanField( default=False )
     # This field is not used -- use_acceptance = models.BooleanField( default=False )
     use_extra_1 = models.BooleanField( default=False )    
     use_extra_2 = models.BooleanField( default=False )    
@@ -177,8 +181,6 @@ class Project(Group):
     
     def get_url_kwargs(self):
         return {'group_slug': self.slug}
-
-
   
 
 class Iteration( models.Model):
@@ -191,8 +193,8 @@ class Iteration( models.Model):
   points_log = generic.GenericRelation( PointsLog )
   locked = models.BooleanField( default=False )
   
-  activity_signal = django.dispatch.Signal(providing_args=["news", "user","action","context"])
-  activity_signal.connect(SubjectActivity.activity_handler)
+  activity_signal = django.dispatch.Signal(providing_args=["user","action","project"])
+  activity_signal.connect(IterationActivity.activity_handler)
 
   include_in_velocity = models.BooleanField(_('include_in_velocity'), default=True)
   
@@ -221,10 +223,13 @@ class Iteration( models.Model):
   class Meta:
     ordering = ["-default_iteration","end_date"];
   
-  def __str__(self):
-    return self.name
+  def __unicode__(self):
+    return "%s / %s" % (self.project.name, self.name)
 
 
+    
+    
+    
 class Story( models.Model ):
   STATUS_TODO = 1
   STATUS_DOING = 2
@@ -252,9 +257,21 @@ class Story( models.Model ):
 
   tags_to_delete = []
   tags_to_add = []
-  activity_signal = django.dispatch.Signal(providing_args=["news", "user","action", "story", "context"])
-  activity_signal.connect(SubjectActivity.activity_handler)
+  activity_signal = django.dispatch.Signal(providing_args=["user","action", "project", "story"])
+  activity_signal.connect(StoryActivity.activity_handler)
 
+  @staticmethod
+  def getAssignedStories(user):
+    projects = ProjectMember.getProjectsForUser(user)
+    assigned_stories = []
+    for project in projects:
+      if project.use_assignee:
+        project_stories = []
+        iterations = project.get_current_iterations()
+        for iteration in iterations:
+          project_stories = project_stories + list(Story.objects.filter(iteration=iteration, assignee=user).exclude(status=4))
+        assigned_stories = assigned_stories + [(project, project_stories)]
+    return assigned_stories
 
   def getPointsLabel(self):
     result = filter( lambda v: v[0]==self.points, self.getPointScale() )
@@ -274,6 +291,13 @@ class Story( models.Model ):
       return float(self.points)
     except:
       return 0
+  
+  def getExternalLink(self, extra_slug):
+      try:
+          link = self.external_links.get( extra_slug="basecamp" )
+      except:
+          return None
+      return link
   
   @property
   def tags(self):
@@ -306,9 +330,11 @@ class Story( models.Model ):
           found = True
       if not found :
         self.tags_to_delete.append( saved_tag ) 
-    
-  
+  def __unicode__(self):
+      return "[%s/#%d] %s" % (self.project.name, self.local_id, self.summary)
 
+  def get_absolute_url(self):
+    return (self.iteration.get_absolute_url() + "#story_" + str(self.id)) 
 
         
   
@@ -333,18 +359,40 @@ def tag_callback(sender, instance, **kwargs):
 
 models.signals.post_save.connect(tag_callback, sender=Story)
 
-
+class Task( models.Model ):
+    story = models.ForeignKey(Story, related_name="tasks")
+    summary = models.TextField(blank=True)
+    assignee = models.ForeignKey(User, related_name="assigned_tasks", verbose_name=_('assignee'), null=True, blank=True)  
+    complete = models.BooleanField(default=False)
+    order = models.PositiveIntegerField( default=0 )
+    
+    def getExternalLink(self, extra_slug):
+        try:
+            link = self.external_links.get( extra_slug="basecamp" )
+        except:
+            return None
+        return link
+        
+    def __unicode__(self):
+        return "[%s/#%d] Task: %s" % (self.story.project.name, self.story.local_id, self.summary)
+    class Meta:
+        ordering = [ 'order' ]
+    
 
 class StoryTag( models.Model ):
   project = models.ForeignKey( Project , related_name="tags")
   name = models.CharField('name', max_length=32 )
-
+  def __unicode__(self):
+      return "[%s] %s" % ( self.project.name, self.name)
+      
 class StoryTagging( models.Model ):
   tag = models.ForeignKey( StoryTag , related_name="stories")
   story = models.ForeignKey( Story , related_name="story_tags")
   @property
   def name(self):
     return self.tag.name
+
+
 
 class ProjectMember(models.Model):
     project = models.ForeignKey(Project, related_name="members", verbose_name=_('project'))
@@ -353,6 +401,16 @@ class ProjectMember(models.Model):
     away = models.BooleanField(_('away'), default=False)
     away_message = models.CharField(_('away_message'), max_length=500)
     away_since = models.DateTimeField(_('away since'), default=datetime.now)
+    
+    def __str__(self):
+        return "ProjectMember: %s " % self.user.username
+        
+    @staticmethod
+    def getProjectsForUser(user):
+      """ This gets all a user's projects, including ones they have access to via teams. """
+      user_projects = [pm.project for pm in ProjectMember.objects.filter(user=user).select_related()]
+      team_projects = [team.projects.all() for team in Team.objects.filter(members=user)]
+      for project_list in team_projects:
+        user_projects = user_projects + list(project_list)
+      return list(set(user_projects))
 
-
-from organizations.team_models import *

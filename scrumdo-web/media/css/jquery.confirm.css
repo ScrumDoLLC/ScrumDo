@@ -1,0 +1,11 @@
+/**
+ * jQuery confirmation box plugin styles
+ * @author Michał Bielawski <d3x@burek.it>
+ * @license WTFPL (http://sam.zoy.org/wtfpl/)
+ 8 @modified Daniel Patterson <dbp@riseup.net>
+ */
+#jquery-confirm a {
+    display: block;
+    text-decoration: none;
+    color: #000;
+}

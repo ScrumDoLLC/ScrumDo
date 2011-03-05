@@ -54,7 +54,7 @@
       <em>{{iteration.start_date|date:"M d, Y"}} - {{iteration.end_date|date:"M d, Y"}}</em>
       <br/>
       {% if iteration.points_log.count %}
-        <div id="iterationBurndown_{{iteration.id}}" style="width:540px;height:300px;"></div>  
+        <div id="iterationBurndown_{{iteration.id}}" style="width:740px;height:300px;"></div>  
       {% else %}
         <img src="/site_media/static/images/burndown.png">
       {% endif %}
@@ -62,7 +62,7 @@
 
     <h1>Overall Project</h1>
     {% if project.points_log.count %}
-      <div id="overallBurndown" style="width:540px;height:300px;"></div>
+      <div id="overallBurndown" style="width:740px;height:300px;"></div>
     {% else %}
       <img src="/site_media/static/images/burndown.png" />
     {% endif %}

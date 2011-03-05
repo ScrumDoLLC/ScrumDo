@@ -21,10 +21,10 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
-from projects.models import Project, ProjectMember, Iteration, Story
+from projects.models import Project, ProjectMember, Iteration, Story, Task
 from django.forms.extras.widgets import SelectDateWidget
 
-
+from projects.limits import userIncreasedAlowed
 
 
 if "notification" in settings.INSTALLED_APPS:
@@ -50,9 +50,19 @@ class IterationForm(forms.ModelForm):
 class ProjectOptionsForm(forms.ModelForm):
   class Meta:
       model = Project
-      fields = ('velocity_type','point_scale_type', 'use_extra_1', 'use_extra_2', 'use_extra_3',  'use_assignee', 'extra_1_label', 'extra_2_label', 'extra_3_label','name', 'description' )
+      fields = ('velocity_type','point_scale_type', 'use_extra_1', 'use_extra_2', 'use_extra_3', 'use_tasks', 'use_assignee', 'extra_1_label', 'extra_2_label', 'extra_3_label','name', 'description' )
 
-
+class TaskForm( forms.ModelForm ):
+    def __init__(self, project, *args, **kwargs):    
+        super(TaskForm, self).__init__(*args, **kwargs)      
+        members = project.all_member_choices()
+        members.insert(0,("","Nobody"))
+        self.fields["assignee"].choices = members    
+        self.fields["summary"].widget = forms.widgets.TextInput(attrs={'size':'50'})         
+    class Meta:
+        model = Task
+        fields = ('complete','summary','assignee')
+        
 class AddStoryForm( forms.ModelForm ):
   RANK_CHOICES = (
       ('0', 'Top'), 
@@ -128,10 +138,10 @@ class ProjectForm(forms.ModelForm):
             raise forms.ValidationError(_("A project already exists with that slug."))
         return self.cleaned_data["slug"].lower()
     
-    def clean_name(self):
-        if Project.objects.filter(name__iexact=self.cleaned_data["name"]).count() > 0:
-            raise forms.ValidationError(_("A project already exists with that name."))
-        return self.cleaned_data["name"]
+    # def clean_name(self):
+    #     if Project.objects.filter(name__iexact=self.cleaned_data["name"]).count() > 0:
+    #         raise forms.ValidationError(_("A project already exists with that name."))
+    #     return self.cleaned_data["name"]
     
     class Meta:
         model = Project
@@ -175,6 +185,7 @@ class AddUserForm(forms.Form):
     
     def __init__(self, *args, **kwargs):
         self.project = kwargs.pop("project")
+        self.user = kwargs.pop("user")
         super(AddUserForm, self).__init__(*args, **kwargs)
     
     def clean_recipient(self):
@@ -184,7 +195,10 @@ class AddUserForm(forms.Form):
             raise forms.ValidationError(_("There is no user with this username."))
         
         if ProjectMember.objects.filter(project=self.project, user=user).count() > 0:
-            raise forms.ValidationError(_("User is already a member of this project."))
+            raise forms.ValidationError(_("User is already a member of this project."))      
+        
+        if not userIncreasedAlowed(self.project, self.user, user):
+            raise forms.ValidationError(_("Upgrade your account to add more users."))      
         
         return self.cleaned_data['recipient']
     

@@ -1,0 +1,8 @@
+{% load uni_form %}
+<div style="margin-left:45px">
+  <form id="edit_task_{{task.id}}" method="POST" action="/projects/task/{{task.id}}/edit">
+    {{ form.complete }} {{ form.summary }} {{ form.assignee }}
+    <input type="submit" value="Save" class="button">
+    <input type="hidden" name="story_id" value="{{task.story.id}}">
+  </form>
+</div>

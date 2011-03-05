@@ -29,11 +29,14 @@ from django.http import HttpResponse
 from django.core import serializers
 import datetime
 
+from projects.calculation import onDemandCalculateVelocity
+
 from projects.models import Project, ProjectMember, Iteration, Story
 from projects.forms import *
 from projects.access import *
 import projects.import_export as import_export
 
+from activities.models import ActivityAction
 from story_views import handleAddStory
 
 @login_required
@@ -85,7 +88,8 @@ def iteration_create(request, group_slug=None):
      iteration = form.save(commit=False)
      iteration.project = project
      iteration.save()
-     iteration.activity_signal.send(sender=Iteration, news=request.user.username + " created\"" +iteration.name + "\" in project\"" +project.name, user=request.user,action="created" ,object=iteration.name, story = None, context=project.slug)
+     action = "created"
+     iteration.activity_signal.send(sender=iteration, user=request.user, action=action, project=project)
      request.user.message_set.create(message="Iteration created.") 
      return HttpResponseRedirect( reverse('project_detail', kwargs={'group_slug':project.slug}) ) # Redirect after POST
 
@@ -154,6 +158,7 @@ def iteration_import(request, group_slug, iteration_id):
         iteration.locked = False
         iteration.save()
       status = import_export.importIteration(iteration, request.FILES['import_file'], request.user )
+      onDemandCalculateVelocity( project )
       return HttpResponseRedirect( reverse('iteration', kwargs={'group_slug':project.slug, 'iteration_id':iteration.id}) ) 
   else:
     form = form_class(  )

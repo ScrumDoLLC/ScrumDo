@@ -19,7 +19,7 @@ from projects.models import Story
 
 logger = logging.getLogger(__name__)
 
-class GitHubIssuesExtra( ScrumdoProjectExtra ):     
+class Plugin( ScrumdoProjectExtra ):     
   """ This Extra allows you to syncronize your GitHub issues with your ScrumDo stories. """
   
   def getName(self):                                                                    
@@ -291,14 +291,3 @@ class GitHubIssuesExtra( ScrumdoProjectExtra ):
         return queue_story
     return None
       
-      
-
-        
-      
-
-
-      
-
-    
-    
-    

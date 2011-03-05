@@ -9,7 +9,7 @@ from django.core.management.base import BaseCommand, CommandError
 from projects.access import *
 from projects.models import *
 from organizations.models import *
-from organizations.team_models import *
+
 from django.contrib.auth.models import User
 
 

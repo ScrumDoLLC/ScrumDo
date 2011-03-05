@@ -1539,15 +1539,6 @@
     }
   }, 
   {
-    "pk": 54, 
-    "model": "contenttypes.contenttype", 
-    "fields": {
-      "model": "association", 
-      "name": "association", 
-      "app_label": "django_openid"
-    }
-  }, 
-  {
     "pk": 23, 
     "model": "contenttypes.contenttype", 
     "fields": {
@@ -1608,33 +1599,6 @@
       "model": "emailconfirmation", 
       "name": "e-mail confirmation", 
       "app_label": "emailconfirmation"
-    }
-  }, 
-  {
-    "pk": 43, 
-    "model": "contenttypes.contenttype", 
-    "fields": {
-      "model": "evolution", 
-      "name": "evolution", 
-      "app_label": "django_evolution"
-    }
-  }, 
-  {
-    "pk": 51, 
-    "model": "contenttypes.contenttype", 
-    "fields": {
-      "model": "externalstorymapping", 
-      "name": "external story mapping", 
-      "app_label": "extras"
-    }
-  }, 
-  {
-    "pk": 52, 
-    "model": "contenttypes.contenttype", 
-    "fields": {
-      "model": "extraconfiguration", 
-      "name": "extra configuration", 
-      "app_label": "extras"
     }
   }, 
   {
@@ -1710,15 +1674,6 @@
     }
   }, 
   {
-    "pk": 53, 
-    "model": "contenttypes.contenttype", 
-    "fields": {
-      "model": "nonce", 
-      "name": "nonce", 
-      "app_label": "django_openid"
-    }
-  }, 
-  {
     "pk": 38, 
     "model": "contenttypes.contenttype", 
     "fields": {
@@ -1791,15 +1746,6 @@
     }
   }, 
   {
-    "pk": 48, 
-    "model": "contenttypes.contenttype", 
-    "fields": {
-      "model": "projectextramapping", 
-      "name": "project extra mapping", 
-      "app_label": "extras"
-    }
-  }, 
-  {
     "pk": 37, 
     "model": "contenttypes.contenttype", 
     "fields": {
@@ -1863,15 +1809,6 @@
     }
   }, 
   {
-    "pk": 49, 
-    "model": "contenttypes.contenttype", 
-    "fields": {
-      "model": "storyqueue", 
-      "name": "story queue", 
-      "app_label": "extras"
-    }
-  }, 
-  {
     "pk": 35, 
     "model": "contenttypes.contenttype", 
     "fields": {
@@ -1905,15 +1842,6 @@
       "model": "subscription", 
       "name": "Subscription", 
       "app_label": "forum"
-    }
-  }, 
-  {
-    "pk": 50, 
-    "model": "contenttypes.contenttype", 
-    "fields": {
-      "model": "syncronizationqueue", 
-      "name": "syncronization queue", 
-      "app_label": "extras"
     }
   }, 
   {
@@ -1986,24 +1914,6 @@
       "model": "user", 
       "name": "user", 
       "app_label": "auth"
-    }
-  }, 
-  {
-    "pk": 55, 
-    "model": "contenttypes.contenttype", 
-    "fields": {
-      "model": "useropenidassociation", 
-      "name": "user openid association", 
-      "app_label": "django_openid"
-    }
-  }, 
-  {
-    "pk": 42, 
-    "model": "contenttypes.contenttype", 
-    "fields": {
-      "model": "version", 
-      "name": "version", 
-      "app_label": "django_evolution"
     }
   }, 
   {

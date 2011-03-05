@@ -12,7 +12,7 @@
         <img src="{{config.extra.getLogo}}" style="float:left">
         
         <div class="single_extra_text">
-          <b>{{ config.extra.getName }}</b><br/>{{ config.extra.getDescription }}<br/>
+          <b>{{ config.extra.getName }}</b><br/>{{ config.extra.getDescription|safe }}<br/>
         </div>        
         <div class="single_extra_bottom">
           {% if config.enabled  %}          

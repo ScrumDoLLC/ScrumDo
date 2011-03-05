@@ -31,9 +31,11 @@
 }
 
 #side {
-    width: 298px;
+    /*width: 250px;*/
+    width: 30%;
     padding: 0px;
-    margin-right: -160px;
+    margin-right: -120px;
+    padding-left: 10%;
     float: right;
 }
 
@@ -42,7 +44,7 @@
     position: absolute;
     right: 0px;
     top: 70px;
-    z-index: 999;
+    z-index: 50;
     border-left: 1px solid #e1e1e1;
     border-top: 1px solid #e1e1e1;
 }
@@ -78,7 +80,18 @@
 
 .box-top {
     min-height: 40px;
-    background: url("/site_media/static/images/layout/box_top.gif") no-repeat 0px 0px #fafafa;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    -webkit-top-left-border-radius: 5px;
+    -webkit-top-right-border-radius: 5px;
+    -moz-top-left-border-radius: 5px;
+    -moz-top-right-border-radius: 5px;
+    -o-top-left-border-radius: 5px;
+    -o-top-right-border-radius: 5px;
+    -khtml-top-left-border-radius: 5px;
+    -khtml-top-right-border-radius: 5px;
+    background-color: #fafafa;
+    border: 1px solid #e1e1e1;
     text-align: center;
 }
 
@@ -114,7 +127,18 @@
 
 .box-bottom {
     height: 10px;
-    background: url("/site_media/static/images/layout/box_bottom.gif") no-repeat 0px 0px;
+    border: 1px solid #e1e1e1;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    -webkit-bottom-left-border-radius: 5px;
+    -webkit-bottom-right-border-radius: 5px;
+    -moz-bottom-left-border-radius: 5px;
+    -moz-bottom-right-border-radius: 5px;
+    -o-bottom-left-border-radius: 5px;
+    -o-bottom-right-border-radius: 5px;
+    -khtml-bottom-left-border-radius: 5px;
+    -khtml-bottom-right-border-radius: 5px;
+    background-color: #fafafa;
 }
 
 .box-top .buttons {
@@ -152,19 +176,79 @@
 	width: 480px;
 	margin-left: -258px;	
 	border-radius: 10px;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  -o-border-radius: 10px;
-  -khtml-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -o-border-radius: 10px;
+    -khtml-border-radius: 10px;
 	
-  box-shadow: 0 0 2em #888;
-  -moz-box-shadow: 0 0 2em #888;
-  -webkit-box-shadow: 0 0 2em #888;
+    box-shadow: 0 0 2em #888;
+    -moz-box-shadow: 0 0 2em #888;
+    -webkit-box-shadow: 0 0 2em #888;
 	padding: 35px;
 	margin-top: 35px;
 	z-index: 2004;
 	position: absolute;
 	background-color: #fffeff;
 	left: 50%;
-
+    
+    behavior: url(/site_media/static/css/PIE.htc);
 }
+
+
+
+
+
+.gripper_reviewing {
+    border-left: 6px solid #ff7f0e;
+}
+.gripper_todo {
+    border-left: 6px solid #444;
+}
+.gripper_doing {
+    border-left: 6px solid #448cca;
+}
+.gripper_done {
+    border-left: 6px solid #8dc73e;
+}
+
+
+
+.todoButtons {
+    border: 1px solid #e1e1e1;
+    background-color: #fafafa;
+    padding: 5px;
+    width: 230px;
+    z-index: 50;
+    position: absolute;
+    right: 10px;
+    margin-top: 0px;
+    display: none;
+}
+
+.todoButtons_block {
+    margin-left: 500px;
+}
+
+.todoButtons_mini {
+    margin-left: 100px;
+}
+
+.todoButtons a {
+    text-decoration: none;
+    color: #000;
+    padding-bottom: 1px;
+}
+
+.todoButtons #review {
+    border-bottom: 4px solid #ff7f0e;
+}
+.todoButtons #todo {
+    border-bottom: 4px solid #444;
+}
+.todoButtons #doing {
+    border-bottom: 4px solid #448cca;
+}
+.todoButtons #done {
+    border-bottom: 4px solid #8dc73e;
+}
+

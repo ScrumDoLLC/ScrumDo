@@ -1,45 +1,31 @@
-{% load i18n %}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+{% load i18n %}<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}" xml:lang="{{ LANGUAGE_CODE }}" lang="{{ LANGUAGE_CODE }}">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <title>{% if SITE_NAME %}{{ SITE_NAME }} : {% endif %}{% block head_title %}{% endblock %}</title>
-        <!--[if IE]><style>
-            div {
-                zoom: 1; /* trigger hasLayout */
-            }
-        </style><![endif]-->
+
         
         
-        <!--
-        Replaced these with combined.css
-        <link rel="stylesheet" href="{{ STATIC_URL }}pinax/css/base.css" />
-        <link rel="stylesheet" href="{{ STATIC_URL }}pinax/css/tabs.css" />
-        <link rel="stylesheet" href="{{ STATIC_URL }}pinax/css/facebox.css" />
-        <link rel="stylesheet" href="{{ STATIC_URL }}pinax/css/announcements.css" />
-        <link rel="stylesheet" href="{{ STATIC_URL }}pinax/css/accounts.css" />
-        <link rel="stylesheet" href="{{ STATIC_URL }}uni_form/uni-form.css" />
-        
-        <link rel="stylesheet" href="{{ STATIC_URL }}css/site.css">
-        <link rel="stylesheet" href="{{ STATIC_URL }}css/site_tabs.css" />
-        <link rel="stylesheet" href="{{ STATIC_URL }}tasks/css/tasks.css" />
-        <link rel="stylesheet" href="{{ STATIC_URL }}pinax/css/groups.css" />
-        <link rel="stylesheet" href="{{ STATIC_URL }}pinax/css/topics.css" />
-        
-        -->
         <link rel="stylesheet" href="{{ STATIC_URL }}css/combined.css" />
-
         <link rel="stylesheet" href="{{ STATIC_URL }}css/layout.css" />
-
         <link rel="stylesheet" href="{{ STATIC_URL }}css/tipTip.css" />
+        <link rel="stylesheet" href="{{ STATIC_URL }}css/jquery.confirm.css" />
         <link rel="stylesheet" href="{{ STATIC_URL }}css/redmond/jquery-ui-1.8.6.custom.css" />
+        
+        
         
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js" type="text/javascript"></script>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script>
-	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.tipTip.js"></script>
+	      <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.tipTip.js"></script>
         <script src="{{ STATIC_URL }}js/jquery.form.js" type="text/javascript"></script>        
         <script src="{{ STATIC_URL }}js/jquery.center.js" type="text/javascript"></script>        
-        <script src="{{ STATIC_URL }}js/jquery.flot.min.js" type="text/javascript"></script>        
+
+	      <script src="{{ STATIC_URL }}js/jquery.confirm.js" type="text/javascript"></script>
+ 	      <script src="{{ STATIC_URL }}js/base.js" type="text/javascript"></script>           
+        
+           
+        <!--[if IE]><script src="{{STATIC_URL}}js/excanvas.min.js" type="text/javascript"></script><![endif]-->         
+
         
         {% block extra_head_base %}
             {% block extra_head %}{% endblock %}
@@ -65,23 +51,38 @@
 
         </script>
       {% endif %}
+      
+      <!--[if IE]><style>
+          div {
+              zoom: 1; /* trigger hasLayout */
+          }          
+      </style><![endif]-->      
+      <!--[if IE 7]><link rel="stylesheet" href="{{ STATIC_URL }}css/ie7.css" /><![endif]-->         
     </head>
     
     <body class="{% block body_class %}{% endblock %}">
+      <!--[if IE 7]>    
+      <div class="ie6_warning">
+        For the best ScrumDo, we suggest: <a href="http://www.microsoft.com/windows/internet-explorer/default.aspx">Internet Explorer 8</a>, 
+        <a href="http://www.mozilla.com/en-US/firefox/personal.html">Firefox</a>, 
+        <a href="http://www.google.com/chrome">Chrome</a>, or 
+        <a href="http://www.apple.com/safari/">Safari</a>.
+        It looks like you're using Internet Explorer 7.
+      </div>        
+      <![endif]-->
       
       <!--[if IE 6]>    
       <div class="ie6_warning">
-        <h2>Hello!</h2>  It looks like you're using Internet Explorer.  Unfortunately, that browser has some serious bugs in it.  We're not going through the trouble
-        of making our site work with those bugs.  Please upgrade your browser.  <br/><br/>
-        <center>We suggest: <a href="http://www.microsoft.com/windows/internet-explorer/default.aspx">Internet Explorer 7 or higher</a>, 
+        <h2>Hello!</h2>  It looks like you're using Internet Explorer 6.  Unfortunately, that browser has some serious bugs in it.  We've decided to focus on adding extra functionality
+        instead of supporting old browsers.
+        Please upgrade your browser.  <br/><br/>
+        <center>We suggest: <a href="http://www.microsoft.com/windows/internet-explorer/default.aspx">Internet Explorer 8 or higher</a>, 
         <a href="http://www.mozilla.com/en-US/firefox/personal.html">Firefox</a>, 
         <a href="http://www.google.com/chrome">Chrome</a>, or 
         <a href="http://www.apple.com/safari/">Safari</a></center>
       </div>  
       <![endif]-->
-<!--      <div class="ribbon">
-        Beta
-      </div>-->
+
 
       
         {% if site_wide_announcements %}
@@ -168,5 +169,7 @@
         {% block extra_body_base %}
             {% block extra_body %}{% endblock %}
         {% endblock %}
+        
+        <script src="{{ STATIC_URL }}js/scrumdo.js" type="text/javascript"></script>          
     </body>
 </html>

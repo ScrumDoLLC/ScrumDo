@@ -42,16 +42,13 @@ feeds = {
 
 urlpatterns = patterns('',
     url(r'^$', "projects.views.home" , name="home"),
-    
     url(r'^robots.txt$', direct_to_template, {'template': 'robots.txt'}),    
-    
     url(r'^stats$', views.stats),    
-    url(r'^stats_data$', views.stats_data ),
-    
+    url(r'^stats_data$', views.stats_data ),    
     url(r'^admin/invite_user/$', 'signup_codes.views.admin_invite_user', name="admin_invite_user"),
     url(r'^account/signup/$', signup_view, name="acct_signup"),
     (r'^extras/', include('extras.urls')),    
-    (r'^forum/', 'django.views.generic.simple.redirect_to', {'url':'http://support.scrumdo.com/'}),
+    (r'^forum/', 'django.views.generic.simple.redirect_to', {'url':settings.SUPPORT_URL}),
     (r'^feeds/(?P<url>.*)/$', 'django.contrib.syndication.views.feed', {'feed_dict': feeds}),
     (r'^about/', include('about.urls')),
     (r'^account/', include('account.urls')),
@@ -61,12 +58,13 @@ urlpatterns = patterns('',
     (r'^comments/', include('threadedcomments.urls')),
     (r'^announcements/', include('announcements.urls')),
     (r'^tagging_utils/', include('tagging_utils.urls')),
-    (r'^attachments/', include('attachments.urls')),
     (r'^projects/', include('projects.urls')),    
     (r'^activities/', include('activities.urls')),    
     (r'^organization/', include('organizations.urls')),    
     (r'^poker/', include('poker.urls')),    
     (r'^admin/(.*)', admin.site.root),
+    (r'^api/', include('api.urls')),
+    url(r'^usage', "projects.views.usage", name="usage"),
 )
 
 if settings.SERVE_MEDIA:
