@@ -26,3 +26,6 @@ body {
   word-wrap: break-word;
 }
 
+.usage_column_box {
+    display: inline;
+}

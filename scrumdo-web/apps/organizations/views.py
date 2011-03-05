@@ -149,7 +149,7 @@ def organization_create(request):
         "projects": projects
       }, context_instance=RequestContext(request))
 
-def _move_project_to_organization(project, organization,member_team):    
+def _move_project_to_organization(project, organization, member_team):    
     project.teams.clear()
     project.organization = organization    
     member_team.projects.add(project)    

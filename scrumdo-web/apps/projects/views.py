@@ -118,6 +118,11 @@ def home( request ):
   else:
     return render_to_response("unauthenticated_homepage.html", context_instance=RequestContext(request))
 
+@login_required
+def usage(request):
+    organizations = Organization.getOrganizationsForUser( request.user )
+    return render_to_response("usage_restrictions.html", {"organizations":organizations}, context_instance=RequestContext(request))
+    
     
 # The project admin page, this is where you can change the title, description, etc. of a project.
 @login_required
