@@ -45,8 +45,7 @@ class SiteStats( models.Model ):
   def __unicode__(self):
       return "%s %d/%d/%d" % (self.date, self.project_count, self.story_count, self.user_count)
   
-class PointsLog( models.Model ):
-    
+class PointsLog( models.Model ):    
   date = models.DateField( auto_now=True );
   points_claimed = models.IntegerField();
   points_total = models.IntegerField();

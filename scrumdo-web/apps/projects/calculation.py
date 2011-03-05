@@ -2,6 +2,16 @@ from datetime import date, timedelta
 from apps.projects.models import Project, Iteration, Story, PointsLog
 from django.core.management.base import BaseCommand, CommandError
 
+from projects.limits import on_demand_velocity
+
+import logging
+
+logger = logging.getLogger(__name__)
+
+def onDemandCalculateVelocity( project ):
+    if not on_demand_velocity.increaseAllowed(project=project):
+        return
+    calculateProject( project )
 
 def calculatePoints( stories ):
     points_total = 0;
@@ -75,16 +85,31 @@ def calculateAverage( iteration_points ):
     return total / len( iteration_points )
 
 
-
+def logPoints( related_object, points_claimed, points_total ):
+    today = date.today()
+    try:
+        log = related_object.points_log.get( date=today )
+        log.points_claimed=points_claimed
+        log.points_total=points_total
+        log.save()
+        logger.debug("logPoints found a previous record.")
+    except PointsLog.DoesNotExist:
+        log = PointsLog( points_claimed=points_claimed, points_total=points_total, related_object=related_object)
+        log.save()
+        logger.debug("logPoints created a new record.")
 
 def calculateProject( project ):
     stories = project.stories.all();
     points = calculatePoints( stories )
     total_project_points = points[0]
-    log = PointsLog( points_claimed=points[1], points_total=points[0], related_object=project)
-
-    log.save();
+    
     today = date.today()
+    
+    logPoints(project, points[1], points[0])
+    # log = PointsLog( points_claimed=points[1], points_total=points[0], related_object=project)
+    # log.save();
+    
+    
     yesterday = today - timedelta( days=1 )
     tomorrow = today +  timedelta( days=1 )
     points_total = 0
@@ -95,6 +120,6 @@ def calculateProject( project ):
         if( iteration != project.get_default_iteration() ):
             points = calculatePoints( iteration.stories.all() );
             if points[0] > 0:  # only logging active iterations with stuff in them
-
-                log = PointsLog( points_claimed=points[1], points_total=points[0], related_object=iteration)
-                log.save();
+                logPoints(iteration, points[1], points[0])
+                # log = PointsLog( points_claimed=points[1], points_total=points[0], related_object=iteration)
+                # log.save();

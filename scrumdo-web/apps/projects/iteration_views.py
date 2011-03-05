@@ -29,6 +29,8 @@ from django.http import HttpResponse
 from django.core import serializers
 import datetime
 
+from projects.calculation import onDemandCalculateVelocity
+
 from projects.models import Project, ProjectMember, Iteration, Story
 from projects.forms import *
 from projects.access import *
@@ -156,6 +158,7 @@ def iteration_import(request, group_slug, iteration_id):
         iteration.locked = False
         iteration.save()
       status = import_export.importIteration(iteration, request.FILES['import_file'], request.user )
+      onDemandCalculateVelocity( project )
       return HttpResponseRedirect( reverse('iteration', kwargs={'group_slug':project.slug, 'iteration_id':iteration.id}) ) 
   else:
     form = form_class(  )
