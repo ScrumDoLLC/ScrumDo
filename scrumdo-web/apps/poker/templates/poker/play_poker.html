@@ -14,7 +14,10 @@
 {% load iteration_tags %}
 
 {% block head_title %}{{ project.name }}{% endblock %}
-    
+
+{% block extra_head %}
+ <script src="{{hookbox_server}}/static/hookbox.min.js" type="text/javascript" charset="utf-8" ></script>
+{% endblock %}
 
 {% block add_story %}
     {% if user.is_authenticated %}
@@ -29,5 +32,61 @@
 {% endblock %}
 
 {% block body %}
-  Main body stuff.
+
+  <div id="scrum_master_title"></div>
+
+  <div id="current_story_block">
+    <div style="width:100%; text-align:center;">
+    To play planning poker, one person should take on the role of Scrum Master.
+    <br/><br/>
+    <a href="#" class="button scrum_master_button green">Become Scrum Master</a>
+    </div>
+  </div>
+
+  <div id="votelist"></div>
+  
+  {% for point in project.getPointScale %}
+    <a href="#" value="{{point.0}}" class="point_button button large">{{ point.0 }}</a>
+  {% endfor %}
+
+ <a class="load_story_link" href="{% url story_block 1346 %}">Load Story</a>  
+ 
+ 
+ 
+ <br/><br/><br/>
+ <div id="scrum_master_block">
+   <div class="planning_poker_column">
+     <h2>Recently sized stories.</h2>
+   </div>
+   <div class="planning_poker_column">
+     <h2>Stories to size</h2>
+     <ul id="stories_to_size_list">
+     </ul>
+   </div>
+   
+ </div>
+ 
+ 
+ <div id="normal_user_block">
+   <div class="planning_poker_column">
+     <h2>Recently sized stories.</h2>
+   </div>
+   <div class="planning_poker_column">
+     <h2>Stories with this size.</h2>
+   </div>
+   <br/><br/>
+   <a href="#" class="button scrum_master_button">Become Scrum Master</a> 
+ </div>
+ 
+ 
+ 
+ 
+ 
+  
+  <script src="{{STATIC_URL}}js/poker.js" type="text/javascript" charset="utf-8" ></script>
+  <script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+      poker_startup( hookbox, "{{ hookbox_server }}", "{{ poker_channel_id }}" , "{{username}}", "{% url poker_ajax project.slug %}");
+    });
+  </script>
 {% endblock %}

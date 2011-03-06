@@ -29,3 +29,7 @@ body {
 .usage_column_box {
     display: inline;
 }
+
+.vote_card {
+    display: inline;
+}

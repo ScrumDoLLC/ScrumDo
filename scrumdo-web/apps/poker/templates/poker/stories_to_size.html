@@ -1,0 +1,5 @@
+{% for story in stories %}
+<li>
+  <a class="load_story_link" href="{% url story_block story.id %}">#{{story.local_id}}</a> {{story.summary}} 
+</li>
+{% endfor %}

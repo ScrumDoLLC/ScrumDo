@@ -115,8 +115,9 @@ function reloadStory( story_id , display_comments, display_tasks)
 		success: function(responseText) {
     		$("#story_" + story_id).replaceWith(responseText);
     		setUpStoryLinks();
+    		
     		if( display_tasks ) { showTasksForStory( story_id , false);}
-    		if( display_comments ) { showCommentsForStory(story_id, false);}
+    		if( display_comments ) { showCommentsForStory(story_id, false);}    		
 	    }
 	});
     
@@ -130,6 +131,7 @@ function reloadStory( story_id , display_comments, display_tasks)
 function setUpStoryLinks() 
 {
 
+    if(typeof reloadStoryCallback == 'function') { reloadStoryCallback(); }
 
     
     $(".tasks_task").mouseenter(function() {      
