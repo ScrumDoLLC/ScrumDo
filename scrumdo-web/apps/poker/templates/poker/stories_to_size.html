@@ -1,5 +1,6 @@
 {% for story in stories %}
-<li>
-  <a class="load_story_link" href="{% url story_block story.id %}">#{{story.local_id}}</a> {{story.summary}} 
+<li class="poker_story_short">
+  <a class="load_story_link" href="{% url story_block story.id %}">#{{story.local_id}}</a> {{story.summary}} <br/>
+  <i style="font-size:11px">{{story.detail|truncatewords:20}}</i>
 </li>
 {% endfor %}

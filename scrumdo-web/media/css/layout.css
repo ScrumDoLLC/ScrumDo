@@ -326,6 +326,19 @@
     behavior: url(/site_media/static/css/PIE.htc);
 	border: 1px solid #c0c0c0;
 	padding: 5px;
-	min-height: 300px;
+	height: 300px;
 	vertical-align: top;
+	overflow:auto;
+}
+
+.planning_poker_column ul {
+    margin-left: 0px;
+    padding-left: 0px;
+}
+.poker_story_short {
+    margin-bottom: 5px;
+    margin-left: 0px;
+    padding-left: 0px;
+    list-style: none;
+    border-bottom: 1px solid #c0c0c0;
 }

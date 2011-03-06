@@ -214,6 +214,19 @@ function poker_make_estimate( value )
 {    
     votes_revealed = true;
     hookbox_connection.publish(hookbox_channel_id, {message:"vote", story_id: "blah", estimate:value} );
+    
+    if( ! scrum_master )
+    {    
+        $.ajax({
+            url: poker_ajax_url,
+            data: {action:"stories_with_size", size:value},
+            type: "POST",
+            success: function(data) {
+                $("#stories_with_size").html(data);            
+            }
+        });
+    }
+    
 }
 
 function calculateBothPoints()

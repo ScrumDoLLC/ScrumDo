@@ -38,12 +38,20 @@ def control(request, project_slug ):
 
 @login_required
 def ajax(request, project_slug):
-    if request.POST.get("action") == "stories_to_size":
+    action = request.POST.get("action")
+    if action == "stories_to_size":
         return stories_to_size( request, project_slug )
-                
+    elif action == "stories_with_size":
+        return stories_with_size( request, project_slug )
     pass
-
-
+    
+def stories_with_size( request, project_slug ):
+    project = get_object_or_404( Project, slug=project_slug )
+    read_access_or_403(project, request.user )
+    stories = project.stories.filter(points=request.POST.get("size"))[:10];
+    return render_to_response("poker/stories_with_size.html",  { "stories":stories } , context_instance=RequestContext(request) )
+    
+    
 def stories_to_size( request, project_slug ):
     project = get_object_or_404( Project, slug=project_slug )
     read_access_or_403(project, request.user )
