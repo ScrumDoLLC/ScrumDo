@@ -49,9 +49,6 @@
     <a href="#" value="{{point.0}}" class="point_button button large">{{ point.0 }}</a>
   {% endfor %}
 
- <a class="load_story_link" href="{% url story_block 1346 %}">Load Story</a>  
- 
- 
  
  <br/><br/><br/>
  <div id="scrum_master_block">
@@ -72,7 +69,7 @@
      <h2>Recently sized stories.</h2>
    </div>
    <div class="planning_poker_column">
-     <h2>Stories with this size.</h2>
+     <h2 id="size_title">Stories with this size.</h2>
      <ul id="stories_with_size">
      </ul>
    </div>

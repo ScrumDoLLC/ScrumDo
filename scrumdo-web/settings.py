@@ -250,7 +250,7 @@ SCRUMDO_EXTRAS = ("extras.plugins.github_issues.GitHubIssuesExtra",
                   "extras.plugins.example.ExampleExtra",)
 
 
-HOOKBOX_HOST = "http://localhost:8080"
+HOOKBOX_HOST = "http://192.168.1.125:8080"
 HOOKBOX_SECRET = "juy789"
 
 # local_settings.py can be used to override environment-specific settings

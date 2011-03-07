@@ -1,4 +1,3 @@
-
 var hookbox_connection = null;
 var hookbox_subscription = null;
 var hookbox_channel_id = null;
@@ -107,6 +106,8 @@ function poker_load_story( args )
     }
     current_story_url = args.payload.story_url;
     update_current_story();
+    
+//    class="story_block gripper_todo" story_id="1794"
 }
 
 function update_current_story()
@@ -131,8 +132,7 @@ function poker_process_vote(args)
     else
     {
         $("#votelist").append( content );
-        $("#vote_" + args.user ).hide();
-        
+        $("#vote_" + args.user ).hide();        
         $("#vote_" + args.user ).slideDown();
     }
     
@@ -192,6 +192,10 @@ function poker_handle_who_scrum_master( args )
     if( scrum_master )
     {
         poker_become_scrum_master();
+        if( current_story_url != "" )
+        {
+            hookbox_connection.publish(hookbox_channel_id, {message:"story", story_url:current_story_url} );
+        }
     }
 }
 
@@ -213,7 +217,7 @@ function refresh_story( )
 function poker_make_estimate( value )
 {    
     votes_revealed = true;
-    hookbox_connection.publish(hookbox_channel_id, {message:"vote", story_id: "blah", estimate:value} );
+    hookbox_connection.publish(hookbox_channel_id, {message:"vote", estimate:value} );
     
     if( ! scrum_master )
     {    
@@ -222,7 +226,8 @@ function poker_make_estimate( value )
             data: {action:"stories_with_size", size:value},
             type: "POST",
             success: function(data) {
-                $("#stories_with_size").html(data);            
+                $("#stories_with_size").html(data);           
+                $("#size_title").html("Other " + value + " point stories.");
             }
         });
     }
