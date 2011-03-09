@@ -47,6 +47,10 @@ function poker_on_publish(args)
         // The scrum master saved the current story.
         poker_handle_save_points();
     }
+    else if( args.payload.message == "reset_votes" )
+    {
+        reset_votes();
+    }
 }
 
 function poker_handle_save_points()
@@ -96,6 +100,8 @@ function poker_handle_scrum_master( username )
         $("#scrum_master_block").show();
         $("#normal_user_block").hide();    
         load_stories_to_size();    
+        
+        $(".reset_button").show();
         $(".save_button").show();
     }
     else
@@ -104,6 +110,7 @@ function poker_handle_scrum_master( username )
         scrum_master = false;
         $("#scrum_master_block").hide();
         $("#normal_user_block").show();        
+        $(".reset_button").hide();
         $(".save_button").hide();
         if( username != scrum_master_username)
         {
@@ -213,6 +220,11 @@ function poker_save_estimate()
     });
 }
 
+function force_revote()
+{
+    hookbox_connection.publish(hookbox_channel_id, { message:"reset_votes" } );
+}
+
 function poker_startup(hookbox, hookbox_server, channel_id, username, ajax_url)
 {
     my_username = username;
@@ -225,8 +237,13 @@ function poker_startup(hookbox, hookbox_server, channel_id, username, ajax_url)
     hookbox_connection.onError = poker_connection_error;    
     hookbox_connection.onSubscribed = poker_subscribed;    
     
+    
     $(".save_button").click(function(){
         poker_save_estimate();
+    });
+    
+    $(".reset_button").click(function(){
+        force_revote();
     });
     
     $(".point_button").click(function(){
@@ -279,18 +296,15 @@ function poker_make_estimate( value )
     current_vote = value;
     hookbox_connection.publish(hookbox_channel_id, {message:"vote", estimate:value} );
     
-    if( ! scrum_master )
-    {    
-        $.ajax({
-            url: poker_ajax_url,
-            data: {action:"stories_with_size", size:value},
-            type: "POST",
-            success: function(data) {
-                $("#stories_with_size").html(data);           
-                $("#size_title").html("Other " + value + " point stories.");
-            }
-        });
-    }
+    $.ajax({
+        url: poker_ajax_url,
+        data: {action:"stories_with_size", size:value},
+        type: "POST",
+        success: function(data) {                
+            $(".stories_with_size").html(data);           
+            $(".size_title").html("Other " + value + " point stories.");
+        }
+    });
     
 }
 

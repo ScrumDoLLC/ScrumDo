@@ -27,9 +27,7 @@
     {% endif %}
 {% endblock %}
 
-{% block extra_panel %}
-  Side panel stuff
-{% endblock %}
+
 
 {% block body %}
 
@@ -48,16 +46,16 @@
   {% for point in project.getPointScale %}
     <a href="#" value="{{point.0}}" class="point_button button large">{{ point.0 }}</a>
   {% endfor %}
+  <a href="#" value="{{point.0}}" style="display:none" class="reset_button button large red">Reset</a>
   <a href="#" value="{{point.0}}" style="display:none" class="save_button button large green">Save</a>
 
  
  <br/><br/><br/>
  <div id="scrum_master_block">
    <div class="planning_poker_column">
-     <h2>Recently sized stories.</h2>
-     <ul class="recently_sized_stories">
+     <h2 class="size_title">Stories with this size.</h2>
+     <ul class="stories_with_size">
      </ul>
-     
    </div>
    <div class="planning_poker_column">
      <h2>Stories to size</h2>
@@ -70,15 +68,16 @@
  
  <div id="normal_user_block">
    <div class="planning_poker_column">
+     <h2 class="size_title">Stories with this size.</h2>
+     <ul class="stories_with_size">
+     </ul>
+   </div>   
+   <div class="planning_poker_column">
      <h2>Recently sized stories.</h2>
      <ul class="recently_sized_stories">
      </ul>
    </div>
-   <div class="planning_poker_column">
-     <h2 id="size_title">Stories with this size.</h2>
-     <ul id="stories_with_size">
-     </ul>
-   </div>
+
    <br/><br/>
    <a href="#" class="button scrum_master_button">Become Scrum Master</a> 
  </div>
