@@ -2,6 +2,8 @@ var hookbox_connection = null;
 var hookbox_subscription = null;
 var hookbox_channel_id = null;
 var votes_revealed = false;
+var current_vote = "";
+var current_story_id = "";
 var current_story_url = "";
 var scrum_master = false;
 var my_username = "";
@@ -40,6 +42,32 @@ function poker_on_publish(args)
         // A new user logged on and asked who the scrum master is.
         poker_handle_who_scrum_master( args );
     }
+    else if( args.payload.message == "save_points" )
+    {
+        // The scrum master saved the current story.
+        poker_handle_save_points();
+    }
+}
+
+function poker_handle_save_points()
+{
+    $("#current_story_block").html("");
+    
+    $.ajax({
+        url: poker_ajax_url,
+        data: {action:"single_story", story:current_story_id},
+        type: "POST",
+        success: function(data) {
+            $(".recently_sized_stories").prepend(data);           
+        }
+    });
+    
+    if( scrum_master )
+    {
+        load_stories_to_size();
+    }
+    
+    reset_votes();
 }
 
 function load_stories_to_size()
@@ -68,6 +96,7 @@ function poker_handle_scrum_master( username )
         $("#scrum_master_block").show();
         $("#normal_user_block").hide();    
         load_stories_to_size();    
+        $(".save_button").show();
     }
     else
     {
@@ -75,7 +104,7 @@ function poker_handle_scrum_master( username )
         scrum_master = false;
         $("#scrum_master_block").hide();
         $("#normal_user_block").show();        
-        
+        $(".save_button").hide();
         if( username != scrum_master_username)
         {
             scrum_master_username = username;
@@ -93,6 +122,7 @@ function poker_handle_scrum_master( username )
 
 function reset_votes()
 {
+    current_vote = "";
     votes_revealed = false;
     $("#votelist").html("");
     $(".point_button").removeClass("blue");
@@ -105,9 +135,16 @@ function poker_load_story( args )
         reset_votes();
     }
     current_story_url = args.payload.story_url;
-    update_current_story();
     
-//    class="story_block gripper_todo" story_id="1794"
+    //http://localhost:8000/projects/story/542
+    var re = new RegExp("projects/story/([0-9]+)");
+    var m = re.exec(current_story_url);
+    if( m != null)
+    {
+        current_story_id = m[1];
+    }
+    
+    update_current_story();
 }
 
 function update_current_story()
@@ -159,6 +196,23 @@ function poker_subscribed(channelName, _subscription)
    hookbox_connection.publish(hookbox_channel_id, { message:"who_is_scrum_master" } );
 }
 
+function poker_save_estimate()
+{
+    
+    if( current_vote == "" || current_story_id == "")
+    {
+        alert("You must have a story and a point value selected before saving.");
+        return;
+    }
+    hookbox_connection.publish(hookbox_channel_id, { message:"save_points", story:current_story_id, points:current_vote } );
+    
+    $.ajax({
+        url: poker_ajax_url,
+        data: {action:"set_size", story:current_story_id, points:current_vote },
+        type: "POST"
+    });
+}
+
 function poker_startup(hookbox, hookbox_server, channel_id, username, ajax_url)
 {
     my_username = username;
@@ -170,6 +224,10 @@ function poker_startup(hookbox, hookbox_server, channel_id, username, ajax_url)
     hookbox_connection.onOpen = function() { hookbox_connection.subscribe( channel_id ); } ;
     hookbox_connection.onError = poker_connection_error;    
     hookbox_connection.onSubscribed = poker_subscribed;    
+    
+    $(".save_button").click(function(){
+        poker_save_estimate();
+    });
     
     $(".point_button").click(function(){
        poker_make_estimate( $(this).attr("value") ) ;
@@ -202,6 +260,7 @@ function poker_handle_who_scrum_master( args )
 function poker_become_scrum_master()
 {
     hookbox_connection.publish(hookbox_channel_id, { message:"scrum_master" } );
+    
 }
 
 function reloadStoryCallback() 
@@ -217,6 +276,7 @@ function refresh_story( )
 function poker_make_estimate( value )
 {    
     votes_revealed = true;
+    current_vote = value;
     hookbox_connection.publish(hookbox_channel_id, {message:"vote", estimate:value} );
     
     if( ! scrum_master )

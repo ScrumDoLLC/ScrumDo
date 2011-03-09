@@ -13,6 +13,7 @@ import pprint
 import logging
 logger = logging.getLogger(__name__)
 
+from projects.models import Story, Project
 from projects.access import *
 
 pp = pprint.PrettyPrinter(indent=4)
@@ -43,8 +44,32 @@ def ajax(request, project_slug):
         return stories_to_size( request, project_slug )
     elif action == "stories_with_size":
         return stories_with_size( request, project_slug )
-    pass
+    elif action == "set_size":
+        return set_story_size( request, project_slug )
+    elif action == "single_story":
+        return single_story(request, project_slug)
     
+
+def set_story_size( request, project_slug ):
+    project = get_object_or_404( Project, slug=project_slug )
+    write_access_or_403(project, request.user )
+    story = get_object_or_404( Story, id=request.POST.get("story") ) 
+    if story.project != project :
+        raise PermissionDenied()   # Shenanigans!
+    story.points = request.POST.get("points")
+    story.save()
+    return HttpResponse("ok")
+    
+def single_story( request, project_slug ):
+    project = get_object_or_404( Project, slug=project_slug )
+    read_access_or_403(project, request.user )
+    story = get_object_or_404( Story, id=request.POST.get("story") )
+    if story.project != project :
+        raise PermissionDenied()   # Shenanigans!
+    
+    return render_to_response("poker/single_story.html",  { "story":story } , context_instance=RequestContext(request) )
+    
+
 def stories_with_size( request, project_slug ):
     project = get_object_or_404( Project, slug=project_slug )
     read_access_or_403(project, request.user )

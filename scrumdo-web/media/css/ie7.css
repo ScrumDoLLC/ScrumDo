@@ -33,3 +33,7 @@ body {
 .vote_card {
     display: inline;
 }
+
+.tagsBox {
+    display: inline;    
+}

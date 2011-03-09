@@ -48,12 +48,16 @@
   {% for point in project.getPointScale %}
     <a href="#" value="{{point.0}}" class="point_button button large">{{ point.0 }}</a>
   {% endfor %}
+  <a href="#" value="{{point.0}}" style="display:none" class="save_button button large green">Save</a>
 
  
  <br/><br/><br/>
  <div id="scrum_master_block">
    <div class="planning_poker_column">
      <h2>Recently sized stories.</h2>
+     <ul class="recently_sized_stories">
+     </ul>
+     
    </div>
    <div class="planning_poker_column">
      <h2>Stories to size</h2>
@@ -67,6 +71,8 @@
  <div id="normal_user_block">
    <div class="planning_poker_column">
      <h2>Recently sized stories.</h2>
+     <ul class="recently_sized_stories">
+     </ul>
    </div>
    <div class="planning_poker_column">
      <h2 id="size_title">Stories with this size.</h2>
