@@ -118,6 +118,12 @@ def home( request ):
   else:
     return render_to_response("unauthenticated_homepage.html", context_instance=RequestContext(request))
 
+@login_required
+def usage(request):
+    organizations = Organization.getOrganizationsForUser( request.user )
+    return render_to_response("usage_restrictions.html", {"organizations":organizations}, context_instance=RequestContext(request))
+    
+    
 # The project admin page, this is where you can change the title, description, etc. of a project.
 @login_required
 def project_admin( request, group_slug ):
@@ -184,7 +190,7 @@ def iteration_burndown(request, group_slug, iteration_id):
   json_serializer = serializers.get_serializer("json")()
   result = json.dumps([total_stats,claimed_stats])
   return HttpResponse(result) #, mimetype='application/json'
-  
+
 
 # Returns a JSON feed for a given project that can be transformed with some javascript
 # into a burn up chart.  
@@ -259,7 +265,7 @@ def create(request, form_class=ProjectForm, template_name="projects/create.html"
             # Finished successfully creating a project, send the user to that page.
             return HttpResponseRedirect(project.get_absolute_url())
         else:
-            request.user.message_set.create(message="Upgrade your account to add more projects." )
+            return HttpResponseRedirect( reverse("usage") )
 
     # If they got here from the organziation page, there will be an org get-param set stating what organization it was from.
     # we need that here so it's pre-selected in the form.

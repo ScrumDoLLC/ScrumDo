@@ -82,6 +82,8 @@
              _gaq.push(['_trackEvent',"EditStory", "{{current_view}}", "", 1]); 
           {% endif %}
           
+          if(typeof reloadStoryCallback == 'function') { reloadStoryCallback(); }
+          
         }});
         
       $("#deleteStoryForm").ajaxForm({

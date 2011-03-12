@@ -23,4 +23,5 @@ def projects_constants(context):
     # return the value you want as a dictionnary. you may add multiple values in there.
     return {'GOOGLE_ANALYTICS': settings.GOOGLE_ANALYTICS,
             'GOOGLE_ANALYTICS_ACCOUNT': settings.GOOGLE_ANALYTICS_ACCOUNT ,
+            'BASE_URL': settings.BASE_URL, 
             'SUPPORT_URL': settings.SUPPORT_URL }

@@ -1,0 +1,34 @@
+{% load i18n %}
+{% load theme_tags %}
+{% load projects_tags %}
+{% load story_tags %}
+
+{% if stories %}
+  {% for story in stories %}
+  <li class="story_block gripper_{% ifequal story.status 1 %}todo{% endifequal %}{% ifequal story.status 3 %}reviewing{% endifequal %}{% ifequal story.status 2 %}doing{% endifequal %}{% ifequal story.status 4 %}done{% endifequal %}" story_id="{{story.id}}" id="story_{{story.id}}" rank="{{ story.rank }}" >
+    {% ifnotequal story.points "?" %}
+      <div class="pointsBox">{{ story|show_points }}</div>
+    {% endifnotequal %}
+  
+    <span class="storyIcons">
+      <a class="hoverDetails" onclick="jQuery.facebox({ ajax: '/projects/project/{{story.project.slug}}/story/{{story.id}}/pretty'}, 'pretty_print'); return false;" href="/projects/project/{{story.project.slug}}/story/{{story.id}}/pretty"><img title="Quick View" src="{{STATIC_URL}}pinax/images/silk/icons/magnifier.png" /></a>
+    </span>
+    
+    <h1><span style="color:#cccccc;">#{{story.local_id}}</span> {{ story.summary|escape|link_stories:story.project|safe }}</h1>
+    {{ story.detail|truncatewords:20|escape|link_stories:story.project|safe }}
+    <br/><a class="load_story_link" href="{% url story_block story.id %}">Size Story</a>  
+  </li>
+  {% endfor %}
+{% else %}
+  <li>
+    No stories found.
+    <br/><br/>
+  </li>
+{% endif %}
+
+<li>
+  <a href="#" onClick="poker_show_all_incomplete_stories()">Show all incomplete stories</a>  
+</li>
+<li>
+  <a href="#" onClick="poker_show_all_stories()">Show all stories</a>  
+</li>

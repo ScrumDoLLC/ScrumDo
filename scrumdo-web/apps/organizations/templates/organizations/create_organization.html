@@ -19,11 +19,41 @@
     <form class="uniForm" id="project_form" method="POST" action="">          
         <fieldset class="inlineLabels">
             {{ form|as_uni_form }}
+            
+            
+            {% if projects %}
+            <div class="ctrlHolder">
+              <label for="id_name">                    
+                  Move projects to organization
+              </label> 
+  
+               <div style="display:inline-block">
+                {% for project in projects %}
+        	            <input class="import_project_checkbox" type="checkbox" name="move_project_{{project.id}}" /> {{project}}<br/>
+                {% endfor %}
+                <a href="#" id="sel_all_projects">Select All</a>
+               </div>
+             </div>
+            {% endif %}
+            
+            <div id="importNotes" style="display:none ; margin-top:10px">
+              The selected projects will be moved into the organzation, and any users of those projects will be added to the organization.
+            </div>
+            
             <div class="form_block">
                 <input type="hidden" name="action" value="create" />
                 <div class="buttonHolder"><button class="primaryAction" type="submit" >Create Organization</button></div>
             </div>
-        </fieldset>
+        </fieldset>                        
     </form>
+    
+    <script type="text/javascript" charset="utf-8">
+      $(".import_project_checkbox").click( function() { $("#importNotes").show(); } );
+      $("#sel_all_projects").click( function(){
+        $(".import_project_checkbox").attr('checked',true);
+        $("#importNotes").show();
+        return false;
+      } );
+    </script>
     
 {% endblock %}

@@ -61,8 +61,10 @@ urlpatterns = patterns('',
     (r'^projects/', include('projects.urls')),    
     (r'^activities/', include('activities.urls')),    
     (r'^organization/', include('organizations.urls')),    
+    (r'^poker/', include('poker.urls')),    
     (r'^admin/(.*)', admin.site.root),
     (r'^api/', include('api.urls')),
+    url(r'^usage', "projects.views.usage", name="usage"),
 )
 
 if settings.SERVE_MEDIA:

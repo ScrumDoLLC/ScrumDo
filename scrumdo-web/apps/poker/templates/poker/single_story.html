@@ -1,0 +1,17 @@
+{% load i18n %}
+{% load theme_tags %}
+{% load projects_tags %}
+{% load story_tags %}
+
+
+<li class="story_block gripper_{% ifequal story.status 1 %}todo{% endifequal %}{% ifequal story.status 3 %}reviewing{% endifequal %}{% ifequal story.status 2 %}doing{% endifequal %}{% ifequal story.status 4 %}done{% endifequal %}" story_id="{{story.id}}" id="story_{{story.id}}" rank="{{ story.rank }}" >
+  <div class="pointsBox">{{ story|show_points }}</div>
+  <span class="storyIcons">
+    <a class="hoverDetails" onclick="jQuery.facebox({ ajax: '/projects/project/{{story.project.slug}}/story/{{story.id}}/pretty'}, 'pretty_print'); return false;" href="/projects/project/{{story.project.slug}}/story/{{story.id}}/pretty"><img title="Quick View" src="{{STATIC_URL}}pinax/images/silk/icons/magnifier.png" /></a>
+  </span>
+    
+  <h1><span style="color:#cccccc;">#{{story.local_id}}</span> {{ story.summary|escape|link_stories:story.project|safe }}</h1>
+  {{ story.detail|truncatewords:20|escape|link_stories:story.project|safe }}
+  
+</li>
+

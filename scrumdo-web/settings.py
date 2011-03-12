@@ -195,6 +195,7 @@ INSTALLED_APPS = (
     'django_evolution',
     'extras',
     'activities',
+    'poker',
 #    'debug_toolbar',
 )
 
@@ -243,11 +244,14 @@ CACHE_BACKEND = 'locmem://'
 
 INTERNAL_IPS = ('127.0.0.1',)
 
-
+BASE_URL="http://localhost:8000"
 
 SCRUMDO_EXTRAS = ("extras.plugins.github_issues.GitHubIssuesExtra",
                   "extras.plugins.example.ExampleExtra",)
 
+
+HOOKBOX_HOST = "http://192.168.1.125:8080"
+HOOKBOX_SECRET = "juy789"
 
 # local_settings.py can be used to override environment-specific settings
 # like database and email that differ between development and production.

@@ -1,0 +1,122 @@
+{% extends "projects/base.html" %}
+
+{% load i18n %}
+{% load uni_form %}
+{% load avatar_tags %}
+{% load threadedcommentstags %}
+{% load pagination_tags %}
+{% load extra_tagging_tags %}
+{% load projects_tags %}
+{% load group_tags %}
+{% load topics_tags %}
+{% load wiki_tags %}
+{% load theme_tags %}
+{% load iteration_tags %}
+
+{% block head_title %}{{ project.name }}{% endblock %}
+
+{% block extra_head %}
+ <script src="{{hookbox_server}}/static/hookbox.min.js" type="text/javascript" charset="utf-8" ></script>
+{% endblock %}
+
+{% block add_story %}
+    {% if user.is_authenticated %}
+    {% canwrite project %}
+      {% include "stories/add_story_form.html" %}
+    {% endcanwrite %}
+    {% endif %}
+{% endblock %}
+
+
+{% block extra_panel %}
+<div class="box">
+  <div class="box-title">Planning Poker</div>
+  <div class="box-content">
+     Scrum Master: <span id="scrum_master_title"></span>
+     <div id="userlist"></div>
+  </div>
+</div>
+  
+  
+  
+{% endblock %}
+
+{% block body %}
+
+  <div id="connection_error" style="display:none" >
+    Could not connect to the planning poker session.<br/><br/>
+    Retrying...
+  </div>
+
+  
+
+  <div id="current_story_block" style="display:none">
+    <div style="width:100%; text-align:center;">
+    To play planning poker, one person should take on the role of Scrum Master.
+    <br/><br/>
+    <a href="#" class="button scrum_master_button green">Become Scrum Master</a>
+    </div>
+  </div>
+
+  <div id="mainPokerArea" style="display:none">
+    <div id="votelist"></div>
+    <div id="buttonArea" style="display:none">
+      {% for point in project.getPointScale %}
+        <a href="#" value="{{point.1}}" class="point_button button large">{{ point.1 }}</a>
+      {% endfor %}
+      <a href="#" value="{{point.0}}" style="display:none" class="reset_button button large red">Reset</a>
+      <a href="#" value="{{point.0}}" style="display:none" class="save_button button large green">Save</a>
+    </div>
+  </div>
+ 
+ <br/><br/><br/>
+ <div id="scrum_master_block">
+   <div class="planning_poker_column">
+     <h2 class="size_title">Stories with this size.</h2>
+     <ul class="stories_with_size">
+     </ul>
+   </div>
+   <div class="planning_poker_column">
+     <h2>Stories to size</h2>
+     <ul id="stories_to_size_list">
+     </ul>
+   </div>
+   
+ </div>
+ 
+ 
+ <div id="normal_user_block">
+   <div class="planning_poker_column">
+     <h2 class="size_title">Stories with this size.</h2>
+     <ul class="stories_with_size">
+     </ul>
+   </div>   
+   <div class="planning_poker_column">
+     <h2>Recently sized stories.</h2>
+     <ul class="recently_sized_stories">
+     </ul>
+   </div>
+
+   <br/><br/>
+   <a href="#" class="button scrum_master_button">Become Scrum Master</a> 
+ </div>
+ 
+
+
+
+ 
+  
+  <script src="{{STATIC_URL}}js/poker.js" type="text/javascript" charset="utf-8" ></script>
+  <script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+      if (typeof hookbox === 'undefined')
+      {
+        retryConnect();
+      }
+      else
+      {
+        poker_startup( hookbox, "{{ hookbox_server }}", "{{ poker_channel_id }}" , "{{username}}", "{% url poker_ajax project.slug %}");
+      }
+    });
+  </script>
+{% endblock %}
