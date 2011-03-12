@@ -24,6 +24,7 @@ def calculatePoints( stories ):
             if( story.status == Story.STATUS_DONE):
                 points_claimed += story_points
         except ValueError:
+            logger.debug("ve")
             pass # probably ? or infinity
 
     #print (points_total, points_claimed)
@@ -87,7 +88,7 @@ def calculateAverage( iteration_points ):
 
 def logPoints( related_object, points_claimed, points_total ):
     today = date.today()
-    logger.debug("%s %d %f" % (related_object, points_claimed, points_total) )
+    logger.info("%s %d %f" % (related_object, points_claimed, points_total) )
     try:
         log = related_object.points_log.get( date=today )
         log.points_claimed=points_claimed
