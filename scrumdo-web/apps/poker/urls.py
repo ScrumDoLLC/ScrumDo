@@ -5,7 +5,6 @@ from django.views.generic.simple import direct_to_template
 urlpatterns = patterns('poker.views',
     url(r'^play/(?P<project_slug>[-\w]+)$', "play", name="play_poker"),
     url(r'^ajax/(?P<project_slug>[-\w]+)$', "ajax", name="poker_ajax"),
-    url(r'^control/(?P<project_slug>[-\w]+)$', "control", name="control_poker"),
     url(r'^hookbox_test$', "hookbox_test"),
     url(r'^hookbox_callback/connect$', "hookbox_callback_connect"),
     url(r'^hookbox_callback/subscribe$', "hookbox_callback_subscribe"),

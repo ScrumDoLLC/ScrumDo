@@ -7,14 +7,14 @@ function setupAutoClose( divID )
 function setStatus(storyID, project_slug, status, return_type)
 {
     $(".todoButtons").hide();
-    
+    if(typeof reloadStoryCallback == 'function') { reloadStoryCallback(); }
     $.ajax({
 	    url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_" + status,
 		type: "POST",
 		data: ({return_type : return_type}),
 		success: function(responseText) {
 		$("#story_" + storyID).replaceWith(responseText);
-		setUpStoryLinks();
+		setUpStoryLinks();		
 	    }
 	});
 		
@@ -45,7 +45,8 @@ function deleteTask( story_id, task_id )
     {
         return;
     }
-    
+ 
+    if(typeof reloadStoryCallback == 'function') { reloadStoryCallback(); }   
     $.ajax({
 	    url: "/projects/task/" + task_id + "/delete",
 		type: "POST",
@@ -58,6 +59,7 @@ function deleteTask( story_id, task_id )
 function setTaskStatus(story_id, task_id, status)
 {
 
+    if(typeof reloadStoryCallback == 'function') { reloadStoryCallback(); }
     $.ajax({
 	    url: "/projects/task/" + task_id + "/set_status",
 		type: "POST",
@@ -131,7 +133,7 @@ function reloadStory( story_id , display_comments, display_tasks)
 function setUpStoryLinks() 
 {
 
-    if(typeof reloadStoryCallback == 'function') { reloadStoryCallback(); }
+    if(typeof setUpStoryLinksCallback == 'function') { setUpStoryLinksCallback(); }
 
     
     $(".tasks_task").mouseenter(function() {      

@@ -343,3 +343,13 @@
     list-style: none;
     border-bottom: 1px solid #c0c0c0;
 }
+
+
+#connection_error {
+	text-align: center;
+	padding: 40px;
+	background-color: #fef7df;
+	border-width: 2px;
+	border-style: solid;
+	font-size: 18px;
+}

@@ -11,8 +11,8 @@ var scrum_master_username = "";
 var poker_ajax_url = "";
 
 function poker_connection_error( error )
-{
-    
+{    
+    retryConnect();
 }
 
 function poker_on_publish(args) 
@@ -57,6 +57,7 @@ function poker_handle_save_points()
 {
     $("#current_story_block").html("");
     
+    
     $.ajax({
         url: poker_ajax_url,
         data: {action:"single_story", story:current_story_id},
@@ -65,12 +66,7 @@ function poker_handle_save_points()
             $(".recently_sized_stories").prepend(data);           
         }
     });
-    
-    if( scrum_master )
-    {
-        load_stories_to_size();
-    }
-    
+        
     reset_votes();
 }
 
@@ -93,6 +89,7 @@ function load_stories_to_size()
 
 function poker_handle_scrum_master( username )
 {
+    $("#mainPokerArea").show();
     if( my_username == username )
     {
         scrum_master = true;
@@ -135,8 +132,45 @@ function reset_votes()
     $(".point_button").removeClass("blue");
 }
 
+function poker_show_all_incomplete_stories()
+{
+    $.ajax({
+        url: poker_ajax_url,
+        data: {action:"all_incomplete_stories_to_size"},
+        type: "POST",
+        success: function(data) {
+            $("#stories_to_size_list").html(data);
+            $(".load_story_link").click( function() { 
+                story_url = $(this).attr("href");
+                hookbox_connection.publish(hookbox_channel_id, {message:"story", story_url:story_url} );
+                return false;
+            });
+        }
+    });
+    return false;
+}
+function poker_show_all_stories()
+{
+    $.ajax({
+        url: poker_ajax_url,
+        data: {action:"all_stories_to_size"},
+        type: "POST",
+        success: function(data) {
+            $("#stories_to_size_list").html(data);
+            $(".load_story_link").click( function() { 
+                story_url = $(this).attr("href");
+                hookbox_connection.publish(hookbox_channel_id, {message:"story", story_url:story_url} );
+                return false;
+            });
+        }
+    });
+    return false;
+}
+
 function poker_load_story( args )
 {
+    $("#buttonArea").show();
+    
     if( current_story_url != args.payload.story_url)
     {
         reset_votes();
@@ -160,6 +194,8 @@ function update_current_story()
         url: current_story_url,
         success: function(data) {
             $("#current_story_block").html(data);
+            $(".moveIterationIcon").hide();
+            setUpStoryLinks();            
         }
     });
 }
@@ -195,6 +231,8 @@ function poker_userlist_change(frame)
 
 function poker_subscribed(channelName, _subscription) 
 {
+    $("#current_story_block").show();
+    
    hookbox_subscription = _subscription;
    hookbox_subscription.onSubscribed = poker_userlist_change;
    hookbox_subscription.onUnsubscribe = poker_userlist_change;
@@ -216,7 +254,10 @@ function poker_save_estimate()
     $.ajax({
         url: poker_ajax_url,
         data: {action:"set_size", story:current_story_id, points:current_vote },
-        type: "POST"
+        type: "POST",
+        success: function() {
+                load_stories_to_size();                        
+        }
     });
 }
 
@@ -225,8 +266,15 @@ function force_revote()
     hookbox_connection.publish(hookbox_channel_id, { message:"reset_votes" } );
 }
 
+function retryConnect()
+{
+    $("#connection_error").show();
+    setTimeout("window.location.reload()",3000)
+}
+
 function poker_startup(hookbox, hookbox_server, channel_id, username, ajax_url)
 {
+
     my_username = username;
 
     poker_ajax_url = ajax_url;
@@ -236,6 +284,7 @@ function poker_startup(hookbox, hookbox_server, channel_id, username, ajax_url)
     hookbox_connection.onOpen = function() { hookbox_connection.subscribe( channel_id ); } ;
     hookbox_connection.onError = poker_connection_error;    
     hookbox_connection.onSubscribed = poker_subscribed;    
+    hookbox_connection.onClose = function() { retryConnect(); };
     
     
     $(".save_button").click(function(){

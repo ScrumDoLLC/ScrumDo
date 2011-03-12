@@ -34,10 +34,6 @@ def play(request, project_slug ):
 
 
 @login_required
-def control(request, project_slug ):
-    pass
-
-@login_required
 def ajax(request, project_slug):
     action = request.POST.get("action")
     if action == "stories_to_size":
@@ -48,6 +44,10 @@ def ajax(request, project_slug):
         return set_story_size( request, project_slug )
     elif action == "single_story":
         return single_story(request, project_slug)
+    elif action == "all_incomplete_stories_to_size":
+        return all_stories(request, project_slug, True)
+    elif action == "all_stories_to_size":
+        return all_stories(request, project_slug, False)
     
 
 def set_story_size( request, project_slug ):
@@ -76,7 +76,17 @@ def stories_with_size( request, project_slug ):
     stories = project.stories.filter(points=request.POST.get("size"))[:10];
     return render_to_response("poker/stories_with_size.html",  { "stories":stories } , context_instance=RequestContext(request) )
     
+def all_stories(request, project_slug, only_incomplete):
+    project = get_object_or_404( Project, slug=project_slug )
+    read_access_or_403(project, request.user )
     
+    if only_incomplete:
+        stories = project.stories.exclude(status=Story.STATUS_DONE ).order_by("local_id");
+    else:
+        stories = project.stories.order_by("local_id");
+        
+    return render_to_response("poker/stories_to_size.html",  { "stories":stories } , context_instance=RequestContext(request) )    
+
 def stories_to_size( request, project_slug ):
     project = get_object_or_404( Project, slug=project_slug )
     read_access_or_403(project, request.user )
@@ -85,10 +95,11 @@ def stories_to_size( request, project_slug ):
 
 def hookbox_test(request):
     # For this to work you need hookbox installed and running with a command similar to:
-    # hookbox -s juy789 --cbhost=localhost --cbport=8000 --cbpath=/poker/hookbox_callback
+    # hookbox -s juy789 --cbhost=localhost --cbport=8000 --cbpath=/poker/hookbox_callback -p 8080
+    # for the scrumdo.com live site: hookbox -s OURSECRETKEY --cbhost=www.scrumdo.com --cbport=80 --cbpath=/poker/hookbox_callback -p 8080
+    # Make sure your secret key in settings matches this one.
 
     hookbox_server = settings.HOOKBOX_HOST
-
     return render_to_response("poker/hookbox_test.html",  {"poker_session_id":"test-poker","hookbox_server":hookbox_server } ,context_instance=RequestContext(request) )
 
 @login_required
