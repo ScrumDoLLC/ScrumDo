@@ -28,6 +28,18 @@
 {% endblock %}
 
 
+{% block extra_panel %}
+<div class="box">
+  <div class="box-title">Planning Poker</div>
+  <div class="box-content">
+     Scrum Master: <span id="scrum_master_title"></span>
+     <div id="userlist"></div>
+  </div>
+</div>
+  
+  
+  
+{% endblock %}
 
 {% block body %}
 
@@ -36,7 +48,7 @@
     Retrying...
   </div>
 
-  <div id="scrum_master_title"></div>
+  
 
   <div id="current_story_block" style="display:none">
     <div style="width:100%; text-align:center;">
@@ -50,7 +62,7 @@
     <div id="votelist"></div>
     <div id="buttonArea" style="display:none">
       {% for point in project.getPointScale %}
-        <a href="#" value="{{point.0}}" class="point_button button large">{{ point.0 }}</a>
+        <a href="#" value="{{point.1}}" class="point_button button large">{{ point.1 }}</a>
       {% endfor %}
       <a href="#" value="{{point.0}}" style="display:none" class="reset_button button large red">Reset</a>
       <a href="#" value="{{point.0}}" style="display:none" class="save_button button large green">Save</a>
@@ -90,8 +102,8 @@
  </div>
  
 
- 
- 
+
+
  
   
   <script src="{{STATIC_URL}}js/poker.js" type="text/javascript" charset="utf-8" ></script>

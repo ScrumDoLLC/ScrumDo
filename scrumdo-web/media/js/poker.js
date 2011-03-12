@@ -51,6 +51,7 @@ function poker_on_publish(args)
     {
         reset_votes();
     }
+    poker_userlist_change(null);
 }
 
 function poker_handle_save_points()
@@ -93,7 +94,7 @@ function poker_handle_scrum_master( username )
     if( my_username == username )
     {
         scrum_master = true;
-        message = "Please pick a story.";
+        message = "<h1>Please pick a story.</h1>";
         $("#scrum_master_block").show();
         $("#normal_user_block").hide();    
         load_stories_to_size();    
@@ -121,7 +122,7 @@ function poker_handle_scrum_master( username )
         $("#current_story_block").html(message);
     }
     
-    $("#scrum_master_title").text("Scrum Master: " + username );
+    $("#scrum_master_title").text( username );
 }
 
 function reset_votes()
@@ -225,8 +226,7 @@ function poker_process_vote(args)
 
 function poker_userlist_change(frame) 
 {
-    $("#userlist").html( hookbox_subscription.presence );
-
+    $("#userlist").html( hookbox_subscription.presence.join("<br/> ") );
 }
 
 function poker_subscribed(channelName, _subscription) 
@@ -239,6 +239,8 @@ function poker_subscribed(channelName, _subscription)
    hookbox_subscription.onPublish = poker_on_publish;
    
    hookbox_connection.publish(hookbox_channel_id, { message:"who_is_scrum_master" } );
+   
+   poker_userlist_change(null);
 }
 
 function poker_save_estimate()
@@ -308,6 +310,10 @@ function poker_startup(hookbox, hookbox_server, channel_id, username, ajax_url)
             poker_become_scrum_master();
         }
     });
+    
+   window.onbeforeunload = function() {
+      hookbox_connection.disconnect();        
+   };
 
 }
 
@@ -325,8 +331,7 @@ function poker_handle_who_scrum_master( args )
 
 function poker_become_scrum_master()
 {
-    hookbox_connection.publish(hookbox_channel_id, { message:"scrum_master" } );
-    
+    hookbox_connection.publish(hookbox_channel_id, { message:"scrum_master" } );   
 }
 
 function reloadStoryCallback() 
@@ -357,7 +362,4 @@ function poker_make_estimate( value )
     
 }
 
-function calculateBothPoints()
-{
-    
-}
+function calculateBothPoints() { }

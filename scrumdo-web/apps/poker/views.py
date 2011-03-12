@@ -108,15 +108,9 @@ def hookbox_callback_connect( request ):
     pp.pprint(request.POST)
     if request.POST.get("secret") != settings.HOOKBOX_SECRET:
         raise PermissionDenied()
-    
-    
-
 
     # Occurs when someone joins, you should handle authorization here.
-    return HttpResponse( json.dumps([ True, { "history_size" : 1,
-                                              "reflective" : True,
-                                              "name" : str(request.user),
-                                              "presenceful" : True } ]) )
+    return HttpResponse( json.dumps([ True, { "name" : str(request.user) } ]) )
 
 @login_required
 def hookbox_callback_create_channel(request):
@@ -125,7 +119,9 @@ def hookbox_callback_create_channel(request):
     if request.POST.get("secret") != settings.HOOKBOX_SECRET:
         raise PermissionDenied()
     # here is where you can handle the first person joining a planning poker session
-    return HttpResponse(json.dumps([ True, {} ]) )
+    return HttpResponse(json.dumps([ True, { "history_size" : 0,
+                                             "reflective" : True,                                             
+                                             "presenceful" : True } ]) )
 
 @login_required
 def hookbox_callback_subscribe (request):
