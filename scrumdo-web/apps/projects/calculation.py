@@ -87,6 +87,7 @@ def calculateAverage( iteration_points ):
 
 def logPoints( related_object, points_claimed, points_total ):
     today = date.today()
+    logger.debug("%s %d %f" % (related_object, points_claimed, points_total) )
     try:
         log = related_object.points_log.get( date=today )
         log.points_claimed=points_claimed
