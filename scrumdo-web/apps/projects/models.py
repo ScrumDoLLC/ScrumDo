@@ -344,7 +344,6 @@ class Story( models.Model ):
 def tag_callback(sender, instance, **kwargs):
 
   for tag_to_delete in instance.tags_to_delete:
-    print "Deleting " + tag_to_delete.name
     tag_to_delete.delete()
   for tag_to_add in instance.tags_to_add:
     tag_to_add = tag_to_add.strip()
