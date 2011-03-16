@@ -152,7 +152,10 @@ class Project(Group):
     def get_default_iteration( self ):
       if self.default_iteration == None:
         iterations = Iteration.objects.filter( project=self, default_iteration=True)
-        self.default_iteration = iterations[0]
+        if len(iterations) == 0:            
+            self.default_iteration = self.iterations.all()[0]  # Shouldn't really happen, but just in case.
+        else:
+            self.default_iteration = iterations[0]
       return self.default_iteration
       
     def get_current_iterations(self):

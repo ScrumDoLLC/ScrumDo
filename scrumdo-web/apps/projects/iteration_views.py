@@ -104,6 +104,11 @@ def iteration_create(request, group_slug=None):
 @login_required
 def delete_iteration( request, group_slug, iteration_id ):
    iteration = get_object_or_404( Iteration, id=iteration_id )  
+   
+   if iteration.default_iteration:
+       request.user.message_set.create(message="You can not delete the default iteration.") 
+       HttpResponseRedirect( reverse('iteration', kwargs={'group_slug':iteration.project.slug, 'iteration_id':iteration.id }) ) #redirect to same iteration+display msg., as delete failed
+       
    if request.method == "POST":
       write_access_or_403(iteration.project,request.user)
       # dont think this signal exists.

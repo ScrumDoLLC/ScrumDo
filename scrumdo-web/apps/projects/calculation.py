@@ -23,8 +23,7 @@ def calculatePoints( stories ):
             # print "%d %f" % ( story.id,story_points)
             if( story.status == Story.STATUS_DONE):
                 points_claimed += story_points
-        except ValueError:
-            logger.debug("ve")
+        except ValueError:            
             pass # probably ? or infinity
 
     #print (points_total, points_claimed)
@@ -88,17 +87,17 @@ def calculateAverage( iteration_points ):
 
 def logPoints( related_object, points_claimed, points_total ):
     today = date.today()
-    logger.info("%s %d %f" % (related_object, points_claimed, points_total) )
+    # logger.info("%s %d %f" % (related_object, points_claimed, points_total) )
     try:
         log = related_object.points_log.get( date=today )
         log.points_claimed=points_claimed
         log.points_total=points_total
         log.save()
-        logger.debug("logPoints found a previous record.")
+        # logger.debug("logPoints found a previous record.")
     except PointsLog.DoesNotExist:
         log = PointsLog( points_claimed=points_claimed, points_total=points_total, related_object=related_object)
         log.save()
-        logger.debug("logPoints created a new record.")
+        # logger.debug("logPoints created a new record.")
 
 def calculateProject( project ):
     stories = project.stories.all();
