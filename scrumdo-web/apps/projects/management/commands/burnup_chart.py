@@ -5,10 +5,16 @@ from django.core.management.base import BaseCommand, CommandError
 
 from projects.calculation import calculateProject    
 
+import logging
+
+logger = logging.getLogger(__name__)
 
 class Command(BaseCommand):
   def handle(self, *args, **options):
     projects = Project.objects.all()
     for project in projects:
-      calculateProject( project )
+        try:
+            calculateProject( project )
+        except:
+            logger.error("Could not calculate project %s" % project.slug)
 
