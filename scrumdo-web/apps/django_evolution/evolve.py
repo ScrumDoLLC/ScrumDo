@@ -58,7 +58,7 @@ def get_mutations(app, evolution_labels, database):
         for filename in filenames:
             if os.path.exists(filename):
                 sql = []
-                sql_file = open(sql_file_name)
+                sql_file = open(filename)
 
                 for line in sql_file:
                     sql.append(line)

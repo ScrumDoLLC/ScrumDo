@@ -22,6 +22,8 @@ from tagging.fields import TagField
 from tagging.models import Tag
 import tagging
 import re
+import random
+import string
 from itertools import groupby
 
 from django.core.urlresolvers import reverse
@@ -103,6 +105,9 @@ class Project(Group):
   
     organization = models.ForeignKey(Organization,related_name="projects", null=True, blank=True)
 
+    token = models.CharField(max_length=7, default=lambda: "".join(random.sample(string.lowercase + string.digits, 7)))
+
+    
 
     def getPointScale( self ):
       return self.POINT_RANGES[ self.point_scale_type ]

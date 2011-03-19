@@ -16,7 +16,7 @@
     <div class="box">
       <div class="box-title">
       	<a title="{{ project.description }}" href="{% url project_detail project.slug %} ">{{ project.name }}</a>
-      	<div class="feed"><a title="Feed of recent activity." target="_blank" href="/feeds/project/{{ project.pk }}">{% silk "feed" %}</a></div>
+      	<div class="feed"><a title="Feed of recent activity." target="_blank" href="/feeds/project/{{ project.pk }}/{{ project.token }}">{% silk "feed" %}</a></div>
       	{% if iteration %}
       	  {{ iteration.name }}
       	{% endif %}
@@ -114,12 +114,12 @@
 	{% canwrite project %}
 	<a title="Add New Iteration" href="{% url iteration_create project.slug %}">{% silk "add" %}</a>   
 	{% endcanwrite %} 
-	<div class="feed"><a title="Constantly updating feed of whatever your current iteration is" target="_blank" href="/feeds/current/{{ project.pk }}">{% silk "feed" %}</a></div>
+	<div class="feed"><a title="Constantly updating feed of whatever your current iteration is" target="_blank" href="/feeds/current/{{ project.pk }}/{{ project.token }}">{% silk "feed" %}</a></div>
       </div><!--box-title-->
       {% for iteration in project.iterations.all %}
       <div class="box-content">
 	{% iteration_name iteration %}{% if iteration.stories.count %} <span class="subtitle">({{iteration.stories.count}})</span>{% endif %}
-	<div class="feed"><a title="Feed of activity in {{ iteration.name }}." target="_blank" href="/feeds/iteration/{{ project.pk }}/{{ iteration.pk }}">{% silk "feed" %}</a></div>
+	<div class="feed"><a title="Feed of activity in {{ iteration.name }}." target="_blank" href="/feeds/iteration/{{ project.pk }}/{{ project.token }}/{{ iteration.pk }}">{% silk "feed" %}</a></div>
       </div><!--box-content-->
       {% endfor %}
     </div><!--box-->

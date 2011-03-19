@@ -35,7 +35,7 @@
 	{% for project in my_projects %}  
 	{% ifequal None project.organization %}
 	<div class="projectfeed">
-	  <a title="Subscribe to project activity." target="_blank" href="/feeds/project/{{ project.pk }}">{% silk "feed" %}</a>
+	  <a title="Subscribe to project activity." target="_blank" href="/feeds/project/{{ project.pk }}/{{ project.token }}">{% silk "feed" %}</a>
 	</div><!--projectfeed-->
 	<div class="project">
   	  <a href="{% url project_detail project.slug %}">{% silk "database_table" %} {{project.name}}</a> 
@@ -53,7 +53,7 @@
       <div id="other-projects">
 	{% for project in member_projects %}  
       <div class="projectfeed">
-	<a title="Subscribe to project activity." target="_blank" href="/feeds/project/{{ project.pk }}">{% silk "feed" %}</a>
+	<a title="Subscribe to project activity." target="_blank" href="/feeds/project/{{ project.pk }}/{{ project.token }}">{% silk "feed" %}</a>
       </div><!--projectfeed-->
 	<div class="project">
           {% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a> 
@@ -90,7 +90,7 @@
       {% for project in org.projects.all %}
       {% canread project %}
       <div class="projectfeed">
-	<a title="Subscribe to project activity." target="_blank" href="/feeds/project/{{ project.pk }}">{% silk "feed" %}</a>
+	<a title="Subscribe to project activity." target="_blank" href="/feeds/project/{{ project.pk }}/{{ project.token }}">{% silk "feed" %}</a>
       </div><!--projectfeed-->
       <div class="project">
 	{% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a> 
