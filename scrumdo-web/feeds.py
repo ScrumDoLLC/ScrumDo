@@ -6,11 +6,14 @@ from projects.models import Project, ProjectMember, Iteration, Story
 from activities.models import Activity, StoryActivity, IterationActivity
 
 class ProjectStories(Feed):
-    def get_object(self,primarykey):
-        if len(primarykey) != 1:
-            raise ObjectDoesNotExist
-        project = get_object_or_404(Project, pk=primarykey[0])
-        return project
+    def get_object(self,key_and_token):
+        if len(key_and_token) != 2:
+            raise FeedDoesNotExist
+        project = get_object_or_404(Project, pk=key_and_token[0])
+        if project.token == key_and_token[1]:
+            return project
+        else:
+            return None
 
     def title(self, obj):
         return "Scrumdo Project %s." % obj.name
@@ -50,11 +53,14 @@ class ProjectCurrentStories(ProjectStories):
 
 class ProjectIterationStories(Feed):
     def get_object(self,project_and_iteration):
-        if len(project_and_iteration) != 2:
+        if len(project_and_iteration) != 3:
             raise ObjectDoesNotExist
         project = get_object_or_404(Project, pk=project_and_iteration[0])
-        iteration = get_object_or_404(Iteration, pk=project_and_iteration[1])
-        return (project,iteration)
+        if project.token == project_and_iteration[1]:
+            iteration = get_object_or_404(Iteration, pk=project_and_iteration[2])
+            return (project,iteration)
+        else:
+            return None
 
     def title(self, obj):
         return "Scrumdo Project %s." % obj[0].name

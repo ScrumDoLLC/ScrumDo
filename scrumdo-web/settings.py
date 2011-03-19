@@ -246,8 +246,9 @@ INTERNAL_IPS = ('127.0.0.1',)
 
 BASE_URL="http://localhost:8000"
 
-SCRUMDO_EXTRAS = ("extras.plugins.github_issues.GitHubIssuesExtra",
-                  "extras.plugins.example.ExampleExtra",)
+# this is failing to include, commentd on 2011.3.18
+SCRUMDO_EXTRAS = ()#("extras.plugins.github_issues.GitHubIssuesExtra",
+                  #"extras.plugins.example.ExampleExtra",)
 
 
 HOOKBOX_HOST = "http://192.168.1.125:8080"
