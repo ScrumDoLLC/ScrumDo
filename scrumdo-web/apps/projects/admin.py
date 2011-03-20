@@ -18,7 +18,7 @@
 
 from django.contrib import admin
 from projects.models import Project, Iteration, SiteStats, Story, StoryTag
-import settings
+from django.conf import settings
 
 
 if not "subscription" in settings.INSTALLED_APPS:
