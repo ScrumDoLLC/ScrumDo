@@ -157,7 +157,8 @@ def hookbox_callback_publish (request):
 
 @login_required
 def hookbox_callback_disconnect( request ):
-    pass
+    return HttpResponse(json.dumps([ True, {} ])  )
+    
 @login_required
 def hookbox_callback_destroy_channel(request):
-    pass
+    return HttpResponse(json.dumps([ True, {} ])  )
