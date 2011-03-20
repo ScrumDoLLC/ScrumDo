@@ -70,6 +70,9 @@ class Organization(models.Model):
     def hasAdminAccess( self, user ):
         return (self.teams.filter( access_type="admin", members=user ).count() > 0)
 
+    def hasReadAccess( self, user ):
+        return (self.teams.filter( members=user ).count() > 0)
+
     # returns all organizations the user has read/write access to
     # @staticmethod
     # def getReadWriteOrganizationsForUser( user ):

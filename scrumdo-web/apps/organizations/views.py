@@ -26,6 +26,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponse
 from django.core import serializers
 from django.conf import settings
+from django.core.exceptions import PermissionDenied
 
 from organizations.forms import *
 from organizations.models import *
@@ -43,6 +44,9 @@ def organization(request, organization_slug):
     organization = get_object_or_404(Organization, slug=organization_slug)
     organizations = Organization.getOrganizationsForUser( request.user )
 
+    if not organization.hasReadAccess( request.user ):
+        raise PermissionDenied()
+        
     teams = []
     for team in organization.teams.all():
         teams.append((team, AddUserForm(team=team)))
@@ -50,6 +54,8 @@ def organization(request, organization_slug):
     # this used to live in team_views.py, but since the individual teams pages
     # have been consolodated, this post is now from the organization overview page
     if request.method == "POST":
+        if not organization.hasAdminAccess( request.user ):
+            raise PermissionDenied()
         action = request.POST.get("action")
         team_id = request.POST.get("team_id")
         team = get_object_or_404(Team, id=team_id)
