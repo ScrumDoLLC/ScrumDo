@@ -1,12 +1,16 @@
 {% extends "base.html" %}
 
 {% load i18n %}
+{% load extras_tags %}
 {% load openid_tags %}
 {% load ifsetting_tag %}
 
 {% block extra_head_base %}
     <link rel="stylesheet" href="{{ STATIC_URL }}projects/css/projects.css" />
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/subscription.css" />
+    
+    {% ifloaded subscription %}     
+      <link rel="stylesheet" href="{{ STATIC_URL }}css/subscription.css" />
+    {% endifloaded %}
 
         
     {% block extra_head %}{% endblock %}
