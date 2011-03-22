@@ -5,12 +5,13 @@ from activities.models import Activity,StoryActivity,IterationActivity,DeletedAc
 from projects.models import ProjectMember, Project
 from django.shortcuts import render_to_response, get_object_or_404
 
+
 # Returns the activities for a given user as an html snippet. 
 @login_required
 def user_activities(request, page):
   # get all the user's projects
   activities = Activity.getActivitiesForUser(request.user)
-
+  
   paginator = Paginator(activities, 10)
   page_obj = paginator.page(page)
 
