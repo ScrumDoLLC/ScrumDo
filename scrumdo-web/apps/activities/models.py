@@ -15,26 +15,11 @@ from django.core.cache import cache
 class ActivityAction(models.Model):
   name = models.TextField(_("action"), max_length=100)
 
-class ActivityLike(models.Model):
-  user = models.ForeignKey(User)
-  activity = models.ForeignKey("Activity")
-
-  @staticmethod
-  def alreadyLiked(user, activity):
-    try:
-      ActivityLike.objects.get(user=user, activity=activity)
-      return True
-    except:
-      return False
-
 class Activity(models.Model):
   user = models.ForeignKey(User,related_name="ActivityByUser", null=True, blank=True)
   action = models.ForeignKey(ActivityAction, related_name="ActivityAction")
   project = models.ForeignKey("projects.Project", related_name="ActivityByProject")
   created = models.DateTimeField(_('created'), default=datetime.datetime.now)
-
-  def numLikes(self):
-    return ActivityLike.objects.filter(activity=self).count()
 
   # Returns all activities for user
   @staticmethod

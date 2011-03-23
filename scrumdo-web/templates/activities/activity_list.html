@@ -46,7 +46,7 @@
 {% comment %}  {% endifnotequal %} {% endcomment %}
 
   <div class="context">
-    {{ act|activity_context }}, <abbr>about {{ act.created|timesince }} ago, <span id="{{act.id}}like"> {{ act.numLikes }}</span> <a href="#" onclick="like({{act.id}})">Like{{act.numLikes|pluralize}}</a>
+    {{ act|activity_context }}, <abbr>about {{ act.created|timesince }} ago
   </abbr>
   </div>
 {# {% comments act %} #}
