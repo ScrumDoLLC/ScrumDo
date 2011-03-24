@@ -12,10 +12,12 @@ from activities.utils import allinstances, instanceof
 
 from django.core.cache import cache
 
+from model_utils.models import InheritanceCastModel
+
 class ActivityAction(models.Model):
   name = models.TextField(_("action"), max_length=100)
 
-class Activity(models.Model):
+class Activity(InheritanceCastModel):
   user = models.ForeignKey(User,related_name="ActivityByUser", null=True, blank=True)
   action = models.ForeignKey(ActivityAction, related_name="ActivityAction")
   project = models.ForeignKey("projects.Project", related_name="ActivityByProject")
@@ -34,28 +36,39 @@ class Activity(models.Model):
       user_projects = projects.models.ProjectMember.getProjectsForUser(userl)
       
       # now get all the stories for the projects a user is interested in
-      activities = [act.mergeChildren() for act in list(Activity.objects.filter(project__in = user_projects).order_by('created').reverse())]
+      related_types = {'all':['action','user', 'project'],
+                       'storyactivity':['story', 'story__iteration'],
+                       'commentactivity':['story'],
+                       'pointschangeactivity':['story'],
+                       'iterationactivity':['iteration'],
+                       }
+      activities = Activity.objects.filter(project__in = user_projects).order_by('created').reverse().cast(select_related_types=related_types) #depth=2)
+
+      # this gets a little tricky. we want to get all the subtypes of activity without the expense of creating a query per entry.
+      # with django newer than 1.2, this could be provided by django-model-utils InheritanceManager, and one solution from the same library
+      # with we partially use, is InheritanceCastModel and InheritanceCastMixin. The problem with the latter is that it does not seem to suppo
 
       def combine(u, a, it, acts):
         if a.name == "reordered" and len(acts) > 1:
-          return [IterationActivity(project = it.project, user=u, iteration=it, created=acts[0].created, action=a, numstories=len(acts))]
+          story = acts[0].story
+          return [IterationActivity(project = story.project, user=u, iteration=story.iteration, created=story.created, action=a, numstories=len(acts))]
         elif allinstances(acts, StoryActivity):
           # if they are the same action about the same story, together, only show the most recent one
-          return [list(acts)[0] for (st,s),acts in groupby(acts, lambda act: (act.story, act.status))]
+          return [list(acts)[0] for (st,s),acts in groupby(acts, lambda act: (act.story_id, act.status))]
         #to add other combinations, simply add elif clauses here
         else:
           return acts
 
       if len(activities) > 0:
         # this groups the stories by user, action, and iteration if it is not an iteration activity
-        groups = groupby(activities, lambda act: (act.user, act.action, not instanceof(act, [StoryActivity, CommentActivity, PointsChangeActivity]) or act.story.iteration))
+        groups = groupby(activities, lambda act: (act.user_id, act.action, not instanceof(act, [StoryActivity, CommentActivity, PointsChangeActivity]) or act.story.iteration_id))
         # this goes through the groupings and combines them if necessary
-        activities = reduce(lambda x,y: x+y, [combine(u,a,it or stories[0].iteration,list(stories)) for (u,a,it),stories in groups])
+        activities = reduce(lambda x,y: x+y, [combine(u,a,it or stories[0].iteration_id,list(stories)) for (u,a,it),stories in groups])
         cache.set(str(userl.id)+"_activities", activities, 60*10)
         return activities
       else:
         return []
-
+  
   def mergeChildren(self):
     """ this function replaces itself with it's child if the child exists. """
     try:
