@@ -188,3 +188,7 @@ class DeletedActivity(Activity):
   """ For an activity about a story that was deleted, archive it's name. The current behavior is that all other activities about the deleted story or iteration are not saved, because since this is not an undoable operation, there doesn't seem to be much value in keeping them. But, we do want to know that the story was deleted, hence this model. """
   name = models.TextField("name")
 
+  def get_absolute_url(self):
+    return self.project.get_absolute_url()
+
+
