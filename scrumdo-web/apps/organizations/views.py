@@ -34,6 +34,7 @@ from organizations.models import *
 from projects.models import Project
 
 import organizations.signals as signals
+import organizations.import_export as import_export
 
 import logging
 
@@ -177,3 +178,9 @@ def team_debug(request):
         "read_orgs":read_orgs,
         "admin_orgs":admin_orgs,
       }, context_instance=RequestContext(request))
+
+def export_organization(request, organization_slug):
+    organization = get_object_or_404(Organization, slug=organization_slug)
+    if not organization.hasReadAccess( request.user ):
+        raise PermissionDenied()
+    return import_export.export_organization( organization )
