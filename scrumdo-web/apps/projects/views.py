@@ -50,6 +50,7 @@ else:
 from projects.access import *
 from projects.models import Project, ProjectMember, Iteration, Story
 from projects.forms import *
+from projects.import_export import exportProject
 from organizations.models import Organization
 from activities.models import Activity, StoryActivity, IterationActivity
 import datetime
@@ -483,4 +484,17 @@ def record_prediction(predictions, stories,iteration_number,start_date,iteration
   predictions.append( { "carried":points_left, "stories":stories , "points":points, "num":iteration_number, "start":start_date, "end":(start_date +  datetime.timedelta(days=(iteration_length-1))) } )
   
   
-
+@login_required
+def export_project(request, group_slug):
+    project = get_object_or_404(Project, slug=group_slug)  
+    read_access_or_403(project, request.user )
+    return exportProject( project )
+    # if request.method == "POST":
+    #     form = ExportProjectForm( request.POST )
+    #     if form.is_valid():
+    #         return exportProject( project, form.cleaned_data["format"])
+    #     else:
+    #         return HttpResponseRedirect(reverse("project_detail",kwargs={'group_slug':project.slug}))
+    # else:
+    #     form = ExportProjectForm()
+    # return render_to_response("projects/project_export_options.html", { "project":project, "form":form }, context_instance=RequestContext(request))
