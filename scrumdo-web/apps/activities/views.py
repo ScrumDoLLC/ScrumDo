@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from django.core.paginator import Paginator, InvalidPage
 from activities.models import Activity,StoryActivity,IterationActivity,DeletedActivity,ActivityLike
+from django.http import HttpResponse
 from projects.models import ProjectMember, Project
 from django.shortcuts import render_to_response, get_object_or_404
 
@@ -10,7 +11,10 @@ from django.shortcuts import render_to_response, get_object_or_404
 def user_activities(request, page):
   # get all the user's projects
   activities = Activity.getActivitiesForUser(request.user)
-
+  
+  if len(activities) == 0:
+      return HttpResponse("")
+  
   paginator = Paginator(activities, 10)
   page_obj = paginator.page(page)
 
