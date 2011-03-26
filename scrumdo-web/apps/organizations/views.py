@@ -18,7 +18,7 @@
 
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
-from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponse
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -184,3 +184,18 @@ def export_organization(request, organization_slug):
     if not organization.hasReadAccess( request.user ):
         raise PermissionDenied()
     return import_export.export_organization( organization )
+    
+    
+@login_required
+def delete_organization(request, organization_slug):
+    organization = get_object_or_404(Organization, slug=organization_slug)    
+    if not organization.hasAdminAccess( request.user ):
+        raise PermissionDenied()    
+    signals.organization_deleted.send( sender=request, organization=organization )
+    for project in organization.projects.all():
+        project.organization = None
+        project.save()
+    for team in organization.teams.all():
+        team.delete()
+    organization.delete()
+    return HttpResponse("Deleted")

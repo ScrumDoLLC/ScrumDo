@@ -19,3 +19,4 @@
 import django.dispatch
 
 organization_created = django.dispatch.Signal(providing_args=["organization"])
+organization_deleted = django.dispatch.Signal(providing_args=["organization"])

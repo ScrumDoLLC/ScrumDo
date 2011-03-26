@@ -25,11 +25,35 @@ function weekendAreas(axes) {
     return markings;
 }
 
+var previousPoint = null;   
 function plotBurndown( divID, series, options)
 {
   if(series[0].data.length > 0)
   {
       $.plot($(divID), series, options);
+      $(divID).bind("plothover", function (event, pos, item) {
+          //$("#x").text(pos.x.toFixed(2));
+          //$("#y").text(pos.y.toFixed(2));
+
+              if (item) {
+                  if (previousPoint != item.dataIndex) {
+                      previousPoint = item.dataIndex;
+
+                      $("#tooltip").remove();
+                      var date = new Date(item.datapoint[0]);
+                     // alert(item);
+                      var x = (date.getMonth()+1) + "/" + date.getDay() + "/" + date.getFullYear(),
+                          y = item.datapoint[1];
+
+                      showTooltip(item.pageX, item.pageY, x + "<br/>" + y + " points");
+                  }
+              }
+              else {
+                  $("#tooltip").remove();
+                  previousPoint = null;            
+              }
+
+      });
   }
   else
   {
@@ -39,15 +63,19 @@ function plotBurndown( divID, series, options)
   }
 }
 
+
+
+
+
 function realGenerateBurnDown(  divID, projectSlug, iterationID )
 {
   var options = {
      colors: ["#2292ff", "#ADD75C"],
      xaxis: { minTickSize: [1, "day"] , mode: "time", timeformat: "%m/%d/%y" },
-     grid: { markings: weekendAreas } ,
+     grid: {  hoverable: true, markings: weekendAreas } ,
      legend: {    position: "nw" },
      series: { lines: {   show: true , fill:true  }, 
-               points: { radius:5, show: true, fill: true} 
+               points: { radius:4, show: true, fill: true} 
                  }                   
   };
   
@@ -70,5 +98,22 @@ function realGenerateBurnDown(  divID, projectSlug, iterationID )
       });
   }
 }
+
+
+
+function showTooltip(x, y, contents) {
+    $('<div id="tooltip">' + contents + '</div>').css( {
+        position: 'absolute',
+        display: 'none',
+        top: y + 5,
+        left: x + 5,
+        border: '1px solid #fdd',
+        padding: '2px',
+        'background-color': '#fee',
+        opacity: 0.80
+    }).appendTo("body").fadeIn(200);
+}
+
+
 
 

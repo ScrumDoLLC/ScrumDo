@@ -360,4 +360,12 @@
 }
 
 
+.deleteLink {
+    text-decoration: none;
 
+    color: #aa0000;
+}
+
+.deleteLink img {
+    vertical-align: text-top;
+}
