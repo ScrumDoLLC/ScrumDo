@@ -5,6 +5,7 @@
 {% load theme_tags %}
 {% load extra_tagging_tags %}
 {% load avatar_tags %}
+{% load extras_tags %}
 {% load sitetips_tags %}
 
 {% block body_class %}projects{% endblock %}
@@ -13,8 +14,10 @@
   
     {% if user.is_authenticated %}
     <div id="panel">  
-
-    {% tip %}
+      
+    {% ifloaded sitetips %}     
+      {% tip %}
+    {% endifloaded %}
     
     <div class="panel_borders">
     
