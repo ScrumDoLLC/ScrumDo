@@ -31,17 +31,26 @@ from projects.import_export import _getHeaders
 from projects.models import Story
 
 import logging
+import re
 
 logger = logging.getLogger(__name__)
 heading_xf = ezxf('font: bold on; align: wrap on, vert centre, horiz center')
+
+def cleanWorksheetName( name ):
+    invalidchars = "[]*/\?:=;"    
+    tmp = name
+    for char in invalidchars:
+        tmp = tmp.replace(char,"")
+    tmp = tmp[:31]
+    return tmp
 
 def export_organization( organization ):
     response = HttpResponse( mimetype="Application/vnd.ms-excel")
     response['Content-Disposition'] = 'attachment; filename=organization.xls'
     w = xlwt.Workbook(encoding='utf8')
-    projects_ws = w.add_sheet( "Projects" )
-    tags_ws = w.add_sheet( "Tags" )
+    projects_ws = w.add_sheet( "Projects" )    
     iterations_ws = w.add_sheet( "Iterations" )
+    tags_ws = w.add_sheet( "Tags" )
     it_ws = w.add_sheet( "Iterations x Tags" )
     
     date_xf = xlwt.XFStyle()
@@ -59,7 +68,7 @@ def export_organization( organization ):
     iteration_tags_row = 1
     for project in organization.projects.all():
         story_headers = _getHeaders( project )
-        project_ws = w.add_sheet( project.name )
+        project_ws = w.add_sheet( cleanWorksheetName(project.name) )
         
         for idx,header in enumerate(story_headers):
             project_ws.write(0,idx,header[1],heading_xf)
@@ -146,7 +155,7 @@ def export_organization( organization ):
             iterations_row += 1
             iteration_tags_row += 1
             for tag in itags :
-                stories = tags[tag]
+                stories = itags[tag]
                 completed_stories = [story for story in stories if story.status==Story.STATUS_DONE ] 
                 it_ws.write(iteration_tags_row,2,tag)
                 it_ws.write(iteration_tags_row,5, len(stories) )

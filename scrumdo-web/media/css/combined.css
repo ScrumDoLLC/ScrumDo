@@ -829,30 +829,89 @@ div.footer {
 	background-color: #fffeff;
 	margin-left: auto;
 	margin-right: auto;
-}
-
-.subscription_table {
-	width: 100%;
-	background-color: #fffeff;
 	border-bottom: 1px solid #d6d6d6;
 }
 
-.subscription_table td {
-	padding-top: 2px;
-	padding-bottom: 2px;
-	padding-left: 4px;
-	text-align: center;
+.subscription_table th a {
+}
+
+.subscription_table .sub_plan_title {
+	height: 100px;	
+	color: #888;
+}
+
+.subscription_table .sub_plan_title h1 {
+	margin-bottom: 0px;
+	margin-left: -2px;
+	padding-left: 0px;
+	font-family: Arial;
+	font-size: 32px;
+	font-weight: bold;
+	color: #000;
+}
+
+.subscription_table tr td .sub_value {
+	font-size: 24px;
+	font-weight: bold;
+	font-family: Arial;
+}
+.subscription_table th {
+	padding-top: 0px;
+	padding-bottom: 15px;
+	padding-left: 20px;
+	text-align: left;
 	padding-right: 4px;
+	vertical-align: top;
+	border-left: 1px solid #d6d6d6;
+	background-color: #f0f0f1;
+	width: 24%;
+}
+.subscription_table td {
+	padding-top: 20px;
+	padding-bottom: 10px;
+	padding-left: 15px;
+	font-size: 14px;
+	text-align: left;
+	padding-right: 4px;
+	vertical-align: top;
+	border-left: 1px solid #d6d6d6;
+	line-height: 24px;
+	width: 24%;
+}
+.subscription_table td img {
+	vertical-align: text-top;
+	
+}
+.subscription_table .most-popular-header {
+	background-color: #cbe3ff;
+	border-top: 3px solid #2c6d9f;
+	border-left: 3px solid #2c6d9f;
+	border-right: 3px solid #2c6d9f;
+	color: #000;
+}
+
+.subscription_table .most-popular-cell {
+	background-color: #f3f9ff;
+	border-left: 3px solid #2c6d9f;
+	border-right: 3px solid #2c6d9f;
+	border-bottom: 3px solid #2c6d9f;
+	z-index: 100;
+	color: #000;
+
 }
 
 .subscription_table tr {
 	height: 30px;
 	border-top: 1px solid #d6d6d6;
-	border-left: 1px solid #d6d6d6;
+	
 	border-right: 1px solid #d6d6d6;	
 }
-.subscription_table tr:nth-child(even) {
-	background: #eee;
+
+.subscription_table .summary_row {
+	text-align: center;
+	background-color: #fcfcfc;
+	padding-top: 15px;
+	padding-bottom: 15px;
 }
 
 .no_organization_warning {

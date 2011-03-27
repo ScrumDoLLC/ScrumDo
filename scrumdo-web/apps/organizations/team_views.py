@@ -17,7 +17,7 @@
 
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
-from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponse
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -33,6 +33,16 @@ from organizations.models import *
 
 def _isAdmin( user, organization ):
     return Organization.objects.filter( teams__members = user , teams__access_type="admin", teams__organization=organization).count() > 0
+
+def team_delete(request, organization_slug, team_id):
+    organization = get_object_or_404(Organization, slug=organization_slug)
+    if not organization.hasAdminAccess( request.user ):
+        raise PermissionDenied()
+    team = get_object_or_404(Team, id=team_id)
+    if team.organization != organization:
+        raise PermissionDenied()
+    team.delete()
+    return HttpResponse("Deleted")
 
 def team_create(request, organization_slug):
     organization = get_object_or_404(Organization, slug=organization_slug)

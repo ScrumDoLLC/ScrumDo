@@ -68,9 +68,13 @@ class Organization(models.Model):
         return Organization.objects.filter( teams__access_type="admin", teams__members = user ).distinct().order_by("name")
 
     def hasAdminAccess( self, user ):
+        if self.creator == user:
+            return True
         return (self.teams.filter( access_type="admin", members=user ).count() > 0)
 
     def hasReadAccess( self, user ):
+        if self.creator == user:
+            return True        
         return (self.teams.filter( members=user ).count() > 0)
 
     # returns all organizations the user has read/write access to

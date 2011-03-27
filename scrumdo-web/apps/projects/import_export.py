@@ -133,7 +133,7 @@ def exportProject( project ):
         iteration_ws.write(itIdx+1, 4, len(completed_stories) )
         iteration_ws.write(itIdx+1, 5, reduce( lambda total,story: total+story.points_value(), iteration_stories, 0 ) )
         iteration_ws.write(itIdx+1, 6, reduce( lambda total,story: total+story.points_value(), completed_stories, 0 ) )        
-        ws = w.add_sheet( iteration.name )
+        ws = w.add_sheet( cleanWorksheetName(iteration.name) )
         
         for idx,header in enumerate(headers):
             ws.write(0,idx,header[1],heading_xf)
@@ -450,3 +450,11 @@ def _importCSVIteration(iteration, file, user):
         logger.info("Failed to import CSV file")
     logger.info("Found %d rows in a CSV file" % count)
     _importData( import_data, iteration, user )
+
+def cleanWorksheetName( name ):
+    invalidchars = "[]*/\?:=;"    
+    tmp = name
+    for char in invalidchars:
+        tmp = tmp.replace(char,"")
+    tmp = tmp[:31]
+    return tmp

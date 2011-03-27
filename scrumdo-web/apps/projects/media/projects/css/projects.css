@@ -410,8 +410,9 @@ h1 a {
 
 
 #subIterationList {
+  color: #444444;
   background-color: #fff;
-  width: 100px;
+  width: 150px;
   position: absolute;
   border-top: 1px solid #e1e1e1;
   overflow: auto;
@@ -426,6 +427,15 @@ h1 a {
   border-bottom: 1px solid #e1e1e1;
   border-left: 1px solid #e1e1e1;
   border-right: 1px solid #e1e1e1;
+}
+
+.subIteration {
+    cursor: pointer;
+}
+
+.subIteration:hover {
+    color: #000000;
+    text-decoration: underline;
 }
 
 .projectOptionsForm tr {

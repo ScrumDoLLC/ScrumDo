@@ -31,9 +31,12 @@ urlpatterns = patterns('organizations.views',
     url(r'^(?P<organization_slug>[-\w]+)/$', 'organization', name="organization_detail"),
     url(r'^(?P<organization_slug>[-\w]+)/edit$', 'organization_edit', name="organization_edit"),
     url(r'^(?P<organization_slug>[-\w]+)/export$', 'export_organization', name="export_organization"),
+    url(r'^(?P<organization_slug>[-\w]+)/delete$', 'delete_organization', name="delete_organization"),
+    
 )
 
 
 urlpatterns += patterns('organizations.team_views',
    url(r'^(?P<organization_slug>[-\w]+)/team/create$', 'team_create', name="team_create"),
+   url(r'^(?P<organization_slug>[-\w]+)/team/(?P<team_id>[0-9]+)/delete$', 'team_delete', name="team_delete"),
 )

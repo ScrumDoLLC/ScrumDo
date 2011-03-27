@@ -7,7 +7,7 @@
 
 {% block panel %}
     {% if user.is_authenticated %}
-    <div id="panel">
+    <div id="panel" class="panel_borders">
       <div class="box">
         <div class="box-content">
           <a href="{% url acct_email %}">{% trans "E-Mail Addresses" %}
