@@ -49,14 +49,17 @@ class Activity(InheritanceCastModel):
       # with we partially use, is InheritanceCastModel and InheritanceCastMixin. The problem with the latter is that it does not seem to suppo
 
       def combine(u, a, it, acts):
-        if a.name == "reordered" and len(acts) > 1:
-          story = acts[0].story
-          return [IterationActivity(project = story.project, user=u, iteration=story.iteration, created=story.created, action=a, numstories=len(acts))]
-        elif allinstances(acts, StoryActivity):
-          # if they are the same action about the same story, together, only show the most recent one
-          return [list(acts)[0] for (st,s),acts in groupby(acts, lambda act: (act.story_id, act.status))]
-        #to add other combinations, simply add elif clauses here
-        else:
+        try:
+          if a.name == "reordered" and len(acts) > 1:
+            story = acts[0].story
+            return [IterationActivity(project = story.project, user=u, iteration=story.iteration, created=story.created, action=a, numstories=len(acts))]
+          elif allinstances(acts, StoryActivity):
+            # if they are the same action about the same story, together, only show the most recent one
+            return [list(acts)[0] for (st,s),acts in groupby(acts, lambda act: (act.story_id, act.status))]
+          #to add other combinations, simply add elif clauses here
+          else:
+            return acts
+        except:
           return acts
 
       if len(activities) > 0:
