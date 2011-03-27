@@ -24,7 +24,10 @@ class ProjectStories(Feed):
         return obj.get_absolute_url()
 
     def item_link(self, obj):
-        return obj.get_absolute_url()
+        try:
+            return obj.get_absolute_url()
+        except:
+            return ""
 
     def description(self, obj):
         return "Recent work in all iterations of project."
