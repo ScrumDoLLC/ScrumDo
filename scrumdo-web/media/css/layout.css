@@ -405,3 +405,8 @@
     vertical-align: text-top;
 }
 
+.hide_burndown_chart_link {
+    text-decoration: none;
+    font-size: 8px;
+    float:right;
+}

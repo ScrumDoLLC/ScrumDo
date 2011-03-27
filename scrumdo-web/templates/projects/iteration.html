@@ -16,6 +16,9 @@
 
 {% block head_title %}{{ project.name }}{% endblock %}
 
+{% block extra_head %}
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.cookie.js"></script>
+{% endblock %}
 
 {% block add_story %}
     {% if user.is_authenticated %}
@@ -33,11 +36,14 @@
         {% if iteration.start_date %}<i>{{iteration.start_date|date:"M d, Y"}} - {{iteration.end_date|date:"M d, Y"}}</i>{% endif %}
         
         {% if not iteration.default_iteration %}
+        <div id="burnup_chart">
           {% if iteration.points_log.count %}
-            <div id="iterationBurndown" style="width:100%;height:200px;"></div>  
+            <div id="iterationBurndown" style="width:100%;height:200px;"></div>              
           {% else %}
             <br/><img src="/site_media/static/images/burndown.png">
           {% endif %}
+        </div>
+          <a class="hide_burndown_chart_link" href="#">Hide Chart</a>
         {% else %}
           This is your Backlog, it's where new stories are created.  It represents the total amount of work left to do on the project.
         {% endif %}
@@ -224,8 +230,34 @@ function updateStoryList()
 {
   loadIteration( "{{ iteration.id }}","","")  ;
 }
-     
+
+
+$(".hide_burndown_chart_link").click( function() {
+  $("#burnup_chart").toggle();
+  if( $('#burnup_chart').is(':visible') ) 
+  {
+    $(".hide_burndown_chart_link").text("Hide Chart");
+    $.cookie("chart", "visible");
+    {% if iteration.points_log.count %}      
+    	generateBurnDown( "#iterationBurndown", "{{project.slug}}" , "{{iteration.id}}" , 0);         
+  	{% endif %}
+  }
+  else
+  {
+    $(".hide_burndown_chart_link").text("Show Chart");
+    $.cookie("chart", "hidden");
+  }
+  
+} );
+
 $(document).ready(function() {
+  
+
+  if( $.cookie("chart") == "hidden" )
+  {
+    $("#burnup_chart").hide();
+    $(".hide_burndown_chart_link").text("Show Chart");
+  }
          
 	$(".subIteration").click( function() 
 				  {
