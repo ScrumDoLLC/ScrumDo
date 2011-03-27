@@ -114,6 +114,30 @@ def organization_edit( request, organization_slug):
         "form":form
       }, context_instance=RequestContext(request))
 
+def handle_organization_create( form , request, projects):
+    organization = form.save( commit=False )
+    organization.creator = request.user
+    organization.save()
+
+    default_team = Team(organization = organization, name="Owners", access_type="admin")
+    default_team.save()
+
+    default_team.members.add(request.user)
+
+    member_team = Team(organization = organization, name="Members", access_type="write")
+    member_team.save()
+    
+    signals.organization_created.send( sender=request, organization=organization )
+
+    request.user.message_set.create(message="Organization Created.")
+    
+    for project in projects:
+        if request.POST.get("move_project_%d" % project.id):
+            _move_project_to_organization(project, organization, member_team)
+            default_team.projects.add( project )
+    default_team.save()
+    return organization
+
 @login_required
 def organization_create(request):
     projects = Project.objects.filter(creator=request.user)    
@@ -122,28 +146,7 @@ def organization_create(request):
         form = OrganizationForm( request.POST)
         
         if form.is_valid(): # All validation rules pass
-            organization = form.save( commit=False )
-            organization.creator = request.user
-            organization.save()
-
-            default_team = Team(organization = organization, name="Owners", access_type="admin")
-            default_team.save()
-
-            default_team.members.add(request.user)
-            
-
-            member_team = Team(organization = organization, name="Members", access_type="write")
-            member_team.save()
-            
-            signals.organization_created.send( sender=request, organization=organization )
-
-            request.user.message_set.create(message="Organization Created.")
-            
-            for project in projects:
-                if request.POST.get("move_project_%d" % project.id):
-                    _move_project_to_organization(project, organization, member_team)
-                    default_team.projects.add( project )
-            default_team.save()
+            organization = handle_organization_create(form, request, projects )
             return HttpResponseRedirect(reverse("organization_detail",  kwargs={'organization_slug':organization.slug}))
     else:
         form = OrganizationForm()
