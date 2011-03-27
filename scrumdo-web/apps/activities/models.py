@@ -12,7 +12,7 @@ from activities.utils import allinstances, instanceof
 
 from django.core.cache import cache
 
-from model_utils.models import InheritanceCastModel
+from scrumdo_model_utils.models import InheritanceCastModel
 
 class ActivityAction(models.Model):
   name = models.TextField(_("action"), max_length=100)
