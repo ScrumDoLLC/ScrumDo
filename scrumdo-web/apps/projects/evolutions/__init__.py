@@ -1,1 +1,1 @@
-SEQUENCE = ['add_token']
+SEQUENCE = []
