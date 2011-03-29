@@ -42,7 +42,7 @@ function plotBurndown( divID, series, options)
                       $("#tooltip").remove();
                       var date = new Date(item.datapoint[0]);
                      // alert(item);
-                      var x = (date.getMonth()+1) + "/" + date.getDay() + "/" + date.getFullYear(),
+                      var x = (date.getMonth()+1) + "/" + date.getDate() + "/" + date.getFullYear(),
                           y = item.datapoint[1];
 
                       showTooltip(item.pageX, item.pageY, x + "<br/>" + y + " points");
