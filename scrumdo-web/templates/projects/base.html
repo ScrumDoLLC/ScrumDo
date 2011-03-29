@@ -106,6 +106,7 @@
 	{% endcanwrite %}
 	{% endif %}    
 	<a href="#iterationDetails" rel="facebox">{% silk "table_edit" %} Edit Details</a><br/>
+	<a href="{% url scrum_board project.slug iteration.id %}">{% silk "application_view_icons" %} Scrum Board</a><br/>
 	<a rel="facebox" href="{% url iteration_export iteration.project.slug iteration.id %}">{% silk "lorry" %} Export</a><br/>
 	{% canwrite project %}
 	<a rel="facebox" href="{% url iteration_import iteration.project.slug iteration.id %}">{% silk "wand" %} Import</a><br/>

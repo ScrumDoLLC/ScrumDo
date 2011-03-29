@@ -27,6 +27,7 @@ from django.utils.datastructures import SortedDict
 from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponse
 from django.core import serializers
+from django.core.exceptions import PermissionDenied
 import datetime
 
 from projects.calculation import onDemandCalculateVelocity
@@ -175,6 +176,8 @@ def iteration_report(request, group_slug, iteration_id):
     project = get_object_or_404(Project, slug=group_slug)
     iteration = get_object_or_404(Iteration, id=iteration_id)
     read_access_or_403(project,request.user)
+    if iteration.project != project:
+        raise PermissionDenied()
     return render_to_response('projects/iteration_report.html', { 'project':project, 'iteration':iteration  }, context_instance=RequestContext(request))
 
 @login_required
@@ -182,6 +185,9 @@ def iteration_export(request, group_slug, iteration_id):
     project = get_object_or_404(Project, slug=group_slug)
     iteration = get_object_or_404(Iteration, id=iteration_id)
     write_access_or_403(project,request.user)
+    if iteration.project != project:
+        raise PermissionDenied()
+    
     if request.method == "POST":
         form = ExportForm(request.POST)
         if form.is_valid():
@@ -195,3 +201,16 @@ def iteration_export(request, group_slug, iteration_id):
         form = ExportForm()
 
     return render_to_response('projects/export_options.html', { 'project':project, 'iteration':iteration, 'form': form,  }, context_instance=RequestContext(request))
+
+
+@login_required
+def scrum_board(request, group_slug, iteration_id):
+    project = get_object_or_404(Project, slug=group_slug)
+    iteration = get_object_or_404(Iteration, id=iteration_id)
+    read_access_or_403(project,request.user)
+    if iteration.project != project:
+        raise PermissionDenied()
+    
+    add_story_form = handleAddStory(request, project)
+    
+    return render_to_response('projects/scrum_board.html', { 'project':project, 'iteration':iteration, "add_story_form":add_story_form  }, context_instance=RequestContext(request))

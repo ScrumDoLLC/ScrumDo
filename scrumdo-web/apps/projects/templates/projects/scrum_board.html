@@ -1,0 +1,40 @@
+{% extends "projects/base.html" %}
+
+{% load i18n %}
+{% load uni_form %}
+{% load avatar_tags %}
+{% load threadedcommentstags %}
+{% load pagination_tags %}
+{% load extra_tagging_tags %}
+{% load projects_tags %}
+{% load iteration_tags %}
+{% load group_tags %}
+{% load topics_tags %}
+{% load wiki_tags %}
+{% load theme_tags %}
+{% load iteration_tags %}
+
+{% block head_title %}{{ project.name }}{% endblock %}
+
+{% block extra_head %}
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.cookie.js"></script>
+{% endblock %}
+
+{% block add_story %}
+    {% if user.is_authenticated %}
+    {% canwrite project %}
+      {% include "stories/add_story_form.html" %}
+    {% endcanwrite %}
+
+    {% endif %}
+{% endblock %}
+
+
+{% block body %}
+   
+    
+    
+{% endblock %}
+
+{% block extra_body %}
+{% endblock %}
