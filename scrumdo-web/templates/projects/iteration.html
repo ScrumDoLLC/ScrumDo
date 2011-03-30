@@ -40,7 +40,7 @@
           {% if iteration.points_log.count %}
             <div id="iterationBurndown" style="width:100%;height:200px;"></div>              
           {% else %}
-            <br/><img src="/site_media/static/images/burndown.png">
+          <br/><img src="{{ STATIC_URL }}images/burndown.png">
           {% endif %}
         </div>
           <a class="hide_burndown_chart_link" href="#">Hide Chart</a>
@@ -50,7 +50,7 @@
         
         <div style="clear:both;">&nbsp;</div>
 
-        <img style="float:right" src="/site_media/static/images/ajax-loader.gif" id="loadingIcon">
+        <img style="float:right" src="{{ STATIC_URL }}images/ajax-loader.gif" id="loadingIcon">
         <h1>Stories</h1>
 
         {% with iteration.id as iteration_id %}
