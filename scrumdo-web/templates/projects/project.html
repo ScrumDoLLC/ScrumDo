@@ -56,7 +56,7 @@
       {% if iteration.points_log.count %}
         <div id="iterationBurndown_{{iteration.id}}" style="width:740px;height:300px;"></div>  
       {% else %}
-        <img src="/site_media/static/images/burndown.png">
+      <img src="{{ STATIC_URL }}images/burndown.png">
       {% endif %}
     {% endfor %}
 
@@ -64,7 +64,7 @@
     {% if project.points_log.count %}
       <div id="overallBurndown" style="width:740px;height:300px;"></div>
     {% else %}
-      <img src="/site_media/static/images/burndown.png" />
+        <img src="{{ STATIC_URL }}images/burndown.png" />
     {% endif %}
 
 
