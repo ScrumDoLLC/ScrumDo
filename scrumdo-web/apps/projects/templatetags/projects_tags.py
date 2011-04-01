@@ -1,16 +1,16 @@
-# ScrumDo - Agile/Scrum story management web application 
+# ScrumDo - Agile/Scrum story management web application
 # Copyright (C) 2011 ScrumDo LLC
-# 
+#
 # This software is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
 # License as published by the Free Software Foundation; either
 # version 2.1 of the License, or (at your option) any later version.
-# 
+#
 # This software is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Lesser General Public License for more details.
-# 
+#
 # You should have received a copy (See file COPYING) of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -39,26 +39,26 @@ def probable_email(user):
     for email in addrs:
         if email.verified:
             return email.email
-            
+
     # no verified, no primary emails...
     if len(addrs) > 0:
         return addrs[0].email
-        
+
     return ""
 
 @stringfilter
 def link_stories(value, project):
 
-  def replaceLink( value ):
-    try:
-      local_id = value.group(1)
-      story = Story.objects.get( project=project, local_id=int(local_id) )  
-      return "<a class='storyLink' onclick=\"jQuery.facebox({ ajax: '/projects/project/%s/story/%d?return_type=block'}); return false;\" >%s</a>" % (project.slug, story.id, value.group(0))
-    except:
-      return value.group(0)
-  
-  return re.sub(r'[sS]tory #([0-9]+)', replaceLink , value)
-  
+    def replaceLink( value ):
+        try:
+            local_id = value.group(1)
+            story = Story.objects.get( project=project, local_id=int(local_id) )
+            return "<a class='storyLink' onclick=\"jQuery.facebox({ ajax: '/projects/project/%s/story/%d?return_type=block'}); return false;\" >%s</a>" % (project.slug, story.id, value.group(0))
+        except:
+            return value.group(0)
+
+    return re.sub(r'[sS]tory #([0-9]+)', replaceLink , value)
+
 link_stories.is_safe=True
 
 # <a onclick="jQuery.facebox({ ajax: '/projects/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=mini'}); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}"><img title="Story Details" src="/site_media/static/pinax/images/silk/icons/magnifier.png" /></a>
@@ -91,40 +91,40 @@ def persist_getvars(request):
 
 @register.tag(name="notlocked")
 def isNotLocked(parser, token):
-  tag_name, story = token.split_contents()
-  nodelist = parser.parse(('endnotlocked',))
-  parser.delete_first_token()
-  return NotLockedNode(nodelist, story)
+    tag_name, story = token.split_contents()
+    nodelist = parser.parse(('endnotlocked',))
+    parser.delete_first_token()
+    return NotLockedNode(nodelist, story)
 
 class NotLockedNode(template.Node):
     def __init__(self, nodelist, story):
         self.nodelist = nodelist
         self.story = story
     def render(self, context):
-      if not context[self.story].iteration.locked:
-        output = self.nodelist.render(context)
-        return output
-      else:
-        return ""
-        
+        if not context[self.story].iteration.locked:
+            output = self.nodelist.render(context)
+            return output
+        else:
+            return ""
+
 @register.tag(name="locked")
 def istLocked(parser, token):
-  tag_name, story = token.split_contents()
-  nodelist = parser.parse(('endlocked',))
-  parser.delete_first_token()
-  return LockedNode(nodelist, story)
+    tag_name, story = token.split_contents()
+    nodelist = parser.parse(('endlocked',))
+    parser.delete_first_token()
+    return LockedNode(nodelist, story)
 
 class LockedNode(template.Node):
     def __init__(self, nodelist, story):
         self.nodelist = nodelist
         self.story = story
     def render(self, context):
-      if context[self.story].iteration.locked:
-        output = self.nodelist.render(context)
-        return output
-      else:
-        return ""        
-    
+        if context[self.story].iteration.locked:
+            output = self.nodelist.render(context)
+            return output
+        else:
+            return ""
+
 @register.tag(name="isadmin")
 def isadmin( parser, token):
     tag_name, project = token.split_contents()
@@ -137,13 +137,13 @@ class IsAdminNode(template.Node):
         self.nodelist = nodelist
         self.project = project
     def render(self, context):
-      if has_admin_access(context[self.project], context["request"].user):
-        output = self.nodelist.render(context)
-        return output
-      else:
-        return ""
-    
-    
+        if has_admin_access(context[self.project], context["request"].user):
+            output = self.nodelist.render(context)
+            return output
+        else:
+            return ""
+
+
 @register.tag(name="canwrite")
 def canwrite( parser, token):
     tag_name, project = token.split_contents()
@@ -156,11 +156,11 @@ class CanWriteNode(template.Node):
         self.nodelist = nodelist
         self.project = project
     def render(self, context):
-      if has_write_access(context[self.project], context["request"].user):
-        output = self.nodelist.render(context)
-        return output
-      else:
-        return ""
+        if has_write_access(context[self.project], context["request"].user):
+            output = self.nodelist.render(context)
+            return output
+        else:
+            return ""
 
 
 @register.tag(name="canread")
@@ -175,8 +175,8 @@ class CanReadNode(template.Node):
         self.nodelist = nodelist
         self.project = project
     def render(self, context):
-      if has_read_access(context[self.project], context["request"].user):
-        output = self.nodelist.render(context)
-        return output
-      else:
-        return ""
+        if has_read_access(context[self.project], context["request"].user):
+            output = self.nodelist.render(context)
+            return output
+        else:
+            return ""

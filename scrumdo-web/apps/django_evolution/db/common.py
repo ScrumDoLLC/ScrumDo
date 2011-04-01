@@ -10,7 +10,7 @@ class BaseEvolutionOperations(object):
 
     def __init__(self, connection = default_connection):
         self.connection = connection
-        
+
     def quote_sql_param(self, param):
         "Add protective quoting around an SQL string parameter"
         if isinstance(param, basestring):
@@ -145,7 +145,7 @@ class BaseEvolutionOperations(object):
         qn = self.connection.ops.quote_name
         params = (qn(model._meta.db_table), qn(f.column),)
         if null:
-           return 'ALTER TABLE %s ALTER COLUMN %s DROP NOT NULL;' % params
+            return 'ALTER TABLE %s ALTER COLUMN %s DROP NOT NULL;' % params
         else:
             return 'ALTER TABLE %s ALTER COLUMN %s SET NOT NULL;' % params
 

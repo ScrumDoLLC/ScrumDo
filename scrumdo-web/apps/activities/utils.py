@@ -1,7 +1,7 @@
 from django.db.models import fields
 
 def model_differences(m1, m2, excludes = [], dicts=False):
-    """ this function takes two models and compares them. 
+    """ this function takes two models and compares them.
     optionally takes two dicts created by running model_instance.__dict__ """
     changes = {}
     if not dicts:

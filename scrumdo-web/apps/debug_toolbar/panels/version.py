@@ -24,7 +24,7 @@ class VersionDebugPanel(DebugPanel):
 
     def url(self):
         return ''
-    
+
     def title(self):
         return _('Versions')
 

@@ -437,4 +437,3 @@ class OutputPHPFilter(Filter):
             varname = self.varname
         stmt.tokens = tuple(self._process(stmt.tokens, varname))
         return stmt
-

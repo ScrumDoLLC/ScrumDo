@@ -74,7 +74,7 @@ class Organization(models.Model):
 
     def hasReadAccess( self, user ):
         if self.creator == user:
-            return True        
+            return True
         return (self.teams.filter( members=user ).count() > 0)
 
     # returns all organizations the user has read/write access to

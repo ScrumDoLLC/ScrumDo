@@ -224,9 +224,9 @@ def _reduce_burndown_data( data ):
     """
     if len(data) < 30:
         return data
-        
+
     subset = data[1:-1] # Subset of data that never includes first/last
-    remove = []     
+    remove = []
     for idx,item in enumerate( subset ):
                 # idx = index before this item in data
                 # idx+1 = this item in data
@@ -238,7 +238,7 @@ def _reduce_burndown_data( data ):
             # don't need this item!
             remove.append(idx+1)
             # logger.debug("Can remove %d" % (idx+1))
-    
+
     remove.reverse()
     for remove_index in remove:
         del data[remove_index:(remove_index+1)]
@@ -516,7 +516,7 @@ def record_prediction(predictions, stories,iteration_number,start_date,iteration
     predictions.append( { "carried":points_left, "stories":stories , "points":points, "num":iteration_number, "start":start_date, "end":(start_date +  datetime.timedelta(days=(iteration_length-1))) } )
 
 @login_required
-def export_project(request, group_slug):    
+def export_project(request, group_slug):
     project = get_object_or_404(Project, slug=group_slug)
     read_access_or_403(project, request.user )
     return exportProject( project )

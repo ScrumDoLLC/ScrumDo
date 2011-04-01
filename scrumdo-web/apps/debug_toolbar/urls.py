@@ -1,5 +1,5 @@
 """
-URLpatterns for the debug toolbar. 
+URLpatterns for the debug toolbar.
 
 These should not be loaded explicitly; the debug toolbar middleware will patch
 this into the urlconf for the request.

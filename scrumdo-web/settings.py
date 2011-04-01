@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
 
-# ScrumDo - Agile/Scrum story management web application 
+# ScrumDo - Agile/Scrum story management web application
 # Copyright (C) 2011 ScrumDo LLC
-# 
+#
 # This software is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
 # License as published by the Free Software Foundation; either
 # version 2.1 of the License, or (at your option) any later version.
-# 
+#
 # This software is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Lesser General Public License for more details.
-# 
+#
 # You should have received a copy (See file COPYING) of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -105,8 +105,8 @@ ADMIN_MEDIA_PREFIX = posixpath.join(STATIC_URL, "admin/")
 SECRET_KEY = 'cl@#$@#!%$^!42164363246y@18*^@-!+$fu^q!sa6yh2^'
 
 # List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.load_template_source',
+TEMPLATE_LOADERS = (    
+    'django.template.loaders.filesystem.load_template_source',    
     'django.template.loaders.app_directories.load_template_source',
 )
 
@@ -140,7 +140,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.debug",
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
-    "django.core.context_processors.request",  
+    "django.core.context_processors.request",
     "projects.context_processors.projects_constants",
     "pinax.core.context_processors.pinax_settings",
     "announcements.context_processors.site_wide_announcements",
@@ -158,7 +158,7 @@ INSTALLED_APPS = (
     'django.contrib.markup',
     'django.contrib.admin',
     'pinax.templatetags',
-    
+
     # external
     'django_openid',
     'emailconfirmation',
@@ -177,7 +177,7 @@ INSTALLED_APPS = (
     'django_markup',
     'django_filters',
     'staticfiles',
-        
+
     # internal (for now)
     'basic_profiles',
     'account',
@@ -195,7 +195,6 @@ INSTALLED_APPS = (
     'django_evolution',
     'extras',
     'activities',
-    'poker',
 #    'debug_toolbar',
 )
 
@@ -227,13 +226,13 @@ LOGIN_URL = "/account/login/"
 LOGIN_REDIRECT_URLNAME = "projects.views.home"
 
 
-EMAIL_HOST='localhost' 
-EMAIL_HOST_USER=''                  
-EMAIL_HOST_PASSWORD=''        
+EMAIL_HOST='localhost'
+EMAIL_HOST_USER=''
+EMAIL_HOST_PASSWORD=''
 EMAIL_PORT='25'
 
 CONTACT_EMAIL = "help@example.com"
-DEFAULT_FROM_EMAIL = 'noreply@example.com'   
+DEFAULT_FROM_EMAIL = 'noreply@example.com'
 SERVER_EMAIL = 'noreply@example.com'
 SUPPORT_URL = "http://support.example.com/"
 
@@ -262,8 +261,8 @@ except ImportError:
     pass
 
 
-if DEBUG:      
-  logging.basicConfig(
-      level = logging.DEBUG,
-      format = '%(levelname)s \033[35m%(message)s\033[0m (%(filename)s:%(lineno)d)',
-  )
+if DEBUG:
+    logging.basicConfig(
+        level = logging.DEBUG,
+        format = '%(levelname)s \033[35m%(message)s\033[0m (%(filename)s:%(lineno)d)',
+    )

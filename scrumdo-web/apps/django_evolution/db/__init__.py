@@ -18,4 +18,3 @@ class EvolutionOperationsMulti(object):
             self.evolver = module.EvolutionOperations()
     def get_evolver(self):
         return self.evolver
-

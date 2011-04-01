@@ -24,7 +24,7 @@ if 'friends' in settings.INSTALLED_APPS:
 
 def _get_next(request):
     """
-    The part that's the least straightforward about views in this module is how they 
+    The part that's the least straightforward about views in this module is how they
     determine their redirects after they have finished computation.
 
     In short, they will try and determine the next place to go in the following order:
@@ -53,7 +53,7 @@ def change(request, extra_context={}, next_override=None):
     if request.method == "POST":
         updated = False
         if 'avatar' in request.FILES:
-            path = avatar_file_path(user=request.user, 
+            path = avatar_file_path(user=request.user,
                 filename=request.FILES['avatar'].name)
             avatar = Avatar(
                 user = request.user,
@@ -83,7 +83,7 @@ def change(request, extra_context={}, next_override=None):
         extra_context,
         context_instance = RequestContext(
             request,
-            { 'avatar': avatar, 
+            { 'avatar': avatar,
               'avatars': avatars,
               'primary_avatar_form': primary_avatar_form,
               'next': next_override or _get_next(request), }
@@ -119,7 +119,7 @@ def delete(request, extra_context={}, next_override=None):
         extra_context,
         context_instance = RequestContext(
             request,
-            { 'avatar': avatar, 
+            { 'avatar': avatar,
               'avatars': avatars,
               'delete_avatar_form': delete_avatar_form,
               'next': next_override or _get_next(request), }

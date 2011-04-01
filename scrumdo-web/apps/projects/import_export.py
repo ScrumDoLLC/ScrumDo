@@ -72,24 +72,24 @@ def exportProject( project ):
     headers = _getHeaders(project)
     iter_format = ezxf('align: wrap on, vert top')
     headers = [(100,"Iteration", lambda story: story.iteration.name , iter_format , None)] + headers
-    
+
     heading_xf = ezxf('font: bold on; align: wrap on, vert centre, horiz center')
     date_xf = xlwt.XFStyle()
     date_xf.num_format_str = 'MM/dd/YYYY'
-    
+
     # Write out a header row.
     for idx,header in enumerate(headers):
         ws.write(0,idx,header[1],heading_xf)
         ws.col(idx).width = 37*header[0]
-        
+
     # Write out the first sheet of all the stories
     for idx, story in enumerate(stories):
         for hidx, header in enumerate(headers):
             f = header[2]
-            ws.write(1+idx,hidx, f(story), header[3] )   
-            
+            ws.write(1+idx,hidx, f(story), header[3] )
+
     headers = _getHeaders(project)
-    
+
     # Create the iteration sheet (it gets filled in below the tags sheet)
     iteration_ws = w.add_sheet("Iterations")
     for idx,header in enumerate( [("Iteration",150),("Start",100),("End",100),("Stories",50),("Stories Claimed",60),("Points",50),("Points Claimed",60) ] ):
@@ -108,33 +108,33 @@ def exportProject( project ):
 
     # Write out the tags sheet.
     if len( tags ) > 0:
-        ws = w.add_sheet( "Tags" )      
+        ws = w.add_sheet( "Tags" )
         for idx,header in enumerate( [("Tag",150),("Stories",50),("Stories Claimed",60),("Points",50),("Points Claimed",60)] ):
             ws.write(0,idx,header[0],heading_xf)
-            ws.col(idx).width = 37*header[1]          
+            ws.col(idx).width = 37*header[1]
         for idx,tag in enumerate( tags ):
             stories = tags[tag]
-            completed_stories = [story for story in stories if story.status==Story.STATUS_DONE ] 
+            completed_stories = [story for story in stories if story.status==Story.STATUS_DONE ]
             ws.write(idx+1,0,tag)
             ws.write(idx+1,1, len(stories) )
             ws.write(idx+1,2, len(completed_stories) )
             ws.write(idx+1,3, reduce( lambda total,story: total+story.points_value(), stories, 0 ) )
             ws.write(idx+1,4, reduce( lambda total,story: total+story.points_value(), completed_stories, 0 ) )
 
-    
+
     # Write data to the iteration sheet, plus create one sheet per iteration.
     for itIdx, iteration in enumerate(project.iterations.all()):
         iteration_stories = iteration.stories.all()
-        completed_stories = [story for story in iteration_stories if story.status==Story.STATUS_DONE ] 
+        completed_stories = [story for story in iteration_stories if story.status==Story.STATUS_DONE ]
         iteration_ws.write(itIdx+1, 0, iteration.name )
         iteration_ws.write(itIdx+1, 1, iteration.start_date , date_xf)
-        iteration_ws.write(itIdx+1, 2, iteration.end_date , date_xf)        
+        iteration_ws.write(itIdx+1, 2, iteration.end_date , date_xf)
         iteration_ws.write(itIdx+1, 3, len(iteration_stories) )
         iteration_ws.write(itIdx+1, 4, len(completed_stories) )
         iteration_ws.write(itIdx+1, 5, reduce( lambda total,story: total+story.points_value(), iteration_stories, 0 ) )
-        iteration_ws.write(itIdx+1, 6, reduce( lambda total,story: total+story.points_value(), completed_stories, 0 ) )        
+        iteration_ws.write(itIdx+1, 6, reduce( lambda total,story: total+story.points_value(), completed_stories, 0 ) )
         ws = w.add_sheet( cleanWorksheetName(iteration.name) )
-        
+
         for idx,header in enumerate(headers):
             ws.write(0,idx,header[1],heading_xf)
             ws.col(idx).width = 37*header[0]
@@ -143,7 +143,7 @@ def exportProject( project ):
                 f = header[2]
                 ws.write(1+idx,hidx, f(story), header[3] )
 
-     
+
     w.save(response)
     return response
 
@@ -248,7 +248,7 @@ def _exportExcel( iteration ):
 
     # Write out all the data.
     for idx, story in enumerate(stories):
-        
+
         for hidx, header in enumerate(headers):
             f = header[2]
             ws.write(1+idx,hidx, f(story), header[3] )
@@ -452,7 +452,7 @@ def _importCSVIteration(iteration, file, user):
     _importData( import_data, iteration, user )
 
 def cleanWorksheetName( name ):
-    invalidchars = "[]*/\?:=;"    
+    invalidchars = "[]*/\?:=;"
     tmp = name
     for char in invalidchars:
         tmp = tmp.replace(char,"")

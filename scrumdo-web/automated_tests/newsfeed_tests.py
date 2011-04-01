@@ -31,7 +31,7 @@ class NewsfeedTests(unittest.TestCase):
         try: self.failUnless(sel.is_text_present("Test story from automated tests"))
         except AssertionError, e: self.verificationErrors.append(str(e))
         sel.click("link=Logout")
-        sel.wait_for_page_to_load("30000")        
+        sel.wait_for_page_to_load("30000")
 
     def test_newsfeed_activity_create(self):
         sel = self.selenium
@@ -73,11 +73,10 @@ class NewsfeedTests(unittest.TestCase):
         try: self.failUnless(sel.is_text_present("created Test story to see if newsfeed is working"))
         except AssertionError, e: self.verificationErrors.append(str(e))
 
-    
+
     def tearDown(self):
         self.selenium.stop()
         self.assertEqual([], self.verificationErrors)
 
 if __name__ == "__main__":
     unittest.main()
-

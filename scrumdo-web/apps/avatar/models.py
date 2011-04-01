@@ -31,20 +31,20 @@ class Avatar(models.Model):
     primary = models.BooleanField(default=False)
     avatar = models.ImageField(max_length=1024, upload_to=avatar_file_path, blank=True)
     date_uploaded = models.DateTimeField(default=datetime.datetime.now)
-    
+
     def __unicode__(self):
         return _(u'Avatar for %s') % self.user
-    
+
     def save(self, force_insert=False, force_update=False):
         if self.primary:
             avatars = Avatar.objects.filter(user=self.user, primary=True)\
                 .exclude(id=self.id)
             avatars.update(primary=False)
         super(Avatar, self).save(force_insert, force_update)
-    
+
     def thumbnail_exists(self, size):
         return self.avatar.storage.exists(self.avatar_name(size))
-    
+
     def create_thumbnail(self, size):
         try:
             orig = self.avatar.storage.open(self.avatar.name, 'rb').read()
@@ -74,10 +74,10 @@ class Avatar(models.Model):
             # Errors in other circumstances could also happen...
             thumb_file = ContentFile(orig)
             thumb = self.avatar.storage.save(self.avatar_name(size), thumb_file)
-    
+
     def avatar_url(self, size):
         return self.avatar.storage.url(self.avatar_name(size))
-    
+
     def avatar_name(self, size):
         return os.path.join(AVATAR_STORAGE_DIR, self.user.username,
             'resized', str(size), self.avatar.name)

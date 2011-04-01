@@ -31,7 +31,7 @@ class ProjectStories(Feed):
 
     def description(self, obj):
         return "Recent work in all iterations of project."
- 
+
     def items(self, obj):
         activities = Activity.objects.filter(project = obj)
         return [activity.mergeChildren() for activity in activities[:30]]
@@ -43,13 +43,13 @@ def getIterationsStories(iterations):
         activities.extend(IterationActivity.objects.filter(iteration=iteration))
     print activities
     return sorted(activities[:30], lambda a,b: cmp(a.created,b.created))
-    
+
 
 
 class ProjectCurrentStories(ProjectStories):
     def description(self, obj):
         return "Recent work in current iteration of project."
- 
+
     def items(self, obj):
         iterations = obj.get_current_iterations()
         return getIterationsStories(iterations)
@@ -78,6 +78,6 @@ class ProjectIterationStories(Feed):
 
     def description(self, obj):
         return "Stories in Iteration %s of project." % obj[1].name
- 
+
     def items(self, obj):
         return getIterationsStories([obj[1]])
