@@ -379,6 +379,46 @@
     border-bottom: 1px solid #c0c0c0;
 }
 
+.project-team a {
+    text-decoration: none;
+    color: #000000;
+}
+.project-team {
+    display: inline-block;
+	border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -o-border-radius: 4px;
+    -khtml-border-radius: 4px;
+    border: 1px solid #c0c0c0;
+    min-width:90px;
+    min-height:72px;
+    padding:5px;
+    text-align: center;
+    vertical-align: center;
+    background-color: #dddddd;
+    font-weight: bold;
+    font-size: 16px;
+    margin: 5px;
+    behavior: url(/site_media/static/css/PIE.htc);
+}
+.project-member {
+    display: inline-block;
+	border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -o-border-radius: 4px;
+    -khtml-border-radius: 4px;
+    border: 1px solid #c0c0c0;
+    min-width:90px;
+    font-weight: normal;
+    padding:5px;
+    text-align: center;
+    vertical-align: center;
+    background-color: #ffffff;
+    margin: 3px;
+    behavior: url(/site_media/static/css/PIE.htc);
+}
 
 #connection_error {
 	text-align: center;

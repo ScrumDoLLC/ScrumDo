@@ -17,6 +17,42 @@
 
 {% block body %}    
   <h1>{{ project.name }}</h1>
+
+  <h2>Project Members</h2>
+    
+
+    {% for team in project.teams.all %}
+      <div class="project-team">
+         <a href="{% url organization_detail project.organization.slug %}">{{project.organization.name}} - {{team.name}}</a><br/>
+         {% for member in team.members.all %}
+     	  <div class="project-member">
+     	    {{ member.username }}<br/>     	   
+           <div class="avatar">{% avatar member 48 %}</div>
+         </div>
+     	  {% endfor %}
+      </div>
+      
+    {% endfor %}
+
+    <br/>
+	  {% for member in project.members.all %}
+	  <div class="project-member">
+	    {{ member.user.username }}<br/>
+	    <br/>
+      <div class="avatar">{% avatar member.user 48 %}</div>
+      <a href="#" user_id="{{member.user.id}}" class="remove_user_link deleteLink">Remove</a>
+    </div>
+	  {% endfor %}
+
+  {% if adduser_form %}
+  <form id="add-member" method="POST" action="">
+    {{ adduser_form.non_field_errors }}
+    {{ adduser_form.recipient }}    {{adduser_form.recipient.errors}}
+    <p><input type="hidden" name="action" value="add" />
+      <button type="submit">Add Member</button></p>
+  </form>
+  {% endif %}
+
   
   <form method="POST" action="" class="uniForm">
        {{ form.non_field_errors }}
@@ -136,6 +172,22 @@
           {% if GOOGLE_ANALYTICS %}     
              _gaq.push(['_trackEvent',"ViewPage", "ProjectAdmin"]); 
           {% endif %}      
+          
+          $(".remove_user_link").click(function(e){
+            user_id = $(this).attr("user_id");
+            if( confirm("Are you sure you want to remove the user from this project?" ) )
+            {
+              
+              $.post( "{% url remove_user project.slug %}", 
+                      {user_id:"user_id"},
+                      function(data) {
+                        $(document).trigger('close.facebox');   
+                       location.reload();
+                     });
+            }
+            return false;
+          });
+          
         
       </script>
   

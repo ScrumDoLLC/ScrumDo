@@ -125,6 +125,11 @@ def usage(request):
     return render_to_response("usage_restrictions.html", {"organizations":organizations}, context_instance=RequestContext(request))
 
 
+def remove_user( request, group_slug ):
+        project = get_object_or_404( Project, slug=group_slug )
+        admin_access_or_403(project, request.user )
+        
+        
 # The project admin page, this is where you can change the title, description, etc. of a project.
 @login_required
 def project_admin( request, group_slug ):

@@ -77,7 +77,7 @@
 	<!-- <span title="Coming Soon: Easily size stories.">{% silk "time" %} Sizing</span><br/> -->
 	{% isadmin project %}                  
  	 <a title="{% trans "Third party plugins and extra functionality." %}" href="{% url project_extras_url project.slug %}" >{% silk "plugin" %} Extras</a><br/>
-	 <a title="{% trans "Project Administration / Settings" %}" href="{% url project_admin project.slug %}" >{% silk "cog" %} Settings</a><br/>
+	 <a title="{% trans "Project Administration / Settings" %}" href="{% url project_admin project.slug %}" >{% silk "cog" %} Project Admin</a><br/>
 	{% endisadmin %}
 	{% include "projects/tools_extra.html" %}
       </div><!--box-content-->
@@ -162,32 +162,7 @@
     </div><!--box-->
     {% endif %}
 
-    <div class="members box">
-      <div class="box-title">{% trans "Members" %}</div>
-      <div class="box-content">
-	<table width="100%" >
-	  {% for member in project.members.all %}
-	  {% if forloop.counter0|divisibleby:"2" %}<tr>{% endif %}
-	    <td>
-              <div class="avatar">{% avatar member.user 16 %}</div>
-              <div class="details"><a href="{% url profile_detail member.user.username %}" title="{{ member.user.username }}">{{ member.user.username }}</a></div>
-	    </td>
-	    {% if forloop.counter0|add:"1"|divisibleby:"2" %}</tr>{% endif %}
-	  {% endfor %}
-	  {% if project.members.all|length|divisibleby:"2" %}{% else %}</tr>{% endif %}
-</table>
-{% isadmin project %} 
-{% if adduser_form %}
-<form id="add-member" method="POST" action="">
-  {{ adduser_form.non_field_errors }}
-  {{ adduser_form.recipient }}    {{adduser_form.recipient.errors}}
-  <p><input type="hidden" name="action" value="add" />
-    <button type="submit">Add Member</button></p>
-</form>
-{% endif %}
-{% endisadmin %}
-</div><!--box-content-->
-</div><!--box-->
+  
 
 {% include "projects/base_extra.html" %}
 

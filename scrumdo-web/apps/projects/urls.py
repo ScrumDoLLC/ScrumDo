@@ -37,6 +37,7 @@ urlpatterns = patterns('projects.views',
     url(r'^project/(?P<group_slug>[-\w]+)/test_data/(?P<count>[0-9]+)', 'test_data'),
     url(r'^project/(?P<group_slug>[-\w]+)/(?P<iteration_id>[-\w]+)/burndown$', 'iteration_burndown'),
     url(r'^project/(?P<group_slug>[-\w]+)/burndown$', 'project_burndown'),
+    url(r'^project/(?P<group_slug>[-\w]+)/remove_user$', 'remove_user', name="remove_user"),
     url(r'^project/(?P<group_slug>[-\w]+)/project_prediction$', 'project_prediction', name="project_prediction"),
     url(r'^project/(?P<group_slug>[-\w]+)/export$', 'export_project', name="export_project"),
 
