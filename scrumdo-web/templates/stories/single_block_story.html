@@ -16,10 +16,10 @@
   <span class="storyIcons">
     <a class="hoverDetails" onclick="jQuery.facebox({ ajax: '/projects/project/{{story.project.slug}}/story/{{story.id}}/pretty'}, 'pretty_print'); return false;" href="/projects/project/{{story.project.slug}}/story/{{story.id}}/pretty"><img title="Quick View" src="{{STATIC_URL}}pinax/images/silk/icons/magnifier.png" /></a>
     {% notlocked story %}
-    <a story_id="{{ story.id }}" class="moveIterationIcon"  href="#"><img title="Move To Another Iteration" src="/site_media/static/pinax/images/silk/icons/page_white_go.png" /></a>
-    <a onclick="setupAutoClose('#todoButtons_{{story.id}}'); jQuery('#todoButtons_{{story.id}}').show();  return false;" href="#"><img title="Set Status" src="/site_media/static/pinax/images/silk/icons/tag_red.png" /></a>
+    <a story_id="{{ story.id }}" class="moveIterationIcon"  href="#"><img title="Move To Another Iteration" src="{{ STATIC_URL }}pinax/images/silk/icons/page_white_go.png" /></a>
+    <a onclick="setupAutoClose('#todoButtons_{{story.id}}'); jQuery('#todoButtons_{{story.id}}').show();  return false;" href="#"><img title="Set Status" src="{{ STATIC_URL }}pinax/images/silk/icons/tag_red.png" /></a>
     {% endnotlocked %}
-    <a onclick="jQuery.facebox({ ajax: '/projects/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=block'}, 'edit_story'); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=block"><img title="Edit Story" src="/site_media/static/pinax/images/silk/icons/pencil.png" /></a>
+    <a onclick="jQuery.facebox({ ajax: '/projects/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=block'}, 'edit_story'); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=block"><img title="Edit Story" src="{{ STATIC_URL }}pinax/images/silk/icons/pencil.png" /></a>
     {% include "stories/single_extra_icons.html" %}</span>
     
   <h1><span style="color:#cccccc;">#{{story.local_id}}</span> {{ story.summary|escape|link_stories:story.project|safe }}</h1>
