@@ -12,7 +12,7 @@
 # Lesser General Public License for more details.
 #
 # You should have received a copy (See file COPYING) of the GNU Lesser General Public
-# License along with this library; if not, write to the Free Software
+# License along with this library;  if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 
@@ -138,6 +138,7 @@ def project_admin( request, group_slug ):
     admin_access_or_403(project, request.user )
 
     form = ProjectOptionsForm(instance=project)
+    adduser_form = AddUserForm(project=project, user=request.user)
 
     if request.method == 'POST': # If one of the three forms on the page has been submitted...
         if request.POST.get("action") == "updateProject":
@@ -164,6 +165,15 @@ def project_admin( request, group_slug ):
                 project.organization = None
                 project.save()
                 request.user.message_set.create(message="Project removed from organization")
+        if request.POST.get("action") == "add":
+            write_access_or_403(project, request.user )
+            adduser_form = AddUserForm(request.POST, project=project, user=request.user)
+            if adduser_form.is_valid():
+                adduser_form.save(request.user)
+                adduser_form = adduser_form_class(project=project, user=request.user) # clear form
+
+            
+                
 
     if project.organization:
         organizations = None
@@ -173,6 +183,7 @@ def project_admin( request, group_slug ):
     return render_to_response("projects/project_admin.html", {
         "project": project,
         "form": form,
+        "adduser_form": adduser_form,
         "organizations": organizations
       }, context_instance=RequestContext(request))
 
@@ -418,14 +429,6 @@ def project(request, group_slug=None, form_class=ProjectUpdateForm, adduser_form
             project = project_form.save()
     else:
         project_form = form_class(instance=project)
-    if action == "add":
-        write_access_or_403(project, request.user )
-        adduser_form = adduser_form_class(request.POST, project=project, user=request.user)
-        if adduser_form.is_valid():
-            adduser_form.save(request.user)
-            adduser_form = adduser_form_class(project=project, user=request.user) # clear form
-    else:
-        adduser_form = adduser_form_class(project=project, user=request.user)
 
     add_story_form = handleAddStory(request, project)
 

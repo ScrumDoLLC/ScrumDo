@@ -16,48 +16,61 @@
 {% block head_title %}{{ project.name }}{% endblock %}
 
 {% block body %}    
+
   <h1>{{ project.name }}</h1>
 
-  <h2>Project Members</h2>
+  <h2 class="page-divider">Project Members</h2>
+
     
 
     {% for team in project.teams.all %}
       <div class="project-team">
-         <a href="{% url organization_detail project.organization.slug %}">{{project.organization.name}} - {{team.name}}</a><br/>
+         <a class="team-title" href="{% url organization_detail project.organization.slug %}#team_popup_{{team.id}}">{{project.organization.name}} - {{team.name}}</a><br/>
+         <ul>
          {% for member in team.members.all %}
-     	  <div class="project-member">
-     	    {{ member.username }}<br/>     	   
-           <div class="avatar">{% avatar member 48 %}</div>
-         </div>
-     	  {% endfor %}
+     	    <li>{% avatar member 16 %} {{ member.username }}</li>
+      	 {% endfor %}
+     	  </ul>
+     	  <a class="manage-team-link" href="{% url organization_detail project.organization.slug%}#team_popup_{{team.id}}">{% silk "group" %} Manage Team</a>
       </div>
       
     {% endfor %}
 
     <br/>
 	  {% for member in project.members.all %}
-	  <div class="project-member">
-	    {{ member.user.username }}<br/>
-	    <br/>
-      <div class="avatar">{% avatar member.user 48 %}</div>
-      <a href="#" user_id="{{member.user.id}}" class="remove_user_link deleteLink">Remove</a>
-    </div>
+	    {% ifnotequal member.user project.creator %}
+  	  <div class="project-member">
+  	    {{ member.user.username }}<br/>
+  	    <br/>
+        <div class="avatar">{% avatar member.user 48 %}</div>
+        <a href="#" user_id="{{member.user.id}}" class="remove_user_link deleteLink">Remove</a>
+      </div>
+      {% endifnotequal %}
 	  {% endfor %}
 
-  {% if adduser_form %}
-  <form id="add-member" method="POST" action="">
+    <div class="invite-user-box">
+    <h3>Invite User</h3>
     {{ adduser_form.non_field_errors }}
-    {{ adduser_form.recipient }}    {{adduser_form.recipient.errors}}
-    <p><input type="hidden" name="action" value="add" />
-      <button type="submit">Add Member</button></p>
-  </form>
-  {% endif %}
+    {{adduser_form.recipient.errors}}
+    <form id="add-member" method="POST" action="" class="uniForm">
+      <fieldset class="inlineLabels">
+        
+          ScrumDo Username: {{ adduser_form.recipient }}
+          <input type="hidden" name="action" value="add" />
+          <button class="primaryAction button" type="submit" >Invite User</button><br/><br/>
+          {% if project.organization %}
+          <b>Tip:</b> <i>This project is part of an organization, you might want to go to the <a href="{% url organization_detail project.organization.slug %}">organization options</a> to add/remove people to/from teams instead of directly to the project.</i>
+          {% endif %}
+      </fieldset>
+    </form>
+    </div>
 
   
   <form method="POST" action="" class="uniForm">
        {{ form.non_field_errors }}
          
-         <h2>Project Options</h2>
+         <h2 class="page-divider">Project Options</h2>
+
          <table class="projectOptionsForm">
            <tr><td style="font-weight:bold">Name:</td><td>{{form.name}} {{form.name.errors}}</td></tr>
            <tr><td style="font-weight:bold">Description:</td><td>{{form.description}} {{form.description.errors}}</td></tr>
@@ -108,10 +121,10 @@
   </form>
   
   <br/><br/>
-  <hr/>
+
   
      {% if organizations %}
-         <h2>Move to organization</h2>
+         <h2 class="page-divider">Move to organization</h2>
          <p>You can move this project into one of your organizations.</p>     
          <form  method="POST" action="" class="uniForm">       
            <fieldset class="inlineLabels">
@@ -134,12 +147,12 @@
           <input type="hidden" name="action" value="moveToOrganization">
          </form>
          <br/>
-         <hr/>
+
      {% endif %}
 
 
      {% if project.organization %}
-     <h2>Remove from organization</h2>
+     <h2 class="page-divider">Remove from organization</h2>
       <p>You can move this project out of your organization.</p>     
       <form  method="POST" action="" class="uniForm">       
         <fieldset class="inlineLabels">
@@ -158,7 +171,7 @@
        <input type="hidden" name="action" value="removeFromOrganization">
       </form>
       <br/>
-      <hr/>
+
      {% endif %}
 
       <br/>

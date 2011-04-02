@@ -185,7 +185,7 @@ class ExportProjectForm(forms.Form):
 
 class AddUserForm(forms.Form):
 
-    recipient = forms.CharField(label=_(u"User"))
+    recipient = forms.CharField(label=_(u"Username or Email Address"))
 
     def __init__(self, *args, **kwargs):
         self.project = kwargs.pop("project")
