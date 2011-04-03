@@ -16,6 +16,14 @@
 
 {% block head_title %}{{ project.name }}{% endblock %}
 
+{% block breadcrumbs %}
+  {% if project.organization %}
+     <a href="{% url organization_detail project.organization.slug %}">{{ project.organization.name }}</a> /
+  {% endif %}
+  <a href="{% url project_detail project.slug %}">{{ project.name }}</a> /
+  {{ iteration.name }}
+{% endblock %}
+
 {% block extra_head %}
   <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.cookie.js"></script>
 {% endblock %}

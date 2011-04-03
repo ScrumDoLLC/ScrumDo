@@ -504,3 +504,13 @@ h2.page-divider {
     font-size: 8px;
     float:right;
 }
+
+.breadcrumbs {
+    color: #666;
+    padding-top: 2px;
+}
+
+.breadcrumbs a {
+    color: #283de1;
+    text-decoration: none;
+}

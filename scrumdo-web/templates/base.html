@@ -106,6 +106,7 @@
 	    {% block panel %}
 	    {% endblock %}
           <div id="body">
+            <div class="breadcrumbs">{% block breadcrumbs %}{% endblock %}</div>
             {% block add_story %}
           	{% endblock %}
             {% if messages %}

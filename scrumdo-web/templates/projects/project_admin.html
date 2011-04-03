@@ -15,9 +15,15 @@
 
 {% block head_title %}{{ project.name }}{% endblock %}
 
-{% block body %}    
+{% block breadcrumbs %}
+  {% if project.organization %}
+     <a href="{% url organization_detail project.organization.slug %}">{{ project.organization.name }}</a> /
+  {% endif %}
+  <a href="{% url project_detail project.slug %}">{{ project.name }}</a> /
+  Project Admin
+{% endblock %}
 
-  <h1>{{ project.name }}</h1>
+{% block body %}    
 
   <h2 class="page-divider">Project Members</h2>
 
@@ -161,7 +167,7 @@
 
      {% if project.organization %}
      <h2 class="page-divider">Remove from organization</h2>
-      <p>You can move this project out of your organization.</p>     
+      <p>You can remove this project from your organization.</p>     
       <form  method="POST" action="" class="uniForm">       
         <fieldset class="inlineLabels">
                 <div class="ctrlHolder">

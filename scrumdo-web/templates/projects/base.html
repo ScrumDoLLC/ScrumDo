@@ -10,6 +10,13 @@
 
 {% block body_class %}projects{% endblock %}
 
+{% block breadcrumbs %}
+  {% if project.organization %}
+     <a href="{% url organization_detail project.organization.slug %}">{{ project.organization.name }}</a> /
+     {{ project.name }}
+  {% endif %}  
+{% endblock %}
+
 {% block panel %}
   
     {% if user.is_authenticated %}

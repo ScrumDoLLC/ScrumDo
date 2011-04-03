@@ -15,6 +15,14 @@
 
 {% block head_title %}{{ project.name }}{% endblock %}
 
+{% block breadcrumbs %}
+  {% if project.organization %}
+     <a href="{% url organization_detail project.organization.slug %}">{{ project.organization.name }}</a> /
+  {% endif %}
+  <a href="{% url project_detail project.slug %}">{{ project.name }}</a> /
+  Iteration Planning
+{% endblock %}
+
 {% block add_story %}
     {% if user.is_authenticated %}
     {% canwrite project %}
