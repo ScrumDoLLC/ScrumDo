@@ -41,6 +41,12 @@ class Team(models.Model):
     name = models.CharField( max_length=65 )
     access_type = models.CharField( max_length=25 , default="read", choices=ACCESS_CHOICES)
 
+    def access_description(self):
+        access = [ entry[1] for entry in Team.ACCESS_CHOICES if entry[0]==self.access_type ]
+        if len(access) == 1:
+            return access[0]
+        return "Read Only"
+        
     def __unicode__(self):
         return "[%s] %s" % (self.organization.name, self.name)
 

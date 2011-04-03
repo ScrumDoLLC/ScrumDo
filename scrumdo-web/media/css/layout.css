@@ -396,6 +396,11 @@
 	padding: 10px;
 	border: 1px solid #c6c6c6;
 }
+.team-access-type {
+    font-size: 12px;
+    font-color: #444444;
+    font-weight: normal;
+}
 .project-team .manage-team-link {
 	font-size: 12px;
 	font-weight: normal;
@@ -415,6 +420,7 @@
 .project-team ul {
 	padding-left: 0px;
 	list-style: none;
+	font-weight: normal;
 }
 
 .project-team {

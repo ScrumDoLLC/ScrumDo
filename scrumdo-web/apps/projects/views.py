@@ -128,6 +128,11 @@ def usage(request):
 def remove_user( request, group_slug ):
         project = get_object_or_404( Project, slug=group_slug )
         admin_access_or_403(project, request.user )
+        user_id = int(request.POST.get("user_id"))
+        # logger.debug("Removing user %d from project %s" % (user_id, group_slug))
+        membership = project.members.get( user__id=user_id )
+        membership.delete()
+        return HttpResponse("ok")
         
         
 # The project admin page, this is where you can change the title, description, etc. of a project.
@@ -170,7 +175,8 @@ def project_admin( request, group_slug ):
             adduser_form = AddUserForm(request.POST, project=project, user=request.user)
             if adduser_form.is_valid():
                 adduser_form.save(request.user)
-                adduser_form = adduser_form_class(project=project, user=request.user) # clear form
+                return HttpResponseRedirect( reverse("project_admin", kwargs={"group_slug":project.slug} ) )
+                
 
             
                 
@@ -434,7 +440,6 @@ def project(request, group_slug=None, form_class=ProjectUpdateForm, adduser_form
 
     return render_to_response(template_name, {
         "project_form": project_form,
-        "adduser_form": adduser_form,
         "add_story_form": add_story_form,
         "project": project,
         "group": project, # @@@ this should be the only context var for the project

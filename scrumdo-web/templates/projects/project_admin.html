@@ -26,6 +26,7 @@
     {% for team in project.teams.all %}
       <div class="project-team">
          <a class="team-title" href="{% url organization_detail project.organization.slug %}#team_popup_{{team.id}}">{{project.organization.name}} - {{team.name}}</a><br/>
+         <span class="team-access-type">{{team.access_description}} access</span>
          <ul>
          {% for member in team.members.all %}
      	    <li>{% avatar member 16 %} {{ member.username }}</li>
@@ -48,21 +49,24 @@
       {% endifnotequal %}
 	  {% endfor %}
 
-    <div class="invite-user-box">
-    <h3>Invite User</h3>
-    {{ adduser_form.non_field_errors }}
-    {{adduser_form.recipient.errors}}
-    <form id="add-member" method="POST" action="" class="uniForm">
-      <fieldset class="inlineLabels">
+    {% if project.organization %}
+      <a href="#" class="show-invite-box-link">Invite Users</a>    
+    {% endif %}
+    <div class="invite-user-box" {% if project.organization %}style="display:none"{% endif %}>
+      <h3>Invite User</h3>
+      {{ adduser_form.non_field_errors }}
+      {{adduser_form.recipient.errors}}
+      <form id="add-member" method="POST" action="" class="uniForm">
+        <fieldset class="inlineLabels">
         
-          ScrumDo Username: {{ adduser_form.recipient }}
-          <input type="hidden" name="action" value="add" />
-          <button class="primaryAction button" type="submit" >Invite User</button><br/><br/>
-          {% if project.organization %}
-          <b>Tip:</b> <i>This project is part of an organization, you might want to go to the <a href="{% url organization_detail project.organization.slug %}">organization options</a> to add/remove people to/from teams instead of directly to the project.</i>
-          {% endif %}
-      </fieldset>
-    </form>
+            ScrumDo Username: {{ adduser_form.recipient }}
+            <input type="hidden" name="action" value="add" /> 
+            <button class="primaryAction button" type="submit" >Invite User</button><br/><br/>
+            {% if project.organization %}
+            <b>Tip:</b> <i>This project is part of an organization, you might want to go to the <a href="{% url organization_detail project.organization.slug %}">organization options</a> to add/remove people to/from teams instead of directly to the project.</i>
+            {% endif %}
+        </fieldset>
+      </form>
     </div>
 
   
@@ -186,13 +190,18 @@
              _gaq.push(['_trackEvent',"ViewPage", "ProjectAdmin"]); 
           {% endif %}      
           
+          $(".show-invite-box-link").click(function(){
+              $(".show-invite-box-link").hide();
+              $(".invite-user-box").show();
+          });
+          
           $(".remove_user_link").click(function(e){
             user_id = $(this).attr("user_id");
             if( confirm("Are you sure you want to remove the user from this project?" ) )
             {
               
               $.post( "{% url remove_user project.slug %}", 
-                      {user_id:"user_id"},
+                      {user_id:user_id},
                       function(data) {
                         $(document).trigger('close.facebox');   
                        location.reload();
