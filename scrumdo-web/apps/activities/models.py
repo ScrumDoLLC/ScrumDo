@@ -14,6 +14,10 @@ from django.core.cache import cache
 
 from scrumdo_model_utils.models import InheritanceCastModel
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 class ActivityAction(models.Model):
     name = models.TextField(_("action"), max_length=100)
 
@@ -22,6 +26,32 @@ class Activity(InheritanceCastModel):
     action = models.ForeignKey(ActivityAction, related_name="ActivityAction")
     project = models.ForeignKey("projects.Project", related_name="ActivityByProject")
     created = models.DateTimeField(_('created'), default=datetime.datetime.now)
+
+    def title( self ):
+        try:            
+            return "Story #%d changed" % (self.storyactivity.story.local_id)
+        except:
+            pass
+        try:
+            return "%s updated" % self.iterationactivity.iteration.name
+        except:
+            pass
+        try:
+            self.deletedactivity
+            return "Item deleted"
+        except:
+            pass
+        try:
+            self.commentactivity
+            return "New Comment"
+        except:
+            pass
+        try:            
+            return "Story %d sized" % self.pointschangeactivity.story.local_id
+        except:
+            pass
+        return ""
+        
 
     # Returns all activities for user
     @staticmethod
@@ -139,10 +169,10 @@ class CommentActivity(Activity):
         return (self.story.iteration.get_absolute_url() + "#story_" + str(self.story.id))
 
     @staticmethod
-    def activity_handler(sender, **kwargs):
+    def activity_handler(sender, **kwargs):        
         action = ActivityAction.objects.get(name="commented")
         t_comment = kwargs['instance']
-        from projects.models import Story
+        from projects.models import Story        
         # check if this is a comment on a story, the only kind we know how to deal with, and that its a new comment.
         if t_comment.content_type.id == ContentType.objects.get_for_model(Story).id and kwargs['created']:
             story = Story.objects.get(id=t_comment.object_id)
