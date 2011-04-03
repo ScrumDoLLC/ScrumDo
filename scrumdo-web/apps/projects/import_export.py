@@ -168,9 +168,9 @@ def _getHeaders( project ):
     def setId(story,value):
         pass
     def setSummary(story,value):
-        story.summary=str(value)
+        story.summary=unicode(value)
     def setDetail(story,value):
-        story.detail=str(value)
+        story.detail=unicode(value)
     def setPoints(story,value):
         try:
             story.points=float(value)
@@ -196,13 +196,13 @@ def _getHeaders( project ):
         except:
             story.rank = story.iteration.stories.count()
     def setExtra1(story,value):
-        story.extra_1 = str(value)
+        story.extra_1 = unicode(value)
     def setExtra2(story,value):
-        story.extra_2 = str(value)
+        story.extra_2 = unicode(value)
     def setExtra3(story,value):
-        story.extra_3 = str(value)
+        story.extra_3 = unicode(value)
     def setTags( story, value ):
-        story.tags = str(value)
+        story.tags = unicode(value)
 
     headers = [ (50,"Story ID", lambda story: story.local_id ,numeric_xf, setId),
                (350,"Summary", lambda story: story.summary,wrap_xf, setSummary),
@@ -274,7 +274,7 @@ def _exportXML( iteration ):
         iteration_node.appendChild( story_node )
         for hidx, header in enumerate(headers):
             f = header[2]
-            story_node.setAttribute(_toXMLNodeName(header[1]), str(f(story)).replace("\n"," ").replace("\r",""))
+            story_node.setAttribute(_toXMLNodeName(header[1]), unicode(f(story)).replace("\n"," ").replace("\r",""))
             # TODO (Future Enhancement): There's a bug in the minidom implementation that doesn't convert newlines to their entities inside attributes,
             #      and there's no good work-around I can find without monkey patching minidom itself.
             #      We should generally recommend people stick to excel or CSV files.
@@ -381,7 +381,7 @@ def _importSingleRow( row, iteration, user):
                     f(story, value)
                     # logger.debug("Setting %s to %s" % (header[1],value) )
                 except:
-                    logger.info("Failed to set %s to %s, ignoring." % (header[1], str(value) ) )
+                    logger.info("Failed to set %s to %s, ignoring." % (header[1], unicode(value) ) )
 
         story.save()
         return True
