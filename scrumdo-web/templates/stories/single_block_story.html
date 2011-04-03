@@ -10,7 +10,9 @@
 <li class="story_block gripper_{% ifequal story.status 1 %}todo{% endifequal %}{% ifequal story.status 3 %}reviewing{% endifequal %}{% ifequal story.status 2 %}doing{% endifequal %}{% ifequal story.status 4 %}done{% endifequal %}" story_id="{{story.id}}" id="story_{{story.id}}" rank="{{ story.rank }}" >
   <div class="pointsBox">{{ story|show_points }}</div>
   <div class="todoButtons todoButtons_block" id="todoButtons_{{story.id}}">
-    {% include "stories/todobuttons.html" %}
+    {% with "block" as return_type %}
+      {% include "stories/todobuttons.html" %}
+    {% endwith %}
   </div>
 
   <span class="storyIcons">
