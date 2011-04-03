@@ -423,6 +423,9 @@
 	font-weight: normal;
 }
 
+.project-team .hidden-team-member {
+    display:none;
+}
 .project-team {
     display: inline-block;
 	border-radius: 4px;
@@ -431,8 +434,8 @@
     -o-border-radius: 4px;
     -khtml-border-radius: 4px;
     border: 1px solid #c0c0c0;
-    min-width:90px;
-    min-height:172px;
+    width:190px;
+    min-height:178px;
     padding:8px;
     vertical-align: top;
     background-color: #ffffff;

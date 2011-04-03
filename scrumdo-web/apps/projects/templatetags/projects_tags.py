@@ -46,6 +46,11 @@ def probable_email(user):
 
     return ""
 
+@register.filter
+def gt(a, b):
+    return a > b
+    
+    
 @stringfilter
 def link_stories(value, project):
 

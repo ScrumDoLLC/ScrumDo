@@ -29,10 +29,14 @@
          <span class="team-access-type">{{team.access_description}} access</span>
          <ul>
          {% for member in team.members.all %}
-     	    <li>{% avatar member 16 %} {{ member.username }}</li>
+     	     <li class="{% if forloop.counter|gt:5 %}hidden-team-member{% endif %}">{% avatar member 16 %} {{ member.username }} </li>
+     	     {% ifequal forloop.counter 5 %}
+     	     <li><a href="#" class="manage-team-link show-more-members-link">{% silk "group" %} More Members...</a></li>
+     	     {% endifequal %}
       	 {% endfor %}
+      	 
      	  </ul>
-     	  <a class="manage-team-link" href="{% url organization_detail project.organization.slug%}#team_popup_{{team.id}}">{% silk "group" %} Manage Team</a>
+     	  <a class="manage-team-link {% if team.members.count|gt:5 %}hidden-team-member{% endif %}" href="{% url organization_detail project.organization.slug%}#team_popup_{{team.id}}">{% silk "group" %} Manage Team</a>
       </div>
       
     {% endfor %}
@@ -188,11 +192,18 @@
       <script type="text/javascript" charset="utf-8">
           {% if GOOGLE_ANALYTICS %}     
              _gaq.push(['_trackEvent',"ViewPage", "ProjectAdmin"]); 
-          {% endif %}      
+          {% endif %} 
+          
+          $(".show-more-members-link").click( function(){
+            $(".show-more-members-link").hide();
+            $(".hidden-team-member").show(400);            
+            return false;
+          });
           
           $(".show-invite-box-link").click(function(){
               $(".show-invite-box-link").hide();
               $(".invite-user-box").show();
+              return false;
           });
           
           $(".remove_user_link").click(function(e){
