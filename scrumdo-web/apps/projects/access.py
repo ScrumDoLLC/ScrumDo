@@ -38,27 +38,32 @@ def write_access_or_403(project,user):
         raise PermissionDenied()
 
 def has_admin_access( project, user ):
-    if project.creator == user: return True
-    key = cache_key(project, user, "admin")
-    cached_value = cache.get(key)
-    if cached_value == None:
-        access = Organization.objects.filter( teams__members = user , teams__access_type="admin", teams__projects=project).count() > 0
-        cache.set(key, access, CACHE_PERMISSION_SECONDS)
-        return access
-    else:
-        return cached_value
-
+    try:
+        if project.creator == user: return True
+        key = cache_key(project, user, "admin")
+        cached_value = cache.get(key)
+        if cached_value == None:
+            access = Organization.objects.filter( teams__members = user , teams__access_type="admin", teams__projects=project).count() > 0
+            cache.set(key, access, CACHE_PERMISSION_SECONDS)
+            return access
+        else:
+            return cached_value
+    except:
+        return False
 
 
 def has_write_access( project, user ):
-    key = cache_key(project, user, "write")
-    cached_value = cache.get(key)
-    if cached_value == None:
-        access = real_has_write_access(project,user)
-        cache.set(key, access, CACHE_PERMISSION_SECONDS)
-        return access
-    else:
-        return cached_value
+    try:
+        key = cache_key(project, user, "write")
+        cached_value = cache.get(key)
+        if cached_value == None:
+            access = real_has_write_access(project,user)
+            cache.set(key, access, CACHE_PERMISSION_SECONDS)
+            return access
+        else:
+            return cached_value
+    except:
+        return False
 
 def real_has_write_access( project, user ):
     if has_admin_access( project, user):
@@ -68,21 +73,24 @@ def real_has_write_access( project, user ):
     return Organization.objects.filter( teams__members = user , teams__access_type="write", teams__projects=project).count() > 0
 
 def has_read_access( project, user ):
-    if not project.private:
-    # A public project!
-        return True
+    try:
+        if not project.private:
+        # A public project!
+            return True
 
-    if user.is_staff:
-        return True
+        if user.is_staff:
+            return True
 
-    key = cache_key(project, user, "read")
-    cached_value = cache.get(key)
-    if cached_value == None:
-        access = real_has_read_access(project,user)
-        cache.set(key, access, CACHE_PERMISSION_SECONDS)
-        return access
-    else:
-        return cached_value
+        key = cache_key(project, user, "read")
+        cached_value = cache.get(key)
+        if cached_value == None:
+            access = real_has_read_access(project,user)
+            cache.set(key, access, CACHE_PERMISSION_SECONDS)
+            return access
+        else:
+            return cached_value
+    except:
+        return False
 
 
 def real_has_read_access(project,user):
