@@ -84,11 +84,27 @@ def organization(request, organization_slug):
                 team.members.remove(user);
                 team.save()
 
+    members = []
+    users = []
+    member_count = 1
+    for team in organization.teams.all():
+        for user in team.members.all():
+            if not user in users:
+                users.append(user)
+                members.append("#%d %s (Team %s)" % (member_count,  user, team.name))
+                member_count+=1
+    for project in organization.projects.all():
+        for member in project.members.all():
+            if (not member.user in users) and (member.user != project.creator):
+                users.append(member.user)
+                members.append("#%d %s (Project %s)" % (member_count, member.user, project.name))
+                member_count+=1
 
     return render_to_response("organizations/organization.html", {
         "organization": organization,
         "organization_teams": teams,
-        "organizations": organizations
+        "organizations": organizations,
+        "members": members
       }, context_instance=RequestContext(request))
 
 
