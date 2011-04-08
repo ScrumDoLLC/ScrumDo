@@ -118,5 +118,3 @@ def build_filter_stack(stack, options):
             stack.postprocess.append(fltr)
 
     return stack
-
-

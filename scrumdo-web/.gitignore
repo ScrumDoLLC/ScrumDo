@@ -1,6 +1,6 @@
 .svn
 local_settings.py
-site_media/media/avatars
+site_media
 *~
 *#*
 runserver.log

@@ -24,7 +24,7 @@
 #     'generics': generics_tests,
 #     'inheritance': inheritance_tests
 # }
-# 
+#
 # if is_multi_db():
 #     from multi_db import tests as multi_db_tests
 #     __test__['multi_db'] = multi_db_tests

@@ -1,12 +1,17 @@
 {% extends "base.html" %}
 
 {% load i18n %}
+{% load extras_tags %}
 {% load openid_tags %}
 {% load theme_tags %}
 {% load ifsetting_tag %}
 
 {% block extra_head_base %}
     <link rel="stylesheet" href="{{ STATIC_URL }}projects/css/projects.css" />
+    
+    {% ifloaded subscription %}     
+      <link rel="stylesheet" href="{{ STATIC_URL }}css/subscription.css" />
+    {% endifloaded %}
 
         
     {% block extra_head %}{% endblock %}
@@ -15,7 +20,12 @@
 {% block login %}
     
     {% if user.is_authenticated %}
-        {% openid_icon openid user %}<b><a href="{% url home %}">{{ user }}</a></b> | <a href="{% url acct_email %}">{% trans "Account" %} {% trans "Settings" %}</a> | <strong><a href="{% url tutorial_page "scrumdo" "start" %}">Tutorial</a></strong> {% silk "new" %} | <a href="{{ SUPPORT_URL }}">Help</a> | <a href="/openid/logout/?next={% url acct_logout %}">{% trans "Logout" %}</a>{% if user.is_staff %} | <a href="/admin/">{% trans "Admin" %}</a>{% endif %}
+
+        {% openid_icon openid user %}<b><a href="{% url home %}">{{ user }}</a></b> | <a href="{% url acct_email %}">{% trans "Account" %} {% trans "Settings" %}</a> | <a href="{{ SUPPORT_URL }}">Help</a> <!-- | <strong><a href="{% url tutorial_page "scrumdo" "start" %}">Tutorial</a></strong> {% silk "new" %} -->| 
+        {% ifloaded biblion %}
+        <a href="{% url blog %}">Blog</a> | 
+        {% endifloaded %}
+        <a href="/openid/logout/?next={% url acct_logout %}">{% trans "Logout" %}</a>{% if user.is_staff %} | <a href="/admin/">{% trans "Admin" %}</a>{% endif %}
     {% else %}
         <a href="{% url acct_login %}">Login<!--<img src="{{ STATIC_URL }}images/loginButton.png">--></a> {% ifsetting ACCOUNT_OPEN_SIGNUP %} | <a href="{% url acct_signup %}">Sign Up<!--<img src="{{ STATIC_URL }}images/signUpButton.png">--></a>{% endifsetting %}
     {% endif %}
@@ -24,7 +34,7 @@
     
 {% endblock %}
 
-{% block logo_link_image %}<a href="{% url home %}"><img src="{{ STATIC_URL }}images/logo.png" alt="Rogue Planning"/></a>{% endblock %}
+{% block logo_link_image %}<a href="{% url home %}"><img src="{{ STATIC_URL }}images/logo.png" alt="ScrumDo"/></a>{% endblock %}
 
 
 {% block extra_body_base %}

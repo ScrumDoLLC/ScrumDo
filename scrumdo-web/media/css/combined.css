@@ -92,13 +92,12 @@ h2 {
 	margin: 0px;
 }
 .ie6_warning {
-	min-height: 50px;
-	background-color: #8b1e17;
+	background-color: #333333;
 	color: white;
-	font-size: 16px;
-	padding: 10px;
-	border-style: solid;
-	border-color: #ff2600;
+	font-size: 14px;
+	padding: 6px;
+	border-style: none;
+	text-align: center;
 }
 /* CLEARS */
 
@@ -255,20 +254,23 @@ p.what_next {
 }
 
 
-#facebox .popup{
+#facebox .popup {
   position:relative;
   border:3px solid rgba(0,0,0,0);
-  -webkit-border-radius:5px;
-  -moz-border-radius:5px;
-  border-radius:5px;
+  
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  
   -webkit-box-shadow:0 0 18px rgba(0,0,0,0.4);
   -moz-box-shadow:0 0 18px rgba(0,0,0,0.4);
   box-shadow:0 0 18px rgba(0,0,0,0.4);
+  
+  behavior: url(/site_media/static/css/PIE.htc);
 }
 
 #facebox .content {
   display:table;
-  width: 370px;
   padding: 10px;
   background: #fff;
   -webkit-border-radius:4px;
@@ -554,24 +556,16 @@ table.email_list td {
 /* ----------------------------------------------------------------------------- */
 
   /* Error message at the top of the form */
-  .uniForm #errorMsg{ background: #ffdfdf; border: 1px solid #f3afb5; margin: 0 0 1.5em 0; padding: 0 1.5em;
-                      /* CSS3 */
-                      border-radius: 4px;
-                      -webkit-border-radius: 4px;
-                      -moz-border-radius: 4px;
-                      -o-border-radius: 4px;
-                      -khtml-border-radius: 4px;
-                    }
+    #errorMsg { 
+        background-color: #ffeeee;  
+        padding: 0 1.5em;
+  	  border: 1px solid #f3afb5;
+  }
+
+    #errorMsg ul { 
+    	float: none;
+    }
     .uniForm #errorMsg h3{} /* Feel free to use a heading level suitable to your page structure */
-    .uniForm #errorMsg ol{ margin: 0 0 1.5em 0; padding: 0; }
-      .uniForm #errorMsg ol li{ margin: 0 0 3px 1.5em; padding: 7px; background: #f6bec1; position: relative; font-size: .85em;
-                                /* CSS3 */
-                                border-radius: 4px;
-                                -webkit-border-radius: 4px;
-                                -moz-border-radius: 4px;
-                                -o-border-radius: 4px;
-                                -khtml-border-radius: 4px;
-                              }
   
   .uniForm .ctrlHolder.error,
   .uniForm .ctrlHolder.focused.error{ background: #ffdfdf; border: 1px solid #f3afb5;
@@ -821,45 +815,13 @@ table.topics .comment_stats {
     font-size: 90%;
 }
 
-#id_recipient {
-  width: 90%;
-}
+
 
 div.footer {
     text-align: center;
     height:60px;   /* Height of the footer */
 }
 
-.subscription_table {
-	width: 100%;
-	background-color: #fffeff;
-	margin-left: auto;
-	margin-right: auto;
-}
-
-.subscription_table {
-	width: 100%;
-	background-color: #fffeff;
-	border-bottom: 1px solid #d6d6d6;
-}
-
-.subscription_table td {
-	padding-top: 2px;
-	padding-bottom: 2px;
-	padding-left: 4px;
-	text-align: center;
-	padding-right: 4px;
-}
-
-.subscription_table tr {
-	height: 30px;
-	border-top: 1px solid #d6d6d6;
-	border-left: 1px solid #d6d6d6;
-	border-right: 1px solid #d6d6d6;	
-}
-.subscription_table tr:nth-child(even) {
-	background: #eee;
-}
 
 .no_organization_warning {
 	width: 70%;

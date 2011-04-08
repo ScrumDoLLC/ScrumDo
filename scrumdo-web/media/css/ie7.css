@@ -1,0 +1,47 @@
+body {
+    font-family: "Helvetica Neue", Helvetica, Verdana, Arial, sans-serif;
+    font-size: 12px;
+}
+#story_form #add_button {    
+    vertical-align: text-bottom;
+}
+
+#story_details ul li {  
+  display: inline;
+}
+
+#facebox .close{
+  top:3px;
+}
+
+.todoButtons {
+    width: 280px;
+    margin-bottom: 4px;   
+}
+
+.story_column {
+  display: inline;
+  width: 45%;
+  overflow: hidden;
+  word-wrap: break-word;
+}
+
+.usage_column_box {
+    display: inline;
+}
+
+.vote_card {
+    display: inline;
+}
+
+.tagsBox {
+    display: inline;    
+}
+
+.project-team {
+    display: inline;    
+}
+
+.project-member {
+     display: inline;    
+}

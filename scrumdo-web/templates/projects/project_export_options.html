@@ -1,0 +1,27 @@
+{% load uni_form %}
+
+<div  style="width: 500px;">
+ <h1>Export Project</h1>
+   <form class="uniForm" id="project_form" method="POST" action="{% url export_project project.slug %}">
+       <fieldset class="inlineLabels">
+           {{ form|as_uni_form}}
+           <div class="form_block">
+               <div class="buttonHolder"><button class="primaryAction" type="submit" >Export</button></div>
+           </div>
+       </fieldset>
+   </form>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+  $("#project_form").submit(function(){$(document).trigger('close.facebox');})
+  
+  
+   {%if GOOGLE_ANALYTICS %}     
+      <script type="text/javascript" charset="utf-8">
+        _gaq.push(['_trackEvent',"ViewPage", "Export Options"]); 
+      </script>
+   {% endif %}    
+  
+  
+  
+</script>

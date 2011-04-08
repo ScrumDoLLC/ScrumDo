@@ -1,5 +1,5 @@
 #queue {
-    width: 200px;
+    width: 30%;
     float: right;
 }
 
@@ -88,7 +88,8 @@
 .newsfeed {
     margin-top: 10px;
     margin-left: 50px;
-    width: 370px;
+/*    width: 370px;*/
+    width: 35%;
 }
 
 .newsfeed #top {

@@ -1,9 +1,4 @@
-{% load i18n %}
-{% load comments_tag %}
-{% load theme_tags %}
-{% load projects_tags %}
-
-<div id="story_area" style="width: 860px;">
+{% load i18n %}{% load comments_tag %}{% load theme_tags %}{% load projects_tags %}<div id="story_area" style="width: 860px;">
 
 <form id="story_detail_form" method="POST" action="{% url story_form group_slug=project.slug story_id=story.id %}">
    {{ form.non_field_errors }}
@@ -87,6 +82,8 @@
              _gaq.push(['_trackEvent',"EditStory", "{{current_view}}", "", 1]); 
           {% endif %}
           
+          if(typeof reloadStoryCallback == 'function') { reloadStoryCallback(); }
+          
         }});
         
       $("#deleteStoryForm").ajaxForm({
@@ -101,8 +98,9 @@
         beforeSubmit: function(arr, $form, options) { 
           $form.hide();
         }
-        
       });
+        
+      
 
 </script>
 

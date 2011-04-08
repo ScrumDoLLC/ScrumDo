@@ -29,11 +29,11 @@
       	                <label for="id_org">                    
       	                    Organization
       	                </label>
-      	          <select style="width:40%" id="id_org" name="organization">
-      	            <option value="none">No Organization</option>
+      	          <select style="width:40%" id="id_org" name="organization">      	            
       	            {% for org in admin_organizations %}
       	              <option value="{{org.id}}" {% ifequal organization org %}selected{% endifequal %} >{{org.name}}</option>
       	            {% endfor %}
+      	            <option value="none">No Organization</option>
     	            </select>
 
                   <p id="hint_id_org" class="formHint">Associate this project with an organization to enable team based functions.  You must be an admin of the organization to create a project for it.<br/><br/>

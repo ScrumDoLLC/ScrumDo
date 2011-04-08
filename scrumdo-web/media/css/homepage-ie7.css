@@ -1,0 +1,33 @@
+
+#body #leftColumn {
+	display: inline;	
+}
+
+#body #middleColumn {
+	display: inline;	
+}
+
+#body #middleColumn2 {
+	display: inline;	
+}
+	
+}
+.infoBlob {
+	display: inline;
+}
+
+#body #rightColumn {
+	width: 242px;
+	display: inline;	
+}
+
+#higlightContentText {
+	display: inline;
+}
+
+#highlightContentImage {
+	display: inline;
+}
+.featureBox {
+	display: inline;
+}

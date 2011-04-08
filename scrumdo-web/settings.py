@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
 
-# ScrumDo - Agile/Scrum story management web application 
+# ScrumDo - Agile/Scrum story management web application
 # Copyright (C) 2011 ScrumDo LLC
-# 
+#
 # This software is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
 # License as published by the Free Software Foundation; either
 # version 2.1 of the License, or (at your option) any later version.
-# 
+#
 # This software is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Lesser General Public License for more details.
-# 
+#
 # You should have received a copy (See file COPYING) of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -105,8 +105,8 @@ ADMIN_MEDIA_PREFIX = posixpath.join(STATIC_URL, "admin/")
 SECRET_KEY = 'cl@#$@#!%$^!42164363246y@18*^@-!+$fu^q!sa6yh2^'
 
 # List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.load_template_source',
+TEMPLATE_LOADERS = (    
+    'django.template.loaders.filesystem.load_template_source',    
     'django.template.loaders.app_directories.load_template_source',
 )
 
@@ -128,7 +128,7 @@ MIDDLEWARE_CLASSES = (
 #    'debug_toolbar.middleware.DebugToolbarMiddleware'
 )
 
-ROOT_URLCONF = 'scrumdo-web.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_ROOT, "templates"),
@@ -140,7 +140,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.debug",
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
-    "django.core.context_processors.request",  
+    "django.core.context_processors.request",
     "projects.context_processors.projects_constants",
     "pinax.core.context_processors.pinax_settings",
     "announcements.context_processors.site_wide_announcements",
@@ -158,7 +158,7 @@ INSTALLED_APPS = (
     'django.contrib.markup',
     'django.contrib.admin',
     'pinax.templatetags',
-    
+
     # external
     'django_openid',
     'emailconfirmation',
@@ -177,7 +177,7 @@ INSTALLED_APPS = (
     'django_markup',
     'django_filters',
     'staticfiles',
-        
+
     # internal (for now)
     'basic_profiles',
     'account',
@@ -221,18 +221,21 @@ ACCOUNT_EMAIL_VERIFICATION = False
 
 EMAIL_CONFIRMATION_DAYS = 2
 EMAIL_DEBUG = DEBUG
-CONTACT_EMAIL = "scrumdo@scrumdo.com"
-SITE_NAME = "ScrumDo"
+
+SITE_NAME = "ScrumDo Community Site"
 LOGIN_URL = "/account/login/"
 LOGIN_REDIRECT_URLNAME = "projects.views.home"
 
 
-EMAIL_HOST='localhost' 
-EMAIL_HOST_USER=''                  
-EMAIL_HOST_PASSWORD=''        
+EMAIL_HOST='localhost'
+EMAIL_HOST_USER=''
+EMAIL_HOST_PASSWORD=''
 EMAIL_PORT='25'
-DEFAULT_FROM_EMAIL = 'noreply@scrumdo.com'   
-SERVER_EMAIL = 'noreply@scrumdo.com'
+
+CONTACT_EMAIL = "help@example.com"
+DEFAULT_FROM_EMAIL = 'noreply@example.com'
+SERVER_EMAIL = 'noreply@example.com'
+SUPPORT_URL = "http://support.example.com/"
 
 GOOGLE_ANALYTICS = False
 GOOGLE_ANALYTICS_ACCOUNT = ""
@@ -241,11 +244,15 @@ CACHE_BACKEND = 'locmem://'
 
 INTERNAL_IPS = ('127.0.0.1',)
 
-SUPPORT_URL = "http://support.scrumdo.com/"
+BASE_URL="http://localhost:8000"
 
-SCRUMDO_EXTRAS = ("extras.plugins.github_issues.GitHubIssuesExtra",
-                  "extras.plugins.example.ExampleExtra",)
+SCRUMDO_EXTRAS = ()
+ #"extras.plugins.github_issues.GitHubIssuesExtra",
+ #                 "extras.plugins.example.ExampleExtra",)
 
+
+HOOKBOX_HOST = "http://192.168.1.125:8080"
+HOOKBOX_SECRET = "juy789"
 
 # local_settings.py can be used to override environment-specific settings
 # like database and email that differ between development and production.
@@ -255,8 +262,8 @@ except ImportError:
     pass
 
 
-if DEBUG:      
-  logging.basicConfig(
-      level = logging.DEBUG,
-      format = '%(levelname)s \033[35m%(message)s\033[0m (%(filename)s:%(lineno)d)',
-  )
+if DEBUG:
+    logging.basicConfig(
+        level = logging.DEBUG,
+        format = '%(levelname)s \033[35m%(message)s\033[0m (%(filename)s:%(lineno)d)',
+    )

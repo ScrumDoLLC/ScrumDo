@@ -248,6 +248,3 @@ class Row(object):
             raise Exception("Unexpected data type %r" % type(label))
 
     write_blanks = set_cell_mulblanks
-
-
-

@@ -1,0 +1,23 @@
+{% load theme_tags %}
+{% if story.project.use_tasks %}
+  <div class="task_section" style="display:none">
+    <h2>Tasks</h2>
+    {% for task in story.tasks.all %}
+     <div id="task_{{task.id}}" class="tasks_task"><div class="task_controls"><a href="#" onClick="deleteTask({{story.id}}, {{task.id}}); return false;"><img src="{{STATIC_URL}}images/icons/trash_16.png"></a> <a onClick="showTaskEditForm({{task.id}}); return false;" href="#">Edit</a></div><input onClick="setTaskStatus({{story.id}}, {{task.id}}, {{task.complete}})" type="checkbox" {% if task.complete %}checked="checked"{% endif %}> {{task.summary}} <b><i>{{task.assignee|default_if_none:""}}</i></b></div>
+    {% endfor %}
+  
+    <div class="add_task">
+      <form class="tasks_add_task_form">
+        <input type="hidden" name="story_id" value="{{story.id}}">
+        <input class="task_summary_input" name="summary" style="width:500px;" type="text">
+        <select style="width:100px" name="assignee">
+          <option value="-1">Nobody</option>
+          {% for user in story.project.all_members %}
+            <option value="{{user.id}}">{{user.username}}</option>
+          {% endfor %}
+        </select>
+        <input class="button" type="submit" value="Add Task">
+      </form>
+    </div>
+  </div>
+{% endif %}

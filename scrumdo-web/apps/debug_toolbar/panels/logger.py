@@ -80,4 +80,3 @@ class LoggingPanel(DebugPanel):
         context.update({'records': records})
 
         return render_to_string('debug_toolbar/panels/logger.html', context)
-

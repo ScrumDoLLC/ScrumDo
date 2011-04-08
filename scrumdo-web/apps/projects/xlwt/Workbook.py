@@ -632,5 +632,3 @@ class Workbook(object):
 
         doc = CompoundDoc.XlsDoc()
         doc.save(filename, self.get_biff_data())
-
-

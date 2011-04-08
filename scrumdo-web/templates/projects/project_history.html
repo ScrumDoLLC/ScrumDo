@@ -15,6 +15,16 @@
 
 {% block head_title %}{{ project.name }}{% endblock %}
 
+
+
+{% block breadcrumbs %}
+  {% if project.organization %}
+     <a href="{% url organization_detail project.organization.slug %}">{{ project.organization.name }}</a> /
+  {% endif %}
+  <a href="{% url project_detail project.slug %}">{{ project.name }}</a> /
+  Project History
+{% endblock %}
+
 {% block body %}
   <script type="text/javascript" charset="utf-8">
     graph_count = 0;  

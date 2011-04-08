@@ -1,24 +1,26 @@
 {% load i18n %}
 {% load theme_tags %}
 {% load projects_tags %}
+{% load story_tags %}
 {% load avatar_tags %}
 
 <li class="story_small gripper_{% ifequal story.status 1 %}todo{% endifequal %}{% ifequal story.status 2 %}doing{% endifequal %}{% ifequal story.status 3 %}reviewing{% endifequal %}{% ifequal story.status 4 %}done{% endifequal %}" story_id="{{story.id}}" id="story_{{story.id}}" rank="{{ story.rank }}" >
-  <div class="pointsBox" point_value="{{ story.points }}">{{ story.getPointsLabel }}</div>
+  <div class="pointsBox" point_value="{{ story.points }}">{{ story|show_points }}</div>
 
-  <div class="todoButtons todoButtons_mini" id="todoButtons_{{story.id}}">
+  <div class="todoButtons todoButtons_block" id="todoButtons_{{story.id}}">
     {% include "stories/todobuttons.html" %}
   </div>
+
 
   <span class="storyIcons">
     <a class="hoverDetails" onclick="jQuery.facebox({ ajax: '/projects/project/{{story.project.slug}}/story/{{story.id}}/pretty'}, 'pretty_print'); return false;" href="/projects/project/{{story.project.slug}}/story/{{story.id}}/pretty"><img title="Quick View" src="{{STATIC_URL}}pinax/images/silk/icons/magnifier.png" /></a>
     {% notlocked story %}
     <a onclick="jQuery('#todoButtons_{{story.id}}').show(); return false;" href="#">
-      <img title="Set Status" src="/site_media/static/pinax/images/silk/icons/tag_red.png" />
+        <img title="Set Status" src="{{ STATIC_URL }}pinax/images/silk/icons/tag_red.png" />
     </a>
     {% endnotlocked %}
     <a onclick="jQuery.facebox({ ajax: '/projects/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=mini'}, 'edit_story'); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=mini">
-      <img title="Edit Story" src="/site_media/static/pinax/images/silk/icons/pencil.png" /></a></span>
+        <img title="Edit Story" src="{{ STATIC_URL }}pinax/images/silk/icons/pencil.png" /></a></span>
   <h1><span style="color:#cccccc;">#{{story.local_id}}</span> {{ story.summary }}</h1>
 
   {% filter truncatewords:"20" %}

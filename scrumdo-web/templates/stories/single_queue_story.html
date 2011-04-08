@@ -1,6 +1,7 @@
 {% load i18n %}
 {% load theme_tags %}
 {% load projects_tags %}
+{% load story_tags %}
 {% load avatar_tags %}
 
 <li class="story_small gripper_{% ifequal story.status 1 %}todo{% endifequal %}{% ifequal story.status 2 %}doing{% endifequal %}{% ifequal story.status 3 %}reviewing{% endifequal %}{% ifequal story.status 4 %}done{% endifequal %}" story_id="{{story.id}}" id="story_{{story.id}}" rank="{{ story.rank }}" >
@@ -12,12 +13,12 @@
     <a class="hoverDetails" onclick="jQuery.facebox({ ajax: '/projects/project/{{story.project.slug}}/story/{{story.id}}/pretty'}, 'pretty_print'); return false;" href="/projects/project/{{story.project.slug}}/story/{{story.id}}/pretty"><img title="Quick View" src="{{STATIC_URL}}pinax/images/silk/icons/magnifier.png" /></a>
     {% notlocked story %}
     <a onclick="jQuery('#todoButtons_{{story.id}}').show(); return false;" href="#">
-      <img title="Set Status" src="/site_media/static/pinax/images/silk/icons/tag_red.png" />
+        <img title="Set Status" src="{{ STATIC_URL }}pinax/images/silk/icons/tag_red.png" />
     </a>
     {% endnotlocked %}
     <a onclick="jQuery.facebox({ ajax: '/projects/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=queue'}, 'edit_story'); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=queue">
-      <img title="Edit Story" src="/site_media/static/pinax/images/silk/icons/pencil.png" /></a>
-    <strong>{{ story.getPointsLabel }}</strong>
+        <img title="Edit Story" src="{{ STATIC_URL }}pinax/images/silk/icons/pencil.png" /></a>
+    <strong>{{ story|show_points }}</strong>
 </span>
   <h1><a href="{% url iteration story.project.slug story.iteration.id %}#story_{{ story.id }}">{{ story.summary }}</a></h1>
 

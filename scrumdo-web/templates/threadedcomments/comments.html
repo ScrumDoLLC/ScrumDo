@@ -6,45 +6,46 @@
 {% get_threaded_comment_tree for object as responses %}
 {% autopaginate responses %}
 
-
-<ul class="responses">
-    {% for response in responses %}
-        <li class="{% cycle even,odd %} thread-{{ response.depth }} clearfix">
-            <div class="meta">
-                <div class="avatar">{% avatar response.user 40 %}</div>
-                <div class="details"><a href="{% url profile_detail response.user.username %}">{{ response.user     }}</a></div>
-                {{ response.date_submitted|date }}
-            </div>
-            <div class="bulk">
-                <div class="body">{{ response.comment|urlize|linebreaks }}</div>
-                {% ifequal user response.user %}
-                <form method="POST" action="{% url tc_comment_delete response.id %}">
-                    <input type="submit" value="{% trans "Delete Post" %}" />
-                    <input type="hidden" name="next" value="{{ request.path }}" />
-                </form>
-                {% endifequal %}
-                <a href="javascript:toggle_comment_form({{ response.id }})">{% trans "Reply to This Comment" %}</a>
-                <form class="hidden" method="POST" action="{% get_comment_url object response %}" id="comment_form_{{ response.id }}">
-                    <table><tr><td><textarea id="id_comment" rows="10" cols="40" name="comment"></textarea></td></tr>
-                    <tr><td><input type="submit" value="{% trans "Post Response" %}" /></td></tr></table>
-                    <input type="hidden" name="next" value="{{ request.path }}" />
-                </form>
-            </div>
-        </li>
-    {% endfor %}
-</ul>
-{% paginate %}
-{% if user.is_authenticated %}
-<div>
-  <div class="commentForm" style="display:none">
-      <form action="{% get_comment_url object %}" method="POST">
-          <table>
-              <tr><td><textarea id="id_comment" rows="3" cols="60" name="comment"></textarea></td></tr>
-              <tr><td><input type="submit" value="{% trans "Post Comment" %}" /></td></tr>
-          </table>
-          <input type="hidden" name="next" value="{{ request.path }}" />
-      </form>
+<div class="comment_section" style="display:none">
+  <h2 style="margin-left:-40px">Comments</h2>
+  <ul class="responses">
+      {% for response in responses %}
+          <li class="{% cycle even,odd %} thread-{{ response.depth }} clearfix">
+              <div class="meta">
+                  <div class="avatar">{% avatar response.user 40 %}</div>
+                  <div class="details"><a href="{% url profile_detail response.user.username %}">{{ response.user     }}</a></div>
+                  {{ response.date_submitted|date }}
+              </div>
+              <div class="bulk">
+                  <div class="body">{{ response.comment|urlize|linebreaks }}</div>
+                  {% ifequal user response.user %}
+                  <form obj_id="{{object.id}}" method="POST" action="{% url tc_comment_delete response.id %}">
+                      <input type="submit" value="{% trans "Delete Post" %}" />
+                      <input type="hidden" name="next" value="{{ request.path }}" />
+                  </form>
+                  {% endifequal %}
+                  <a href="javascript:toggle_comment_form({{ response.id }})">{% trans "Reply to This Comment" %}</a>
+                  <form obj_id="{{object.id}}" class="hidden" method="POST" action="{% get_comment_url object response %}" id="comment_form_{{ response.id }}">
+                      <table><tr><td><textarea id="id_comment" rows="10" cols="40" name="comment"></textarea></td></tr>
+                      <tr><td><input type="submit" value="{% trans "Post Response" %}" /></td></tr></table>
+                      <input type="hidden" name="next" value="{{ request.path }}" />
+                  </form>
+              </div>
+          </li>
+      {% endfor %}
+  </ul>
+  {% paginate %}
+  {% if user.is_authenticated %}
+  <div>
+    <div class="commentForm" >
+        <form obj_id="{{object.id}}" action="{% get_comment_url object %}" method="POST">
+            <table>
+                <tr><td><textarea id="id_comment" rows="3" cols="60" name="comment"></textarea></td></tr>
+                <tr><td><input class="button" type="submit" value="{% trans "Post Comment" %}" /></td></tr>
+            </table>
+            <input type="hidden" name="next" value="{{ request.path }}" />
+        </form>
+    </div>
   </div>
-  <a href="#" class="commentLink" title="Write Comment" alt="Comment">{% silk "comment" %}</a>
+  {% endif %}
 </div>
-{% endif %}
