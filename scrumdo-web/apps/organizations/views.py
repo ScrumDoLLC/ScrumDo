@@ -18,7 +18,7 @@
 
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
-from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponse
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -34,6 +34,7 @@ from organizations.models import *
 from projects.models import Project
 
 import organizations.signals as signals
+import organizations.import_export as import_export
 
 import logging
 
@@ -46,7 +47,7 @@ def organization(request, organization_slug):
 
     if not organization.hasReadAccess( request.user ):
         raise PermissionDenied()
-        
+
     teams = []
     for team in organization.teams.all():
         teams.append((team, AddUserForm(team=team)))
@@ -113,36 +114,39 @@ def organization_edit( request, organization_slug):
         "form":form
       }, context_instance=RequestContext(request))
 
+def handle_organization_create( form , request, projects):
+    organization = form.save( commit=False )
+    organization.creator = request.user
+    organization.save()
+
+    default_team = Team(organization = organization, name="Owners", access_type="admin")
+    default_team.save()
+
+    default_team.members.add(request.user)
+
+    member_team = Team(organization = organization, name="Members", access_type="write")
+    member_team.save()
+
+    signals.organization_created.send( sender=request, organization=organization )
+
+    request.user.message_set.create(message="Organization Created.")
+
+    for project in projects:
+        if request.POST.get("move_project_%d" % project.id):
+            _move_project_to_organization(project, organization, member_team)
+            default_team.projects.add( project )
+    default_team.save()
+    return organization
+
 @login_required
 def organization_create(request):
-    projects = Project.objects.filter(creator=request.user)    
-    
+    projects = Project.objects.filter(creator=request.user)
+
     if request.method == 'POST': # If the form has been submitted...
         form = OrganizationForm( request.POST)
-        
+
         if form.is_valid(): # All validation rules pass
-            organization = form.save( commit=False )
-            organization.creator = request.user
-            organization.save()
-
-            default_team = Team(organization = organization, name="Owners", access_type="admin")
-            default_team.save()
-
-            default_team.members.add(request.user)
-            
-
-            member_team = Team(organization = organization, name="Members", access_type="write")
-            member_team.save()
-            
-            signals.organization_created.send( sender=request, organization=organization )
-
-            request.user.message_set.create(message="Organization Created.")
-            
-            for project in projects:
-                if request.POST.get("move_project_%d" % project.id):
-                    _move_project_to_organization(project, organization, member_team)
-                    default_team.projects.add( project )
-            default_team.save()
+            organization = handle_organization_create(form, request, projects )
             return HttpResponseRedirect(reverse("organization_detail",  kwargs={'organization_slug':organization.slug}))
     else:
         form = OrganizationForm()
@@ -155,17 +159,17 @@ def organization_create(request):
         "projects": projects
       }, context_instance=RequestContext(request))
 
-def _move_project_to_organization(project, organization, member_team):    
+def _move_project_to_organization(project, organization, member_team):
     project.teams.clear()
-    project.organization = organization    
-    member_team.projects.add(project)    
-    
+    project.organization = organization
+    member_team.projects.add(project)
+
     for membership in project.members.all():
         member = membership.user
-        if member != project.creator:            
+        if member != project.creator:
             member_team.members.add( member )
             membership.delete()
-    member_team.save()       
+    member_team.save()
     project.save()
 
 @login_required
@@ -177,3 +181,24 @@ def team_debug(request):
         "read_orgs":read_orgs,
         "admin_orgs":admin_orgs,
       }, context_instance=RequestContext(request))
+
+def export_organization(request, organization_slug):
+    organization = get_object_or_404(Organization, slug=organization_slug)
+    if not organization.hasReadAccess( request.user ):
+        raise PermissionDenied()
+    return import_export.export_organization( organization )
+
+
+@login_required
+def delete_organization(request, organization_slug):
+    organization = get_object_or_404(Organization, slug=organization_slug)
+    if not organization.hasAdminAccess( request.user ):
+        raise PermissionDenied()
+    signals.organization_deleted.send( sender=request, organization=organization )
+    for project in organization.projects.all():
+        project.organization = None
+        project.save()
+    for team in organization.teams.all():
+        team.delete()
+    organization.delete()
+    return HttpResponse("Deleted")

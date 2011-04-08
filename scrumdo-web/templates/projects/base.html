@@ -5,15 +5,30 @@
 {% load theme_tags %}
 {% load extra_tagging_tags %}
 {% load avatar_tags %}
-
+{% load extras_tags %}
+{% load sitetips_tags %}
 
 {% block body_class %}projects{% endblock %}
 
+{% block breadcrumbs %}
+  {% if project.organization %}
+     <a href="{% url organization_detail project.organization.slug %}">{{ project.organization.name }}</a> /
+     {{ project.name }}
+  {% endif %}  
+{% endblock %}
+
 {% block panel %}
-  <div id="panel">
+  
     {% if user.is_authenticated %}
+    <div id="panel">  
+      
+    {% ifloaded sitetips %}     
+      {% tip %}
+    {% endifloaded %}
     
-    <div class="box">
+    <div class="panel_borders">
+    
+     <div class="box">
       <div class="box-title">
       	<a title="{{ project.description }}" href="{% url project_detail project.slug %} ">{{ project.name }}</a>
       	<div class="feed"><a title="Feed of recent activity." target="_blank" href="/feeds/project/{{ project.pk }}/{{ project.token }}">{% silk "feed" %}</a></div>
@@ -62,11 +77,14 @@
         {% endif %}
 	<a title="See how much you've completed in past iterations." href="{% url project_history project.slug %}">{% silk "report" %} History</a><br/>
 	<a title="Make predictions of what work will get done when based on your ranking and velocity." href="{% url project_prediction project.slug %}">{% silk "find" %} Predictions</a><br/>
+	{% ifloaded poker %}
 	<a href="{% url play_poker project.slug %}">{% silk "application_view_tile" %} Planning Poker</a><br/>
+	{% endifloaded %}
+	<a href="{% url export_project project.slug %}">{% silk "lorry" %} Export Project</a><br/>
 	<!-- <span title="Coming Soon: Easily size stories.">{% silk "time" %} Sizing</span><br/> -->
 	{% isadmin project %}                  
  	 <a title="{% trans "Third party plugins and extra functionality." %}" href="{% url project_extras_url project.slug %}" >{% silk "plugin" %} Extras</a><br/>
-	 <a title="{% trans "Project Administration / Settings" %}" href="{% url project_admin project.slug %}" >{% silk "cog" %} Settings</a><br/>
+	 <a title="{% trans "Project Administration / Settings" %}" href="{% url project_admin project.slug %}" >{% silk "cog" %} Project Admin</a><br/>
 	{% endisadmin %}
 	{% include "projects/tools_extra.html" %}
       </div><!--box-content-->
@@ -151,32 +169,7 @@
     </div><!--box-->
     {% endif %}
 
-    <div class="members box">
-      <div class="box-title">{% trans "Members" %}</div>
-      <div class="box-content">
-	<table width="100%" >
-	  {% for member in project.members.all %}
-	  {% if forloop.counter0|divisibleby:"2" %}<tr>{% endif %}
-	    <td>
-              <div class="avatar">{% avatar member.user 16 %}</div>
-              <div class="details"><a href="{% url profile_detail member.user.username %}" title="{{ member.user.username }}">{{ member.user.username }}</a></div>
-	    </td>
-	    {% if forloop.counter0|add:"1"|divisibleby:"2" %}</tr>{% endif %}
-	  {% endfor %}
-	  {% if project.members.all|length|divisibleby:"2" %}{% else %}</tr>{% endif %}
-</table>
-{% isadmin project %} 
-{% if adduser_form %}
-<form id="add-member" method="POST" action="">
-  {{ adduser_form.non_field_errors }}
-  {{ adduser_form.recipient }}    {{adduser_form.recipient.errors}}
-  <p><input type="hidden" name="action" value="add" />
-    <button type="submit">Add Member</button></p>
-</form>
-{% endif %}
-{% endisadmin %}
-</div><!--box-content-->
-</div><!--box-->
+  
 
 {% include "projects/base_extra.html" %}
 
@@ -187,6 +180,7 @@
     {% trans "Created:" %} {{ project.created|date }}
   </div><!--box-content-->
 </div><!--box-->
+</div><!-- panel_borders -->
 </div><!--panel-->
 
 <script src="{{ STATIC_URL }}js/burndown.js" type="text/javascript"></script>  

@@ -15,6 +15,14 @@
 
 {% block head_title %}{{ project.name }}{% endblock %}
 
+{% block breadcrumbs %}
+  {% if project.organization %}
+     <a href="{% url organization_detail project.organization.slug %}">{{ project.organization.name }}</a> /
+  {% endif %}
+  <a href="{% url project_detail project.slug %}">{{ project.name }}</a> /
+  Iteration Planning
+{% endblock %}
+
 {% block add_story %}
     {% if user.is_authenticated %}
     {% canwrite project %}
@@ -26,7 +34,7 @@
 
 {% block body %}
 
- <img style="float:right" src="/site_media/static/images/ajax-loader.gif" id="loadingIcon">
+<img style="float:right" src="{{ STATIC_URL }}images/ajax-loader.gif" id="loadingIcon">
  <h1>Iteration Planning</h1>
   
   <div id="columnContainer">
@@ -87,7 +95,7 @@
       &nbsp;&nbsp;
       <div id="empty_iteration_column">
         <br/>
-        <img src="/site_media/static/images/chooseIteration.png">
+        <img src="{{ STATIC_URL }}images/chooseIteration.png">
         <br/><br/><br/>
         <br/><br/><br/>
       </div>

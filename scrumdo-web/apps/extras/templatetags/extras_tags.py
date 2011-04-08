@@ -24,16 +24,16 @@ class IfLoadedNode(template.Node):
     def __init__(self, var, nodelist_true, nodelist_false=None):
         self.nodelist_true, self.nodelist_false = nodelist_true, nodelist_false
         self.var = var
-    
+
     def __repr__(self):
         return '<IfLoaded node>'
-    
+
     def __iter__(self):
         for node in self.nodelist_true:
             yield node
         for node in self.nodelist_false:
             yield node
-    
+
     def get_nodes_by_type(self, nodetype):
         nodes = []
         if isinstance(self, nodetype):
@@ -41,7 +41,7 @@ class IfLoadedNode(template.Node):
         nodes.extend(self.nodelist_true.get_nodes_by_type(nodetype))
         nodes.extend(self.nodelist_false.get_nodes_by_type(nodetype))
         return nodes
-    
+
     def render(self, context):
         for app in settings.INSTALLED_APPS:
             if str(app) == str(self.var):

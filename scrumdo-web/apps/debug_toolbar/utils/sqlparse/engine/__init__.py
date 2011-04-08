@@ -42,8 +42,8 @@ class FilterStack(object):
         stream = lexer.tokenize(sql)
         # Process token stream
         if self.preprocess:
-           for filter_ in self.preprocess:
-               stream = filter_.process(self, stream)
+            for filter_ in self.preprocess:
+                stream = filter_.process(self, stream)
 
         if (self.stmtprocess or self.postprocess or self.split_statements
             or self._grouping):
@@ -77,4 +77,3 @@ class FilterStack(object):
             stream = _run(stream)
 
         return stream
-

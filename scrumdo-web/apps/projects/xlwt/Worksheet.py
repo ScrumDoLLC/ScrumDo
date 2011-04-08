@@ -1293,5 +1293,3 @@ class Worksheet(object):
             self.__flushed_rows[rowx] = 1
         self.__update_row_visible_levels()
         self.__rows = {}
-
-

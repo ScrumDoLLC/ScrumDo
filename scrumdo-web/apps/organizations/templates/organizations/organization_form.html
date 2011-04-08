@@ -19,7 +19,8 @@
   
 </form>
  
-
+  <br/><br/><br/>
+  <a href="#" class="deleteLink deleteOrgLink" id="deleteOrganizationLink">{% silk "delete" %} Delete Organization</a>
 </div>
 
 <script type="text/javascript" charset="utf-8">
@@ -45,6 +46,16 @@
             $form.hide();
           }        
       }); 
+      
+      $(".deleteOrgLink").click( function() {
+        if( confirm("Are you sure you want to delete this organization?") )
+        {
+          $.post("{% url delete_organization organization.slug %}", function(data) {
+            window.location="/";
+          });
+          
+        }
+      });
 
 </script>
 

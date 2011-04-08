@@ -23,4 +23,8 @@ import settings
 if not "subscription" in settings.INSTALLED_APPS:
     admin.site.register(Organization)
 
-admin.site.register(Team )
+class TeamAdmin(admin.ModelAdmin):
+    list_display = ('name', 'organization')
+    search_fields = ('name',)
+
+admin.site.register(Team , TeamAdmin)

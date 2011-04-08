@@ -17,7 +17,7 @@ class Reader:
         self.__build_SAT()
         self.__build_directory()
         self.__build_short_sectors_data()
-        
+
         if len(self.short_sectors_data) > 0:
             self.__build_SSAT()
         else:
@@ -30,11 +30,11 @@ class Reader:
             self.SSAT = [-2]
 
         for dentry in self.dir_entry_list[1:]:
-            (did, 
-             sz, name, 
-             t, c, 
-             did_left, did_right, did_root, 
-             dentry_start_sid, 
+            (did,
+             sz, name,
+             t, c,
+             did_left, did_right, did_root,
+             dentry_start_sid,
              stream_size
             ) = dentry
             stream_data = ''
@@ -49,7 +49,7 @@ class Reader:
                 # BAD IDEA: names may be equal. NEED use full paths...
                 self.STREAMS[name] = stream_data
 
-    
+
     def __build_header(self):
         self.doc_magic             = self.header[0:8]
 
@@ -69,7 +69,7 @@ class Reader:
         self.total_ssat_sectors,   = struct.unpack('<L', self.header[64:68])
         self.msat_start_sid,       = struct.unpack('<l', self.header[68:72])
         self.total_msat_sectors,   = struct.unpack('<L', self.header[72:76])
-         
+
         self.sect_size        = 1 << self.log2_sect_size
         self.short_sect_size  = 1 << self.log2_short_sect_size
 
@@ -82,13 +82,13 @@ class Reader:
 
             print 'revision number: '
             print_bin_data(self.rev_num)
-         
+
             print 'version number: '
             print_bin_data(self.ver_num)
-            
+
             print 'byte order: '
             print_bin_data(self.byte_order)
-            
+
             print 'sector size                                :', hex(self.sect_size), self.sect_size
             #print 'total sectors in file                      :', hex(self.total_sectors), self.total_sectors
             print 'short sector size                          :', hex(self.short_sect_size), self.short_sect_size
@@ -103,12 +103,12 @@ class Reader:
 
     def __build_MSAT(self):
         self.MSAT = list(struct.unpack('<109l', self.header[76:]))
-        
+
         next = self.msat_start_sid
         while next > 0:
-           msat_sector = struct.unpack('<128l', self.data[next*self.sect_size:(next+1)*self.sect_size])
-           self.MSAT.extend(msat_sector[:127])
-           next = msat_sector[-1]
+            msat_sector = struct.unpack('<128l', self.data[next*self.sect_size:(next+1)*self.sect_size])
+            self.MSAT.extend(msat_sector[:127])
+            next = msat_sector[-1]
 
         if self.dump:
             print 'MSAT (header part): \n', self.MSAT[:109]
@@ -146,7 +146,7 @@ class Reader:
         while i < len(dir_stream):
             dentry = dir_stream[i:i+128] # 128 -- dir entry size
             i += 128
-            
+
             did = len(self.dir_entry_list)
             sz, = struct.unpack('<H', dentry[64:66])
             if sz > 0 :
@@ -161,9 +161,9 @@ class Reader:
             dentry_start_sid ,  = struct.unpack('<l', dentry[116:120])
             stream_size ,  = struct.unpack('<L', dentry[120:124])
 
-            self.dir_entry_list.extend([(did, sz, name, t, c, 
-                                            did_left, did_right, did_root, 
-                                            dentry_start_sid, stream_size)]) 
+            self.dir_entry_list.extend([(did, sz, name, t, c,
+                                            did_left, did_right, did_root,
+                                            dentry_start_sid, stream_size)])
 
         if self.dump:
             dentry_types = {
@@ -181,8 +181,8 @@ class Reader:
             print 'total directory entries:', len(self.dir_entry_list)
 
             for dentry in self.dir_entry_list:
-                (did, sz, name, t, c, 
-                 did_left, did_right, did_root, 
+                (did, sz, name, t, c,
+                 did_left, did_right, did_root,
                  dentry_start_sid, stream_size) = dentry
                 print 'DID', did
                 print 'Size of the used area of the character buffer of the name:', sz
@@ -201,10 +201,10 @@ class Reader:
                 else:
                     print 'stream stored as short-stream'
 
-    
+
     def __build_short_sectors_data(self):
-        (did, sz, name, t, c, 
-         did_left, did_right, did_root, 
+        (did, sz, name, t, c,
+         did_left, did_right, did_root,
          dentry_start_sid, stream_size) = self.dir_entry_list[0]
         assert t == 0x05 # Short-Stream Container Stream (SSCS) resides in Root Storage
         if stream_size == 0:
@@ -224,14 +224,14 @@ class Reader:
             if next_in_chain == last_chunk_finish + 1:
                 chunks[-1] = last_chunk_start, next_in_chain
             else:
-                chunks.extend([(next_in_chain, next_in_chain)]) 
+                chunks.extend([(next_in_chain, next_in_chain)])
             sid = next_in_chain
         for s, f in chunks:
             stream_data += data[s*sect_size:(f+1)*sect_size]
         #print chunks
         return stream_data
 
-        
+
 def print_bin_data(data):
     i = 0
     while i < len(data):
@@ -250,7 +250,7 @@ def print_bin_data(data):
 
 # This implementation writes only 'Root Entry', 'Workbook' streams
 # and 2 empty streams for aligning directory stream on sector boundary
-# 
+#
 # LAYOUT:
 # 0         header
 # 76                MSAT (1st part: 109 SID)
@@ -305,7 +305,7 @@ class XlsDoc:
            dentry_name_sz,
            dentry_type,
            dentry_colour,
-           dentry_did_left, 
+           dentry_did_left,
            dentry_did_right,
            dentry_did_root,
            0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -322,7 +322,7 @@ class XlsDoc:
         dentry_did_left  = -1
         dentry_did_right = -1
         dentry_did_root  = -1
-        dentry_start_sid = 0     
+        dentry_start_sid = 0
         dentry_stream_sz = self.book_stream_len
 
         self.dir_stream += struct.pack('<64s H 2B 3l 9L l L L',
@@ -330,15 +330,15 @@ class XlsDoc:
            dentry_name_sz,
            dentry_type,
            dentry_colour,
-           dentry_did_left, 
+           dentry_did_left,
            dentry_did_right,
            dentry_did_root,
-           0, 0, 0, 0, 0, 0, 0, 0, 0, 
+           0, 0, 0, 0, 0, 0, 0, 0, 0,
            dentry_start_sid,
            dentry_stream_sz,
            0
         )
-        
+
         # padding
         dentry_name      = ''
         dentry_name_sz   = len(dentry_name)
@@ -356,7 +356,7 @@ class XlsDoc:
            dentry_name_sz,
            dentry_type,
            dentry_colour,
-           dentry_did_left, 
+           dentry_did_left,
            dentry_did_right,
            dentry_did_root,
            0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -364,12 +364,12 @@ class XlsDoc:
            dentry_stream_sz,
            0
         ) * 2
-    
+
     def __build_sat(self):
         # Build SAT
         book_sect_count = self.book_stream_len >> 9
         dir_sect_count  = len(self.dir_stream) >> 9
-        
+
         total_sect_count     = book_sect_count + dir_sect_count
         SAT_sect_count       = 0
         MSAT_sect_count      = 0
@@ -400,7 +400,7 @@ class XlsDoc:
             sect += 1
 
         while sect < book_sect_count + MSAT_sect_count + SAT_sect_count:
-            self.SAT_sect.append(sect)            
+            self.SAT_sect.append(sect)
             SAT[sect] = self.SID_USED_BY_SAT
             sect += 1
 
@@ -461,7 +461,7 @@ class XlsDoc:
         not_used0             = '\x00'*10
         total_sat_sectors     = struct.pack('<L', len(self.SAT_sect))
         dir_start_sid         = struct.pack('<l', self.dir_stream_sect[0])
-        not_used1             = '\x00'*4        
+        not_used1             = '\x00'*4
         min_stream_size       = struct.pack('<L', 0x1000)
         ssat_start_sid        = struct.pack('<l', -2)
         total_ssat_sectors    = struct.pack('<L', 0)
@@ -490,7 +490,7 @@ class XlsDoc:
                                         msat_start_sid,
                                         total_msat_sectors
                                     ])
-                                        
+
 
     def save(self, file_name_or_filelike_obj, stream):
         # 1. Align stream on 0x1000 boundary (and therefore on sector boundary)
@@ -500,7 +500,7 @@ class XlsDoc:
         self.__build_directory()
         self.__build_sat()
         self.__build_header()
-        
+
         f = file_name_or_filelike_obj
         we_own_it = not hasattr(f, 'write')
         if we_own_it:
