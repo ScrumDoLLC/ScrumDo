@@ -39,6 +39,8 @@ def write_access_or_403(project,user):
 
 def has_admin_access( project, user ):
     try:
+        if user.is_staff:
+            return True
         if project.creator == user: return True
         key = cache_key(project, user, "admin")
         cached_value = cache.get(key)
@@ -66,6 +68,8 @@ def has_write_access( project, user ):
         return False
 
 def real_has_write_access( project, user ):
+    if user.is_staff:
+        return True    
     if has_admin_access( project, user):
         return True
     if project.members.filter(user__id=user.id).count() > 0:
