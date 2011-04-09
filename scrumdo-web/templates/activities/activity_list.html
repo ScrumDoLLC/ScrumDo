@@ -39,7 +39,7 @@
        {% silk "script_code_red" %}
        {% endifequal %}
      </div>
-     <div class="avatar"><a href="{% url profile_detail act.user.username %}" title="{{ act.user.username }}">{% avatar act.user 16 %} </a> <a href="{% url profile_detail act.user.username %}" title="{{ act.user.username }}">{{ act.user.username }}</a></div>
+     <div class="avatar">{% avatar act.user 16 %} {{ act.user.username }}</div>
 
  <div class="details"><span class="action">{{  act|activity_action }}</span> {{ act|activity_object }}</div>
 

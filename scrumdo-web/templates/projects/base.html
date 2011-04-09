@@ -173,13 +173,15 @@
 
 {% include "projects/base_extra.html" %}
 
+<!--
 <div class="box">
   <div class="box-content">
     {% trans "Slug:" %} <tt>{{ project.slug }}</tt><br />
-    {% trans "Creator:" %} <a href="{% url profile_detail project.creator.username %}">{{ project.creator }}</a><br />
+    {% trans "Creator:" %} {{ project.creator }}<br />
     {% trans "Created:" %} {{ project.created|date }}
-  </div><!--box-content-->
-</div><!--box-->
+  </div>
+</div> -->
+
 </div><!-- panel_borders -->
 </div><!--panel-->
 

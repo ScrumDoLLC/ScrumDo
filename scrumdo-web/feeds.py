@@ -121,7 +121,10 @@ class ProjectIterationStories(Feed):
         return obj[0].get_absolute_url()
 
     def item_link(self, obj):
-        return obj.story.iteration.get_absolute_url()
+        try:
+            return obj.story.iteration.get_absolute_url()
+        except:
+            return obj.iteration.get_absolute_url()
 
     def description(self, obj):
         return "Stories in Iteration %s of project." % obj[1].name

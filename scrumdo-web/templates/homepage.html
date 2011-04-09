@@ -57,7 +57,7 @@
       </div><!--projectfeed-->
 	<div class="project">
           {% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a> 
-	  <div class="subtitle">{{ project.get_num_iterations }} iteration{{ project.get_num_iterations|pluralize }}, {{ project.get_num_stories }} stor{{ project.get_num_stories|pluralize:"y,ies" }}, created by <a href="{% url profile_detail project.creator.username %}" title="{{ project.creator.username }}">{{ project.creator.username }}</a>.</div>
+	  <div class="subtitle">{{ project.get_num_iterations }} iteration{{ project.get_num_iterations|pluralize }}, {{ project.get_num_stories }} stor{{ project.get_num_stories|pluralize:"y,ies" }}, created by {{ project.creator.username }}.</div>
 	</div><!--project-->
 	{% endfor %}
       </div><!--other-projects-->
