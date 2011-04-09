@@ -1,0 +1,39 @@
+
+#panel .box .active {
+    border-left: 4px solid #00c700;
+    background-color: #fafafa;
+}
+
+
+#body img {
+    border: 5px solid #e1e1e1;
+}
+
+#body h2 img {
+    border: 0px;
+}
+
+p {
+    line-height: 1.7em;
+    font-size: 1.2em;
+}
+
+h2 {
+    background-color: #fafafa;
+    border: 1px solid #e1e1e1;
+    padding: 5px;
+}
+
+#menu {
+    padding: 5px;
+    border: 1px solid #e1e1e1;
+    margin: 5px;
+}
+
+#menu a {
+    color: #666;
+}
+
+#menu a:hover {
+    color: #000;
+}

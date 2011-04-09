@@ -195,6 +195,7 @@ INSTALLED_APPS = (
     'django_evolution',
     'extras',
     'activities',
+    'tutorial',
 #    'debug_toolbar',
 )
 

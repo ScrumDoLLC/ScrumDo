@@ -3,6 +3,7 @@
 {% load i18n %}
 {% load extras_tags %}
 {% load openid_tags %}
+{% load theme_tags %}
 {% load ifsetting_tag %}
 
 {% block extra_head_base %}
@@ -19,7 +20,8 @@
 {% block login %}
     
     {% if user.is_authenticated %}
-        {% openid_icon openid user %}<b><a href="{% url home %}">{{ user }}</a></b> | <a href="{% url acct_email %}">{% trans "Account" %} {% trans "Settings" %}</a> | <a href="{{ SUPPORT_URL }}">Help</a> | 
+
+        {% openid_icon openid user %}<b><a href="{% url home %}">{{ user }}</a></b> | <a href="{% url acct_email %}">{% trans "Account" %} {% trans "Settings" %}</a> | <a href="{{ SUPPORT_URL }}">Help</a> <!-- | <strong><a href="{% url tutorial_page "scrumdo" "start" %}">Tutorial</a></strong> {% silk "new" %} -->| 
         {% ifloaded biblion %}
         <a href="{% url blog %}">Blog</a> | 
         {% endifloaded %}

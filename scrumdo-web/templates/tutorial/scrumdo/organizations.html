@@ -1,0 +1,33 @@
+{% load theme_tags %}
+
+<h2 alt="Setup">Organization Setup: Answering the question "Who are we?"</h2>
+<p>
+<img src="{{ STATIC_URL }}images/tutorial/organization.png" alt="Organization Overview" />
+Your organization may be your company, an open source development group, or any other association that projects should be associated to. 
+Organizations are not required, but are a helpful way to organize work because they allow you to divide your company or group into teams that are responsible for different aspects of projects and base access controls off of that grouping. They can save you time and help streamline your process. If there is a definite group that you are working within, that is what your organization should be.</p>
+
+<h2 alt="Creating">How do I create an organization?</h2>
+<p>
+<img src="{{ STATIC_URL }}images/tutorial/organization-create.png" alt="Organization Create" />
+On your home page, find the box "Organizations" and click on the {% silk "add" %} to add an organization. Fill in all the details and click "Create Organization" to be brought to the organization summary page.
+<img src="{{ STATIC_URL }}images/tutorial/organization-create-form.png" alt="Organization Create" />
+On this page you can see the teams and projects your organization has (which currently will be none), and see the rest of your organizations on the sidebar.
+
+<h2 alt="Creating Teams">What are teams and how do I create them?</h2>
+<p>
+Teams allow you to easily designate who in your organization has control over what aspects of a project. Each team may have access to any number of projects, and all the members of the team will have access to those projects as well, according the privileges that the team holds. In order to create a team, click on the {% silk "add" %} at the top of the teams box, or click on "New Team" in the tools box of the sidebar. The team can have "Read Only" access, "Read/Write" Access, or "Administrator" access.
+<img src="{{ STATIC_URL }}images/tutorial/team-create.png" alt="Team Create" />
+</p>
+
+<h2 alt="Adding Team Members">How do I add members to a team?</h2>
+<p><img src="{{ STATIC_URL }}images/tutorial/team-add-member.png" alt="Team Add Member" />You can add members to a team by typing their ScrumDo username into the field in the box for the team and clicking "Add Member". To remove a member, click on the {% silk "delete" %} next to their name in the list of members. 
+</p>
+
+<h2 alt="Adding Team Projects">How do I add a project to a team</h2>
+<p>The project must belong the the organization. Then it will appear in the dropdown menu in the team's box - select it and click "Add Project" to add it to the team. Remove a project by clicking {% silk "delete" %} next to the projects name.
+</p>
+
+<h2 alt="Access Privileges">Can team members have different access privileges?</h2>
+<p>
+  No, since the advantage to teams is that they allow you to give privileges in bulk - if each individual could gain different privileges, it would be no easier than controlling permissions per user. However, members can belong to multiple teams, so you could designate multiple teams with the same members but different permissions in order to assign them to different projects at different levels.
+</p>
