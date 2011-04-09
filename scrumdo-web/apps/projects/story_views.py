@@ -138,7 +138,7 @@ def reorder_story( request, group_slug, story_id):
                     otherStory.rank = rank
                     otherStory.save()
                     rank = rank + 1
-
+        signals.story_updated.send( sender=request, story=story, user=request.user )
         return HttpResponse("OK")
     return  HttpResponse("Fail")
 

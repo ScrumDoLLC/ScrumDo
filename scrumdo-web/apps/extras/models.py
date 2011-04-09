@@ -36,6 +36,8 @@ class StoryQueue( models.Model ):
     extra_1 = models.TextField( blank=True , null=True)
     extra_2 = models.TextField( blank=True , null=True)
     extra_3 = models.TextField( blank=True , null=True)
+    external_extra = models.CharField( max_length=512 , blank=True, null=True )    
+
 
 class SyncronizationQueue( models.Model ):
     ACTION_SYNC_REMOTE = 1
@@ -81,6 +83,7 @@ class ExternalStoryMapping( models.Model ):
     external_id = models.CharField( max_length=40 )
     external_url = models.CharField( max_length=256, blank=True , null=True)
     extra_slug = models.CharField( max_length=20 )
+    external_extra = models.CharField( max_length=512 , blank=True, null=True )    
 
 class ExternalTaskMapping( models.Model ):
     """ When a task is related to external, third party sites, this gives a way of associating a reference to that other site."""

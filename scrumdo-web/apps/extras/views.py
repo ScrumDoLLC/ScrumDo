@@ -55,7 +55,7 @@ def import_story(request, project_slug, queue_id):
 
     story.delete() # delete the story queue object since we just imported it.
 
-    signals.story_imported.send( sender=request, story=new_story, user=request.user )
+    signals.story_imported.send( sender=request, story=new_story, story_queue=story, user=request.user )
 
     return HttpResponseRedirect(reverse("story_queue_url", kwargs={'project_slug':project_slug} )) #story_queue(request,project_slug)
 

@@ -57,7 +57,7 @@ class ScrumdoExtra:
 
 
 class ScrumdoProjectExtra( ScrumdoExtra ):
-    "Base calss for extras that should be associated with a project.  "
+    "Base class for extras that should be associated with a project.  "
 
 
     def associate( self, project):
