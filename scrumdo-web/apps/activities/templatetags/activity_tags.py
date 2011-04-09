@@ -12,7 +12,10 @@ def iteration_name(iteration):
     if iteration.name == "Backlog":
         return "Backlog"
     else:
-        return "Iteration %s" % iteration.name
+        if iteration.name.startswith("Iteration") or iteration.name.startswith("Sprint"):
+            return iteration.name
+        else:
+            return "Iteration %s" % iteration.name
 
 def iteration_uri(iteration, project):
     return reverse("iteration", args=[project.slug, iteration.id])
