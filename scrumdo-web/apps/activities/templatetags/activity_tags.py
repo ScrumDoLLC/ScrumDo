@@ -26,7 +26,12 @@ def iteration_link(iteration, project):
 def story_link(s, project):
     return ("<a href='%s#story_%s'>" % (iteration_uri(s.iteration, project), s.id)) + escape(s.summary) + "</a>"
 
-
+@register.filter
+def subscription_checkbox(project , subscription_list):
+    if project.id in subscription_list:
+        return "<input type=\"checkbox\" name=\"subscriptions\" value=\"%d\" checked=\"checked\"> " % project.id
+    else:
+        return "<input type=\"checkbox\" name=\"subscriptions\" value=\"%d\"> " % project.id
 
 
 @register.filter
