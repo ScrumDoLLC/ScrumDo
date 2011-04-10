@@ -26,7 +26,11 @@ def import_story(request, project_slug, queue_id):
     logger.debug("Adding story from StoryQueue")
     project = get_object_or_404( Project, slug=project_slug )
     write_access_or_403(project, request.user )
-    story = StoryQueue.objects.get(id=queue_id)
+    try:
+        story = StoryQueue.objects.get(id=queue_id)
+    except:
+        return HttpResponseRedirect(reverse("story_queue_url", kwargs={'project_slug':project_slug} ))
+        
     if story.project != project:
         # Shenanigans here!
         raise PermissionDenied()

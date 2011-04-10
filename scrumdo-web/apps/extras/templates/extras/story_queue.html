@@ -33,7 +33,7 @@
       {% if story.extra_1 %}{{story.extra_1}}<br/>{% endif %}
       {% if story.extra_2 %}{{story.extra_2}}<br/>{% endif %}
       {% if story.extra_3 %}{{story.extra_3}}<br/>{% endif %}      
-      <div style="background-color:#dddddd; padding:8px; margin-top:5px;"><a href="{% url import_story_url project.slug story.id%}" class="green small button">Import Story</a> <a href="{{story.external_url}}">{{story.external_url}}</a></div>
+      <div style="background-color:#dddddd; padding:8px; margin-top:5px;"><a href="{% url import_story_url project.slug story.id%}" class="green button">Import Story</a> <a href="{{story.external_url}}">{{story.external_url}}</a></div>
     </li>    
   {% endfor %}
   </ul>
