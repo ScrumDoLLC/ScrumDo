@@ -21,6 +21,9 @@ logger = logging.getLogger(__name__)
 class ProjectEmailSubscription(models.Model):
     project = models.ForeignKey("projects.Project")
     user = models.ForeignKey(User,related_name="email_subscriptions")
+    def __unicode__(self):
+        return "Subscription: %s %s" % (self.user, self.project)
+    
 
 class ActivityAction(models.Model):
     name = models.TextField(_("action"), max_length=100)
