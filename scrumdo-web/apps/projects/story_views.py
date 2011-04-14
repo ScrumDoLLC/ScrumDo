@@ -258,8 +258,12 @@ def stories_iteration(request, group_slug, iteration_id):
             stories = iteration.stories.filter(story_tags__tag__name__in=tags_list).distinct().order_by(order_by)
         elif text_search:
             stories = iteration.stories.extra( where = ["MATCH(summary, detail, extra_1, extra_2, extra_3) AGAINST (%s IN BOOLEAN MODE)"], params=[text_search]).order_by(order_by)
+            
         if only_assigned:
-            stories = stories.filter(assignee=request.user)
+            if stories == None:
+                stories = iteration.stories.filter(assignee=request.user).order_by(order_by)
+            else:
+                stories = stories.filter(assignee=request.user)
 
     if stories == None:
         stories = iteration.stories.order_by(order_by)

@@ -1,0 +1,22 @@
+<h1>{{ project.name }}</h1>
+
+{% for iteration in project.get_current_iterations %}
+  <h2 style="margin:0px; padding:0px">{{ iteration.name }}</h2>
+  {% if iteration.daysLeft %}
+  {{ iteration.daysLeft }} days left<br/>
+  {% endif %}
+  {{ iteration.total_points }} total points<br/>
+  {{ iteration.completed_points }} points completed<br/>
+{% endfor %}
+
+{% if stories.items %}
+  Today's Activity:
+  {% for id,story in stories.items %}
+    <div><a href="{{domain}}{% url iteration project.slug story.iteration.id %}#story_{{story.id}}">#{{story.local_id}}</a> {{story.summary|truncatewords:"18"}}<br/>
+    </div>
+  {% endfor %}
+{% else %}
+  No Activity.
+{% endif }
+
+<hr/>

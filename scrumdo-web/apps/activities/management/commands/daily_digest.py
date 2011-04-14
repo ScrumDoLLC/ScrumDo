@@ -2,8 +2,11 @@ import datetime
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
 from django.template import loader, Context
-
+from django.conf import settings
 from activities.models import Activity, StoryActivity
+
+from mailer import send_mail
+from django.core.mail import EmailMultiAlternatives
 
 import logging
 
@@ -21,6 +24,7 @@ class Command(BaseCommand):
         template = loader.get_template('activities/digest_header.html')
         context = Context( {"user":user } )        
         body = template.render(context)
+        domain = settings.BASE_URL
         
         for sub in user.email_subscriptions.all():
             logger.debug(sub)
@@ -34,13 +38,22 @@ class Command(BaseCommand):
                 if hasattr(act,"story"):
                     stories[act.story.id] = act.story
             template = loader.get_template('activities/digest_project.html')
-            context = Context( {"project":sub.project , "stories":stories} )        
+            context = Context( {"project":sub.project , "stories":stories, "domain":domain} )        
             body = "%s %s" % (body, template.render(context))
         
         template = loader.get_template('activities/digest_footer.html')
         context = Context( {"user":user } )        
         body = "%s %s" % (body, template.render(context))
-        logger.debug(body)
+        
+        subject, from_email, to = 'hello', 'noreply@scrumdo.com', 'marc.hughes@gmail.com'
+        text_content = 'See html email...'
+        html_content = body
+        msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
+        
+        
+        # logger.debug(body)
 
         
         

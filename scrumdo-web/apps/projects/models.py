@@ -216,6 +216,15 @@ class Iteration( models.Model):
     def completed_points(self) :
         return sum( map( lambda story: (story.points_value() if story.status==Story.STATUS_DONE else 0), self.stories.all() ) )
 
+    def daysLeft(self):
+        try:
+            today = datetime.date.today()
+            if self.start_date <= today and self.end_date >= today:
+                return (self.end_date - today).days
+        except:
+            pass
+        return None
+        
 
     def stats():
         points = 0
