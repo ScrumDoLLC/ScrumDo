@@ -40,17 +40,17 @@ from activities.models import Activity, StoryActivity, IterationActivity
 import django.dispatch
 
 class SiteStats( models.Model ):
-    user_count = models.IntegerField();
-    project_count = models.IntegerField();
-    story_count = models.IntegerField();
-    date = models.DateField( auto_now=True );
+    user_count = models.IntegerField()
+    project_count = models.IntegerField()
+    story_count = models.IntegerField()
+    date = models.DateField( auto_now=True )
     def __unicode__(self):
         return "%s %d/%d/%d" % (self.date, self.project_count, self.story_count, self.user_count)
 
 class PointsLog( models.Model ):
-    date = models.DateField( auto_now=True );
-    points_claimed = models.IntegerField();
-    points_total = models.IntegerField();
+    date = models.DateField( auto_now=True )
+    points_claimed = models.IntegerField()
+    points_total = models.IntegerField()
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
     related_object = generic.GenericForeignKey('content_type', 'object_id')
@@ -58,7 +58,7 @@ class PointsLog( models.Model ):
     def timestamp(self):
         return int((time.mktime(self.date.timetuple()) - time.timezone)*1000)
     class Meta:
-        ordering = ["date"];
+        ordering = ["date"]
 
 
 
@@ -238,7 +238,7 @@ class Iteration( models.Model):
         return reverse('iteration', kwargs={'group_slug': self.project.slug, 'iteration_id': self.id})
 
     class Meta:
-        ordering = ["-default_iteration","end_date"];
+        ordering = ["-default_iteration","end_date"]
 
     def __unicode__(self):
         return "%s / %s" % (self.project.name, self.name)
@@ -318,7 +318,7 @@ class Story( models.Model ):
 
     @property
     def tags(self):
-        r = "";
+        r = ""
         for tag in self.story_tags.all():
             if len(r) > 0:
                 r = r + ", "
