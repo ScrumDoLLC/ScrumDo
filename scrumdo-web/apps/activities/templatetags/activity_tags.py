@@ -37,7 +37,7 @@ def subscription_checkbox(project , subscription_list):
 @register.filter
 def activity_action(activity):
     if isinstance(activity,StoryActivity) and activity.status:
-        return (activity.action.name + " to " + activity.status + " for ")
+        return (activity.action.name + " to " + activity.status )
     elif isinstance(activity,IterationActivity) and activity.numstories:
         return activity.action.name + " " + str(activity.numstories) + " stories"
     else:
@@ -47,7 +47,12 @@ def activity_action(activity):
 def activity_object(activity):
     if isinstance(activity,StoryActivity):
         s = activity.story
-        return mark_safe(story_link(s, activity.project) + " in " + iteration_link(s.iteration, activity.project))
+        if activity.status:
+            return mark_safe(" for " + story_link(s, activity.project) + " in " + iteration_link(s.iteration, activity.project))
+        else:
+            return mark_safe(story_link(s, activity.project) + " in " + iteration_link(s.iteration, activity.project))
+        
+        
     elif isinstance(activity,IterationActivity):
         if activity.numstories:
             # this is a reorder activity

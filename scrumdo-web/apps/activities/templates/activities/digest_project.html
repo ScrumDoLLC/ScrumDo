@@ -1,22 +1,47 @@
-<h1>{{ project.name }}</h1>
+{% load activity_tags %}
+{% load projects_tags %}
+{% load story_tags %}
+
+<a style="font-size:165%; font-weight:bold; text-decoration:none" href="{{domain}}{% url project_detail project.slug %}">{{ project.name }}</a><br/>
+<img src="{{project|google_chart_url}}"><br/>
 
 {% for iteration in project.get_current_iterations %}
-  <h2 style="margin:0px; padding:0px">{{ iteration.name }}</h2>
+  <a style="font-size:115%; font-weight:bold; text-decoration:none" href="{{domain}}{% url iteration project.slug iteration.id %}">{{ iteration.name }}</a><br/>
   {% if iteration.daysLeft %}
-  {{ iteration.daysLeft }} days left<br/>
+  <b>{{ iteration.daysLeft }}</b> days left,
   {% endif %}
-  {{ iteration.total_points }} total points<br/>
-  {{ iteration.completed_points }} points completed<br/>
+  <b>{{ iteration.total_points }}</b> total points,
+  <b>{{ iteration.completed_points }}</b> points completed<br/>
+  
+  <img src="{{iteration|google_chart_url}}"><br/>
+ 
 {% endfor %}
 
 {% if stories.items %}
-  Today's Activity:
-  {% for id,story in stories.items %}
-    <div><a href="{{domain}}{% url iteration project.slug story.iteration.id %}#story_{{story.id}}">#{{story.local_id}}</a> {{story.summary|truncatewords:"18"}}<br/>
+  Today's Activity:<br/>
+  {% for id,story_obj in stories.items %}
+    
+    <div style="background-color: #eeeeee; padding-bottom:3px; margin-bottom:5px;">
+      <div style="float: right; padding: 3px 3px 5px; background-color: #fef9dd; font-size: 18px; width: 30px; height: 20px; text-align: center; vertical-align: middle">{{ story_obj.story|show_points }}</div>
+      <span style="padding-bottom:2px; padding-left:3px; padding-right:3px; background-color:{% ifequal story_obj.story.status 1 %}#333333{% endifequal %}{% ifequal story_obj.story.status 3 %}#FD690D{% endifequal %}{% ifequal story_obj.story.status 2 %}#3477BE{% endifequal %}{% ifequal story_obj.story.status 4 %}#7BBF2C{% endifequal %};">
+      <a style="font-weight:bold; text-decoration:none; color:#ffffff;" href="{{domain}}{% url iteration project.slug story_obj.story.iteration.id %}#story_{{story_obj.story.id}}">#{{story_obj.story.local_id}}</a></span>
+       
+      {{story_obj.story.summary|truncatewords:"18"}}
+      {% if story_obj.story.assignee %}
+       <b>({{ story_obj.story.assignee|name_or_username }})</b>
+      {% endif %}
+      <br/>
+      <ul style="margin-top:0px; margin-bottom:0px;list-style-type:none">
+      {% for act in story_obj.activities %}
+        <li style="font-size:70%; color:#333333">
+           {{act.user|name_or_username}} {{ act|activity_action }}         
+        </li>
+      {% endfor %}
+      </ul>
     </div>
   {% endfor %}
 {% else %}
   No Activity.
-{% endif }
+{% endif %}
 
-<hr/>
+<hr style="color: #ddd; background-color: #ddd; height: 1px;"/>

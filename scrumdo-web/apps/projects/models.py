@@ -218,7 +218,7 @@ class Iteration( models.Model):
 
     def daysLeft(self):
         try:
-            today = datetime.date.today()
+            today = date.today()
             if self.start_date <= today and self.end_date >= today:
                 return (self.end_date - today).days
         except:

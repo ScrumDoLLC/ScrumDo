@@ -17,19 +17,83 @@
 
 
 from django import template
+from datetime import date
 from projects.forms import ProjectForm
 from projects.models import Story
 from projects.access import has_write_access, has_admin_access, has_read_access
+from projects.util import reduce_burndown_data
 from django.template.defaultfilters import stringfilter
+
+
+
 import re
 register = template.Library()
 
 urlfinder = re.compile('(http:\/\/[^\s<>]+)')
+import logging
 
+logger = logging.getLogger(__name__)
+
+@register.filter("google_chart_url")
+def google_chart_url(iteration_or_project):
+    try:
+        if hasattr(iteration_or_project,"slug"):
+            size = "550x100"
+        else:
+            size = "550x80"
+        
+        
+        total_points = []
+        claimed_points = []
+        max_val = 0
+        for log in iteration_or_project.points_log.all():
+            total_points.append( [log.timestamp(), log.points_total] )
+            claimed_points.append( [log.timestamp(), log.points_claimed] )
+            if log.points_total > max_val: 
+                max_val = log.points_total
+    
+        if len(total_points) <= 1:
+            return "cht=lxy&chs=5x5"
+        
+        total_points = reduce_burndown_data(total_points)
+        claimed_points = reduce_burndown_data(claimed_points)
+    
+        claimed_dates = []
+        claimed_values = []
+        total_dates = []
+        total_values = []
+    
+        start_date = total_points[0][0]
+        end_date = total_points[-1][0]
+        start_date_s = date.fromtimestamp( start_date/1000 ).strftime('%Y-%m-%d')
+        end_date_s = date.fromtimestamp( end_date/1000 ).strftime('%Y-%m-%d')
+    
+        date_range = end_date - start_date
+
+        for piece in total_points:
+            total_dates.append( _googleChartValue(piece[0], start_date, end_date) )
+            total_values.append( _googleChartValue( piece[1] ,0, max_val) )
+        
+        for piece in claimed_points:
+            claimed_dates.append( _googleChartValue(piece[0], start_date, end_date) )
+            claimed_values.append( _googleChartValue( piece[1] ,0, max_val) )
+        
+        data = "http://chart.googleapis.com/chart?chxr=0,0,%d&cht=lxy&chs=%s&chd=s:%s,%s,%s,%s&chxt=y,x&chxs=0,444444,8,0,lt&chxl=1:|%s|%s&chco=9ED147,197AFF&chm=B,7EAEE3,1,0,0|B,99CBB0,0,0,0" % ( max_val,size,"".join(claimed_dates), "".join(claimed_values), "".join(total_dates), "".join(total_values), start_date_s, end_date_s )
+        logger.debug(data)
+        return data
+    except:
+        return "cht=lxy&chs=5x5"
+        
 
 @register.filter("urlify2")
 def urlify2(value):
     return urlfinder.sub(r'<a target="_blank" href="\1">\1</a>', value)
+
+@register.filter("name_or_username")
+def name_or_username(user):
+    if user.first_name and user.last_name:
+        return "%s %s" % (user.first_name, user.last_name)
+    return user.username
 
 @register.filter("probable_email")
 def probable_email(user):
@@ -185,3 +249,15 @@ class CanReadNode(template.Node):
             return output
         else:
             return ""
+
+
+def _googleChartValue(val, min_val, max_val):
+    codes = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+    percent = (val-min_val) / float(max_val - min_val) 
+    #logger.debug("%d %d %d %f" % (val,min_val,max_val,percent))
+    new_val = int( 61 * percent )
+    return codes[ new_val ]
+    
+
+
+

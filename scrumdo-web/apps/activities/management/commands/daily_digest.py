@@ -22,30 +22,36 @@ class Command(BaseCommand):
         logger.debug( user )
         
         template = loader.get_template('activities/digest_header.html')
-        context = Context( {"user":user } )        
+        context = Context( {"user":user, "site_name":settings.SITE_NAME } )        
         body = template.render(context)
         domain = settings.BASE_URL
+        
+        email_address = 'marc.hughes@gmail.com'
         
         for sub in user.email_subscriptions.all():
             logger.debug(sub)
             today = datetime.date.today()
-            mdiff = datetime.timedelta(days=-4) # TODO - change this to 1
+            mdiff = datetime.timedelta(days=-6) # TODO - change this to 1
             daterange = today + mdiff            
             stories = {}
-            activities = Activity.objects.filter( project=sub.project, created__gte=daterange)
+            activities = Activity.objects.filter( project=sub.project, created__gte=daterange).order_by("-created")
             for act in activities:
                 act = act.mergeChildren()
                 if hasattr(act,"story"):
-                    stories[act.story.id] = act.story
+                    if act.story.id in stories:
+                        stories[act.story.id]["activities"].append(act)
+                    else:
+                        stories[act.story.id] = {"story":act.story, "activities":[act] }
+                    
             template = loader.get_template('activities/digest_project.html')
-            context = Context( {"project":sub.project , "stories":stories, "domain":domain} )        
+            context = Context( {"project":sub.project , "stories":stories, "domain":domain, 'email_address':email_address,"support_email":settings.CONTACT_EMAIL} )        
             body = "%s %s" % (body, template.render(context))
         
         template = loader.get_template('activities/digest_footer.html')
-        context = Context( {"user":user } )        
+        context = Context( {"user":user , "domain":domain, 'email_address':email_address,"support_email":settings.CONTACT_EMAIL} )        
         body = "%s %s" % (body, template.render(context))
         
-        subject, from_email, to = 'hello', 'noreply@scrumdo.com', 'marc.hughes@gmail.com'
+        subject, from_email, to = 'ScrumDo Daily Digest', 'noreply@scrumdo.com', email_address
         text_content = 'See html email...'
         html_content = body
         msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
