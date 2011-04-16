@@ -22,6 +22,7 @@ from projects.forms import ProjectForm
 from projects.models import Story
 from projects.access import has_write_access, has_admin_access, has_read_access
 from projects.util import reduce_burndown_data
+from projects.limits import personal_email_limit, org_email_limit
 from django.template.defaultfilters import stringfilter
 
 
@@ -38,7 +39,7 @@ logger = logging.getLogger(__name__)
 def google_chart_url(iteration_or_project):
     try:
         if hasattr(iteration_or_project,"slug"):
-            size = "550x100"
+            size = "550x120"
         else:
             size = "550x80"
         
@@ -53,7 +54,7 @@ def google_chart_url(iteration_or_project):
                 max_val = log.points_total
     
         if len(total_points) <= 1:
-            return "cht=lxy&chs=5x5"
+            return "cht=lxy&chs=1x1"
         
         total_points = reduce_burndown_data(total_points)
         claimed_points = reduce_burndown_data(claimed_points)
@@ -79,10 +80,10 @@ def google_chart_url(iteration_or_project):
             claimed_values.append( _googleChartValue( piece[1] ,0, max_val) )
         
         data = "http://chart.googleapis.com/chart?chxr=0,0,%d&cht=lxy&chs=%s&chd=s:%s,%s,%s,%s&chxt=y,x&chxs=0,444444,8,0,lt&chxl=1:|%s|%s&chco=9ED147,197AFF&chm=B,7EAEE3,1,0,0|B,99CBB0,0,0,0" % ( max_val,size,"".join(claimed_dates), "".join(claimed_values), "".join(total_dates), "".join(total_values), start_date_s, end_date_s )
-        logger.debug(data)
+        #logger.debug(data)
         return data
     except:
-        return "cht=lxy&chs=5x5"
+        return "cht=lxy&chs=1x1"
         
 
 @register.filter("urlify2")
@@ -212,6 +213,30 @@ class IsAdminNode(template.Node):
         else:
             return ""
 
+@register.tag(name="canemail")
+def can_email(parser, token):
+    tag_name, project = token.split_contents()
+    nodelist = parser.parse(('endcanemail',))
+    parser.delete_first_token()
+    return CanEmailNode(nodelist, project)
+
+class CanEmailNode(template.Node):
+    def __init__(self, nodelist, project):
+        self.nodelist = nodelist
+        self.project = project
+    def render(self, context):
+        access = True
+        project = context[self.project]
+        if project.organization:
+            access = org_email_limit.increaseAllowed(organization=project.organization)
+        else:
+            access = personal_email_limit.increaseAllowed(project=project)
+        
+        if access:
+            output = self.nodelist.render(context)
+            return output
+        else:
+            return ""
 
 @register.tag(name="canwrite")
 def canwrite( parser, token):

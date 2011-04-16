@@ -262,8 +262,3 @@ except ImportError:
     pass
 
 
-if DEBUG:
-    logging.basicConfig(
-        level = logging.DEBUG,
-        format = '%(levelname)s \033[35m%(message)s\033[0m (%(filename)s:%(lineno)d)',
-    )

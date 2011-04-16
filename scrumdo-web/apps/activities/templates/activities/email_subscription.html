@@ -1,6 +1,7 @@
 {% extends "account/base.html" %}
 
 {% load i18n %}
+{% load projects_tags %}
 {% load activity_tags %}
 
 {% block head_title %}{% trans "Email Subscriptions" %}{% endblock %}
@@ -17,7 +18,7 @@
        {{organization.name}}
        <ul style="list-style:none; padding-left:5px">
        {% for project in organization.projects.all %}
-        <li>{{ project|subscription_checkbox:subscriptions|safe }}{{project.name}}</li>        
+        <li>{% canemail project %}{{ project|subscription_checkbox:subscriptions|safe }}{% endcanemail %}{{project.name}}</li>        
        {% endfor %}
        </ul>
      </li>
