@@ -42,6 +42,6 @@ body {
     display: inline;    
 }
 
-.project-member {
+.inline-block, .project-member, .organization-plan-box, .organization-box, .meter, .organization-popup-column, .organization-popup-column-header, .organization-column-footer, .usage_column_box {
      display: inline;    
 }
