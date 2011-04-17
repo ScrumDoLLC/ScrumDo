@@ -76,7 +76,6 @@ ALTER TABLE tagging_taggeditem CONVERT TO CHARACTER SET utf8 COLLATE utf8_genera
 ALTER TABLE threadedcomments_freethreadedcomment CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE threadedcomments_testmodel CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE threadedcomments_threadedcomment CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
-ALTER TABLE tips_tip CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE topics_topic CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE wiki_article CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE wiki_changeset CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
