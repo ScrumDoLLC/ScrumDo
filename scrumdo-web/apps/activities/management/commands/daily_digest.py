@@ -31,7 +31,7 @@ class Command(BaseCommand):
         for sub in user.email_subscriptions.all():
             logger.debug(sub)
             today = datetime.date.today()
-            mdiff = datetime.timedelta(days=-6) # TODO - change this to 1
+            mdiff = datetime.timedelta(days=-1) # TODO - change this to 1
             daterange = today + mdiff            
             stories = {}
             activities = Activity.objects.filter( project=sub.project, created__gte=daterange).order_by("-created")

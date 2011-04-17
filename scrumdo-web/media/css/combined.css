@@ -519,7 +519,8 @@ table.email_list td {
                                            }
       .uniForm .buttonHolder .primaryAction:active{ position: relative; top: 1px; }
       .uniForm .secondaryAction { text-align: left; }
-      .uniForm button.secondaryAction { background: transparent; border: none; color: #777; margin: 1.25em 0 0 0; padding: 0; }
+      .uniForm .secondaryAction { text-decoration:none; background: transparent; border: none; color: #777; margin: 1.25em 0 0 0; padding: 0; }
+
       
         .uniForm .inlineLabels label em,
         .uniForm .inlineLabels .label em{ font-style: normal; font-weight: bold; }
