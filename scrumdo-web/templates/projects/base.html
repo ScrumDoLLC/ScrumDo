@@ -51,19 +51,6 @@
       {% endif %}
     </div><!--box-->
 
-    {% if project.story_queue.count %}
-    <div class="box">
-      <div class="box-title">
-        Import Queue
-      </div><!--box-heading-->       
-      <div class="box-content">
-      	<span title="Stories improted from external systems go here so you can choose to import them or not">{% silk "plugin_add" %} <a href="{% url story_queue_url project.slug %}">Queued Stories: <b>{{project.story_queue.count}}</b></a></span> <br/>
-      </div><!--box-content-->
-
-    </div><!--box-->
-  
-    {% endif %}
-
     {% block extra_panel %}{% endblock %}
 
     {% if not iteration %}
@@ -145,29 +132,28 @@
     
 
     
-    {% if project.organization %}    
+  {% if project.extras.all %}    
     <div class="project_stats box">        
       <div class="box-title">
-	Organization
+	      Extras
       </div><!--box-title-->
       <div class="box-content">
-	<div class="title">
-	  <a href="{% url organization_detail organization_slug=project.organization.slug %}">
-	    {% silk "building" %} {{project.organization.name}}
-	  </a>
-	</div>
-	{% for team in project.teams.all %}
-	<div class="team">
-	  <a href="{% url organization_detail organization_slug=project.organization.slug %}">
-	    {% silk "group" %} {{ team.name }} 
-	    <span class="subtitle">({{ team.members.count }})</span>
-	  </a>
 
-	</div><!--team-->
-	{% endfor %}
-      </div><!--box-content-->
+
+        {% if project.story_queue.count %}
+          	<span title="Stories improted from external systems go here so you can choose to import them or not">{% silk "plugin_add" %} <a href="{% url story_queue_url project.slug %}">Queued Stories: <b>{{project.story_queue.count}}</b></a></span> <br/>
+          	<hr class="light-rule"/>
+        {% endif %}
+
+
+  	{% for extra_mapping in project.extras.all %}
+  	<div class="title">
+  	  {% extra_buttons extra_mapping.extra_slug project %}
+  	</div>
+  	{% endfor %}
+    </div><!--box-content-->
     </div><!--box-->
-    {% endif %}
+  {% endif %}
 
   
 

@@ -4,8 +4,19 @@ from django.conf import settings
 from django import template
 from django.template import NodeList
 
+from extras.manager import manager as extras_manager
+
 register = template.Library()
 
+@register.inclusion_tag('extras/extras_buttons.html')
+def extra_buttons(extra_slug, project):    
+    extra = extras_manager.getExtra( extra_slug )        
+    return {'extra':extra, 'project':project, 'actions':extra.getExtraActions(project)}
+
+    
+    
+    
+@register.tag(name='ifloaded')
 def do_ifloaded(parser, token):
     bits = token.split_contents()[1:]
     var = bits[0]
@@ -17,7 +28,7 @@ def do_ifloaded(parser, token):
     else:
         nodelist_false = NodeList()
     return IfLoadedNode(var, nodelist_true, nodelist_false)
-register.tag('ifloaded', do_ifloaded)
+
 
 
 class IfLoadedNode(template.Node):

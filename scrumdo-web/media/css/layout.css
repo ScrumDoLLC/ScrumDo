@@ -514,3 +514,12 @@ h2.page-divider {
     color: #283de1;
     text-decoration: none;
 }
+
+.light-rule {
+    height: 1px;
+    color: #ffffff;
+    background-color: #ffffff;
+    border-top: 1px solid #ccc;
+    border-left: 0px;
+    border-right: 0px;
+}

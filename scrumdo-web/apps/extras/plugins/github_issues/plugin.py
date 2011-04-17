@@ -164,9 +164,14 @@ class Plugin( ScrumdoProjectExtra ):
 
 
 
-        configuration["status"] = "Syncronized with GitHub on " + str( datetime.date.today()  )
+        configuration["status"] = "Synchronized with GitHub on " + str( datetime.date.today()  )
         logging.debug("pullProject complete, saving configuration.")
         self.saveConfiguration( project.slug, configuration )
+
+    # def getExtraActions( self, project):
+    #     return [("Synchronize",
+    #              "%s?syncronize=now" % reverse("configure_extra_url",kwargs={'project_slug':project.slug,'extra_slug':self.getSlug()}), 
+    #              'arrow_refresh')]
 
     def initialSync( self, project):
         logging.debug("Performing initial GitHub issues syncronization.")

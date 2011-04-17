@@ -64,30 +64,29 @@ class ScrumdoProjectExtra( ScrumdoExtra ):
         "called when an extra is first associated with a project."
         pass
 
-
-
     def unassociate( self, project):
         "called when an extra is removed from a project."
         pass
 
-
     def getShortStatus( self,  project ):
         """ Should return a string representing the current status that this extra has for a given project.
-            Examples: 'Successfully syncronized on 1/1/2010' or 'Syncronization last failed' or 'Everything OK' """
+            Examples: 'Successfully synchronize on 1/1/2010' or 'Syncronization last failed' or 'Everything OK' """
         raise NotImplementedError("ScrumdoProjectExtra subclasses must implement getShortStatus()")
 
+    def getExtraActions( self, project):
+        """ Should return a list of tupples with a label, url, and silk icon that represent actions that a user can manually
+            invoke for this extra. Example: ('Syncronize','/blah/blah/syncronize','') """
+        return []
 
     def doProjectdoProjectConfiguration( self, request, project ):
         """ Should return a django style response that handles any configuration that this extra may need. """
         raise NotImplementedError("ScrumdoProjectExtra subclasses must implement doProjectConfiguration()")
-
 
     def initialSync( self, project):
         """ Does whatever needs doing for an initial sync of the project.
             An extra's configuration should add this event to the queue when
             it's ready.  """
         pass
-
 
     def pullProject( self, project ):
         """ Should cause a full pull syncronization of this extra from whatever external source
