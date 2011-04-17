@@ -16,17 +16,20 @@ class Command(BaseCommand):
     def handle(self, *app_labels, **options):
         for user in User.objects.all():
             if user.email_subscriptions.count() > 0:
-                self.dailyDigest( user )
+                try:
+                    self.dailyDigest( user )
+                except:
+                    logger.error("Could not send daily digest to %s" % user)
     
     def dailyDigest( self, user ):
-        logger.debug( user )
+        logger.debug( "Sending daily digest to %s" % user )
         
         template = loader.get_template('activities/digest_header.html')
         context = Context( {"user":user, "site_name":settings.SITE_NAME } )        
         body = template.render(context)
         domain = settings.BASE_URL
         
-        email_address = 'marc.hughes@gmail.com'
+        email_address = user.email
         
         for sub in user.email_subscriptions.all():
             logger.debug(sub)
