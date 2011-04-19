@@ -17,7 +17,7 @@
 
 
 from django.contrib import admin
-from projects.models import Project, Iteration, SiteStats, Story, StoryTag
+from projects.models import Project, Iteration, SiteStats, Story, StoryTag, Task
 from django.conf import settings
 
 
@@ -27,6 +27,12 @@ if not "subscription" in settings.INSTALLED_APPS:
     admin.site.register(Story)
     admin.site.register(Project, ProjectAdmin)
 
+
+class TaskAdmin(admin.ModelAdmin):
+    list_display = ('story', 'summary', 'complete')
+    search_fields = ('summary',)
+
 admin.site.register(Iteration)
-admin.site.register(SiteStats )
-admin.site.register(StoryTag )
+admin.site.register(SiteStats)
+admin.site.register(StoryTag)
+admin.site.register(Task, TaskAdmin)
