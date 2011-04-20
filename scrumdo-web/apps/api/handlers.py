@@ -31,9 +31,11 @@ class IterationHandler(BaseHandler):
     allowed_methods = ('GET',)
     model = Project
 
-    def read(self, request, slug):
+    def read(self, request, slug, iteration_id=None):
         """ given a project slug, returns all the iterations
         associated with that project """
+        if iteration_id:
+        	return Project.objects.get(slug=slug).iterations.get(id=iteration_id)
         return Project.objects.get(slug=slug).iterations.all()
 
 
