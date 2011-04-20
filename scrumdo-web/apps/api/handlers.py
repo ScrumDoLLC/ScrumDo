@@ -29,12 +29,12 @@ class ProjectHandler(BaseHandler):
 
 class IterationHandler(BaseHandler):
     allowed_methods = ('GET',)
-    model = Iteration
+    model = Project
 
     def read(self, request, slug):
         """ given a project slug, returns all the iterations
         associated with that project """
-        return Iteration.objects.filter(project__slug = slug)
+        return Project.objects.get(slug=slug)
 
 
 class StoryHandler(BaseHandler):
