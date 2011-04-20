@@ -41,12 +41,12 @@ class IterationHandler(BaseHandler):
 
 class StoryHandler(BaseHandler):
     allowed_methods = ('GET', 'POST', 'DELETE')
-    model = Story
+    model = Project
 
     def read(self, request, slug, iteration_id):
         """ given a project slug and iteration id, return all stories
         associated with that iteration """
-        return Story.objects.filter(project__slug = slug, iteration__id = iteration_id)
+        return Project.objects.get(slug=slug).iterations.get(id=iteration_id).stories.all()
 
     def create(self, request, slug, story_id=None):
         if story_id:
