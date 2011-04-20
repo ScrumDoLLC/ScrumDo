@@ -34,7 +34,7 @@ class IterationHandler(BaseHandler):
     def read(self, request, slug):
         """ given a project slug, returns all the iterations
         associated with that project """
-        return Project.objects.get(slug=slug)
+        return Project.objects.get(slug=slug).iterations.all()
 
 
 class StoryHandler(BaseHandler):
