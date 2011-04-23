@@ -128,14 +128,14 @@ class ScrumdoProjectExtra( ScrumdoExtra ):
         "Occurs when a user imports a story from the story queue"
         pass
 
-    def taskUpdated(project, task):
+    def taskUpdated(self, project, task):
         pass
 
-    def taskDeleted(project, external_id):
+    def taskDeleted(self, project, external_id):
         pass
 
-    def taskCreated(project, task):
+    def taskCreated(self, project, task):
         pass
 
-    def taskStatusChange(project, task):
+    def taskStatusChange(self, project, task):
         pass

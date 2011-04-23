@@ -33,12 +33,11 @@
 }
 
 #side {
-    /*width: 250px;*/
-    width: 30%;
-    padding: 0px;
-    margin-right: -120px;
-    padding-left: 10%;
-    float: right;
+    width: 210px;
+    position: absolute;
+    right: 0px;
+    top: 60px;
+    z-index: 50;
 }
 
 #panel {

@@ -1,10 +1,12 @@
+/* @override http://localhost:8000/site_media/static/css/home.css */
+
 #queue {
-    width: 30%;
-    float: right;
+    width: 100%;
+
 }
 
 .box {
-    width: 298px;
+    width: 210px;
 }
 
 
@@ -36,6 +38,9 @@
     padding: 0px;
 }
 
+#queue-box {
+	margin-top: 7px;
+}
 #queue-box .box-top, #projects-box .box-top {
     border-bottom: 1px solid #e1e1e1;
 }
@@ -86,10 +91,8 @@
 }
 
 .newsfeed {
-    margin-top: 10px;
-    margin-left: 50px;
-/*    width: 370px;*/
-    width: 35%;
+   width: 100%;
+   margin-top: 7px;
 }
 
 .newsfeed #top {
@@ -114,26 +117,58 @@
 }
 
 .newsfeed .activity {
-    padding: 10px;
-    border-bottom: 1px solid #e1e1e1;
-}
-
-.newsfeed .activity .icon, .newsfeed .activity .avatar, .newsfeed .activity .details {
-    display: inline-block;
-}
-
-.newsfeed .context {
-    margin-left: 55px;
-}
-
-.newsfeed .activity .icon {
-    padding-right: 10px;
+    padding: 0px;    
+    vertical-align: top;
 }
 
 .newsfeed .activity .action {
     font-weight: bold
 }
 
+.story_queue_list {
+	margin-top: 3px;
+	padding-left: 23px;
+	margin-bottom: 0px;
+	
+}
+
 .newsfeed .activity abbr {
     color: #b0b0b0;
+}
+
+.story_queue_project_title {
+	text-decoration: none;
+	color: #000;
+	font-size: 18px;
+	
+}
+.activity_body {
+	display: inline-block;
+	width: 90%;
+	border-bottom: 1px solid #e1e1e1;
+	vertical-align: top;
+	padding-bottom: 7px;
+	padding-left: 3px;
+	margin-left: 10px;
+	margin-bottom: 8px;
+	margin-right: 0px;
+	padding-right: 0px;
+}
+
+.story_queue_story_list_item {
+    padding: 3px;
+    margin: 0px 0px 5px;
+    padding-left: 10px;
+    list-style-type: none;
+    border-bottom: 1px solid #e1e1e1;
+    border-top: 1px solid #e1e1e1;
+    border-right: 1px solid #e1e1e1;
+    min-height: 18px;
+    position: relative;    	
+    width: 95%;
+}
+
+.story_queue_story_list_item a {
+	text-decoration: none;
+	color: #222;
 }

@@ -569,11 +569,8 @@ div.add_task {
     border-bottom: 1px solid #e1e1e1;
     border-top: 1px solid #e1e1e1;
     border-right: 1px solid #e1e1e1;
-
-
     min-height: 33px;
-    position: relative;    
-	
+    position: relative;    	
 }
 
 .comment_section {

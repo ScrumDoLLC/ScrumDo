@@ -2,6 +2,15 @@ body {
     font-family: "Helvetica Neue", Helvetica, Verdana, Arial, sans-serif;
     font-size: 12px;
 }
+
+#side {
+    top: 90px;
+}
+
+#panel {
+    top: 90px;
+}
+
 #story_form #add_button {    
     vertical-align: text-bottom;
 }
@@ -42,6 +51,7 @@ body {
     display: inline;    
 }
 
-.inline-block, .project-member, .organization-plan-box, .organization-box, .meter, .organization-popup-column, .organization-popup-column-header, .organization-column-footer, .usage_column_box {
+.activity_body, .inline-block, .project-member, .organization-plan-box, .organization-box, .meter, .organization-popup-column, .organization-popup-column-header, .organization-column-footer, .usage_column_box {
      display: inline;    
 }
+

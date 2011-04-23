@@ -24,7 +24,16 @@ def iteration_link(iteration, project):
     return ("<a href='%s'>" % iteration_uri(iteration, project)) + iteration_name(iteration) + "</a>"
 
 def story_link(s, project):
-    return ("<a href='%s#story_%s'>" % (iteration_uri(s.iteration, project), s.id)) + escape(s.summary) + "</a>"
+    url = iteration_uri(s.iteration, project)
+    summary = escape(smart_truncate(s.summary,length=40))
+    return "<a href='%s#story_%s'> #%d %s</a>" % (url, s.id, s.local_id, summary )
+
+
+def smart_truncate(content, length=100, suffix='...'):
+    if len(content) <= length:
+        return content
+    else:
+        return ' '.join(content[:length+1].split(' ')[0:-1]) + suffix
 
 @register.filter
 def subscription_checkbox(project , subscription_list):
@@ -72,9 +81,10 @@ def activity_object(activity):
 @register.filter
 def activity_context(activity):
     if isinstance(activity,IterationActivity) and activity.numstories:
-        start = "of "
+        start = "of"
     if isinstance(activity,CommentActivity):
-        start = "on " + story_link(activity.story, activity.project) + " in "
+        start = "on " + story_link(activity.story, activity.project) + " in"
     else:
-        start = "in "
-    return mark_safe(start + "<a href='%s'>" % (reverse("project_detail", args=[activity.project.slug])) + activity.project.name + "</a>")
+        start = "in"
+    url = reverse("project_detail", args=[activity.project.slug])
+    return mark_safe( "%s <a href='%s'>%s</a>" % (start, url, activity.project.name )  )
