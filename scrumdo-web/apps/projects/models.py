@@ -122,6 +122,7 @@ class Project(Group):
         choices = []
         for member in members:
             choices.append([member.id, member.username])
+        choices = sorted(choices, key=lambda user: user[1].lower() )
         return choices
 
 
