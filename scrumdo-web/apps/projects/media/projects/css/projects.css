@@ -334,11 +334,11 @@
   padding-right: 2px;
 }
 
-#story_details ul {
+#story_details #points_section ul {
   margin: 0px;
   padding: 0px;
 }
-#story_details li {
+#story_details #points_section li {
   list-style-type: none;
   display: inline-block;
   background-color: #ededed;

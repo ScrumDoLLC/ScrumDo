@@ -121,7 +121,8 @@
 	background-color: #fffeff;
 	left: 50%;
     
-    behavior: url(/site_media/static/css/PIE.htc);  text-align: left;
+    behavior: url(/site_media/static/css/PIE.htc);  
+    text-align: left;
     margin-bottom: 10px;
     margin-right: 2px;
     margin-left: 0px;
