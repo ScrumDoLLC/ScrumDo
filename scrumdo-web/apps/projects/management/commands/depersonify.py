@@ -13,9 +13,22 @@ logger = logging.getLogger(__name__)
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        logger.info("Resetting user email addresses to %s" % settings.CONTACT_EMAIL)
+        
+
+
+        
+        if not settings.DEBUG:
+            logger.error("Can only run this on sites in debug mode (for safety!)")
+            return
+            
+        confirm = raw_input("We're about to devestate this DB making it completely non-production worthy and destroy user data.  Type yes to continue.\n > ")
+        if confirm != "yes":
+            return
+        
+        logger.info("Resetting user email addresses to %s and passwords to klug" % settings.CONTACT_EMAIL)
         for user in User.objects.all():
             user.email = settings.CONTACT_EMAIL
+            user.password = "sha1$d4f5f$2ccff0e66fe0090095add4d3e47343aa6b8009b7"
             user.save()
         
         logger.info("Removing project<->extras mappings")

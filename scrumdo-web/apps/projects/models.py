@@ -287,7 +287,8 @@ class Story( models.Model ):
                 iterations = project.get_current_iterations()
                 for iteration in iterations:
                     project_stories = project_stories + list(Story.objects.filter(iteration=iteration, assignee=user).exclude(status=4))
-                assigned_stories = assigned_stories + [(project, project_stories)]
+                if len(project_stories) > 0:
+                    assigned_stories = assigned_stories + [(project, project_stories)]
         return assigned_stories
 
     def getPointsLabel(self):
