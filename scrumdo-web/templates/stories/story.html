@@ -74,9 +74,17 @@
 </div>
 
 <script type="text/javascript" charset="utf-8">
+      var project_tags = [
+        {% for tag in tags %}
+        {label:"{{tag.name}}",value:"{{tag.name}}"},        
+        {% endfor %}
+        {label:"", value:""}
+      ];
+      
+      var all_tags = scrumdo_special_tags.concat( project_tags );
 
       $("#story_details #id_tags2").tagit({
-          availableTags:["one","two"], 
+          availableTags:all_tags, 
           input_field:"#facebox #story_details #id_tags"
           });
 

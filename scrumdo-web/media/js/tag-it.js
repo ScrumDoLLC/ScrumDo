@@ -62,18 +62,36 @@
 		});
 
          tag_input.autocomplete({
+         minLength: 0,
          source: options.availableTags, 
          select: function(event,ui){
              if (is_new (ui.item.value)) {
                  create_choice (ui.item.value);
              }
              // Cleaning the input.
-             tag_input.val("");
-        
+             tag_input.val("");        
              // Preventing the tag input to be update with the chosen value.
              return false;
          }
-        });
+        }).data( "autocomplete" )._renderItem = function( ul, item ) {
+            if( item.desc )
+            {
+         			return $( "<li></li>" )
+         				.data( "item.autocomplete", item )
+         				.append( "<a><b>" + item.label + "</b><br><i>" + item.desc + "</i></a>" )
+         				.appendTo( ul );
+         	}
+         	else
+         	{
+     			return $( "<li></li>" )
+     				.data( "item.autocomplete", item )
+     				.append( "<a><b>" + item.label + "</b></a>" )
+     				.appendTo( ul );         	    
+         	}
+        };
+
+        $(tag_input).focus( function() { tag_input.autocomplete( "search", "" ); });
+        
         
         function serializeTags()
         {

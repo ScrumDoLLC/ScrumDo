@@ -1,4 +1,7 @@
 
+scrumdo_special_tags = [ {label:"Bug", desc:"Represents a bug report.", value:"Bug"}                         
+                        ];
+
 function setupAutoClose( divID )
 {  
   setTimeout( "$('body').one('click',function() { $(\"" + divID + "\").fadeOut(100); });" , 100);

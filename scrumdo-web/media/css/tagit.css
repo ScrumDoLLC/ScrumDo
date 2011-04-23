@@ -1,28 +1,16 @@
 /* @override http://localhost:8000/site_media/static/css/tagit.css */
-
 .ui-autocomplete {
-	background-color: #eee;
-	position: absolute;
-	cursor: default;
-}
-.ui-autocomplete .ui-menu-item {
-}
-.ui-autocomplete  .ui-menu-item a {
-	display:block;
-	padding:4px 6px;
-	text-decoration:none;
-	line-height:12px;
-}
-.ui-autocomplete .ui-menu-item a.ui-state-hover,
-.ui-autocomplete .ui-menu-item a.ui-state-active {
-	background-color:#78959D;
-	color:#fff;
-	margin:0;
-}
-.ui-autocomplete-loading {
-	background: white url(images/ui-anim_basic_16x16.gif) right center no-repeat;
+		max-height: 200px;
+		overflow-y: auto;
+		/* prevent horizontal scrollbar */
+		overflow-x: hidden;
+		/* add padding to account for vertical scrollbar */
+		padding-right: 20px;
 }
 
+li.ui-menu-item {
+	font-size: 10px;
+}
 ul.tagit {
 	padding:1px 5px;
 	border-style:solid;

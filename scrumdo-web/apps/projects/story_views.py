@@ -224,10 +224,12 @@ def story(request, group_slug, story_id):
         read_access_or_403(project,request.user)
         form = StoryForm(project, instance=story )
 
+    tags = project.tags.all().order_by("name")
     return   render_to_response("stories/story.html", {
         "story": story,
         "form": form,
         "project": project,
+        "tags": tags,
         "return_type": return_type
       }, context_instance=RequestContext(request))
 
