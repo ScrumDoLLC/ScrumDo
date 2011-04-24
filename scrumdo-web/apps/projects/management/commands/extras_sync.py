@@ -74,6 +74,9 @@ def processQueue():
     for queueItem in queue:
         try:
             project = queueItem.project
+            if not project.active:
+                continue
+                
             logger.info("== Syncronizing %s" % project.slug)
             story = queueItem.story
             task = queueItem.task

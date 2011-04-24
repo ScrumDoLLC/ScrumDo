@@ -39,10 +39,12 @@
         <div id="your-projects">
         	{% for project in my_projects %}  
         	  {% ifequal None project.organization %}
-        	  <div class="projectfeed">
-        	    <a title="Subscribe to project activity." target="_blank" href="/feeds/project/{{ project.pk }}/{{ project.token }}">{% silk "feed" %}</a>
-        	  </div><!--projectfeed-->
-        	  <div class="project">
+
+          	  <div class="projectfeed">
+          	    <a title="Subscribe to project activity." target="_blank" href="/feeds/project/{{ project.pk }}/{{ project.token }}">{% silk "feed" %}</a>
+          	  </div><!--projectfeed-->
+
+        	  <div class="project {% if not project.active %}disabled_project{% endif %}">
           	  <a href="{% url project_detail project.slug %}">{% silk "database_table" %} {{project.name}}</a> 
         	    <div class="subtitle">{{ project.get_num_iterations }} iteration{{ project.get_num_iterations|pluralize }}, {{ project.get_num_stories }} stor{{ project.get_num_stories|pluralize:"y,ies" }}</div>
         	  </div><!--project-->
@@ -61,10 +63,12 @@
     <div class="box-content">
       <div id="other-projects">
 	{% for project in member_projects %}  
+
       <div class="projectfeed">
-	<a title="Subscribe to project activity." target="_blank" href="/feeds/project/{{ project.pk }}/{{ project.token }}">{% silk "feed" %}</a>
+	      <a title="Subscribe to project activity." target="_blank" href="/feeds/project/{{ project.pk }}/{{ project.token }}">{% silk "feed" %}</a>
       </div><!--projectfeed-->
-	<div class="project">
+
+	<div class="project {% if not project.active %}disabled_project{% endif %}">
           {% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a> 
 	  <div class="subtitle">{{ project.get_num_iterations }} iteration{{ project.get_num_iterations|pluralize }}, {{ project.get_num_stories }} stor{{ project.get_num_stories|pluralize:"y,ies" }}, created by {{ project.creator.username }}.</div>
 	</div><!--project-->
@@ -82,7 +86,7 @@
 	<span class="subtitle">({{ my_organizations|length }})</span>	
       </div>
       <div class="buttons">
-	<a title="Add New Organization" href="{% url organization_create %}">{% silk "add" %}</a>
+	      <a title="Add New Organization" href="{% url organization_create %}">{% silk "add" %}</a>
       </div><!--buttons-->
     </div><!--box-top-->
     {% for org in my_organizations %}  
@@ -93,13 +97,15 @@
     <div class="box-content">
       {% for project in org.projects.all %}
       {% canread project %}
-      <div class="projectfeed">
-	<a title="Subscribe to project activity." target="_blank" href="/feeds/project/{{ project.pk }}/{{ project.token }}">{% silk "feed" %}</a>
-      </div><!--projectfeed-->
-      <div class="project">
-	{% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a> 
-	<div class="subtitle">{{ project.get_num_iterations }} iteration{{ project.get_num_iterations|pluralize }}, {{ project.get_num_stories }} stor{{ project.get_num_stories|pluralize:"y,ies" }}</div>
-      </div><!--project-->
+      
+        <div class="projectfeed">
+    	      <a title="Subscribe to project activity." target="_blank" href="/feeds/project/{{ project.pk }}/{{ project.token }}">{% silk "feed" %}</a>
+        </div><!--projectfeed-->
+
+        <div class="project {% if not project.active %}disabled_project{% endif %}">
+	        {% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a> 
+	        <div class="subtitle">{{ project.get_num_iterations }} iteration{{ project.get_num_iterations|pluralize }}, {{ project.get_num_stories }} stor{{ project.get_num_stories|pluralize:"y,ies" }}</div>
+        </div><!--project-->
       {% endcanread %}
       {% endfor %}
     </div><!--box-content-->

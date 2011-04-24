@@ -15,6 +15,7 @@
     padding-top: 8px;
     padding-right: 4px;
 }
+
 .box-content .project {
     padding: 2px;
     border-bottom: 1px solid #e1e1e1;
@@ -23,6 +24,11 @@
     padding-left: 22px;
     text-indent: -20px;
 }
+
+.box-content .disabled_project {
+    opacity: 0.4;
+}
+
 
 .box-content .project .subtitle {
     margin-left: 15px;
