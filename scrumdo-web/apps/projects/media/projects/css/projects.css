@@ -576,3 +576,27 @@ div.add_task {
 .comment_section {
 	margin-left: 42px;
 }
+
+
+
+.archived_project {
+	width: 100%;
+	min-height: 35px;
+	background-color: #efeeed;
+	margin-top: 0px;
+	border-bottom: 2px solid #8a8a8a;
+	padding: 12px 220px 0 20px;
+}
+
+.archived_project h1 {
+	display: inline-block;
+	vertical-align: middle;
+}
+.archived_project input {
+	position: absolute;
+	right: 200px;
+	top: 59px;
+	z-index: 8;
+}
+
+
