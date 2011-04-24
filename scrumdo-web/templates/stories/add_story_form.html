@@ -51,10 +51,7 @@
     
     var all_tags = scrumdo_special_tags.concat( project_tags );
 
-    // $("#addStoryForm #id_tags2").tagit({
-    //     availableTags:all_tags, 
-    //     input_field:"#id_tags"
-    //     });
+
 
 
     function updateStoryListInternal( newStory )
@@ -77,12 +74,16 @@
         _gaq.push(['_trackEvent',"AddStory", "{{current_view}}", "", 1]);      
       {% endif %}
       story_form_expanded = false;
-      
+      window.location.hash = "";
     }
 
     $(document).ready(function() {
             
-      
+      $("#id_tags_add_story").tagit({
+          availableTags:all_tags, 
+          input_field:"#id_tags"
+          });
+          
       $("#addStoryForm").ajaxForm({ url:"{% url ajax_add_story project.slug %}",
                                     success:updateStoryListInternal });
       
