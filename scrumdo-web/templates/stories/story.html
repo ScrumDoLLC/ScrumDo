@@ -83,10 +83,7 @@
       
       var all_tags = scrumdo_special_tags.concat( project_tags );
 
-      $("#story_details #id_tags2").tagit({
-          availableTags:all_tags, 
-          input_field:"#facebox #story_details #id_tags"
-          });
+      $("#story_details #id_tags2").tagit({availableTags:all_tags,input_field:"#id_tags"});
 
       $("#story_area .commentForm").show();
       

@@ -4,12 +4,13 @@
 
 		var el = this;
 
-		const BACKSPACE		= 8;
-		const ENTER			= 13;
-		const SPACE			= 32;
-		const COMMA			= 44;
+		var BACKSPACE		= 8;
+		var ENTER			= 13;
+		var SPACE			= 32;
+		var COMMA			= 44;
 
-        var input_field = $(options.input_field);
+        
+        var input_field = $(this).siblings(options.input_field);
 
         
 		// add the tagit CSS class.
