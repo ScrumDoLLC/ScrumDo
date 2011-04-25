@@ -63,6 +63,8 @@ class ProjectStories(Feed):
         return "Recent work in all iterations of project."
 
     def items(self, obj):
+        if not obj.active:
+            return []
         activities = Activity.objects.filter(project = obj)
         return [activity.mergeChildren() for activity in activities[:30]]
 

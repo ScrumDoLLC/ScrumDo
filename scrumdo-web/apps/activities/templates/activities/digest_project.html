@@ -34,7 +34,7 @@
       <ul style="margin-top:0px; margin-bottom:0px;list-style-type:none">
       {% for act in story_obj.activities %}
         <li style="font-size:70%; color:#333333">
-           {{act.user|name_or_username}} {{ act|activity_action }}         
+           {{act.user|name_or_username}} {{ act|activity_action }} <i>{{act.comment}}</i>
         </li>
       {% endfor %}
       </ul>

@@ -25,8 +25,8 @@ from django.core.cache import cache
 
 CACHE_PERMISSION_SECONDS = 30
 
-def admin_access_or_403(project,user):
-    if not has_admin_access(project, user):
+def admin_access_or_403(project,user, ignore_active=False):
+    if not has_admin_access(project, user, ignore_active=ignore_active):
         raise PermissionDenied()
 
 def read_access_or_403(project,user):
@@ -37,8 +37,12 @@ def write_access_or_403(project,user):
     if not has_write_access(project, user):
         raise PermissionDenied()
 
-def has_admin_access( project, user ):
+def has_admin_access( project, user , ignore_active=False):
     try:
+        if not ignore_active:
+            if not project.active:
+                return False
+                
         if user.is_staff:
             return True
         if project.creator == user: return True
@@ -56,6 +60,8 @@ def has_admin_access( project, user ):
 
 def has_write_access( project, user ):
     try:
+        if not project.active:
+            return False        
         key = cache_key(project, user, "write")
         cached_value = cache.get(key)
         if cached_value == None:

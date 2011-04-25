@@ -18,6 +18,17 @@
 {% endblock %}
 
 {% block panel %}
+
+   {% archived project %}
+    <div class="archived_project">
+      <b>This project is archived.</b>
+      You can not make changes to archived projects.
+      <form method="POST" action="{% url project_activate project.slug %}">
+        <input type="submit" value="Reactivate Project" />
+      </form>
+    </div>
+   {% endarchived %}
+
   
     {% if user.is_authenticated %}
     <div id="panel">  
@@ -57,15 +68,19 @@
     <div class="box">
       <div class="box-title">Project Tools</div>
       <div class="box-content">
-        {% if iterationinfo %}
-          <a title="Easily rank your stories and move them into an iteration." href="{% url stories project.slug  %}?iteration={{iteration.id}}">{% silk "date" %} Iteration Planning</a><br/>
-        {% else %}
-          <a title="Easily rank your stories and move them into an iteration." href="{% url stories project.slug %}">{% silk "date" %} Iteration Planning</a><br/>
-        {% endif %}
+        {% canwrite project %}
+          {% if iterationinfo %}
+            <a title="Easily rank your stories and move them into an iteration." href="{% url stories project.slug  %}?iteration={{iteration.id}}">{% silk "date" %} Iteration Planning</a><br/>
+          {% else %}
+            <a title="Easily rank your stories and move them into an iteration." href="{% url stories project.slug %}">{% silk "date" %} Iteration Planning</a><br/>
+          {% endif %}
+        {% endcanwrite %}
 	<a title="See how much you've completed in past iterations." href="{% url project_history project.slug %}">{% silk "report" %} History</a><br/>
 	<a title="Make predictions of what work will get done when based on your ranking and velocity." href="{% url project_prediction project.slug %}">{% silk "find" %} Predictions</a><br/>
 	{% ifloaded poker %}
-	<a href="{% url play_poker project.slug %}">{% silk "application_view_tile" %} Planning Poker</a><br/>
+  	{% canwrite project %}
+ 	  <a href="{% url play_poker project.slug %}">{% silk "application_view_tile" %} Planning Poker</a><br/>
+ 	  {% endcanwrite %}
 	{% endifloaded %}
 	<a href="{% url export_project project.slug %}">{% silk "lorry" %} Export Project</a><br/>
 	<!-- <span title="Coming Soon: Easily size stories.">{% silk "time" %} Sizing</span><br/> -->
@@ -173,5 +188,6 @@
 
 <script src="{{ STATIC_URL }}js/burndown.js" type="text/javascript"></script>  
 <script src="{{ STATIC_URL }}js/project.js" type="text/javascript"></script>  
+<script src="{{ STATIC_URL }}js/tag-it.js" type="text/javascript"></script>  
 
 {% endblock %}

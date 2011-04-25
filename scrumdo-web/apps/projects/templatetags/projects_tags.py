@@ -194,6 +194,26 @@ class NotLockedNode(template.Node):
         else:
             return ""
 
+@register.tag(name="archived")
+def isArchived(parser, token):
+    tag_name, project = token.split_contents()
+    nodelist = parser.parse(('endarchived',))
+    parser.delete_first_token()
+    return ArchivedNode(nodelist, project)
+
+class ArchivedNode(template.Node):
+    def __init__(self, nodelist, project):
+        self.nodelist = nodelist
+        self.project = project
+    def render(self, context):
+        if not context[self.project].active:
+            output = self.nodelist.render(context)
+            return output
+        else:
+            return ""
+
+
+
 @register.tag(name="locked")
 def istLocked(parser, token):
     tag_name, story = token.split_contents()

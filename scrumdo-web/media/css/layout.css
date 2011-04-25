@@ -33,12 +33,11 @@
 }
 
 #side {
-    /*width: 250px;*/
-    width: 30%;
-    padding: 0px;
-    margin-right: -120px;
-    padding-left: 10%;
-    float: right;
+    width: 210px;
+    position: absolute;
+    right: 0px;
+    top: 60px;
+    z-index: 50;
 }
 
 #panel {
@@ -122,7 +121,8 @@
 	background-color: #fffeff;
 	left: 50%;
     
-    behavior: url(/site_media/static/css/PIE.htc);  text-align: left;
+    behavior: url(/site_media/static/css/PIE.htc);  
+    text-align: left;
     margin-bottom: 10px;
     margin-right: 2px;
     margin-left: 0px;
@@ -522,4 +522,8 @@ h2.page-divider {
     border-top: 1px solid #ccc;
     border-left: 0px;
     border-right: 0px;
+}
+
+.disabled_project {
+    opacity: 0.4;
 }

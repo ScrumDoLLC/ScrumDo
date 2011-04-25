@@ -334,11 +334,11 @@
   padding-right: 2px;
 }
 
-#story_details ul {
+#story_details #points_section ul {
   margin: 0px;
   padding: 0px;
 }
-#story_details li {
+#story_details #points_section li {
   list-style-type: none;
   display: inline-block;
   background-color: #ededed;
@@ -569,13 +569,34 @@ div.add_task {
     border-bottom: 1px solid #e1e1e1;
     border-top: 1px solid #e1e1e1;
     border-right: 1px solid #e1e1e1;
-
-
     min-height: 33px;
-    position: relative;    
-	
+    position: relative;    	
 }
 
 .comment_section {
 	margin-left: 42px;
 }
+
+
+
+.archived_project {
+	width: 100%;
+	min-height: 35px;
+	background-color: #efeeed;
+	margin-top: 0px;
+	border-bottom: 2px solid #8a8a8a;
+	padding: 12px 220px 0 20px;
+}
+
+.archived_project h1 {
+	display: inline-block;
+	vertical-align: middle;
+}
+.archived_project input {
+	position: absolute;
+	right: 200px;
+	top: 59px;
+	z-index: 8;
+}
+
+

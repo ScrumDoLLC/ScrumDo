@@ -32,6 +32,8 @@ class Command(BaseCommand):
         email_address = user.email
         
         for sub in user.email_subscriptions.all():
+            if not sub.project.active:
+                continue
             logger.debug(sub)
             today = datetime.date.today()
             mdiff = datetime.timedelta(days=-1) # TODO - change this to 1

@@ -60,8 +60,8 @@ class Organization(models.Model):
     created = models.DateTimeField(_('created'), default=datetime.datetime.now)
     description = models.TextField(_('description'),  null=True, default="")
 
-    def getDefaultTeam():
-        return Organization.objects.filter( teams__access_type="admin", teams__members__user__id = user.id ).order_by("name")[0]
+    def activeProjects(self):
+        return self.projects.filter(active=True);
 
     # Returns all organizations
     @staticmethod
@@ -87,12 +87,6 @@ class Organization(models.Model):
             return True
         return (self.teams.filter( members=user ).count() > 0)
 
-    # returns all organizations the user has read/write access to
-    # @staticmethod
-    # def getReadWriteOrganizationsForUser( user ):
-    #   return Organization.objects.filter( teams__members = user ).exclude(teams__access_type = "read").distinct().order_by("name")
-
-
     def memberCount(self):
         members = []
         for team in self.teams.all():
@@ -100,8 +94,6 @@ class Organization(models.Model):
                 if members.count(member) == 0:
                     members.append(member)
         return len(members)
-
-
 
     def get_url_kwargs(self):
         return {'organization_slug': self.slug}

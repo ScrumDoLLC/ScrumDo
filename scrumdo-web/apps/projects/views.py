@@ -89,7 +89,7 @@ def home( request ):
 
         assigned_stories = Story.getAssignedStories(request.user)
 
-        paginator = Paginator(activities, 10)
+        paginator = Paginator(activities, 20)
         page_obj = paginator.page(1)
         activities = page_obj.object_list
         next_page = page_obj.has_next()
@@ -136,8 +136,16 @@ def remove_user( request, group_slug ):
         membership = project.members.get( user__id=user_id )
         membership.delete()
         return HttpResponse("ok")
-        
-        
+
+@login_required
+def activate( request, group_slug ):
+    project = get_object_or_404( Project, slug=group_slug )
+    admin_access_or_403(project, request.user, ignore_active=True)
+    project.active = True
+    project.save()
+    return HttpResponseRedirect( reverse("project_detail", kwargs={"group_slug":project.slug} ) )
+    
+    
 # The project admin page, this is where you can change the title, description, etc. of a project.
 @login_required
 def project_admin( request, group_slug ):
@@ -179,6 +187,10 @@ def project_admin( request, group_slug ):
             if adduser_form.is_valid():
                 adduser_form.save(request.user)
                 return HttpResponseRedirect( reverse("project_admin", kwargs={"group_slug":project.slug} ) )
+        if request.POST.get("action") == "archiveProject":
+            project.active = False
+            project.save()
+            return HttpResponseRedirect( reverse("project_detail", kwargs={"group_slug":project.slug} ) )
                 
 
             

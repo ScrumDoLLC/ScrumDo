@@ -1,4 +1,7 @@
 
+scrumdo_special_tags = [ {label:"Bug", desc:"Represents a bug report.", value:"Bug"}                         
+                        ];
+
 function setupAutoClose( divID )
 {  
   setTimeout( "$('body').one('click',function() { $(\"" + divID + "\").fadeOut(100); });" , 100);
@@ -15,6 +18,7 @@ function setStatus(storyID, project_slug, status, return_type)
 		success: function(responseText) {
 		$("#story_" + storyID).replaceWith(responseText);
 		setUpStoryLinks();		
+		
 	    }
 	});
 		
@@ -119,7 +123,7 @@ function reloadStory( story_id , display_comments, display_tasks)
     		setUpStoryLinks();
     		
     		if( display_tasks ) { showTasksForStory( story_id , false);}
-    		if( display_comments ) { showCommentsForStory(story_id, false);}    		
+    		if( display_comments ) { showCommentsForStory(story_id, false);}   
 	    }
 	});
     

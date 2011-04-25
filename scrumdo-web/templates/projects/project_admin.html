@@ -123,8 +123,12 @@
           <label><input type="radio" {% ifequal project.velocity_type 2 %}checked{% endifequal %} value="2" name="velocity_type"> <b>Median</b> Uses the median velocity of all your iterations. </label> 
           <p><i>All of these methods ignore iterations if their "Include in velocity calculations" check box is not enabled.</i></p>
           
-            
-            
+          <h2>Category</h2>
+          <p><i>Enter a category to group this project on the organization page.</i></p>
+          <table class="projectOptionsForm">
+            <tr><td style="font-weight:bold">Category:</td><td>{{form.category}} {{form.category.errors}}</td></tr>
+          </table>
+          
       <br/>
       
       <div class="form_block">
@@ -135,6 +139,15 @@
   </form>
   
   <br/><br/>
+  
+    <h2 class="page-divider">Archive Project</h2>
+    <p>Archived projects don't count towards your quotas, but you can no longer edit them.</p>     
+     <form   method="POST" action="" class="uniForm">       
+      <div class="form_block">     
+         <div  class="buttonHolder"><button id="archiveFormButton" class="primaryAction" type="submit" >Archive Project</button></div>
+      </div>
+      <input type="hidden" name="action" value="archiveProject">
+     </form>
 
   
      {% if organizations %}
@@ -212,6 +225,11 @@
               return false;
           });
           
+          $(".archiveFormButton").click(function(){
+            alert("!");
+            return confirm("Are you sure you want to archive this project?" );
+          });
+
           $(".remove_user_link").click(function(e){
             user_id = $(this).attr("user_id");
             if( confirm("Are you sure you want to remove the user from this project?" ) )

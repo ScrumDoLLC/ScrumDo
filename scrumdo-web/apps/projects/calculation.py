@@ -100,6 +100,8 @@ def logPoints( related_object, points_claimed, points_total ):
         # logger.debug("logPoints created a new record.")
 
 def calculateProject( project ):
+    if not project.active:
+        return
     stories = project.stories.all();
     points = calculatePoints( stories )
     total_project_points = points[0]

@@ -63,7 +63,6 @@ class PointsLog( models.Model ):
 
 
 class Project(Group):
-
     POINT_CHOICES_FIBO = ( ('?', '?'), ('0', '0'), ('0.5','0.5'), ('1', '1'),  ('2', '2'),  ('3', '3'),  ('5', '5'), ('8', '8'), ('13', '13'), ('20', '20'), ('40', '40'), ('100', '100'), ('Inf', 'Infinite') )
     POINT_CHOICES_MINIMAL = ( ('?', '?'), ('0', '0'),  ('1', '1'),  ('2', '2'),  ('3', '3'),  ('4', '4'), ('5', '5') )
     POINT_CHOICES_MAX = ( ('?', '?'), ('0', '0'), ('0.5','0.5'), ('1', '1'),  ('2', '2'),  ('3', '3'),   ('4', '4'), ('5', '5'),  ('6', '6'),  ('7', '7'), ('8', '8'),  ('9', '9'),  ('10', '10'), ('15', '15'), ('25', '25'), ('50', '50'), ('100', '100'), ('Inf', 'Infinite') )
@@ -76,38 +75,32 @@ class Project(Group):
     VELOCITY_TYPE_AVERAGE_3 = 3
 
     active = models.BooleanField( default=True )
-
     member_users = models.ManyToManyField(User, through="ProjectMember", verbose_name=_('members'))
-
     # private means only members can see the project
     private = models.BooleanField(_('private'), default=True)
     points_log = generic.GenericRelation( PointsLog )
     current_iterations = None
     default_iteration = None
-
     use_assignee = models.BooleanField( default=False )
     use_tasks = models.BooleanField( default=False )
-    # This field is not used -- use_acceptance = models.BooleanField( default=False )
     use_extra_1 = models.BooleanField( default=False )
     use_extra_2 = models.BooleanField( default=False )
     use_extra_3 = models.BooleanField( default=False )
     extra_1_label = models.CharField(  max_length=25, blank=True, null=True)
     extra_2_label = models.CharField(  max_length=25, blank=True, null=True)
     extra_3_label = models.CharField(  max_length=25, blank=True, null=True)
-
     velocity_type = models.PositiveIntegerField( default=1 )
     point_scale_type = models.PositiveIntegerField( default=0 )
-
     velocity = models.PositiveIntegerField( null=True )
     velocity_iteration_span = models.PositiveIntegerField( null=True )
-
     iterations_left = models.PositiveIntegerField( null=True )
-
     organization = models.ForeignKey(Organization,related_name="projects", null=True, blank=True)
-
+    category = models.CharField( max_length=25, blank=True, null=True)
     token = models.CharField(max_length=7, default=lambda: "".join(random.sample(string.lowercase + string.digits, 7)))
-
-
+    
+    class Meta:
+        ordering = ['-active','name']
+        
 
     def getPointScale( self ):
         return self.POINT_RANGES[ self.point_scale_type ]
@@ -122,6 +115,7 @@ class Project(Group):
         choices = []
         for member in members:
             choices.append([member.id, member.username])
+        choices = sorted(choices, key=lambda user: user[1].lower() )
         return choices
 
 
@@ -281,13 +275,14 @@ class Story( models.Model ):
     def getAssignedStories(user):
         projects = ProjectMember.getProjectsForUser(user)
         assigned_stories = []
-        for project in projects:
-            if project.use_assignee:
+        for project in projects:            
+            if project.active and project.use_assignee:
                 project_stories = []
                 iterations = project.get_current_iterations()
                 for iteration in iterations:
                     project_stories = project_stories + list(Story.objects.filter(iteration=iteration, assignee=user).exclude(status=4))
-                assigned_stories = assigned_stories + [(project, project_stories)]
+                if len(project_stories) > 0:
+                    assigned_stories = assigned_stories + [(project, project_stories)]
         return assigned_stories
 
     def getPointsLabel(self):

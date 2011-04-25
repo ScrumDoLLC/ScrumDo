@@ -68,7 +68,7 @@
         <ul id="story_list">
 
         </ul>
-    </div>
+    
     
 
       <div id="subIterationList" style="display:none">
@@ -91,10 +91,10 @@
 
     <div id="deleteIteration" style="display: none">
       <form method="POST" id="deleteForm" action="{% url delete_iteration project.slug iteration.id %}">
-	<strong>Are you sure you want to delete this iteration?</strong>
-	<input type="submit" style="display: inline; " value="Yes" />
-	<button><a style="text-decoration: none; color: #000" href="{% url iteration project.slug iteration.id %}">No</a></button>
-	<br/>
+    	<strong>Are you sure you want to delete this iteration?</strong>
+    	<input type="submit" style="display: inline; " value="Yes" />
+    	<button><a style="text-decoration: none; color: #000" href="{% url iteration project.slug iteration.id %}">No</a></button>
+    	<br/>
       </form>
       <p>Note: Iterations can only be deleted when they contain no stories.</p>
     </div>
