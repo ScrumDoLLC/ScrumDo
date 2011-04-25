@@ -24,8 +24,8 @@ class ScrumDoAuthorization(Authorization):
         return object_list.filter(self.read_q(request.user)).distinct()
       elif request.method in ['POST','PUT','DELETE']:
         return object_list.filter(self.write_q(request.user)).distinct()
-    else: # if there is no user, don't give them anything.
-      return object_list.none()
+    else: # if there is no user, then this is an internal call, in which case give it all back
+      return object_list.all()
 
 class ScrumDoAuthentication(ApiKeyAuthentication):
   """ Overriding to use more sensible param name for username (as username collides with built in django auth) """

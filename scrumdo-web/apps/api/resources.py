@@ -35,14 +35,14 @@ class OrganizationResource(ModelResource):
     queryset = Organization.objects.all()
     authentication = ScrumDoAuthentication()
     authorization = ScrumDoAuthorization(
-       lambda u: Q(id__in = u.teams.all().values('organization').distinct()),
-       lambda u: Q(id__in = u.teams.filter(access_type="admin").values('organization').distinct()))
+       lambda u: Q(id__in = u.teams.all().values('organization__id').distinct()),
+       lambda u: Q(id__in = u.teams.filter(access_type="admin").values('organization__id').distinct()))
     
 
 class TeamResource(ModelResource):
   members = fields.ToManyField('api.resources.UserResource', 'members')
   projects = fields.ToManyField('api.resources.ProjectResource', 'projects')  
-  organization = fields.ToOneField(OrganizationResource, 'organization')
+  organization = fields.ToOneField('api.resources.OrganizationResource', 'organization')
 
   class Meta:
     queryset = Team.objects.all()
