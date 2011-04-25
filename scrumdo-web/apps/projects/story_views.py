@@ -70,14 +70,17 @@ def set_story_status( request, group_slug, story_id, status):
         return render_to_response("stories/single_mini_story.html", {
             "story": story,
             "return_type": "mini",
+            "project": story.project
           }, context_instance=RequestContext(request))
     if( request.POST.get("return_type","mini") == "queue"):
         return render_to_response("stories/single_queue_story.html", {
             "story": story,
             "return_type": "queue",
+            "project": story.project
           }, context_instance=RequestContext(request))
     return render_to_response("stories/single_block_story.html", {
         "story": story,
+        "project": story.project
       }, context_instance=RequestContext(request))
 
 
@@ -172,6 +175,7 @@ def story_block(request, story_id):
     return render_to_response("stories/single_block_story.html", {
         "story": story,
         "return_type": "block",
+        "project": story.project
       }, context_instance=RequestContext(request))
 
 # Returns the edit-story form, with minimal html wrapper.  This is useful for displaying within
@@ -213,6 +217,7 @@ def story(request, group_slug, story_id):
             return render_to_response("stories/single_block_story.html", {
                 "story": story,
                 "return_type": return_type,
+                "project": story.project
               }, context_instance=RequestContext(request))
         if( request.POST['return_type'] == 'queue'):
             return render_to_response("stories/single_queue_story.html", {
