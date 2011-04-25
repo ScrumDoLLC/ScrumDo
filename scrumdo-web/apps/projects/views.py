@@ -89,7 +89,7 @@ def home( request ):
 
         assigned_stories = Story.getAssignedStories(request.user)
 
-        paginator = Paginator(activities, 10)
+        paginator = Paginator(activities, 20)
         page_obj = paginator.page(1)
         activities = page_obj.object_list
         next_page = page_obj.has_next()

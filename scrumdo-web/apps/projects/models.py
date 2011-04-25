@@ -95,6 +95,7 @@ class Project(Group):
     velocity_iteration_span = models.PositiveIntegerField( null=True )
     iterations_left = models.PositiveIntegerField( null=True )
     organization = models.ForeignKey(Organization,related_name="projects", null=True, blank=True)
+    category = models.CharField( max_length=25, blank=True, null=True)
     token = models.CharField(max_length=7, default=lambda: "".join(random.sample(string.lowercase + string.digits, 7)))
     
     class Meta:

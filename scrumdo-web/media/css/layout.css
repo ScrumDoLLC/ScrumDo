@@ -523,3 +523,7 @@ h2.page-divider {
     border-left: 0px;
     border-right: 0px;
 }
+
+.disabled_project {
+    opacity: 0.4;
+}

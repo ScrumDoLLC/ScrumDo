@@ -122,6 +122,13 @@
           <label><input type="radio" {% ifequal project.velocity_type 1 %}checked{% endifequal %} value="1" name="velocity_type"> <b>Average last 5</b> Average your 5 most recent iterations. </label> 
           <label><input type="radio" {% ifequal project.velocity_type 2 %}checked{% endifequal %} value="2" name="velocity_type"> <b>Median</b> Uses the median velocity of all your iterations. </label> 
           <p><i>All of these methods ignore iterations if their "Include in velocity calculations" check box is not enabled.</i></p>
+          
+          <h2>Category</h2>
+          <p><i>Enter a category to group this project on the organization page.</i></p>
+          <table class="projectOptionsForm">
+            <tr><td style="font-weight:bold">Category:</td><td>{{form.category}} {{form.category.errors}}</td></tr>
+          </table>
+          
       <br/>
       
       <div class="form_block">

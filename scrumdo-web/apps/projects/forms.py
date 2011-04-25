@@ -50,7 +50,7 @@ class IterationForm(forms.ModelForm):
 class ProjectOptionsForm(forms.ModelForm):
     class Meta:
         model = Project
-        fields = ('velocity_type','point_scale_type', 'use_extra_1', 'use_extra_2', 'use_extra_3', 'use_tasks', 'use_assignee', 'extra_1_label', 'extra_2_label', 'extra_3_label','name', 'description' )
+        fields = ('category','velocity_type','point_scale_type', 'use_extra_1', 'use_extra_2', 'use_extra_3', 'use_tasks', 'use_assignee', 'extra_1_label', 'extra_2_label', 'extra_3_label','name', 'description' )
 
 class TaskForm( forms.ModelForm ):
     def __init__(self, project, *args, **kwargs):
