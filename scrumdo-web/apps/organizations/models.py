@@ -33,7 +33,7 @@ class Team(models.Model):
         ('read', 'Read Only'),
         ('write', 'Read / Write'),
         ('admin', 'Administrator') ]
-    members = models.ManyToManyField(User, verbose_name=_('members'))
+    members = models.ManyToManyField(User, verbose_name=_('members'), related_name="teams")
     projects = models.ManyToManyField("projects.Project", verbose_name=_('projects'), related_name="teams")
 
     organization = models.ForeignKey('Organization', related_name="teams")
