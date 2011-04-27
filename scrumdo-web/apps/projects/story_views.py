@@ -257,8 +257,7 @@ def stories_iteration(request, group_slug, iteration_id):
     stories = None
 
     if request.GET.get("clearButton") != "Clear Filter":
-
-            # There's probably a better way to set up these filters...
+        # There's probably a better way to set up these filters...
         if text_search and tags_search:
             stories = iteration.stories.filter(story_tags__tag__name__in=tags_list).extra( where = ["MATCH(summary, detail, extra_1, extra_2, extra_3) AGAINST (%s IN BOOLEAN MODE)"], params=[text_search]).distinct().order_by(order_by)
         elif tags_search:
@@ -273,8 +272,8 @@ def stories_iteration(request, group_slug, iteration_id):
                 stories = stories.filter(assignee=request.user)
 
     if stories == None:
-        stories = iteration.stories.order_by(order_by)
-
+        stories = iteration.stories.select_related('project', 'project__organization','project__organization__subscription',  'iteration','iteration__project',).order_by(order_by)
+    
     return render_to_response("stories/mini_story_list.html", {
       "stories": stories,
       "project":project,
