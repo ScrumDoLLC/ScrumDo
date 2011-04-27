@@ -7,9 +7,9 @@
 {% block body %}
 
 <h1>New Developer Key</h1>
-<form class="uniForm" id="edit-project" method="POST" action="">
+<form class="uniForm" id="edit-developer" method="POST" action="">
     <fieldset class="inlineLabels">
-        {{ apply_form|as_uni_form }}
+        {{ form|as_uni_form }}
         <div class="form_block">
             <input type="submit" value="{% trans "Create Developer" %}"/>
         </div>

@@ -1,5 +1,6 @@
 from tastypie.authentication import ApiKeyAuthentication
 from tastypie.authorization import Authorization
+from api.models import UserApiKey
 
 
 class ScrumDoAuthorization(Authorization):
@@ -29,6 +30,20 @@ class ScrumDoAuthorization(Authorization):
 
 class ScrumDoAuthentication(ApiKeyAuthentication):
   """ Overriding to use more sensible param name for username (as username collides with built in django auth) """
+  
+  def get_key(self, user, api_key):
+       """
+       Attempts to find the API key for the user. Uses ``ApiKey`` by default
+       but can be overridden.
+       """
+       
+       try:
+           key = UserApiKey.objects.get(user=user, key=api_key)
+       except UserApiKey.DoesNotExist:
+           return self._unauthorized()
+       
+       return True
+  
   def is_authenticated(self, request, **kwargs):
       """
       Finds the user and checks their API key.

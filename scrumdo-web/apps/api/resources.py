@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 from tastypie import fields
 from tastypie.resources import ModelResource
 from tastypie.validation import Validation, FormValidation
@@ -15,6 +16,7 @@ from projects.access import has_read_access, has_write_access
 from projects.forms import StoryForm
  
 from auth import ScrumDoAuthentication, ScrumDoAuthorization
+from api.models import DeveloperApiKey, UserApiKey
 
 class UserResource(ModelResource):
   # teams = fields.ToManyField('api.resources.TeamResource', 'team')
@@ -25,7 +27,19 @@ class UserResource(ModelResource):
     fields = ['username', 'first_name', 'last_name', 'last_login']
     allowed_methods = ['get']
     authentication = ScrumDoAuthentication()
-    
+ 
+class UserKeyResource(ModelResource):
+  class Meta:
+    queryset = UserApiKey.objects.all()
+    fields = ['key']
+    allowed_methods = ['get']
+    resource_name = "developer"
+     
+    def base_urls(self):
+        return [
+            url(r"^(?P<resource_name>%s)/login%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('login'), name="api_login"),
+        ]
+
 
 class OrganizationResource(ModelResource):
   teams = fields.ToManyField('api.resources.TeamResource', 'teams')
