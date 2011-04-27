@@ -38,7 +38,7 @@
 
 
 <div class="story_footer">
-  {% if story.assignee and story.project.use_assignee %}
+  {% if story.project.use_assignee and story.assignee %}
       {% avatar story.assignee 20 %} <b>{{story.assignee}}</b> -
   {% endif %}
 
