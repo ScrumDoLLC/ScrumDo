@@ -65,6 +65,8 @@ urlpatterns = patterns('',
     (r'^tutorial/', include('tutorial.urls')),
     (r'^admin/(.*)', admin.site.root),
     (r'^api/', include('api.urls')),
+    (r'^developer/', include('developer.urls')),
+
     url(r'^usage', "projects.views.usage", name="usage"),
 )
 

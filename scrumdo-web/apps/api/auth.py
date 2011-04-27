@@ -18,7 +18,7 @@ class ScrumDoAuthorization(Authorization):
     # so it is useless unless you are doing class level authorization.
     return True
 
-  def apply_limits(self, request, object_list):
+  def apply_limits(self, request, object_list):    
     if request and hasattr(request, 'user') and self:
       if request.method == 'GET':
         return object_list.filter(self.read_q(request.user)).distinct()

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load uni_form %}
+
+
+{% block body %}
+
+<h1>New Developer Key</h1>
+<form class="uniForm" id="edit-project" method="POST" action="">
+    <fieldset class="inlineLabels">
+        {{ apply_form|as_uni_form }}
+        <div class="form_block">
+            <input type="submit" value="{% trans "Create Developer" %}"/>
+        </div>
+    </fieldset>
+</form>
+
+
+<script type="text/javascript" charset="utf-8">
+ 
+  {% if GOOGLE_ANALYTICS %}     
+     _gaq.push(['_trackEvent',"ViewPage", "DeveloperKeyCreated", "", 1]); 
+  {% endif %}      
+
+  
+</script>
+{% endblock %}

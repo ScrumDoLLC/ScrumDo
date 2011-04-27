@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<a href="{% url developer_apply %}">Apply For A Key</a>
+<br>
+
+{% for key in keys %}
+<p>{{key.application_name}} - {{key.key}}</p>
+
+{% endfor %}
+
+{% endblock %}

@@ -177,7 +177,8 @@ INSTALLED_APPS = (
     'django_markup',
     'django_filters',
     'staticfiles',
-    'tastypie',
+#    'tastypie',
+    'api',
 
     # internal (for now)
     'basic_profiles',
