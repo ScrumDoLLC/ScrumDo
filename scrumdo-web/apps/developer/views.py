@@ -1,5 +1,5 @@
 from forms import DeveloperApiKeyForm
-from api.models import DeveloperApiKey
+from api.models import DeveloperApiKey, UserApiKey
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
@@ -29,4 +29,16 @@ def apply(request):
              })
       
          
-    
+@login_required
+def user_keys(request):
+  if request.method == 'POST' and request.POST.get("key_id"):
+    k = UserApiKey.objects.get(pk=request.POST.get("key_id"))
+    appname = k.developer_key.application_name
+    k.delete()
+    request.user.message_set.create(message=("Deleted developer key for application %s." % appname))
+
+  keys = UserApiKey.objects.filter(user = request.user)
+  return render_to_response("developer/user_keys.html", {
+    "keys" : keys,
+  })
+

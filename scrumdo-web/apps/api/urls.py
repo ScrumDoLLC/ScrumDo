@@ -4,7 +4,8 @@ from api.resources import OrganizationResource, TeamResource, ProjectResource, S
 
 class ScrumDoApi(Api):
   def override_urls(self):
-    return [url(r'^login$', "api.views.login" , name="api_login")]
+    return [url(r'^login$', "api.views.login" , name="api_login"),
+            url(r'^is_key_valid$', "api.views.is_key_valid" , name="is_key_valid"),]
 
 v1_api = ScrumDoApi(api_name='v1')
 v1_api.register(OrganizationResource())

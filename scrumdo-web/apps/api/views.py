@@ -41,3 +41,17 @@ def login(request, **kwargs):
     else:
       assert False, "invalid username / password"
       return HttpUnauthorized()
+
+def is_key_valid(request, **kwargs):
+    user_key = request.GET.get('user_key')
+    try:
+      user_key = UserApiKey.objects.get(key=user_key)
+      key_valid = True
+    except UserApiKey.DoesNotExist:
+      key_valid = False
+      # self.log_throttled_access(request)
+    serializer = Serializer()
+    desired_format = determine_format(request, serializer)
+    serialized = serializer.serialize({'is_valid' : key_valid}, desired_format)
+    return HttpResponse(content=serialized, content_type=build_content_type(desired_format))
+
