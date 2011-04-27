@@ -49,11 +49,11 @@
     {% get_comment_count for story as comment_count %}
     <a onClick="showCommentsForStory({{story.id}}); return false;" href="#">{{comment_count}} Comment{{comment_count|pluralize}}</a>
 
-  {% if story.story_tags.all %}  
-    {% for tag in story.story_tags.all %}
-       <div class="tagsBox">{% silk "tag_blue" %}<a onclick="filterByTag('{{tag.name}}');  return false;" href="#">{{ tag.name }}</a></div>
-    {% endfor %}
-  {% endif %}
+
+  {% for tag in story.story_tags.all %}
+     <div class="tagsBox">{% silk "tag_blue" %}<a onclick="filterByTag('{{tag.name}}');  return false;" href="#">{{ tag.name }}</a></div>
+  {% endfor %}
+
 
   {% for link in story.external_links.all %}
    <div class="tagsBox">{% silk "link" %} <a href="{{ link.external_url }}">{{ link.extra_slug }}</a></div>
