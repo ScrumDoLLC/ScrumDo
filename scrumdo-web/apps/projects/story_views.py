@@ -84,6 +84,15 @@ def set_story_status( request, group_slug, story_id, status):
       }, context_instance=RequestContext(request))
 
 
+@login_required
+def story_comments( request, story_id ):
+    logger.debug("Retrieving comments for story")
+    story = get_object_or_404( Story, id=story_id )
+    read_access_or_403( story.project, request.user )
+    return render_to_response("stories/story_comments.html", {
+        "story": story,
+      }, context_instance=RequestContext(request))
+
 # Deletes a story.  No further confirmation, don't post here if you want your story.
 # We're doing some confirmation client-side.  Sometimes called via ajax, sometimes
 # a normal request.  If a normal request, there should be a GET param specifying where

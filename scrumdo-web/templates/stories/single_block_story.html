@@ -63,7 +63,8 @@
 
 </div>
 
-{% comments story %}
+<div id="story_comments_{{story.id}}" style="display:none"></div>
+
 
 {% if story.project.use_tasks %}
   {% include "stories/tasks_section.html" %}
