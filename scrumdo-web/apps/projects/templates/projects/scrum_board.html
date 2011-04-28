@@ -16,24 +16,66 @@
 
 {% block head_title %}{{ project.name }}{% endblock %}
 
+
+{% block panel %}
+{% endblock %}
+
+{% block breadcrumbs %}
+  {% if project.organization %}
+     <a href="{% url organization_detail project.organization.slug %}">{{ project.organization.name }}</a> /
+  {% endif %}
+  <a href="{% url project_detail project.slug %}">{{ project.name }}</a> /
+  <a href="{% url iteration project.slug iteration.id %}">{{ iteration.name }}</a> /
+  Scrum Board
+{% endblock %}
+
+
 {% block extra_head %}
   <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.cookie.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/scrum-board.js"></script>
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/scrum-board.css" />
+    
+
+  <style type="text/css" media="screen">
+    html, body, #body_holder { min-height: 100%; width:100%; max-width:100%;}
+    #body {
+      padding-top: 0px;
+      padding-right: 210px; 
+      padding: 0px; 
+      margin: 0px;
+      width: 100%;
+      max-width: 100%;
+      min-width: 100%;
+    }
+    
+  </style>
 {% endblock %}
 
-{% block add_story %}
-    {% if user.is_authenticated %}
-    {% canwrite project %}
-      {% include "stories/add_story_form.html" %}
-    {% endcanwrite %}
-
-    {% endif %}
-{% endblock %}
 
 
 {% block body %}
-   
+    <div class="scrum_board_column" id="board_todo_column">
+      <div class="scrum_board_header scrum_board_header_todo">Todo</div>
+      <ul class="scrum_board_list"></ul>
+    </div>
+    <div class="scrum_board_column" id="board_doing_column">
+      <div class="scrum_board_header scrum_board_header_doing">Doing</div>
+      <ul class="scrum_board_list"></ul>
+    </div>
+    <div class="scrum_board_column" id="board_reviewing_column">
+      <div class="scrum_board_header scrum_board_header_reviewing">Reviewing</div>
+      <ul class="scrum_board_list"></ul>
+    </div>
+    <div class="scrum_board_column" id="board_done_column">
+      <div class="scrum_board_header scrum_board_header_done">Done</div>
+      <ul class="scrum_board_list"></ul>
+    </div>
     
     
+    <script type="text/javascript" charset="utf-8">
+      project_slug = "{{project.slug}}";
+      iteration_id = "{{iteration.id}}";
+    </script>
 {% endblock %}
 
 {% block extra_body %}

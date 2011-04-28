@@ -209,8 +209,6 @@ def scrum_board(request, group_slug, iteration_id):
     iteration = get_object_or_404(Iteration, id=iteration_id)
     read_access_or_403(project,request.user)
     if iteration.project != project:
-        raise PermissionDenied()
-    
-    add_story_form = handleAddStory(request, project)
-    
+        raise PermissionDenied()    
+    add_story_form = handleAddStory(request, project)    
     return render_to_response('projects/scrum_board.html', { 'project':project, 'iteration':iteration, "add_story_form":add_story_form  }, context_instance=RequestContext(request))

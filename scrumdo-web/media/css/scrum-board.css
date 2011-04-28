@@ -1,0 +1,89 @@
+/* @override http://localhost:8000/site_media/static/css/scrum-board.css */
+
+.scrum_board_column {
+	width: 24%;
+	border: 1px solid #d2d2d2;
+	height: 100%;
+	float: left;
+	border-right-style: none;
+	min-height: 2500px;
+}
+
+.scrum_board_column:last-child {
+	border-right: 1px solid #d2d2d2;
+}
+
+.scrum_board_header {
+	width: 100%;
+	text-align: center;
+	font-size: 16px;
+	font-weight: bold;
+	padding: 8px 0;
+}
+
+.scrum_board_header_todo {
+	background-color: #444;
+	color: #fff;
+}
+
+.scrum_board_header_doing {
+	background-color: #448cca;
+	color: #fff;
+}
+
+.scrum_board_header_reviewing {
+	background-color: #ff7f0e;
+	color: #fff;
+}
+
+.scrum_board_header_done {
+	background-color: #8dc73e;
+	color: #fff;
+}
+
+.scrum_board_list {
+	margin: 0px;
+	padding: 0px;
+}
+
+.scrum_board_story_block {
+	list-style: none;
+	
+}
+
+.scrum_board_story_block {
+	font-size: 12px;
+	color: #444;
+	border-bottom-style: none;
+	border-bottom-width: 1px;
+	overflow: hidden;
+	border-top: 8px solid #afafaf;
+	border-right-width: 1px;
+	border-left-width: 1px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+	margin: 3px 2px 2px;
+	background-color: #fafafa;
+	min-height: 110px;
+	cursor: move;
+}
+
+.board_story_body {
+    cursor: default;
+}
+
+.scrum_board_story_block h1 {
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.scrum_board_story_block .pointsBox {
+	margin-top: -8px;
+}
+
+.ui-board-state-highlight {
+    min-height: 110px;
+    background-color: #cccccc;
+    list-style: none;
+}

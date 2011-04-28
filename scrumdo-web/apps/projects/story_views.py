@@ -247,6 +247,21 @@ def story(request, group_slug, story_id):
         "return_type": return_type
       }, context_instance=RequestContext(request))
 
+@login_required
+def stories_scrum_board(request, group_slug, iteration_id, status):
+    project = get_object_or_404(Project, slug=group_slug)
+    read_access_or_403(project,request.user)
+    iteration = get_object_or_404(Iteration, id=iteration_id, project=project)
+
+    
+    stories = iteration.stories.select_related('project', 'project__organization','project__organization__subscription',  'iteration','iteration__project',).filter(status=Story.STATUS_REVERSE[status]).order_by("rank")
+
+    return render_to_response("stories/scrum_board_story_list.html", {
+    "stories": stories,
+    "project":project   
+    }, context_instance=RequestContext(request))
+
+
 # Returns the stories for a given iteration as an html snippet.  The iteration planning page uses this
 # uplon load, and then also upon filtering by the user
 @login_required
