@@ -1137,8 +1137,8 @@ class Sheet(BaseObject):
                         r.xf_index = -1
                     elif data_len == 18:
                         # Seems the XF index in the cell_attr is dodgy
-                         xfx = local_unpack('<H', data[16:18])[0]
-                         r.xf_index = self.fixed_BIFF2_xfindex(cell_attr=None, rowx=rowx, colx=-1, true_xfx=xfx)
+                        xfx = local_unpack('<H', data[16:18])[0]
+                        r.xf_index = self.fixed_BIFF2_xfindex(cell_attr=None, rowx=rowx, colx=-1, true_xfx=xfx)
                     else:
                         cell_attr = data[13:16]
                         r.xf_index = self.fixed_BIFF2_xfindex(cell_attr, rowx, colx=-1)

@@ -15,6 +15,14 @@
 
 {% block head_title %}{{ project.name }}{% endblock %}
 
+{% block breadcrumbs %}
+  {% if project.organization %}
+     <a href="{% url organization_detail project.organization.slug %}">{{ project.organization.name }}</a> /
+  {% endif %}
+  <a href="{% url project_detail project.slug %}">{{ project.name }}</a> /
+  Iteration Planning
+{% endblock %}
+
 {% block add_story %}
     {% if user.is_authenticated %}
     {% canwrite project %}
@@ -26,7 +34,7 @@
 
 {% block body %}
 
- <img style="float:right" src="/site_media/static/images/ajax-loader.gif" id="loadingIcon">
+<img style="float:right" src="{{ STATIC_URL }}images/ajax-loader.gif" id="loadingIcon">
  <h1>Iteration Planning</h1>
   
   <div id="columnContainer">
@@ -81,13 +89,13 @@
               {% endifnotequal %}
             {% endfor %}
           </select>  <br/><br/>
-          <a id="addIterationButton" href="{% url iteration_create project.slug %}" ><button>Add Iteration</button></a>
-          <span id="iteration_points"></span>
+          <a id="addIterationButton" href="{% url iteration_create project.slug %}" style="float:right" class="button green small" >Add Iteration</a>
+           <span id="iteration_points"></span><div style="float:left; width: 120px; height:12px;" id="progressbar"></div>          
       </div>
       &nbsp;&nbsp;
       <div id="empty_iteration_column">
         <br/>
-        <img src="/site_media/static/images/chooseIteration.png">
+        <img src="{{ STATIC_URL }}images/chooseIteration.png">
         <br/><br/><br/>
         <br/><br/><br/>
       </div>
@@ -115,6 +123,8 @@
   {# Inject some page values into javascript variables so we know them at runtime. #}  
   var project_slug = "{{ project.slug }}";
   var default_iteration = "{{ project.get_default_iteration.id }}";
+  
+  //$( "#progressbar" ).progressbar({ value: 0 });
   
   
   function updateStoryList()
@@ -145,7 +155,7 @@
         }
       });
       
-      var result = "Points: " + iter_points;
+      var result = " &nbsp;- Points: " + iter_points;
       if( inf > 0)
       {
         result = result + " + (<b>inf</b> x " + inf + ") ";
@@ -154,10 +164,11 @@
       {
         result = result + " ( <b>?</b> x " + question + ")";
       }
-      
-        
       $(iteration_points).html(result);
-    
+      
+
+      if( iteration_points == "#iteration_points")
+         $( "#progressbar" ).progressbar({ value: Math.round( 100 * iter_points / {{project.velocity}} ) });
   }
   
   

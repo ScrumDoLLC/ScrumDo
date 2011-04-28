@@ -12,7 +12,7 @@
 # Lesser General Public License for more details.
 #
 # You should have received a copy (See file COPYING) of the GNU Lesser General Public
-# License along with this library; if not, write to the Free Software
+# License along with this library;  if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 
@@ -28,6 +28,9 @@ from django.utils.datastructures import SortedDict
 from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponse
 from django.core import serializers
+
+from util import reduce_burndown_data
+
 import json
 import datetime
 import math
@@ -86,7 +89,7 @@ def home( request ):
 
         assigned_stories = Story.getAssignedStories(request.user)
 
-        paginator = Paginator(activities, 10)
+        paginator = Paginator(activities, 20)
         page_obj = paginator.page(1)
         activities = page_obj.object_list
         next_page = page_obj.has_next()
@@ -103,7 +106,7 @@ def home( request ):
                 pass
 
         num_projects = len(member_projects) + len(filter(lambda p: p.organization == None, my_projects))
-        blank_state = True if (num_projects + len(organizations)) == 0 else False
+        blank_state = True if num_projects == 0 else False
         return render_to_response("homepage.html", {
            "my_projects":my_projects,
            "my_organizations": organizations,
@@ -125,6 +128,24 @@ def usage(request):
     return render_to_response("usage_restrictions.html", {"organizations":organizations}, context_instance=RequestContext(request))
 
 
+def remove_user( request, group_slug ):
+        project = get_object_or_404( Project, slug=group_slug )
+        admin_access_or_403(project, request.user )
+        user_id = int(request.POST.get("user_id"))
+        # logger.debug("Removing user %d from project %s" % (user_id, group_slug))
+        membership = project.members.get( user__id=user_id )
+        membership.delete()
+        return HttpResponse("ok")
+
+@login_required
+def activate( request, group_slug ):
+    project = get_object_or_404( Project, slug=group_slug )
+    admin_access_or_403(project, request.user, ignore_active=True)
+    project.active = True
+    project.save()
+    return HttpResponseRedirect( reverse("project_detail", kwargs={"group_slug":project.slug} ) )
+    
+    
 # The project admin page, this is where you can change the title, description, etc. of a project.
 @login_required
 def project_admin( request, group_slug ):
@@ -133,6 +154,7 @@ def project_admin( request, group_slug ):
     admin_access_or_403(project, request.user )
 
     form = ProjectOptionsForm(instance=project)
+    adduser_form = AddUserForm(project=project, user=request.user)
 
     if request.method == 'POST': # If one of the three forms on the page has been submitted...
         if request.POST.get("action") == "updateProject":
@@ -159,6 +181,20 @@ def project_admin( request, group_slug ):
                 project.organization = None
                 project.save()
                 request.user.message_set.create(message="Project removed from organization")
+        if request.POST.get("action") == "add":
+            write_access_or_403(project, request.user )
+            adduser_form = AddUserForm(request.POST, project=project, user=request.user)
+            if adduser_form.is_valid():
+                adduser_form.save(request.user)
+                return HttpResponseRedirect( reverse("project_admin", kwargs={"group_slug":project.slug} ) )
+        if request.POST.get("action") == "archiveProject":
+            project.active = False
+            project.save()
+            return HttpResponseRedirect( reverse("project_detail", kwargs={"group_slug":project.slug} ) )
+                
+
+            
+                
 
     if project.organization:
         organizations = None
@@ -168,6 +204,7 @@ def project_admin( request, group_slug ):
     return render_to_response("projects/project_admin.html", {
         "project": project,
         "form": form,
+        "adduser_form": adduser_form,
         "organizations": organizations
       }, context_instance=RequestContext(request))
 
@@ -186,8 +223,8 @@ def iteration_burndown(request, group_slug, iteration_id):
         total_points.append( [log.timestamp(), log.points_total] );
         claimed_points.append( [log.timestamp(), log.points_claimed] );
 
-    total_stats = { "label":"Total Points", "data":_reduce_burndown_data(total_points)}
-    claimed_stats = { "label":"Claimed Points", "data":_reduce_burndown_data(claimed_points)}
+    total_stats = { "label":"Total Points", "data":reduce_burndown_data(total_points)}
+    claimed_stats = { "label":"Claimed Points", "data":reduce_burndown_data(claimed_points)}
 
     json_serializer = serializers.get_serializer("json")()
     result = json.dumps([total_stats,claimed_stats])
@@ -207,42 +244,15 @@ def project_burndown(request, group_slug):
         total_points.append( [log.timestamp(), log.points_total] );
         claimed_points.append( [log.timestamp(), log.points_claimed] );
 
-    total_stats = { "label":"Total Points", "data":_reduce_burndown_data(total_points)}
-    claimed_stats = { "label":"Claimed Points", "data":_reduce_burndown_data(claimed_points)}
+    total_stats = { "label":"Total Points", "data":reduce_burndown_data(total_points)}
+    claimed_stats = { "label":"Claimed Points", "data":reduce_burndown_data(claimed_points)}
 
 
     json_serializer = serializers.get_serializer("json")()
     result = json.dumps([ total_stats , claimed_stats ])
     return HttpResponse(result) #, mimetype='application/json'
 
-def _reduce_burndown_data( data ):
-    """Takes a list of datapoints for a burnup chart and if there are more than 30, removes any redundant points.
-       Redundant is when a point's two neighbors are equal to itself so it would just be a marker on a straight line.
-       (I guess points along a straight sloped line could be considered redundant, but we don't remove those)
-       The middle 15 is considered redundant here: [5,6,10,10,15,15,15,20]
-       The middle 4 threes are considered redundant here: [1,2,3,3,3,3,3,3,5]
-    """
-    if len(data) < 30:
-        return data
-        
-    subset = data[1:-1] # Subset of data that never includes first/last
-    remove = []     
-    for idx,item in enumerate( subset ):
-                # idx = index before this item in data
-                # idx+1 = this item in data
-                # idx+2 = next item in data
-        last_val = data[ idx ][1]
-        next_val = data[ idx+2 ][1]
 
-        if item[1]==last_val and item[1]==next_val:
-            # don't need this item!
-            remove.append(idx+1)
-            # logger.debug("Can remove %d" % (idx+1))
-    
-    remove.reverse()
-    for remove_index in remove:
-        del data[remove_index:(remove_index+1)]
-    return data
 
 
 # The project history page, which lets you see a burn up chart for each past iteration.
@@ -413,26 +423,28 @@ def project(request, group_slug=None, form_class=ProjectUpdateForm, adduser_form
             project = project_form.save()
     else:
         project_form = form_class(instance=project)
-    if action == "add":
-        write_access_or_403(project, request.user )
-        adduser_form = adduser_form_class(request.POST, project=project, user=request.user)
-        if adduser_form.is_valid():
-            adduser_form.save(request.user)
-            adduser_form = adduser_form_class(project=project, user=request.user) # clear form
-    else:
-        adduser_form = adduser_form_class(project=project, user=request.user)
 
     add_story_form = handleAddStory(request, project)
 
     return render_to_response(template_name, {
         "project_form": project_form,
-        "adduser_form": adduser_form,
         "add_story_form": add_story_form,
         "project": project,
         "group": project, # @@@ this should be the only context var for the project
         "is_member": is_member,
         "current_view":"project_page"
     }, context_instance=RequestContext(request))
+
+# @login_required
+# def burnup_chart(request, group_slug):
+#     project = get_object_or_404(Project, slug=group_slug)
+#     read_access_or_403(project, request.user )
+#     # CairoPlot
+#     # data = CairoPlot.dot_line_plot('dotline1_dots', [(1,2),(2,3),(3,3)], 400, 300, axis = True, grid = True, dots = True)
+#     response = HttpResponse(data, mimetype="image/png")
+#     return response
+
+    
 
 
 # Drives the prediction page
@@ -516,7 +528,7 @@ def record_prediction(predictions, stories,iteration_number,start_date,iteration
     predictions.append( { "carried":points_left, "stories":stories , "points":points, "num":iteration_number, "start":start_date, "end":(start_date +  datetime.timedelta(days=(iteration_length-1))) } )
 
 @login_required
-def export_project(request, group_slug):    
+def export_project(request, group_slug):
     project = get_object_or_404(Project, slug=group_slug)
     read_access_or_403(project, request.user )
     return exportProject( project )

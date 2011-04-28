@@ -9,7 +9,7 @@
     </div><!--box-title-->
     <div class="box-content">
       {% trans "Slug:" %} <tt>{{ organization.slug }}</tt><br />
-      {% trans "Creator:" %} <a href="{% url profile_detail organization.creator.username %}">{{ organization.creator }}</a><br />
+      {% trans "Creator:" %} {{ organization.creator }}<br />
       {% trans "Created:" %} {{ organization.created|date }}
     </div><!--box-content-->
     <div class="box-title">

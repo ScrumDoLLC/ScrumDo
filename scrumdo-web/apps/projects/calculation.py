@@ -23,7 +23,7 @@ def calculatePoints( stories ):
             # print "%d %f" % ( story.id,story_points)
             if( story.status == Story.STATUS_DONE):
                 points_claimed += story_points
-        except ValueError:            
+        except ValueError:
             pass # probably ? or infinity
 
     #print (points_total, points_claimed)
@@ -100,17 +100,19 @@ def logPoints( related_object, points_claimed, points_total ):
         # logger.debug("logPoints created a new record.")
 
 def calculateProject( project ):
+    if not project.active:
+        return
     stories = project.stories.all();
     points = calculatePoints( stories )
     total_project_points = points[0]
-    
+
     today = date.today()
-    
+
     logPoints(project, points[1], points[0])
     # log = PointsLog( points_claimed=points[1], points_total=points[0], related_object=project)
     # log.save();
-    
-    
+
+
     yesterday = today - timedelta( days=1 )
     tomorrow = today +  timedelta( days=1 )
     points_total = 0

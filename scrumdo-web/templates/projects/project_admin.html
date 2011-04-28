@@ -15,13 +15,76 @@
 
 {% block head_title %}{{ project.name }}{% endblock %}
 
+{% block breadcrumbs %}
+  {% if project.organization %}
+     <a href="{% url organization_detail project.organization.slug %}">{{ project.organization.name }}</a> /
+  {% endif %}
+  <a href="{% url project_detail project.slug %}">{{ project.name }}</a> /
+  Project Admin
+{% endblock %}
+
 {% block body %}    
-  <h1>{{ project.name }}</h1>
+
+  <h2 class="page-divider">Project Members</h2>
+
+    
+
+    {% for team in project.teams.all %}
+      <div class="project-team">
+         <a class="team-title" href="{% url organization_detail project.organization.slug %}#team_popup_{{team.id}}">{{project.organization.name}} - {{team.name}}</a><br/>
+         <span class="team-access-type">{{team.access_description}} access</span>
+         <ul>
+         {% for member in team.members.all %}
+     	     <li class="{% if forloop.counter|gt:5 %}hidden-team-member{% endif %}">{% avatar member 16 %} {{ member.username }} </li>
+     	     {% ifequal forloop.counter 5 %}
+     	     <li><a href="#" class="manage-team-link show-more-members-link">{% silk "group" %} More Members...</a></li>
+     	     {% endifequal %}
+      	 {% endfor %}
+      	 
+     	  </ul>
+     	  <a class="manage-team-link {% if team.members.count|gt:5 %}hidden-team-member{% endif %}" href="{% url organization_detail project.organization.slug%}#team_popup_{{team.id}}">{% silk "group" %} Manage Team</a>
+      </div>
+      
+    {% endfor %}
+
+    <br/>
+	  {% for member in project.members.all %}
+	    {% ifnotequal member.user project.creator %}
+  	  <div class="project-member">
+  	    {{ member.user.username }}<br/>
+  	    <br/>
+        <div class="avatar">{% avatar member.user 48 %}</div>
+        <a href="#" user_id="{{member.user.id}}" class="remove_user_link deleteLink">Remove</a>
+      </div>
+      {% endifnotequal %}
+	  {% endfor %}
+
+    {% if project.organization %}
+      <a href="#" class="show-invite-box-link">Invite Users</a>    
+    {% endif %}
+    <div class="invite-user-box" {% if project.organization %}style="display:none"{% endif %}>
+      <h3>Invite User</h3>
+      {{ adduser_form.non_field_errors }}
+      {{adduser_form.recipient.errors}}
+      <form id="add-member" method="POST" action="" class="uniForm">
+        <fieldset class="inlineLabels">
+        
+            ScrumDo Username: {{ adduser_form.recipient }}
+            <input type="hidden" name="action" value="add" /> 
+            <button class="primaryAction button" type="submit" >Invite User</button><br/><br/>
+            {% if project.organization %}
+            <b>Tip:</b> <i>This project is part of an organization, you might want to go to the <a href="{% url organization_detail project.organization.slug %}">organization options</a> to add/remove people to/from teams instead of directly to the project.</i>
+            {% endif %}
+        </fieldset>
+      </form>
+    </div>
+
   
   <form method="POST" action="" class="uniForm">
        {{ form.non_field_errors }}
          
-         <h2>Project Options</h2>
+         <h2 class="page-divider">Project Options</h2>
+
          <table class="projectOptionsForm">
            <tr><td style="font-weight:bold">Name:</td><td>{{form.name}} {{form.name.errors}}</td></tr>
            <tr><td style="font-weight:bold">Description:</td><td>{{form.description}} {{form.description.errors}}</td></tr>
@@ -60,8 +123,12 @@
           <label><input type="radio" {% ifequal project.velocity_type 2 %}checked{% endifequal %} value="2" name="velocity_type"> <b>Median</b> Uses the median velocity of all your iterations. </label> 
           <p><i>All of these methods ignore iterations if their "Include in velocity calculations" check box is not enabled.</i></p>
           
-            
-            
+          <h2>Category</h2>
+          <p><i>Enter a category to group this project on the organization page.</i></p>
+          <table class="projectOptionsForm">
+            <tr><td style="font-weight:bold">Category:</td><td>{{form.category}} {{form.category.errors}}</td></tr>
+          </table>
+          
       <br/>
       
       <div class="form_block">
@@ -72,10 +139,19 @@
   </form>
   
   <br/><br/>
-  <hr/>
+  
+    <h2 class="page-divider">Archive Project</h2>
+    <p>Archived projects don't count towards your quotas, but you can no longer edit them.</p>     
+     <form   method="POST" action="" class="uniForm">       
+      <div class="form_block">     
+         <div  class="buttonHolder"><button id="archiveFormButton" class="primaryAction" type="submit" >Archive Project</button></div>
+      </div>
+      <input type="hidden" name="action" value="archiveProject">
+     </form>
+
   
      {% if organizations %}
-         <h2>Move to organization</h2>
+         <h2 class="page-divider">Move to organization</h2>
          <p>You can move this project into one of your organizations.</p>     
          <form  method="POST" action="" class="uniForm">       
            <fieldset class="inlineLabels">
@@ -98,13 +174,13 @@
           <input type="hidden" name="action" value="moveToOrganization">
          </form>
          <br/>
-         <hr/>
+
      {% endif %}
 
 
      {% if project.organization %}
-     <h2>Remove from organization</h2>
-      <p>You can move this project out of your organization.</p>     
+     <h2 class="page-divider">Remove from organization</h2>
+      <p>You can remove this project from your organization.</p>     
       <form  method="POST" action="" class="uniForm">       
         <fieldset class="inlineLabels">
                 <div class="ctrlHolder">
@@ -122,7 +198,7 @@
        <input type="hidden" name="action" value="removeFromOrganization">
       </form>
       <br/>
-      <hr/>
+
      {% endif %}
 
       <br/>
@@ -135,7 +211,40 @@
       <script type="text/javascript" charset="utf-8">
           {% if GOOGLE_ANALYTICS %}     
              _gaq.push(['_trackEvent',"ViewPage", "ProjectAdmin"]); 
-          {% endif %}      
+          {% endif %} 
+          
+          $(".show-more-members-link").click( function(){
+            $(".show-more-members-link").hide();
+            $(".hidden-team-member").show(400);            
+            return false;
+          });
+          
+          $(".show-invite-box-link").click(function(){
+              $(".show-invite-box-link").hide();
+              $(".invite-user-box").show();
+              return false;
+          });
+          
+          $(".archiveFormButton").click(function(){
+            alert("!");
+            return confirm("Are you sure you want to archive this project?" );
+          });
+
+          $(".remove_user_link").click(function(e){
+            user_id = $(this).attr("user_id");
+            if( confirm("Are you sure you want to remove the user from this project?" ) )
+            {
+              
+              $.post( "{% url remove_user project.slug %}", 
+                      {user_id:user_id},
+                      function(data) {
+                        $(document).trigger('close.facebox');   
+                       location.reload();
+                     });
+            }
+            return false;
+          });
+          
         
       </script>
   

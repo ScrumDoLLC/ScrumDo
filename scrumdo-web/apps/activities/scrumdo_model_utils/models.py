@@ -107,7 +107,7 @@ def add_timeframed_query_manager(sender, **kwargs):
         sender._meta.get_field('timeframed')
         raise ImproperlyConfigured("Model '%s' has a field named "
                                    "'timeframed' which conflicts with "
-                                   "the TimeFramedModel manager." 
+                                   "the TimeFramedModel manager."
                                    % sender.__name__)
     except FieldDoesNotExist:
         pass

@@ -1,1 +1,4 @@
-{{ obj.detail }}
+{% load activity_tags %}
+
+In <a href="{% url project_detail obj.project.slug %}">{{ obj.project.name }}</a>, {{ obj.user.username }} {{obj|activity_action}} {{ obj|activity_object }}<br/>
+On {{ obj.created }}.

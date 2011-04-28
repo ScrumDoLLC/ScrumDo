@@ -10,8 +10,8 @@
       <div id="story_details">
         <table>
           <tr><td>Detail:</td><td>{{add_story_form.detail}}    {{add_story_form.detail.errors}} </td></tr>
-          <tr><td>Tags:</td><td>{{add_story_form.tags}} {{add_story_form.tags.errors}} </td></tr>
-          <tr><td>Points:&nbsp;</td><td>{{add_story_form.points}}  {{add_story_form.points.errors}} </td></tr>
+          <tr><td>Tags:</td><td><ul id="id_tags_add_story"></ul> {{add_story_form.tags}} {{add_story_form.tags.errors}} </td></tr>
+          <tr><td>Points:&nbsp;</td><td id="points_section">{{add_story_form.points}}  {{add_story_form.points.errors}} </td></tr>
           {% if project.use_assignee %}
             <tr><td>Assigned To:&nbsp;</td><td>{{add_story_form.assignee}}  {{add_story_form.assignee.errors}} </td></tr>
           {% endif %}
@@ -41,6 +41,17 @@
 <script type="text/javascript" charset="utf-8">
   
     story_form_expanded = false;
+    
+    var project_tags = [
+      {% for tag in tags %}
+      {label:"{{tag.name}}",value:"{{tag.name}}"},        
+      {% endfor %}
+      {label:"", value:""}
+    ];
+    
+    var all_tags = scrumdo_special_tags.concat( project_tags );
+
+
 
 
     function updateStoryListInternal( newStory )
@@ -63,12 +74,16 @@
         _gaq.push(['_trackEvent',"AddStory", "{{current_view}}", "", 1]);      
       {% endif %}
       story_form_expanded = false;
-      
+      window.location.hash = "";
     }
 
     $(document).ready(function() {
             
-      
+      $("#id_tags_add_story").tagit({
+          availableTags:all_tags, 
+          input_field:"#id_tags"
+          });
+          
       $("#addStoryForm").ajaxForm({ url:"{% url ajax_add_story project.slug %}",
                                     success:updateStoryListInternal });
       

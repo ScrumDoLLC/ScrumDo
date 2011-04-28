@@ -1,1 +1,1 @@
-SEQUENCE = []
+SEQUENCE = ['utf8']

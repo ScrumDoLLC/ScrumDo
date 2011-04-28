@@ -1,4 +1,7 @@
 
+scrumdo_special_tags = [ {label:"Bug", desc:"Represents a bug report.", value:"Bug"}                         
+                        ];
+
 function setupAutoClose( divID )
 {  
   setTimeout( "$('body').one('click',function() { $(\"" + divID + "\").fadeOut(100); });" , 100);
@@ -15,6 +18,7 @@ function setStatus(storyID, project_slug, status, return_type)
 		success: function(responseText) {
 		$("#story_" + storyID).replaceWith(responseText);
 		setUpStoryLinks();		
+		
 	    }
 	});
 		
@@ -84,29 +88,36 @@ function showTasksForStory( story_id , animate)
 
 function showCommentsForStory( story_id , animate)
 {
-    if( (animate == null) || animate )
-    {
-        $("#story_" + story_id + " .comment_section").toggle(150);    
-    }
-    else
-    {
-        $("#story_" + story_id + " .comment_section").toggle();    
-    }
-    
-    $("#story_" + story_id + " .comment_section form").unbind("submit");
-    $("#story_" + story_id + " .comment_section form").submit(function() {
-        form = $(this);
-        $.ajax({
-          type:"POST",
-          url: form.attr("action"),
-          data: form.serialize(),
-          success: function(responseText){
-             reloadStory(story_id, true, false);
-          }          
-        });
-        return false;
+    $.ajax({
+    url: "/projects/story/" + story_id + "/comments",
+    success: function(responseText){
+            
+            $("#story_comments_" + story_id ).html(responseText);
+        
+            if( (animate == null) || animate )
+            {
+                $("#story_comments_" + story_id ).toggle(150);    
+            }
+            else
+            {
+                $("#story_comments_" + story_id ).toggle();    
+            }
+
+            $("#story_comments_" + story_id + " form").unbind("submit");
+            $("#story_comments_" + story_id + " form").submit(function() {
+                form = $(this);
+                $.ajax({
+                  type:"POST",
+                  url: form.attr("action"),
+                  data: form.serialize(),
+                  success: function(responseText){
+                     reloadStory(story_id, true, false);
+                  }          
+                });
+                return false;
+            });
+         } // end success function
     });
-      
 }
 
 function reloadStory( story_id , display_comments, display_tasks)
@@ -119,7 +130,7 @@ function reloadStory( story_id , display_comments, display_tasks)
     		setUpStoryLinks();
     		
     		if( display_tasks ) { showTasksForStory( story_id , false);}
-    		if( display_comments ) { showCommentsForStory(story_id, false);}    		
+    		if( display_comments ) { showCommentsForStory(story_id, false);}   
 	    }
 	});
     

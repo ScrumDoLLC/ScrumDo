@@ -1,16 +1,16 @@
-# ScrumDo - Agile/Scrum story management web application 
+# ScrumDo - Agile/Scrum story management web application
 # Copyright (C) 2011 ScrumDo LLC
-# 
+#
 # This software is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
 # License as published by the Free Software Foundation; either
 # version 2.1 of the License, or (at your option) any later version.
-# 
+#
 # This software is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Lesser General Public License for more details.
-# 
+#
 # You should have received a copy (See file COPYING) of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -44,23 +44,23 @@ logger = logging.getLogger(__name__)
 @login_required
 def create_task( request ):
     if request.method != "POST":
-        return HttpResponseNotAllowed('Only POST allowed')        
+        return HttpResponseNotAllowed('Only POST allowed')
     story_id = request.POST.get("story_id")
     story = get_object_or_404( Story, id=story_id )
     assignee = None
     assignee_id = request.POST.get("assignee")
     if assignee_id != "-1":
         assignee = User.objects.get(id=assignee_id)
-    
+
     write_access_or_403( story.project, request.user )
     task_text = request.POST.get("summary")
     logger.debug("Adding task to story %d %s" % (story.id, task_text) )
-    
+
     if story.tasks.count() > 0:
         order = story.tasks.order_by("-order")[0].order + 1
     else:
         order = 0
-    
+
     task = Task(story=story, summary=task_text, assignee=assignee, order=order)
     task.save()
     signals.task_created.send( sender=request, task=task, user=request.user )
@@ -79,31 +79,31 @@ def set_task_status( request, task_id ):
     task.save()
     signals.task_status_changed.send( sender=request, task=task, user=request.user )
     return HttpResponse("OK")
-    
+
 @login_required
 def delete_task( request, task_id ):
     if request.method != "POST":
-      return HttpResponseNotAllowed('Only POST allowed')
+        return HttpResponseNotAllowed('Only POST allowed')
     task = get_object_or_404(Task, id=task_id)
     write_access_or_403( task.story.project, request.user )
     story = task.story
     signals.task_deleted.send( sender=request, task=task, user=request.user )
     task.sync_queue.clear()
     task.delete()
-   
-    return HttpResponse("OK")  
+
+    return HttpResponse("OK")
 
 @login_required
-def edit_task(request, task_id):    
+def edit_task(request, task_id):
     task = get_object_or_404(Task, id=task_id)
     write_access_or_403( task.story.project, request.user )
-    
+
     if request.method == "POST":
         form = TaskForm( task.story.project , request.POST, instance=task)
         signals.task_updated.send( sender=request, task=task, user=request.user )
         form.save()
-        return HttpResponse("OK") 
-    else:    
+        return HttpResponse("OK")
+    else:
         form = TaskForm( task.story.project , instance=task)
         return render_to_response("tasks/edit.html", {
           "task": task,

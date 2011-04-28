@@ -1,8 +1,8 @@
 {% load i18n %}{% load comments_tag %}{% load theme_tags %}{% load projects_tags %}<div id="story_area" style="width: 860px;">
 
-<form id="story_detail_form" method="POST" action="{% url story_form group_slug=project.slug story_id=story.id %}">
+<form id="story_detail_form" method="POST" action="{% url story_form group_slug=project.slug story_id=story.id %}" style="width: 100%">
    {{ form.non_field_errors }}
-   
+
     <h1>Story #{{story.local_id}}</h1><br/>
   
     
@@ -13,12 +13,16 @@
       </div>
     {% endlocked %}
     
-   <div id="story_details">
-    <table>
-      <tr><td>Summary</td><td>{{form.summary}}    {{form.summary.errors}} </td></tr>
+   <div id="story_details"  style="width: 840px;">
+    <table style="width: 840px;">
+      <tr><td>Summary</td><td width="740">{{form.summary}}    {{form.summary.errors}} </td></tr>
       <tr><td>Detail</td><td>{{form.detail}}    {{form.detail.errors}} </td></tr>
-      <tr><td>Tags</td><td>{{form.tags}} {{form.tags.errors}} </td></tr>
-      <tr><td>Points&nbsp;</td><td>{{form.points}}  {{form.points.errors}} </td></tr>
+      <tr><td>Tags</td>
+        <td>
+            <ul id="id_tags2" style="width: 100%"></ul>
+            {{form.tags}} {{form.tags.errors}} 
+        </td></tr>
+      <tr><td>Points&nbsp;</td><td id="points_section">{{form.points}}  {{form.points.errors}} </td></tr>
       {% if project.use_assignee %}
         <tr><td>Assignee</td><td>{{form.assignee}}  {{form.assignee.errors}} </td></tr>
       {% endif %}
@@ -70,6 +74,17 @@
 </div>
 
 <script type="text/javascript" charset="utf-8">
+      var project_tags = [
+        {% for tag in tags %}
+        {label:"{{tag.name}}",value:"{{tag.name}}"},        
+        {% endfor %}
+        {label:"", value:""}
+      ];
+      
+      var all_tags = scrumdo_special_tags.concat( project_tags );
+
+      $("#story_details #id_tags2").tagit({availableTags:all_tags,input_field:"#id_tags"});
+
       $("#story_area .commentForm").show();
       
       $("#story_detail_form").ajaxForm({        
@@ -82,7 +97,7 @@
              _gaq.push(['_trackEvent',"EditStory", "{{current_view}}", "", 1]); 
           {% endif %}
           
-          if(typeof reloadStoryCallback == 'function') { reloadStoryCallback(); }
+          if(typeof reloadStoryCallback == 'function') { reloadStoryCallback(); }          
           
         }});
         

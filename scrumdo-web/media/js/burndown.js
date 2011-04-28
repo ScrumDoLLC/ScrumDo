@@ -40,12 +40,10 @@ function plotBurndown( divID, series, options)
                       previousPoint = item.dataIndex;
 
                       $("#tooltip").remove();
-                      var date = new Date(item.datapoint[0]);
-                     // alert(item);
-                      var x = (date.getMonth()+1) + "/" + date.getDay() + "/" + date.getFullYear(),
-                          y = item.datapoint[1];
+//                      var x = (date.getMonth()+1) + "/" + date.getDate() + "/" + date.getFullYear() + " " + date.getHours(),
+                      var y = item.datapoint[1];
 
-                      showTooltip(item.pageX, item.pageY, x + "<br/>" + y + " points");
+                      showTooltip(item.pageX, item.pageY,  y + " points");
                   }
               }
               else {

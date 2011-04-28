@@ -245,4 +245,3 @@ False
 >>> deregister_models()
 
 """
-

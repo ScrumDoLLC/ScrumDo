@@ -41,6 +41,12 @@ class Team(models.Model):
     name = models.CharField( max_length=65 )
     access_type = models.CharField( max_length=25 , default="read", choices=ACCESS_CHOICES)
 
+    def access_description(self):
+        access = [ entry[1] for entry in Team.ACCESS_CHOICES if entry[0]==self.access_type ]
+        if len(access) == 1:
+            return access[0]
+        return "Read Only"
+        
     def __unicode__(self):
         return "[%s] %s" % (self.organization.name, self.name)
 
@@ -54,8 +60,8 @@ class Organization(models.Model):
     created = models.DateTimeField(_('created'), default=datetime.datetime.now)
     description = models.TextField(_('description'),  null=True, default="")
 
-    def getDefaultTeam():
-        return Organization.objects.filter( teams__access_type="admin", teams__members__user__id = user.id ).order_by("name")[0]
+    def activeProjects(self):
+        return self.projects.filter(active=True);
 
     # Returns all organizations
     @staticmethod
@@ -68,20 +74,18 @@ class Organization(models.Model):
         return Organization.objects.filter( teams__access_type="admin", teams__members = user ).distinct().order_by("name")
 
     def hasAdminAccess( self, user ):
+        if user.is_staff:
+            return True
         if self.creator == user:
             return True
         return (self.teams.filter( access_type="admin", members=user ).count() > 0)
 
     def hasReadAccess( self, user ):
-        if self.creator == user:
+        if user.is_staff:
             return True        
+        if self.creator == user:
+            return True
         return (self.teams.filter( members=user ).count() > 0)
-
-    # returns all organizations the user has read/write access to
-    # @staticmethod
-    # def getReadWriteOrganizationsForUser( user ):
-    #   return Organization.objects.filter( teams__members = user ).exclude(teams__access_type = "read").distinct().order_by("name")
-
 
     def memberCount(self):
         members = []
@@ -90,8 +94,6 @@ class Organization(models.Model):
                 if members.count(member) == 0:
                     members.append(member)
         return len(members)
-
-
 
     def get_url_kwargs(self):
         return {'organization_slug': self.slug}

@@ -5,7 +5,7 @@ class ChoiceEnum(object):
     surprising data corruption if new choices are inserted in the
     middle of the list. Automatic assignment of numeric IDs is not
     such a great idea after all.
-    
+
     A class to encapsulate handy functionality for lists of choices
     for a Django model field.
 
@@ -25,7 +25,7 @@ class ChoiceEnum(object):
     'PUBLISHED'
     >>> tuple(STATUS)
     ((0, 'DRAFT'), (1, 'PUBLISHED'))
-    
+
     """
     def __init__(self, *choices):
         import warnings
@@ -50,7 +50,7 @@ class ChoiceEnum(object):
     def __repr__(self):
         return '%s(%s)' % (self.__class__.__name__,
                            ', '.join(("'%s'" % i[1] for i in self._choices)))
-    
+
 
 class Choices(object):
     """
@@ -116,8 +116,8 @@ class Choices(object):
         try:
             return self._choice_dict[attname]
         except KeyError:
-            raise AttributeError(attname)    
-    
+            raise AttributeError(attname)
+
     def __getitem__(self, index):
         return self._choices[index]
 

@@ -2390,4 +2390,3 @@ class ExternnameRecord(BiffRecord):
 
     def __init__(self, options=0, index=0, name=None, fmla=None):
         self._rec_data = pack('<HHH', options, index, 0) + upack1(name) + fmla
-

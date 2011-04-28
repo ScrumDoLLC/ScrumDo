@@ -12,5 +12,3 @@ class Command(BaseCommand):
             activity = activity.mergeChildren()
             activity.real_type = activity._get_real_type()
             activity.save()
-
-

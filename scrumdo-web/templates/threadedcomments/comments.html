@@ -6,14 +6,14 @@
 {% get_threaded_comment_tree for object as responses %}
 {% autopaginate responses %}
 
-<div class="comment_section" style="display:none">
+<div class="comment_section" >
   <h2 style="margin-left:-40px">Comments</h2>
   <ul class="responses">
       {% for response in responses %}
           <li class="{% cycle even,odd %} thread-{{ response.depth }} clearfix">
               <div class="meta">
                   <div class="avatar">{% avatar response.user 40 %}</div>
-                  <div class="details"><a href="{% url profile_detail response.user.username %}">{{ response.user     }}</a></div>
+                  <div class="details">{{ response.user }}</div>
                   {{ response.date_submitted|date }}
               </div>
               <div class="bulk">

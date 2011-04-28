@@ -1,0 +1,47 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load projects_tags %}
+{% load activity_tags %}
+
+{% block head_title %}{% trans "Email Subscriptions" %}{% endblock %}
+
+{% block body %}
+   
+   {% if user.email %}
+   <h2>Choose the projects to include in your daily email digest</h2>
+   
+   <form action="" method="POST" >
+   <ul>
+   {% for organization in organizations %}
+     <li>   
+       {{organization.name}}
+       <ul style="list-style:none; padding-left:5px">
+       {% for project in organization.projects.all %}
+        <li>{% canemail project %}{{ project|subscription_checkbox:subscriptions|safe }}{% endcanemail %}{{project.name}}</li>        
+       {% endfor %}
+       </ul>
+     </li>
+   {% endfor %}
+   </ul>
+   
+   Email will be sent to: {{ user.email }} 
+   
+   <div class="form_block uniForm">
+   <div class="buttonHolder">
+      <button class="secondaryAction" name="skip" value="1" type="submit" >Select none to cancel your daily digest email.</button>
+      <button id="createButton" class="primaryAction" type="submit" >Save Email Subscriptions</button>
+   </div>
+   </div>
+   </form>
+   {% else %}
+     <h2>
+     You must have a confirmed primary email to receive daily digest emails.  
+     </h2>
+     Select "E-Mail Addresses" on the right to configure.
+   {% endif %}
+   
+   
+   
+{% endblock %}
+

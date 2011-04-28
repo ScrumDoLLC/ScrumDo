@@ -12,24 +12,24 @@ class Github(object):
         """
         An interface to GitHub's API:
             http://develop.github.com/
-        
+
         Params:
             `username` is your own GitHub username.
-    
+
             `api_token` can be found here (while logged in as that user):
                 https://github.com/account
 
             `access_token` can be used when no ``username`` and/or ``api_token``
                 is used.  The ``access_token`` is the OAuth access token that is
                 received after successful OAuth authentication.
-    
+
             `requests_per_second` is a float indicating the API rate limit
                 you're operating under (1 per second per GitHub at the moment),
                 or None to disable delays.
 
                 The default is to disable delays (for backwards compatibility).
         """
-        
+
         self.debug = debug
         self.request = GithubRequest(username=username, api_token=api_token,
                                      debug=self.debug,

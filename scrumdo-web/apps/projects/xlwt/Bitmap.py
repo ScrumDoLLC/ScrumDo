@@ -258,5 +258,3 @@ class ImDataBmpRecord(BiffRecord):
         env = 0x01
         lcb = self.size
         self._rec_data = pack("<HHL", cf, env, lcb) + data
-
-
