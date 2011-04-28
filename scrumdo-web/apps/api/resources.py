@@ -4,12 +4,16 @@ from tastypie import fields
 from tastypie.resources import ModelResource
 from tastypie.validation import Validation, FormValidation
 
+from django.conf.urls.defaults import *
+
+
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 
 from projects.models import Project,ProjectMember,Story,Iteration
 from organizations.models import Organization, Team
 from threadedcomments.models import ThreadedComment
+from activities.models import Activity, ActivityAction
 
 from projects.access import has_read_access, has_write_access
 
@@ -19,27 +23,25 @@ from auth import ScrumDoAuthentication, ScrumDoAuthorization
 from api.models import DeveloperApiKey, UserApiKey
 
 class UserResource(ModelResource):
-  # teams = fields.ToManyField('api.resources.TeamResource', 'team')
-  # projects = fields.ToManyField('api.resources.ProjectResource', 'projects')  
+  teams = fields.ToManyField('api.resources.TeamResource', 'teams')
+  projects = fields.ToManyField('api.resources.ProjectResource', 'projects')  
   
   class Meta:
     queryset = User.objects.all()
     fields = ['username', 'first_name', 'last_name', 'last_login']
-    allowed_methods = ['get']
+    detail_allowed_methods = ['get']
+    list_allowed_methods = []
     authentication = ScrumDoAuthentication()
- 
-class UserKeyResource(ModelResource):
-  class Meta:
-    queryset = UserApiKey.objects.all()
-    fields = ['key']
-    allowed_methods = ['get']
-    resource_name = "developer"
-     
-    def base_urls(self):
-        return [
-            url(r"^(?P<resource_name>%s)/login%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('login'), name="api_login"),
-        ]
-
+  
+  def override_urls(self):
+     return [
+         url(r"^(?P<resource_name>%s)/self/$" % self._meta.resource_name, self.wrap_view('self_dispatch_detail'), name="api_self_dispatch_detail"),
+     ]
+  def self_dispatch_detail(self, request, **kwargs):
+    self._meta.authentication.is_authenticated(request)
+    kwargs['id'] = request.user.id
+    return self.dispatch_detail(request, **kwargs)
+  
 
 class OrganizationResource(ModelResource):
   teams = fields.ToManyField('api.resources.TeamResource', 'teams')
@@ -47,6 +49,7 @@ class OrganizationResource(ModelResource):
  
   class Meta:
     queryset = Organization.objects.all()
+    list_allowed_methods = []
     authentication = ScrumDoAuthentication()
     authorization = ScrumDoAuthorization(
        lambda u: Q(id__in = u.teams.all().values('organization__id').distinct()),
@@ -60,6 +63,7 @@ class TeamResource(ModelResource):
 
   class Meta:
     queryset = Team.objects.all()
+    list_allowed_methods = []
     authentication = ScrumDoAuthentication()
     authorization = ScrumDoAuthorization(
       lambda u: Q(organization__id__in = u.teams.all().values('organization__id').distinct()),
@@ -83,6 +87,7 @@ class StoryResource(ModelResource):
   
   class Meta:
     queryset = Story.objects.all()
+    list_allowed_methods = []
     authentication = ScrumDoAuthentication()
     authorization = ScrumDoAuthorization(
       lambda u: Q(project__teams__in = u.teams.all())|Q(project__member_users__in = [u]),
@@ -101,6 +106,7 @@ class IterationResource(ModelResource):
 
   class Meta:
     queryset = Iteration.objects.all()
+    list_allowed_methods = []
     authentication = ScrumDoAuthentication()
     authorization = ScrumDoAuthorization(
       lambda u: Q(project__teams__in = u.teams.all())|Q(project__member_users__in = [u]),
@@ -115,8 +121,27 @@ class ProjectResource(ModelResource):
   class Meta:
     queryset = Project.objects.all()
     fields = ['slug']
+    list_allowed_methods = []
     authentication = ScrumDoAuthentication()
     authorization = ScrumDoAuthorization(
        lambda u: Q(teams__in = u.teams.all())|Q(member_users__in = [u]),
        lambda u: Q(teams__in = u.teams.filter(Q(access_type="read/write")|Q(access_type="admin")))|Q(member_users__in = [u]))
-       
+
+class ActivityActionResource(ModelResource):
+
+  class Meta:
+    queryset = ActivityAction.objects.all()
+    fields = ['name ']
+    
+class ActivityResource(ModelResource):
+  def obj_get_list(self, request=None, **kwargs):
+    """ overriding """
+    return Activity.getActivitiesForUser(request.user)
+  
+  creator = fields.ToOneField('api.resources.UserResource', 'user')
+  project = fields.ToOneField('api.resources.ProjectResource', 'project')
+  action = fields.ToOneField('api.resources.ActivityActionResource', 'action', full=True)
+  
+  class Meta:
+    queryset = Activity.objects.all()
+    authentication = ScrumDoAuthentication()

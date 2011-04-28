@@ -59,6 +59,7 @@ class Organization(models.Model):
     creator = models.ForeignKey(User, verbose_name=_('creator'), related_name="organizations_created")
     created = models.DateTimeField(_('created'), default=datetime.datetime.now)
     description = models.TextField(_('description'),  null=True, default="")
+    
 
     def activeProjects(self):
         return self.projects.filter(active=True);

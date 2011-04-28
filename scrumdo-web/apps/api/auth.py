@@ -63,7 +63,7 @@ class ScrumDoAuthentication(ApiKeyAuthentication):
           user = User.objects.get(username=username)
       except (User.DoesNotExist, User.MultipleObjectsReturned):
           return self._unauthorized()
-  
+          
       request.user = user
   
       return self.get_key(user, api_key)

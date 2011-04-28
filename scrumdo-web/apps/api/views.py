@@ -53,5 +53,4 @@ def is_key_valid(request, **kwargs):
     serializer = Serializer()
     desired_format = determine_format(request, serializer)
     serialized = serializer.serialize({'is_valid' : key_valid}, desired_format)
-    return HttpResponse(content=serialized, content_type=build_content_type(desired_format))
-
+    return HttpResponse(content=serialized, content_type=build_content_type(desired_format))  
