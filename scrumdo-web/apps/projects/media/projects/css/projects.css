@@ -561,6 +561,12 @@ div.add_task {
 	text-decoration: none;
 }
 
+
+.block_story_body {
+    margin-top: -11px;
+    cursor: default;
+}
+
 .story_block, .story_small {
     padding: 3px;
     margin: 0px 0px 5px;
@@ -570,7 +576,8 @@ div.add_task {
     border-top: 1px solid #e1e1e1;
     border-right: 1px solid #e1e1e1;
     min-height: 33px;
-    position: relative;    	
+    position: relative;  
+    cursor: move;  	
 }
 
 .comment_section {
