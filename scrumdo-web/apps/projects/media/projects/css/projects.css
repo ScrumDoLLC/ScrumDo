@@ -76,6 +76,7 @@
   padding: 0px;
   border: 1px solid #e1e1e1;
   height: 100%;
+  min-height: 900px;
 }
 
 
@@ -384,7 +385,8 @@ h1 a {
     padding: 0px;
     margin: 5px;
     border-top: 1px solid #e1e1e1;
-    min-height: 100px;
+    min-height: 900px;
+    height:100%;
 }
 
 .showFilter {
