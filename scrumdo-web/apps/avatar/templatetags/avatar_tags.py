@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 from django.utils.hashcompat import md5_constructor
 
+from scrumdo_utils import cache
+
 from avatar import AVATAR_DEFAULT_URL, AVATAR_GRAVATAR_BACKUP, AVATAR_GRAVATAR_DEFAULT
 
 register = template.Library()
@@ -39,7 +41,12 @@ def avatar_url(user, size=80):
             return AVATAR_DEFAULT_URL
 register.simple_tag(avatar_url)
 
+
 def avatar(user, size=80):
+    return real_avatar(user, size)
+
+@cache(3)
+def real_avatar(user, size):
     if not isinstance(user, User):
         try:
             user = User.objects.get(username=user)
