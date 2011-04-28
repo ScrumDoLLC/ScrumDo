@@ -21,9 +21,10 @@ class DeveloperApiKey(models.Model):
     key = models.CharField(max_length=256, blank=True, default='')
     application_name = models.CharField(max_length=30)
     created = models.DateTimeField(default=datetime.now)
+    approved = models.BooleanField(default=False)
     
     def __unicode__(self):
-        return u"%s for developer %s" % (self.key, self.user)
+        return u"%s for developer %s" % (self.key, self.developer)
     
     def save(self, *args, **kwargs):
         if not self.key:

@@ -15,13 +15,11 @@ def login(request, **kwargs):
     password = request.GET.get('password')
 
     if not developer_key or not username or not password:
-      assert False, "doesnt have params"
       return HttpUnauthorized()
     
     try:
-      dev_key = DeveloperApiKey.objects.get(key=developer_key)
+      dev_key = DeveloperApiKey.objects.get(key=developer_key, approved=True)
     except DeveloperApiKey.DoesNotExist:
-      assert False, "invalid dev key"
       return HttpUnauthorized()
 
     user = authenticate(username=username, password=password)
@@ -39,7 +37,6 @@ def login(request, **kwargs):
       serialized = serializer.serialize({'key' : key.key}, desired_format)
       return HttpResponse(content=serialized, content_type=build_content_type(desired_format))
     else:
-      assert False, "invalid username / password"
       return HttpUnauthorized()
 
 def is_key_valid(request, **kwargs):

@@ -178,7 +178,6 @@ INSTALLED_APPS = (
     'django_filters',
     'staticfiles',
 #    'tastypie',
-    'api',
 
     # internal (for now)
     'basic_profiles',
@@ -198,6 +197,9 @@ INSTALLED_APPS = (
     'extras',
     'activities',
     'tutorial',
+    'api',
+    'developer',
+    
 #    'debug_toolbar',
 )
 

@@ -23,6 +23,7 @@ import feeds
 from django.views.generic.simple import direct_to_template, redirect_to
 
 from django.contrib import admin
+
 admin.autodiscover()
 
 from account.openid_consumer import PinaxConsumer

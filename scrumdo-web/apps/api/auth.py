@@ -42,8 +42,11 @@ class ScrumDoAuthentication(ApiKeyAuthentication):
        except UserApiKey.DoesNotExist:
            return self._unauthorized()
        
-       return True
-  
+       if key.developer_key and key.developer_key.approved:
+         return True
+       else:
+         return self._unauthorized()
+         
   def is_authenticated(self, request, **kwargs):
       """
       Finds the user and checks their API key.
