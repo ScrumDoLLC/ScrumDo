@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "developer/base.html" %}
 
 {% load i18n %}
 {% load uni_form %}
@@ -6,7 +6,7 @@
 
 {% block body %}
 
-<h1>New Developer Key</h1>
+<h4>New Developer Key</h4>
 <form class="uniForm" id="edit-developer" method="POST" action="">
     <fieldset class="inlineLabels">
         {{ form|as_uni_form }}
@@ -15,14 +15,4 @@
         </div>
     </fieldset>
 </form>
-
-
-<script type="text/javascript" charset="utf-8">
- 
-  {% if GOOGLE_ANALYTICS %}     
-     _gaq.push(['_trackEvent',"ViewPage", "DeveloperKeyCreated", "", 1]); 
-  {% endif %}      
-
-  
-</script>
 {% endblock %}

@@ -56,8 +56,8 @@ class ScrumDoAuthentication(ApiKeyAuthentication):
       """
       from django.contrib.auth.models import User
       
-      username = request.GET.get('api_name') or request.POST.get('api_name')
-      api_key = request.GET.get('api_key') or request.POST.get('api_key')
+      username = request.GET.get('user_name') or request.POST.get('user_name')
+      api_key = request.GET.get('user_key') or request.POST.get('user_key')
       
       if not username or not api_key:
           return self._unauthorized()
@@ -77,4 +77,4 @@ class ScrumDoAuthentication(ApiKeyAuthentication):
       
       This implementation returns the user's username.
       """
-      return request.REQUEST.get('api_name', 'no_user')
+      return request.REQUEST.get('user_name', 'no_user')

@@ -1,0 +1,9 @@
+{% extends "developer/base.html" %}
+
+{% block body %}
+
+{% for page in page_templates %}
+{% include page %}
+{% endfor %}
+
+{% endblock %}

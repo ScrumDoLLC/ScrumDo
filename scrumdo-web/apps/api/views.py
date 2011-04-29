@@ -49,5 +49,5 @@ def is_key_valid(request, **kwargs):
       # self.log_throttled_access(request)
     serializer = Serializer()
     desired_format = determine_format(request, serializer)
-    serialized = serializer.serialize({'is_valid' : key_valid}, desired_format)
+    serialized = serializer.serialize({'valid' : key_valid}, desired_format)
     return HttpResponse(content=serialized, content_type=build_content_type(desired_format))  

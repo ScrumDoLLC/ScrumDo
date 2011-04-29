@@ -1,0 +1,53 @@
+{% extends "site_base.html" %}
+
+{% load theme_tags %}
+
+{% block head_title %}ScrumDo Developer - {{ page }}{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" media="all" href="{{ STATIC_URL }}css/tutorial.css" />
+  <link rel="stylesheet" media="print" href="{{ STATIC_URL }}css/tutorial-print.css" />
+{% endblock %}
+
+{% block panel %}
+<div id="panel">
+  <div class="box">
+    <div class="box-title">
+      Developer - {{ name|capfirst }}
+    </div><!--box-title-->
+    <div class="box-content">
+      <a href="{% url developer_home %}">My Developer Keys</a>
+    </div>
+    <div class="box-content">
+      <a href="{% url developer_apply %}">Apply For A Developer Key</a>
+    </div>
+    {% for page_url, page_name in pages %}
+    <div class="box-content{% ifequal page_url this.0 %} active{% endifequal %}" >
+      <a href="{% url developer_docs_page name page_url %}">{{ page_name }}</a>
+    </div><!--box-content-->
+    {% endfor %}
+    {% if pages %}
+    <div class="box-content{% ifequal "print" this.0 %} active{% endifequal %}">
+      <a href="{% url developer_docs_print name %}">{% silk "printer" %} Print Version</a>
+    </div><!--box-content-->
+    {% endif %}
+  </div><!--box-->
+</div><!--panel-->
+{% endblock %}
+
+{% block body %}
+{# put script here so in print version it is overridden and never runs #}
+  <script type="text/javascript">
+    /* this provides the icon for navigation */
+    var arrow_up = '{% silk "arrow_up" %}';
+  </script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/tutorial.js"></script>
+
+
+<div id="menu">
+<span>Page Contents: </span>
+</div><!--menu-->
+
+{% include page_template %}
+
+{% endblock %}
