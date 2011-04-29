@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="{{ STATIC_URL }}css/scrum-board.css" />
     
 
-  <style type="text/css" media="screen">
+  <style type="text/css">
     html, body, #body_holder { min-height: 100%; width:100%; max-width:100%;}
     #body {
       padding-top: 0px;
@@ -54,21 +54,34 @@
 
 
 {% block body %}
+    
+    <form>
+    	<div id="scrum-board-options" >
+    		<input type="radio" id="small_stories" name="radio" /><label for="small_stories">_</label>
+    		<input type="radio" id="med_stories" name="radio" /><label for="med_stories">=</label>
+    		<input type="radio" id="big_stories" name="radio" checked="checked"  /><label for="big_stories">≡</label>
+    	</div>
+    </form>
+    
+    
     <div class="scrum_board_column" id="board_todo_column">
       <div class="scrum_board_header scrum_board_header_todo">Todo</div>
-      <ul class="scrum_board_list"></ul>
+      <ul class="scrum_board_list" id="todo"></ul>
     </div>
+    
     <div class="scrum_board_column" id="board_doing_column">
       <div class="scrum_board_header scrum_board_header_doing">Doing</div>
-      <ul class="scrum_board_list"></ul>
+      <ul class="scrum_board_list" id="doing"></ul>
     </div>
+    
     <div class="scrum_board_column" id="board_reviewing_column">
       <div class="scrum_board_header scrum_board_header_reviewing">Reviewing</div>
-      <ul class="scrum_board_list"></ul>
+      <ul class="scrum_board_list" id="reviewing"></ul>
     </div>
+    
     <div class="scrum_board_column" id="board_done_column">
       <div class="scrum_board_header scrum_board_header_done">Done</div>
-      <ul class="scrum_board_list"></ul>
+      <ul class="scrum_board_list" id="done"></ul>
     </div>
     
     

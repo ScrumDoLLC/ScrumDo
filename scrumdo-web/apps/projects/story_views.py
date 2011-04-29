@@ -15,6 +15,7 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
+import sys
 
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
@@ -127,32 +128,63 @@ def reorder_story( request, group_slug, story_id):
         rank = 0
         target_iteration = request.POST["iteration"]
         iteration = get_object_or_404( Iteration, id=target_iteration )
-
         if request.POST.get("action","") == "reorder" :
-            # Sometimes, we're just moving iterations...
-            target_rank = int(request.POST["index"])
-            story.rank = target_rank;
-
+            reorderStory( story, request.POST.get("before"), request.POST.get("after"), iteration, field_name=request.POST.get("rank_type","rank"))
+            story.activity_signal.send(sender=story, user=request.user, story=story, action="reordered", project=project)
         story.iteration = iteration;
         story.save()
-
-        stories = project.stories.all().filter(iteration=iteration).order_by("rank")
-        story.activity_signal.send(sender=story, user=request.user, story=story, action="reordered", project=project)
-
-
-        if request.POST.get("action","") == "reorder" :
-            # For now, a stupid reorder everything algorithm
-            for otherStory in stories:
-                if rank == target_rank:
-                    rank+=1
-
-                if otherStory != story:
-                    otherStory.rank = rank
-                    otherStory.save()
-                    rank = rank + 1
-        signals.story_updated.send( sender=request, story=story, user=request.user )
+        
+        signals.story_updated.send( sender=request, story=story, user=request.user )        
         return HttpResponse("OK")
     return  HttpResponse("Fail")
+
+
+def reorderStory( story, before_id, after_id, iteration, field_name="rank"):
+    "Reorders a story between two others."
+    story_rank_before = 0
+    story_rank_after = 999999 # max value of the DB field
+    
+    # If there is a story that should be before this one, grab it's rank
+    try:
+        story_before = Story.objects.get( id=before_id )
+        story_rank_before = story_before.__dict__[field_name]
+    except:
+        pass
+        
+    # If  there is a story that should be after this one, grab it's rank.
+    try:
+        story_after = Story.objects.get( id=after_id )
+        story_rank_after = story_after.__dict__[field_name]
+    except:
+        pass
+        
+    diff = abs(story_rank_after - story_rank_before)
+    # logger.debug("Before %d , after %d, diff %d" % (story_rank_after, story_rank_before, diff) )
+    try:
+        if diff > 1:
+            # It fits between them
+            logger.debug(round(diff/2) )
+            story.__dict__[field_name] = round(diff/2) + story_rank_before
+            logger.debug("Reordering fit %d %d %d" % (story_rank_before, story.__dict__[field_name], story_rank_after) )
+            return
+    except:
+        pass # do an emergency re-order below if things are falling out of bounds.
+
+    # It doesn't fit!  reorder everything!
+    stories = iteration.stories.all().order_by(field_name)
+
+    rank = 10
+    for other_story in stories:
+        if other_story.__dict__[field_name] == story_rank_after:
+            # We should always have a story_rank_after if we get here.
+            story.__dict__[field_name] = rank
+            rank += 10                
+        other_story.__dict__[field_name] = rank
+        other_story.save()
+        rank += 10
+
+            
+            
 
 
 # On the iteration planning page, this renders one story view.  Generally called
@@ -254,7 +286,7 @@ def stories_scrum_board(request, group_slug, iteration_id, status):
     iteration = get_object_or_404(Iteration, id=iteration_id, project=project)
 
     
-    stories = iteration.stories.select_related('project', 'project__organization','project__organization__subscription',  'iteration','iteration__project',).filter(status=Story.STATUS_REVERSE[status]).order_by("rank")
+    stories = iteration.stories.select_related('project', 'project__organization','project__organization__subscription',  'iteration','iteration__project',).filter(status=Story.STATUS_REVERSE[status]).order_by("board_rank")
 
     return render_to_response("stories/scrum_board_story_list.html", {
     "stories": stories,
@@ -335,7 +367,13 @@ def _handleAddStoryInternal( form , project, request):
         story.iteration = iteration
     else:
         story.iteration = project.get_default_iteration()
-    story.rank = _calculate_rank( story.iteration, int(form.cleaned_data['general_rank']) )
+
+    try:
+        general_rank = int(form.cleaned_data['general_rank'])
+    except:
+        general_rank = 2 # bottom
+        
+    story.rank = _calculate_rank( story.iteration, general_rank )
     logger.info("New Story %s" % story.summary)
     story.save()
     if story.points_value() > 0:

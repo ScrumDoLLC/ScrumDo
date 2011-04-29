@@ -21,6 +21,8 @@
 		el.html (html_input_field);
 
 		tag_input		= el.children(".tagit-new").children(".tagit-input");
+		
+		$(tag_input).blur(function(){ commitInput(); });
 
 		$(this).click(function(e){
 			if (e.target.tagName == 'A') {
@@ -46,18 +48,9 @@
 			// Comma/Space/Enter are all valid delimiters for new tags.
 			else if (event.which == COMMA || event.which == SPACE || event.which == ENTER) {
 				event.preventDefault();
+				commitInput();
 
-				var typed = tag_input.val();
-				typed = typed.replace(/,+$/,"");
-				typed = typed.trim();
 
-				if (typed != "") {
-					if (is_new (typed)) {
-						create_choice (typed);
-					}
-					// Cleaning the input.
-					tag_input.val("");
-				}
 			}
 			serializeTags();
 		});
@@ -93,6 +86,21 @@
 
         $(tag_input).focus( function() { tag_input.autocomplete( "search", "" ); });
         
+        
+        function commitInput()
+        {
+            var typed = tag_input.val();
+			typed = typed.replace(/,+$/,"");
+			typed = typed.trim();
+
+			if (typed != "") {
+				if (is_new (typed)) {
+					create_choice (typed);
+				}
+				// Cleaning the input.
+				tag_input.val("");
+			}
+        }
         
         function serializeTags()
         {

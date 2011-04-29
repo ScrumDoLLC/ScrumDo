@@ -2,15 +2,16 @@
 
 .scrum_board_column {
 	width: 24%;
-	border: 1px solid #d2d2d2;
 	height: 100%;
 	float: left;
-	border-right-style: none;
-	min-height: 2500px;
+	background-color: #eee;
 }
 
-.scrum_board_column:last-child {
-	border-right: 1px solid #d2d2d2;
+#scrum-board-options {
+	position: absolute;
+	right: 0;
+	top: 35px;
+	z-index: 10;
 }
 
 .scrum_board_header {
@@ -48,25 +49,50 @@
 
 .scrum_board_story_block {
 	list-style: none;
-	
+}
+
+.scrum_board_gripper {
+	width: 100%;
+	background-color: #e5e8e8;
+	height: 8px;
+	margin-left: -2px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+
+#board_todo_column .scrum_board_gripper:hover {
+	background-color: #444;
+}
+
+#board_doing_column .scrum_board_gripper:hover {
+	background-color: #448cca;
+}
+
+#board_reviewing_column .scrum_board_gripper:hover {
+	background-color: #ff7f0e;
+}
+
+#board_done_column .scrum_board_gripper:hover {
+	background-color: #8dc73e;
 }
 
 .scrum_board_story_block {
 	font-size: 12px;
 	color: #444;
-	border-bottom-style: none;
-	border-bottom-width: 1px;
 	overflow: hidden;
-	border-top: 8px solid #afafaf;
-	border-right-width: 1px;
-	border-left-width: 1px;
-	padding-top: 5px;
+	padding-top: 2px;
 	padding-bottom: 5px;
 	padding-left: 5px;
 	margin: 3px 2px 2px;
-	background-color: #fafafa;
+	background-color: #fff;
 	min-height: 110px;
 	cursor: move;
+	border: 1px solid #dbdbdb;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+
 }
 
 .board_story_body {
@@ -76,6 +102,7 @@
 .scrum_board_story_block h1 {
 	font-size: 14px;
 	font-weight: bold;
+	color: #555;
 }
 
 .scrum_board_story_block .pointsBox {
@@ -84,6 +111,6 @@
 
 .ui-board-state-highlight {
     min-height: 110px;
-    background-color: #cccccc;
+    background-color: #d4ecfe;
     list-style: none;
 }

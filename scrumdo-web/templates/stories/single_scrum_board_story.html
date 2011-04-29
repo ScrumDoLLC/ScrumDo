@@ -8,26 +8,21 @@
 {% load avatar_tags %}
 
 <li class="scrum_board_story_block" story_id="{{story.id}}" id="story_{{story.id}}" rank="{{ story.rank }}" >
+  <div class="scrum_board_gripper"></div>
   <div class="board_story_body">
   <div class="pointsBox">{{ story|show_points }}</div>
-  <div class="todoButtons todoButtons_block" id="todoButtons_{{story.id}}">
-    {% with "block" as return_type %}
-      {% include "stories/todobuttons.html" %}
-    {% endwith %}
-  </div>
+
 
   <span class="storyIcons">
     <a class="hoverDetails" onclick="jQuery.facebox({ ajax: '/projects/project/{{story.project.slug}}/story/{{story.id}}/pretty'}, 'pretty_print'); return false;" href="/projects/project/{{story.project.slug}}/story/{{story.id}}/pretty"><img title="Quick View" src="{{STATIC_URL}}pinax/images/silk/icons/magnifier.png" /></a>
-
-    
-    
-
-    </span>
+  </span>
     
   <h1><span style="color:#cccccc;">#{{story.local_id}}</span> {{ story.summary|escape|link_stories:story.project|safe }}</h1>
 
 
-  {{ story.detail|escape|link_stories:story.project|truncatewords_html:"15"|safe }}
+  <div class="story_detail">
+  {{ story.detail|escape|link_stories:story.project|truncatewords_html:"30"|safe }}
+  </div>
   
     
 

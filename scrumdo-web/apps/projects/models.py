@@ -251,6 +251,7 @@ class Story( models.Model ):
     STATUS_REVERSE = {"TODO":STATUS_TODO, "Doing":STATUS_DOING, "In Progress":STATUS_DOING,  "Reviewing":STATUS_REVIEWING,  "Done":STATUS_DONE }
 
     rank = models.IntegerField()
+    board_rank = models.IntegerField(default=0)
     summary = models.TextField( )
     local_id = models.IntegerField()
     detail = models.TextField( blank=True )

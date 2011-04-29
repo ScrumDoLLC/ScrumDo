@@ -166,22 +166,38 @@ $(document).ready(function () {
 function updateStoryPosition(event, ui)
 {        
     if( $(ui.item).attr("draggedOffScreen") == "1" )
-	{
-	    // We were getting double sort/drag events sometimes when dragging to a different iteration.
-	    return;
-	}
-    iterationId = "{{ iteration.id }}";
+	  {
+  	    // We were getting double sort/drag events sometimes when dragging to a different iteration.
+  	    return;
+  	}
+    iteration_id = "{{ iteration.id }}";
     $("#loadingIcon").show();
+    
+    
+    var ind = ui.item.index();
+    var before = "";
+    var after = "";
+    children = ui.item.parent().children();
+    if( ind > 0)
+    {
+        before = $(children[ind-1]).attr("story_id");
+    }
+    
+    if( children.length > (1+ind) )
+    {
+        after = $(children[ind+1]).attr("story_id");
+    }
+    
     $.ajax({
-	    url: "/projects/project/" + project_slug + "/story/" + $(ui.item).attr("story_id") + "/reorder",
-		data:({ action:"reorder", index:ui.item.index(), iteration:iterationId }),
-		type: "POST",
-		success: function() {
-		calculateBothPoints();
-		$("#loadingIcon").hide();          
-	    }
-
-	});
+    	    url: "/projects/project/" + project_slug + "/story/" + $(ui.item).attr("story_id") + "/reorder",
+    		data:({ action:"reorder", before:before, after:after, iteration:iteration_id }),
+    		type: "POST",
+    		success: function() {
+    		    calculateBothPoints();
+        		$("#loadingIcon").hide();
+    	    }
+	    });
+  
 }
         
 function filterByTag( tag )
@@ -278,7 +294,7 @@ $(document).ready(function() {
           
 
 	$("#story_list").sortable({ 
-		update: updateStoryPosition, 
+		    update: updateStoryPosition, 
 		    tolerance: 'pointer', 
 		    distance: 5,
 		    opacity: 0.6, 
