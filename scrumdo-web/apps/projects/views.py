@@ -106,7 +106,7 @@ def home( request ):
                 pass
 
         num_projects = len(member_projects) + len(filter(lambda p: p.organization == None, my_projects))
-        blank_state = True if num_projects == 0 else False
+        blank_state = True if (num_projects + len(organizations)) == 0 else False
         return render_to_response("homepage.html", {
            "my_projects":my_projects,
            "my_organizations": organizations,
