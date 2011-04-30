@@ -527,3 +527,16 @@ h2.page-divider {
 .disabled_project {
     opacity: 0.4;
 }
+
+.project_category_header h1 {
+	font-size: 15px;
+	margin-left: 5px;
+}
+.project_category_header {
+
+	width: 100%;
+	padding: 1px;
+	border-bottom: 1px solid #e1e1e1;
+}
+
+

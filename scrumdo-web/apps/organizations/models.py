@@ -74,6 +74,9 @@ class Organization(models.Model):
     def getAdminOrganizationsForUser( user ):
         return Organization.objects.filter( teams__access_type="admin", teams__members = user ).distinct().order_by("name")
 
+    def projectsByCategory(self):
+        return self.projects.all().order_by('-active','category','name')
+
     def hasAdminAccess( self, user ):
         if user.is_staff:
             return True

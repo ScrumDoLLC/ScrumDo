@@ -25,6 +25,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponse
 from django.core import serializers
 from django.conf import settings
+from django.core.exceptions import PermissionDenied
 
 from organizations.forms import *
 from organizations.models import *

@@ -2,7 +2,7 @@
 {% load theme_tags %}
 {% load projects_tags %}
 {% load avatar_tags %}
-
+{% load projects_tags %}
 {% load i18n %}
 {% load ifsetting_tag %}
 {% load theme_tags %}
@@ -95,18 +95,32 @@
 
     </div><!--box-heading-->
     <div class="box-content">
-      {% for project in org.projects.all %}
-      {% canread project %}
+      {% for project in org.projectsByCategory %}
+        {% canread project %}
       
-        <div class="projectfeed">
-    	      <a title="Subscribe to project activity." target="_blank" href="/feeds/project/{{ project.pk }}/{{ project.token }}">{% silk "feed" %}</a>
-        </div><!--projectfeed-->
-
-        <div class="project {% if not project.active %}disabled_project{% endif %}">
-	        {% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a> 
-	        <div class="subtitle">{{ project.get_num_iterations }} iteration{{ project.get_num_iterations|pluralize }}, {{ project.get_num_stories }} stor{{ project.get_num_stories|pluralize:"y,ies" }}</div>
-        </div><!--project-->
-      {% endcanread %}
+      
+        {% ifchanged project.category %}
+          {% if project.category %}
+            {% if project.active %}
+              <div class="project_category_header"><h1>{% silk "folder" %} {{project.category}}</h1></div>
+            {% endif %}
+          {% endif %}
+        {% endifchanged %}
+        {% ifchanged project.active %}
+          {% if not project.active %}
+            <div class="project_category_header"><h1>{% silk "folder" %} Archived</h1></div>
+          {% endif %}
+        {% endifchanged %}
+                
+          <div class="projectfeed">
+      	      <a title="Subscribe to project activity." target="_blank" href="/feeds/project/{{ project.pk }}/{{ project.token }}">{% silk "feed" %}</a>
+          </div>
+          <div class="project {% if not project.active %}disabled_project{% endif %}">
+  	        {% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a> 
+  	        <div class="subtitle">{{ project.get_num_iterations }} iteration{{ project.get_num_iterations|pluralize }}, {{ project.get_num_stories }} stor{{ project.get_num_stories|pluralize:"y,ies" }}</div>
+          </div>
+          
+        {% endcanread %}
       {% endfor %}
     </div><!--box-content-->
     {% endfor %}
