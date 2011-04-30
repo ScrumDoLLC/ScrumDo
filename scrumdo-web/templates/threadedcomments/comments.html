@@ -6,7 +6,7 @@
 {% get_threaded_comment_tree for object as responses %}
 {% autopaginate responses %}
 
-<div class="comment_section" style="display:none">
+<div class="comment_section" >
   <h2 style="margin-left:-40px">Comments</h2>
   <ul class="responses">
       {% for response in responses %}
