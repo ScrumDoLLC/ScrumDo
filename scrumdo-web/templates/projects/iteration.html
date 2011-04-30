@@ -142,6 +142,9 @@ function loadIteration(iterationID, tags, search)
             $("a.delete").confirm("Are you sure you want to delete this?");
 
             setUpStoryLinks();
+            
+            $("#story_count").text($("#story_list").children().length + " stories");
+            
         }
     });
 }
@@ -166,6 +169,7 @@ $(document).ready(function() {
             $("ul").sortable("disable");
             setUpStoryLinks();
 
+            $("#story_count").text($("#story_list").children().length + " stories");
         }
     });
 
