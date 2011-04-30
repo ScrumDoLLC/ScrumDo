@@ -90,7 +90,7 @@ function onDropColumn(event, ui)
     var url = "/projects/project/" + project_slug + "/story/" + story_id + "/set_" + target_status;
     $.ajax({
         url: url,
-        method: "POST"        
+        type: "POST"        
     });
     resizeColumns();
 }
