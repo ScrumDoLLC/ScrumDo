@@ -127,7 +127,12 @@ def reorder_story( request, group_slug, story_id):
     if request.method == 'POST':
         rank = 0
         target_iteration = request.POST["iteration"]
-        iteration = get_object_or_404( Iteration, id=target_iteration )
+
+        try:
+            iteration = get_object_or_404( Iteration, id=target_iteration )
+        except:
+            iteration = story.iteration
+
         if request.POST.get("action","") == "reorder" :
             reorderStory( story, request.POST.get("before"), request.POST.get("after"), iteration, field_name=request.POST.get("rank_type","rank"))
             story.activity_signal.send(sender=story, user=request.user, story=story, action="reordered", project=project)
