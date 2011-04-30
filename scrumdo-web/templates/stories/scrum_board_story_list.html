@@ -1,0 +1,7 @@
+{% load i18n %}
+
+{# This template gets rendered when we're filling in the columns on the story_list page through javascript #}
+
+{% for story in stories %}
+    {% include "stories/single_scrum_board_story.html" %}  
+{% endfor %} 

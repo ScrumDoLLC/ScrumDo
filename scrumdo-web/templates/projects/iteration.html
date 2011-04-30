@@ -110,191 +110,232 @@
 
 
 <script type="text/javascript">
-
 var project_slug = "{{ iteration.project.slug }}";
 var current_story_popup = "";
 
-function loadIteration( iterationID , tags, search)
-{
+function loadIteration(iterationID, tags, search)
+ {
     $("#loadingIcon").show();
     $.ajax({
-	    url: "/projects/project/" + project_slug + "/stories/" + iterationID,
-		data:{display_type:"block",
-		    tags:tags,		    
-		    search:search},
-		success: function(html){
-		$("#story_list").html(html);  
-		$("#story_list").attr("iteration_id", iterationID);
-		$("#loadingIcon").hide();
-                /* if we came here with the name of a specific story in the url, scroll to it */
-                if ($(window.location.hash).offset()) {
-                     $("html,body").animate({scrollTop: $(window.location.hash).offset().top})
-                }
-               $('a[rel*=facebox]').unbind('click.facebox');                
-               $('a[rel*=facebox]').facebox({
-               loadingImage: '{{ STATIC_URL }}images/facebox/loading.gif',
-               closeImage: '{{ STATIC_URL }}images/facebox/closelabel.png'
-               });
+        url: "/projects/project/" + project_slug + "/stories/" + iterationID,
+        data: {
+            display_type: "block",
+            tags: tags,
+            search: search
+        },
+        success: function(html) {
+            $("#story_list").html(html);
+            $("#story_list").attr("iteration_id", iterationID);
+            $("#loadingIcon").hide();
+            /* if we came here with the name of a specific story in the url, scroll to it */
+            if ($(window.location.hash).offset()) {
+                $("html,body").animate({
+                    scrollTop: $(window.location.hash).offset().top
+                })
+            }
+            $('a[rel*=facebox]').unbind('click.facebox');
+            $('a[rel*=facebox]').facebox({
+                loadingImage: '{{ STATIC_URL }}images/facebox/loading.gif',
+                closeImage: '{{ STATIC_URL }}images/facebox/closelabel.png'
+            });
 
-	$("a.delete").confirm("Are you sure you want to delete this?");
+            $("a.delete").confirm("Are you sure you want to delete this?");
 
-		setUpStoryLinks();          
-	    }
-	});
+            setUpStoryLinks();
+            
+            $("#story_count").text($("#story_list").children().length + " stories");
+            
+        }
+    });
 }
-$(document).ready(function () {
-	$(".showFilter").click( function() { $("#filterDialog").toggle(); return false;} );
+$(document).ready(function() {
+    $(".showFilter").click(function() {
+        $("#filterDialog").toggle();
+        return false;
+    });
 
-    
-	$(".filterForm").ajaxForm(
-				  {
-				    beforeSend: function() { $("#loadingIcon").show();},
-					  success: function(html)
-					  {
-					      $("#story_list").html(html);  
-					      $(document).trigger('close.facebox');   
-					      $("#loadingIcon").hide();   
 
-					      $("ul").sortable("disable");
-                setUpStoryLinks();
+    $(".filterForm").ajaxForm(
+    {
+        beforeSend: function() {
+            $("#loadingIcon").show();
+        },
+        success: function(html)
+        {
+            $("#story_list").html(html);
+            $(document).trigger('close.facebox');
+            $("#loadingIcon").hide();
 
-				  }});
+            $("ul").sortable("disable");
+            setUpStoryLinks();
 
-                });
+            $("#story_count").text($("#story_list").children().length + " stories");
+        }
+    });
 
-{# This is the method that handles the user-drop event and records that fact on the server. #}
+});
+
+ {#This is the method that handles the user - drop event and records that fact on the server.#}
 function updateStoryPosition(event, ui)
-{        
-    if( $(ui.item).attr("draggedOffScreen") == "1" )
-	{
-	    // We were getting double sort/drag events sometimes when dragging to a different iteration.
-	    return;
-	}
-    iterationId = "{{ iteration.id }}";
+ {
+    if ($(ui.item).attr("draggedOffScreen") == "1")
+    {
+        // We were getting double sort/drag events sometimes when dragging to a different iteration.
+        return;
+    }
+    iteration_id = "{{ iteration.id }}";
     $("#loadingIcon").show();
-    $.ajax({
-	    url: "/projects/project/" + project_slug + "/story/" + $(ui.item).attr("story_id") + "/reorder",
-		data:({ action:"reorder", index:ui.item.index(), iteration:iterationId }),
-		type: "POST",
-		success: function() {
-		calculateBothPoints();
-		$("#loadingIcon").hide();          
-	    }
 
-	});
+
+    var ind = ui.item.index();
+    var before = "";
+    var after = "";
+    children = ui.item.parent().children();
+    if (ind > 0)
+    {
+        before = $(children[ind - 1]).attr("story_id");
+    }
+
+    if (children.length > (1 + ind))
+    {
+        after = $(children[ind + 1]).attr("story_id");
+    }
+
+    $.ajax({
+        url: "/projects/project/" + project_slug + "/story/" + $(ui.item).attr("story_id") + "/reorder",
+        data: ({
+            action: "reorder",
+            before: before,
+            after: after,
+            iteration: iteration_id
+        }),
+        type: "POST",
+        success: function() {
+            calculateBothPoints();
+            $("#loadingIcon").hide();
+        }
+    });
+
 }
-        
-function filterByTag( tag )
-{
+
+function filterByTag(tag)
+ {
     $("#filterDialog").show();
     $("#tags_input").val(tag);
     $("#filter_button").submit();
 }
 
 function calculateBothPoints()
-{
+ {
     setUpStoryLinks();
 }
-   
 
-    
-$(document).bind('afterReveal.facebox', function() {
-        $("#id_start_date-2").datepicker({dateFormat: 'yy-mm-dd' });
-        $("#id_end_date-2").datepicker({dateFormat: 'yy-mm-dd' });
+
+
+$(document).bind('afterReveal.facebox',
+function() {
+    $("#id_start_date-2").datepicker({
+        dateFormat: 'yy-mm-dd'
     });
-    
-$(document).bind('reveal.facebox', function() {
-	$('#facebox input').each( function(intIndex){
-		$(this).attr('id',jQuery(this).attr('id') + '-2')
-		    });
+    $("#id_end_date-2").datepicker({
+        dateFormat: 'yy-mm-dd'
     });
-    
-    
+});
+
+$(document).bind('reveal.facebox',
+function() {
+    $('#facebox input').each(function(intIndex) {
+        $(this).attr('id', jQuery(this).attr('id') + '-2')
+    });
+});
 
 
-        
-function moveCurrentlyOpenStoryToIteration( iteration_id )
-{
+function moveCurrentlyOpenStoryToIteration(iteration_id)
+ {
     $("#loadingIcon").show();
     $.ajax({
-	    url: "/projects/project/" + project_slug + "/story/" + current_story_popup + "/reorder",
-		data:({ action:"move_iteration", iteration:iteration_id }),
-		type: "POST",
-		success: function() {
-		$("#loadingIcon").hide();
-		$("#story_" + current_story_popup).hide(true);              
-	    }
-	});
+        url: "/projects/project/" + project_slug + "/story/" + current_story_popup + "/reorder",
+        data: ({
+            action: "move_iteration",
+            iteration: iteration_id
+        }),
+        type: "POST",
+        success: function() {
+            $("#loadingIcon").hide();
+            $("#story_" + current_story_popup).hide(true);
+        }
+    });
 
-      {% if GOOGLE_ANALYTICS %}     
-         _gaq.push(['_trackEvent',"MoveToIteration", "{{current_view}}", "", 1]); 
-      {% endif %}
-      
+    {% if GOOGLE_ANALYTICS %}
+    _gaq.push(['_trackEvent', "MoveToIteration", "{{current_view}}", "", 1]);
+    {% endif %}
+
 }
 
 
 
 function updateStoryList()
-{
-  loadIteration( "{{ iteration.id }}","","")  ;
+ {
+    loadIteration("{{ iteration.id }}", "", "");
 }
 
 
-$(".hide_burndown_chart_link").click( function() {
-  $("#burnup_chart").toggle();
-  if( $('#burnup_chart').is(':visible') ) 
-  {
-    $(".hide_burndown_chart_link").text("Hide Chart");
-    $.cookie("chart", "visible");
-    {% if iteration.points_log.count %}      
-    	generateBurnDown( "#iterationBurndown", "{{project.slug}}" , "{{iteration.id}}" , 0);         
-  	{% endif %}
-  }
-  else
-  {
-    $(".hide_burndown_chart_link").text("Show Chart");
-    $.cookie("chart", "hidden");
-  }
-  
-} );
+$(".hide_burndown_chart_link").click(function() {
+    $("#burnup_chart").toggle();
+    if ($('#burnup_chart').is(':visible'))
+    {
+        $(".hide_burndown_chart_link").text("Hide Chart");
+        $.cookie("chart", "visible");
+        {% if iteration.points_log.count %}
+        generateBurnDown("#iterationBurndown", "{{project.slug}}", "{{iteration.id}}", 0);
+        {% endif %}
+    }
+    else
+    {
+        $(".hide_burndown_chart_link").text("Show Chart");
+        $.cookie("chart", "hidden");
+    }
+
+});
 
 $(document).ready(function() {
-  
 
-  if( $.cookie("chart") == "hidden" )
-  {
-    $("#burnup_chart").hide();
-    $(".hide_burndown_chart_link").text("Show Chart");
-  }
-         
-	$(".subIteration").click( function() 
-				  {
-				      iteration_id = $(this).attr("iteration_id");
-				      moveCurrentlyOpenStoryToIteration(iteration_id);
-				  } );
 
-	loadIteration( "{{ iteration.id }}","","")  ;
-          
-          
+    if ($.cookie("chart") == "hidden")
+    {
+        $("#burnup_chart").hide();
+        $(".hide_burndown_chart_link").text("Show Chart");
+    }
 
-	$("#story_list").sortable({ 
-		update: updateStoryPosition, 
-		    tolerance: 'pointer', 
-		    distance: 5,
-		    opacity: 0.6, 
-		    placeholder: "ui-state-highlight" ,
-		    cancel: ".block_story_body"
-		    });
-          
-	{# Draw the graph... #}
-	{% if iteration.points_log.count %}      
-	generateBurnDown( "#iterationBurndown", "{{project.slug}}" , "{{iteration.id}}" , 0);         
-	{% endif %}
-
-    {% if GOOGLE_ANALYTICS %}     
-        _gaq.push(['_trackEvent',"ViewPage", "Iteration", "", 1]); 
-    {% endif %}     
+    $(".subIteration").click(function()
+    {
+        iteration_id = $(this).attr("iteration_id");
+        moveCurrentlyOpenStoryToIteration(iteration_id);
     });
+
+    loadIteration("{{ iteration.id }}", "", "");
+
+
+
+    $("#story_list").sortable({
+        update: updateStoryPosition,
+        tolerance: 'pointer',
+        distance: 5,
+        opacity: 0.6,
+        placeholder: "ui-state-highlight",
+        cancel: ".block_story_body"
+    });
+
+    {#Draw the graph...#}
+    
+    {% if iteration.points_log.count %}
+    generateBurnDown("#iterationBurndown", "{{project.slug}}", "{{iteration.id}}", 0);
+    {% endif %}
+
+    {% if GOOGLE_ANALYTICS %}
+    _gaq.push(['_trackEvent', "ViewPage", "Iteration", "", 1]);
+    {% endif %}
+});
 </script>
     
 {% endblock %}

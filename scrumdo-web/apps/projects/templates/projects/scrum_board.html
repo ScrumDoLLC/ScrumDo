@@ -1,0 +1,95 @@
+{% extends "projects/base.html" %}
+
+{% load i18n %}
+{% load uni_form %}
+{% load avatar_tags %}
+{% load threadedcommentstags %}
+{% load pagination_tags %}
+{% load extra_tagging_tags %}
+{% load projects_tags %}
+{% load iteration_tags %}
+{% load group_tags %}
+{% load topics_tags %}
+{% load wiki_tags %}
+{% load theme_tags %}
+{% load iteration_tags %}
+
+{% block head_title %}{{ project.name }}{% endblock %}
+
+
+{% block panel %}
+{% endblock %}
+
+{% block breadcrumbs %}
+  {% if project.organization %}
+     <a href="{% url organization_detail project.organization.slug %}">{{ project.organization.name }}</a> /
+  {% endif %}
+  <a href="{% url project_detail project.slug %}">{{ project.name }}</a> /
+  <a href="{% url iteration project.slug iteration.id %}">{{ iteration.name }}</a> /
+  Scrum Board
+{% endblock %}
+
+
+{% block extra_head %}
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.cookie.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/scrum-board.js"></script>
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/scrum-board.css" />
+    
+
+  <style type="text/css">
+    html, body, #body_holder { min-height: 100%; width:100%; max-width:100%;}
+    #body {
+      padding-top: 0px;
+      padding-right: 210px; 
+      padding: 0px; 
+      margin: 0px;
+      width: 100%;
+      max-width: 100%;
+      min-width: 100%;
+    }
+    
+  </style>
+{% endblock %}
+
+
+
+{% block body %}
+    
+    <form>
+    	<div id="scrum-board-options" >
+    		<input type="radio" id="small_stories" name="radio" /><label for="small_stories">_</label>
+    		<input type="radio" id="med_stories" name="radio" /><label for="med_stories">=</label>
+    		<input type="radio" id="big_stories" name="radio" checked="checked"  /><label for="big_stories">≡</label>
+    	</div>
+    </form>
+    
+    
+    <div class="scrum_board_column" id="board_todo_column">
+      <div class="scrum_board_header scrum_board_header_todo">Todo</div>
+      <ul class="scrum_board_list" id="todo"></ul>
+    </div>
+    
+    <div class="scrum_board_column" id="board_doing_column">
+      <div class="scrum_board_header scrum_board_header_doing">Doing</div>
+      <ul class="scrum_board_list" id="doing"></ul>
+    </div>
+    
+    <div class="scrum_board_column" id="board_reviewing_column">
+      <div class="scrum_board_header scrum_board_header_reviewing">Reviewing</div>
+      <ul class="scrum_board_list" id="reviewing"></ul>
+    </div>
+    
+    <div class="scrum_board_column" id="board_done_column">
+      <div class="scrum_board_header scrum_board_header_done">Done</div>
+      <ul class="scrum_board_list" id="done"></ul>
+    </div>
+    
+    
+    <script type="text/javascript" charset="utf-8">
+      project_slug = "{{project.slug}}";
+      iteration_id = "{{iteration.id}}";
+    </script>
+{% endblock %}
+
+{% block extra_body %}
+{% endblock %}
