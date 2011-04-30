@@ -87,6 +87,7 @@ class StoryResource(ModelResource):
   
   class Meta:
     queryset = Story.objects.all()
+    fields = ['id', 'summary','detail','assignee_id','points', 'iteration_id','project_id', 'status','extra_1','extra_2','extra_3']
     list_allowed_methods = []
     authentication = ScrumDoAuthentication()
     authorization = ScrumDoAuthorization(
@@ -106,6 +107,7 @@ class IterationResource(ModelResource):
 
   class Meta:
     queryset = Iteration.objects.all()
+    fields = ['id','name', 'start_date','end_date','project_id']
     list_allowed_methods = []
     authentication = ScrumDoAuthentication()
     authorization = ScrumDoAuthorization(
@@ -120,7 +122,7 @@ class ProjectResource(ModelResource):
 
   class Meta:
     queryset = Project.objects.all()
-    fields = ['slug']
+    fields = ['slug', 'creator_id','organization_id','velocity','iterations_left']
     list_allowed_methods = []
     authentication = ScrumDoAuthentication()
     authorization = ScrumDoAuthorization(
