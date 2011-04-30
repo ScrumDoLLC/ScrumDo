@@ -117,6 +117,26 @@ def delete_story( request, group_slug, story_id ):
     else:
         return HttpResponse("FAIL");
 
+# Request handler for the scrum board ajax calls
+@login_required
+def scrum_board( request, group_slug, story_id):
+    status_map = {"todo":Story.STATUS_TODO, "doing":Story.STATUS_DOING, "reviewing":Story.STATUS_REVIEWING, "done":Story.STATUS_DONE};
+    story = get_object_or_404( Story, id=story_id )
+    project = get_object_or_404( Project, slug=group_slug )
+    if request.method == 'POST':
+        target_status = status_map[request.POST.get("status")]
+        reorderStory( story, request.POST.get("before"), request.POST.get("after"), story.iteration, field_name="board_rank")
+        if story.status != target_status:
+            story.status = target_status
+            story.save()
+            story.activity_signal.send(sender=story, user=request.user, story=story, action="changed status", status=story.statusText(), project=story.project)
+            onDemandCalculateVelocity( story.project )
+        else:
+            story.save()
+    return HttpResponse("OK")
+        
+    
+    
 # This is the request handler that gets called from the story_list and iteraqtion pages when the user drags & drops a story to a
 # new ranking or a new iteration.  It should have two post variables, index and iteration
 @login_required
@@ -134,7 +154,7 @@ def reorder_story( request, group_slug, story_id):
             iteration = story.iteration
 
         if request.POST.get("action","") == "reorder" :
-            reorderStory( story, request.POST.get("before"), request.POST.get("after"), iteration, field_name=request.POST.get("rank_type","rank"))
+            reorderStory( story, request.POST.get("before"), request.POST.get("after"), iteration)
             story.activity_signal.send(sender=story, user=request.user, story=story, action="reordered", project=project)
         story.iteration = iteration;
         story.save()
@@ -162,7 +182,7 @@ def reorderStory( story, before_id, after_id, iteration, field_name="rank"):
         story_rank_after = story_after.__dict__[field_name]
     except:
         pass
-        
+    
     diff = abs(story_rank_after - story_rank_before)
     # logger.debug("Before %d , after %d, diff %d" % (story_rank_after, story_rank_before, diff) )
     try:

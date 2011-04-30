@@ -286,6 +286,9 @@ class Story( models.Model ):
                     assigned_stories = assigned_stories + [(project, project_stories)]
         return assigned_stories
 
+    def statusText(self):
+        return Story.STATUS_CHOICES[ self.status - 1][1]
+    
     def getPointsLabel(self):
         result = filter( lambda v: v[0]==self.points, self.getPointScale() )
         if len(result) > 0:

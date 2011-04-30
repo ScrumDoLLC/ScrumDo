@@ -11,7 +11,6 @@ $(document).ready( function() {
         placeholder: "ui-board-state-highlight" ,
         opacity: 0.6,
         cancel: ".board_story_body",
-        receive: onDropColumn,
         update: onSortStory        
 	});
 	
@@ -73,27 +72,29 @@ function onSortStory(event, ui)
         after = $(children[ind+1]).attr("story_id");
     }
     
+    var target_status = $(ui.item).parent().attr("id");
+    
     $.ajax({
-    	    url: "/projects/project/" + project_slug + "/story/" + $(ui.item).attr("story_id") + "/reorder",
-    		data:({ action:"reorder", before:before, after:after, iteration:iteration_id, rank_type:"board_rank" }),
+    	    url: "/projects/project/" + project_slug + "/story/" + $(ui.item).attr("story_id") + "/scrum_board",
+    		data:({ action:"reorder", before:before, after:after, iteration:iteration_id, status:target_status, rank_type:"board_rank" }),
     		type: "POST",
-    		success: function() {
-    		    
+    		success: function() {    
+    		    resizeColumns();
     	    }
 	    });
 }
-
-function onDropColumn(event, ui)
-{    
-    var story_id = ui.item.attr("story_id");
-    var target_status = $(event.target).attr("id");
-    var url = "/projects/project/" + project_slug + "/story/" + story_id + "/set_" + target_status;
-    $.ajax({
-        url: url,
-        type: "POST"        
-    });
-    resizeColumns();
-}
+// 
+// function onDropColumn(event, ui)
+// {    
+//     var story_id = ui.item.attr("story_id");
+//     var target_status = $(event.target).attr("id");
+//     var url = "/projects/project/" + project_slug + "/story/" + story_id + "/set_" + target_status;
+//     $.ajax({
+//         url: url,
+//         type: "POST"        
+//     });
+//     
+// }
 
 function loadColumn( column_div, story_type )
 {
