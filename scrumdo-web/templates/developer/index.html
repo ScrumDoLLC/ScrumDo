@@ -1,0 +1,14 @@
+{% extends "developer/base.html" %}
+
+{% block body %}
+
+{% if not keys %}
+<h2>You do not have any developer keys currently</h2>
+{% else %}
+<h2>Your Developer Keys</h2>
+{% for key in keys %}
+<p>{% if key.approved %}Active{% else %}Not Active{% endif %} - {{key.application_name}} - {{key.key}}</p>
+{% endfor %}
+{% endif %}
+
+{% endblock %}

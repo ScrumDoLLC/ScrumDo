@@ -1,0 +1,4 @@
+<h2 alt="Traversing">Traversing</h2>
+<p>When resources have references to other resources, those come back as strings that are URIs to those resources. For example, if I use the call user/1 I will get back information about the user that includes a list of projects they are a member of. This list could look like: ["/api/v1/project/1/", "/api/v1/project/2/"]. To view those resources all I have to do is add my credentials to the URI, resulting in something like:<br><br>
+   /api/v1/project/1/?user_name=test&user_key=06909df452564210a7cef5811132a53ba3a7a31a<br><br> Of course, this will only work for resources that you are authorized to view. See the section "Permissions" for more information.
+  </p>

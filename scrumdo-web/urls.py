@@ -23,6 +23,7 @@ import feeds
 from django.views.generic.simple import direct_to_template, redirect_to
 
 from django.contrib import admin
+
 admin.autodiscover()
 
 from account.openid_consumer import PinaxConsumer
@@ -65,6 +66,8 @@ urlpatterns = patterns('',
     (r'^tutorial/', include('tutorial.urls')),
     (r'^admin/(.*)', admin.site.root),
     (r'^api/', include('api.urls')),
+    (r'^developer/', include('developer.urls')),
+
     url(r'^usage', "projects.views.usage", name="usage"),
 )
 

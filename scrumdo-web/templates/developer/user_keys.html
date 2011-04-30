@@ -1,0 +1,15 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Account" %}{% endblock %}
+
+{% block body %}
+
+<h3>All your current keys:</h3>
+{% for key in keys %}
+<p>{{key.developer_key.application_name}} - {{key.key}} - <form method=post><input type="hidden" value="{{key.id}}" name="key_id"></input><input type=submit value="Delete"></input></form></p>
+
+{% endfor %}
+
+{% endblock %}

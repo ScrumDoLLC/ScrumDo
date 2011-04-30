@@ -1,27 +1,21 @@
 from django.conf.urls.defaults import *
-from piston.resource import Resource
-from piston.authentication import HttpBasicAuthentication
+from tastypie.api import Api
+from api.resources import OrganizationResource, TeamResource, ProjectResource, StoryResource, IterationResource, UserResource, ActivityResource #, CommentResource
 
-from api.handlers import ProjectHandler,IterationHandler,StoryHandler,NewsfeedHandler
+class ScrumDoApi(Api):
+  def override_urls(self):
+    return [url(r'^v1/login$', "api.views.login" , name="api_login"),
+            url(r'^v1/is_key_valid$', "api.views.is_key_valid" , name="is_key_valid"),
+            ]
 
-auth = HttpBasicAuthentication(realm="ScrumDo Test Auth")
-ad = { 'authentication': auth }
+v1_api = ScrumDoApi(api_name='v1')
+v1_api.register(OrganizationResource())
+v1_api.register(TeamResource())
+v1_api.register(ProjectResource())
+v1_api.register(StoryResource())
+# v1_api.register(CommentResource())
+v1_api.register(IterationResource())
+v1_api.register(UserResource())
+v1_api.register(ActivityResource())
 
-project_handler = Resource(ProjectHandler, **ad)
-iteration_handler = Resource(IterationHandler, **ad)
-story_handler = Resource(StoryHandler, **ad)
-newsfeed_handler = Resource(NewsfeedHandler, **ad)
-
-urlpatterns = patterns('',
-   url(r'^projects/mine', project_handler, {"user" : True}),
-   url(r'^projects/organization/(?P<slug>[^/]+)/', project_handler, {"org" : True}),
-   url(r'^projects/', project_handler),
-   url(r'^project/(?P<slug>[^/]+)/iterations', iteration_handler),
-   url(r'^project/(?P<slug>[^/]+)/iteration/(?P<iteration_id>[^/]+)/stories', story_handler),
-   url(r'^project/(?P<slug>[^/]+)/story/create', story_handler),
-   url(r'^project/(?P<slug>[^/]+)/story/(?P<story_id>[^/]+)/delete', story_handler),
-   url(r'^project/(?P<slug>[^/]+)/story/(?P<story_id>[^/]+)/comment', story_handler),
-   url(r'^project/(?P<slug>[^/]+)/', project_handler),
-   url(r'^newsfeed/(?P<num>[^/]+)', newsfeed_handler),
-   url(r'^newsfeed/', newsfeed_handler),
-)
+urlpatterns = v1_api.urls

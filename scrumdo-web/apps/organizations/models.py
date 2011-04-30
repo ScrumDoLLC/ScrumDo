@@ -33,7 +33,7 @@ class Team(models.Model):
         ('read', 'Read Only'),
         ('write', 'Read / Write'),
         ('admin', 'Administrator') ]
-    members = models.ManyToManyField(User, verbose_name=_('members'))
+    members = models.ManyToManyField(User, verbose_name=_('members'), related_name="teams")
     projects = models.ManyToManyField("projects.Project", verbose_name=_('projects'), related_name="teams")
 
     organization = models.ForeignKey('Organization', related_name="teams")
@@ -59,6 +59,7 @@ class Organization(models.Model):
     creator = models.ForeignKey(User, verbose_name=_('creator'), related_name="organizations_created")
     created = models.DateTimeField(_('created'), default=datetime.datetime.now)
     description = models.TextField(_('description'),  null=True, default="")
+    
 
     def activeProjects(self):
         return self.projects.filter(active=True);

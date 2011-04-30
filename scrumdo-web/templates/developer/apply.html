@@ -1,0 +1,18 @@
+{% extends "developer/base.html" %}
+
+{% load i18n %}
+{% load uni_form %}
+
+
+{% block body %}
+
+<h4>New Developer Key</h4>
+<form class="uniForm" id="edit-developer" method="POST" action="">
+    <fieldset class="inlineLabels">
+        {{ form|as_uni_form }}
+        <div class="form_block">
+            <input type="submit" value="{% trans "Create Developer" %}"/>
+        </div>
+    </fieldset>
+</form>
+{% endblock %}
