@@ -62,7 +62,7 @@ function onSortStory(event, ui)
     var ind = ui.item.index();
     var before = "";
     var after = "";
-    children = ui.item.parent().children();
+    var children = ui.item.parent().children();
     if( ind > 0)
     {
         before = $(children[ind-1]).attr("story_id");
