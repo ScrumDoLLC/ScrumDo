@@ -85,9 +85,9 @@ function onSortStory(event, ui)
 
 function onDropColumn(event, ui)
 {    
-    story_id = ui.item.attr("story_id");
-    status = $(event.target).attr("id");
-    var url = "/projects/project/" + project_slug + "/story/" + story_id + "/set_" + status;
+    var story_id = ui.item.attr("story_id");
+    var target_status = $(event.target).attr("id");
+    var url = "/projects/project/" + project_slug + "/story/" + story_id + "/set_" + target_status;
     $.ajax({
         url: url,
         method: "POST"        
