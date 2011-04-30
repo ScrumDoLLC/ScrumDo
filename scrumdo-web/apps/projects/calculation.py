@@ -94,7 +94,7 @@ def logPoints( related_object, points_claimed, points_total ):
         log.points_total=points_total
         log.save()
         # logger.debug("logPoints found a previous record.")
-    except PointsLog.DoesNotExist:
+    except:
         log = PointsLog( points_claimed=points_claimed, points_total=points_total, related_object=related_object)
         log.save()
         # logger.debug("logPoints created a new record.")
