@@ -8,13 +8,15 @@
 
 {% block extra_head_base %}
     <link rel="stylesheet" href="{{ STATIC_URL }}projects/css/projects.css" />
-    
+  
     {% ifloaded subscription %}     
       <link rel="stylesheet" href="{{ STATIC_URL }}css/subscription.css" />
     {% endifloaded %}
-
-        
     {% block extra_head %}{% endblock %}
+    
+    <link rel="stylesheet" media="print" href="{{ STATIC_URL }}css/print.css" />    
+
+    
 {% endblock %}
 
 {% block login %}

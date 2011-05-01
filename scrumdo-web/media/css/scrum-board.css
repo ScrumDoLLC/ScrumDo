@@ -49,6 +49,7 @@
 
 .scrum_board_story_block {
 	list-style: none;
+	page-break-before: avoid;
 }
 
 .scrum_board_gripper {
