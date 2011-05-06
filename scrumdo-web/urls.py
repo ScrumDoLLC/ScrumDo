@@ -44,6 +44,7 @@ feeds = {
 urlpatterns = patterns('',
     url(r'^$', "projects.views.home" , name="home"),
     url(r'^robots.txt$', direct_to_template, {'template': 'robots.txt'}),
+    url(r'^crossdomain.xml$', direct_to_template, {'template': 'crossdomain.xml'}),
     url(r'^stats$', views.stats),
     url(r'^stats_data$', views.stats_data ),
     url(r'^admin/invite_user/$', 'signup_codes.views.admin_invite_user', name="admin_invite_user"),

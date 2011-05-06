@@ -359,14 +359,21 @@ def tag_callback(sender, instance, **kwargs):
     for tag_to_delete in instance.tags_to_delete:
         tag_to_delete.delete()
     for tag_to_add in instance.tags_to_add:
-        tag_to_add = tag_to_add.strip()
+        tag_to_add = tag_to_add.strip()        
         if len(tag_to_add) == 0:
             continue
+        tag = None
         try:
-            tag = StoryTag.objects.get( project=instance.project, name=tag_to_add)
-        except ObjectDoesNotExist:
+            tags = StoryTag.objects.filter( project=instance.project, name=tag_to_add)
+            if tags.len() > 0:
+                tag = tags[0]
+        except:
+            pass
+            
+        if tag == None:
             tag = StoryTag( project=instance.project, name=tag_to_add)
             tag.save()
+            
         tagging = StoryTagging( tag=tag, story=instance)
         tagging.save()
     instance.tags_to_delete = []

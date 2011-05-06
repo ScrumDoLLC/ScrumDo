@@ -1,0 +1,63 @@
+/* @override http://192.168.1.125:8000/site_media/static/css/print.css */
+
+.footer, #tabhead, #panel, .storyIcons, #story_form, .login, #scrum-board-options, .scrum_board_gripper {
+	display: none;
+}
+
+.scrum_board_column {
+	width: 20%;
+	max-width: 20%;
+}
+
+#body {
+	margins: 0px;
+	width: 100%;
+	padding: 0px;
+	max-width: 99909px;
+}
+
+#body_holder {
+	margins: 0px;
+	width: 100%;
+	padding: 0px;	
+}
+
+
+a:link, a:visited {
+	color: #000;	
+	text-decoration: none;
+}
+
+.logo, #tabhead {
+	background-color: #666 !important;
+}
+
+.scrum_board_column {
+	vertical-align: top;
+	background-color: #fff;
+}
+#board_todo_column .scrum_board_story_block {
+	border-color: #333;	
+	border-width: 2px;
+}
+
+#board_doing_column .scrum_board_story_block {
+	border-color: #448cca;	
+	border-width: 2px;
+}
+
+#board_reviewing_column .scrum_board_story_block {
+	border-color: #ff7f0e;	
+	border-width: 2px;
+}
+
+#board_done_column .scrum_board_story_block {
+	border-color: #8dc73e;	
+	border-width: 2px;
+}
+
+.story_block {
+	border-top: none;
+
+	margin-bottom: 0px;
+}
