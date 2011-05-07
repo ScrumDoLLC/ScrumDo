@@ -327,7 +327,7 @@ def stories_iteration(request, group_slug, iteration_id):
     read_access_or_403(project,request.user)
     iteration = get_object_or_404(Iteration, id=iteration_id, project=project)
 
-    order_by = request.GET.get("order_by","rank");
+    order_by = request.GET.get("order_by","rank")
     display_type = request.GET.get("display_type","mini")
     text_search = request.GET.get("search","")
     tags_search = request.GET.get("tags","")
@@ -336,11 +336,20 @@ def stories_iteration(request, group_slug, iteration_id):
 
     tags_list = re.split('[, ]+', tags_search)
 
-    stories = iteration.stories.order_by(order_by)
+    stories = iteration.stories
+    
+    if order_by != "numeric_points":
+        stories = stories.order_by(order_by)
+    else:
+        # Tried a few things here... CAST(points as SIGNED) in the order_by clause would have been preferred, but I couldn't get that through
+        # the ORM.  Secondary, I tried craeting a custom column assigned to that, but it caused the query to fail.  The 0+string is a bit
+        # of a mysql specific hack to convert a string to a number.
+        stories = stories.extra(select={'numeric_points': '0+points'}).order_by(order_by)
 
     if request.GET.get("clearButton") != "Clear Filter":
 
-        
+        if order_by == "numeric_points":
+            stories = stories
         
         if tags_search:
             stories = stories.filter(story_tags__tag__name__in=tags_list).distinct().order_by(order_by)                                
