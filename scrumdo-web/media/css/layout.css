@@ -1,4 +1,7 @@
-/* @override http://localhost:8000/site_media/static/css/layout.css */
+/* @override 
+	http://localhost:8000/site_media/static/css/layout.css
+	http://192.168.1.125:8000/site_media/static/css/layout.css
+*/
 
 #tabhead {
 	background-color: #000;	
@@ -539,4 +542,8 @@ h2.page-divider {
 	border-bottom: 1px solid #e1e1e1;
 }
 
-
+.light-rule {	
+	border-style: none;
+	border-top: 1px solid #d3d3d3;
+	margin-top: 20px;
+}

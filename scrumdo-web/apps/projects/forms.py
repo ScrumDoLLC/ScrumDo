@@ -48,6 +48,14 @@ class IterationForm(forms.ModelForm):
 
 
 class ProjectOptionsForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ProjectOptionsForm, self).__init__(*args, **kwargs)
+        self.fields["name"].widget.attrs["style"] = 'width:595px;'
+        self.fields["categories"].widget.attrs["style"] = 'width:595px;'
+        self.fields["description"].widget.attrs["style"] = 'width:600px; height:75px;'
+        
+
+        
     class Meta:
         model = Project
         fields = ('category','categories','velocity_type','point_scale_type', 'use_extra_1', 'use_extra_2', 'use_extra_3', 'use_tasks', 'use_assignee', 'extra_1_label', 'extra_2_label', 'extra_3_label','name', 'description' )
