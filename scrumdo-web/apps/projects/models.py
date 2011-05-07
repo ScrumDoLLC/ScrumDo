@@ -96,6 +96,7 @@ class Project(Group):
     iterations_left = models.PositiveIntegerField( null=True )
     organization = models.ForeignKey(Organization,related_name="projects", null=True, blank=True)
     category = models.CharField( max_length=25, blank=True, null=True)
+    categories = models.CharField(max_length=256, blank=True, null=True)
     token = models.CharField(max_length=7, default=lambda: "".join(random.sample(string.lowercase + string.digits, 7)))
     
     class Meta:
@@ -235,10 +236,7 @@ class Iteration( models.Model):
         ordering = ["-default_iteration","end_date"]
 
     def __unicode__(self):
-        return "%s / %s" % (self.project.name, self.name)
-
-
-
+        return "%s / %s" % (self.project.name, self.name) 
 
 
 class Story( models.Model ):
@@ -263,6 +261,7 @@ class Story( models.Model ):
     iteration = models.ForeignKey( Iteration , related_name="stories")
     project = models.ForeignKey( Project , related_name="stories")
     status = models.IntegerField( max_length=2, choices=STATUS_CHOICES, default=1 )
+    category = models.CharField(max_length=25, blank=True, null=True)
     extra_1 = models.TextField( blank=True , null=True)
     extra_2 = models.TextField( blank=True , null=True)
     extra_3 = models.TextField( blank=True , null=True)
