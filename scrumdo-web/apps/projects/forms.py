@@ -92,7 +92,9 @@ class AddStoryForm( forms.ModelForm ):
         self.fields["extra_2"].widget = forms.widgets.Textarea(attrs={'rows':3, 'cols':50})
         self.fields["extra_3"].widget = forms.widgets.Textarea(attrs={'rows':3, 'cols':50})
         if project.categories:
-            self.fields["category"] = forms.ChoiceField(choices=[(c,c) for c in project.categories.split(",")])
+            choices = [(c.strip(),c.strip()) for c in project.categories.split(",")]
+            choices.insert(0,("",""))            
+            self.fields["category"] = forms.ChoiceField(choices=choices, required=False)
         self.fields["assignee"].required = False
         self.fields["extra_1"].required = False
         self.fields["extra_2"].required = False
@@ -125,7 +127,9 @@ class StoryForm( forms.ModelForm ):
         self.fields["extra_2"].widget = forms.widgets.Textarea(attrs={'rows':3, 'cols':50})
         self.fields["extra_3"].widget = forms.widgets.Textarea(attrs={'rows':3, 'cols':50})
         if project.categories:
-            self.fields["category"] = forms.ChoiceField(choices=[(c.strip(),c.strip()) for c in project.categories.split(",")])        
+            choices = [(c.strip(),c.strip()) for c in project.categories.split(",")]
+            choices.insert(0,("",""))
+            self.fields["category"] = forms.ChoiceField(choices=choices, required=False)        
         self.fields["assignee"].required = False
         self.fields["extra_1"].required = False
         self.fields["extra_2"].required = False
