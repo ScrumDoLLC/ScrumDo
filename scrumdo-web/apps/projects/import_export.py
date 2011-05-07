@@ -204,14 +204,17 @@ def _getHeaders( project ):
         story.extra_3 = unicode(value)
     def setTags( story, value ):
         story.tags = unicode(value)
-
+    def setCategory( story, value ):
+        story.category = unicode(value)
+        
     headers = [ (50,"Story ID", lambda story: story.local_id ,numeric_xf, setId),
                (350,"Summary", lambda story: story.summary,wrap_xf, setSummary),
                (300,"Detail", lambda story: story.detail ,wrap_xf, setDetail),
                (50,"Points", lambda story: int(story.points) if story.points.isdigit() else story.points, numeric_xf, setPoints),
                (70,"Status", lambda story: Story.STATUS_CHOICES[story.status-1][1] ,wrap_xf, setStatus),
                (50,"Rank", lambda story: story.rank,numeric_xf ,  setRank),
-               (80,"Tags", lambda story: story.tags,numeric_xf ,  setTags) ]
+               (80,"Tags", lambda story: story.tags,wrap_xf,  setTags),
+               (80,"Category", lambda story: story.category,wrap_xf, setCategory) ]
 
 
     # And some optional columns that depend on project settings:

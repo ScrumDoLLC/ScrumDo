@@ -16,7 +16,11 @@
             <tr><td>Assigned To:&nbsp;</td><td>{{add_story_form.assignee}}  {{add_story_form.assignee.errors}} </td></tr>
           {% endif %}
           <tr><td>Backlog&nbsp;Position:&nbsp;</td><td>{{add_story_form.general_rank}}  {{add_story_form.general_rank.errors}} </td></tr>
-     
+          
+          {% if project.categories %}
+          <tr><td>Category:&nbsp;</td><td>{{add_story_form.category}}  {{add_story_form.category.errors}} </td></tr>
+          {% endif %}
+          
           {% if project.use_extra_1 %}
             <tr><td>{{project.extra_1_label}}:&nbsp;</td><td>{{add_story_form.extra_1}}  {{add_story_form.extra_1.errors}} </td></tr>
           {% endif %}
