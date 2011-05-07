@@ -103,6 +103,12 @@ class Project(Group):
         ordering = ['-active','name']
         
 
+    def getCategoryList( self ):
+        if self.categories:
+            return [c.strip() for c in self.categories.split(",")]
+        else:
+            return []
+            
     def getPointScale( self ):
         return self.POINT_RANGES[ self.point_scale_type ]
 

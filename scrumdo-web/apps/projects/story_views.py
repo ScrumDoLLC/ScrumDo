@@ -331,29 +331,27 @@ def stories_iteration(request, group_slug, iteration_id):
     display_type = request.GET.get("display_type","mini")
     text_search = request.GET.get("search","")
     tags_search = request.GET.get("tags","")
+    category = request.GET.get("category","")
     only_assigned = request.GET.get("only_assigned", False)
 
     tags_list = re.split('[, ]+', tags_search)
 
-    stories = None
+    stories = iteration.stories.order_by(order_by)
 
     if request.GET.get("clearButton") != "Clear Filter":
-        # There's probably a better way to set up these filters...
-        if text_search and tags_search:
-            stories = iteration.stories.filter(story_tags__tag__name__in=tags_list).extra( where = ["MATCH(summary, detail, extra_1, extra_2, extra_3) AGAINST (%s IN BOOLEAN MODE)"], params=[text_search]).distinct().order_by(order_by)
-        elif tags_search:
-            stories = iteration.stories.filter(story_tags__tag__name__in=tags_list).distinct().order_by(order_by)
-        elif text_search:
-            stories = iteration.stories.extra( where = ["MATCH(summary, detail, extra_1, extra_2, extra_3) AGAINST (%s IN BOOLEAN MODE)"], params=[text_search]).order_by(order_by)
-            
-        if only_assigned:
-            if stories == None:
-                stories = iteration.stories.filter(assignee=request.user).order_by(order_by)
-            else:
-                stories = stories.filter(assignee=request.user)
 
-    if stories == None:
-        stories = iteration.stories.select_related('project', 'project__organization','project__organization__subscription',  'iteration','iteration__project',).order_by(order_by)
+        
+        
+        if tags_search:
+            stories = stories.filter(story_tags__tag__name__in=tags_list).distinct().order_by(order_by)                                
+        if only_assigned:
+            stories = stories.filter(assignee=request.user)        
+        if category:
+            stories = stories.filter(category=category)
+        if text_search:
+            stories = stories.extra( where = ["MATCH(summary, detail, extra_1, extra_2, extra_3) AGAINST (%s IN BOOLEAN MODE)"], params=[text_search]).order_by(order_by)
+    else:        
+        stories = stories.select_related('project', 'project__organization','project__organization__subscription',  'iteration','iteration__project',).order_by(order_by)
     
     return render_to_response("stories/mini_story_list.html", {
       "stories": stories,

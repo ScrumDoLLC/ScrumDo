@@ -10,6 +10,18 @@
       <input type="radio" name="order_by" value="created" > Created Date <br/>                
       <!-- <input type="radio" name="order_by" value="modified" > Last Modified <br/>                 -->
       <input type="radio" name="order_by" value="status" > Status <br/></td></tr>
+
+      {% if project.getCategoryList %}
+      <tr><td>Category:</td><td>
+        <select name="category">
+          <option value="">All</option>
+        {% for category in project.getCategoryList %}
+          <option>{{category}}</option>
+        {% endfor %}
+        </select>
+      </td></tr>
+      {% endif %}
+
       <tr><td>Tags:</td><td><input type="text" name="tags" id="tags_input"></tr>
       {% if project.use_assignee %}
       <tr><td>Only My Assigned Stories:</td><td><input type="checkbox" name="only_assigned" /></td></tr>
