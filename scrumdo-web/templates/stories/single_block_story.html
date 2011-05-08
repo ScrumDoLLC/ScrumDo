@@ -57,7 +57,9 @@
 
 
   {% for link in story.external_links.all %}
-   <div class="tagsBox">{% silk "link" %} <a href="{{ link.external_url }}">{{ link.extra_slug }}</a></div>
+   {% if link.external_url %}
+     <div class="tagsBox">{% silk "link" %} <a href="{{ link.external_url }}">{{ link.extra_slug }}</a></div>
+   {% endif %}
   {% endfor %}
   
   {% include "stories/single_extra.html" %}

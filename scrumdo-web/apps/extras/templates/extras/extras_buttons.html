@@ -1,5 +1,5 @@
 {% load theme_tags %}
 <a href="{% url configure_extra_url extra.getSlug project.slug %}">{{extra.getName}}</a><br/>
 {% for action in actions %}
-  <a style="margin-left:10px" href="{{action.1}}">{% silk action.2 %} {{action.0}}</a>
+  <a style="margin-left:10px" href="{{action.1}}">{% silk action.2 %} {{action.0}}</a><br/>
 {% endfor %}
