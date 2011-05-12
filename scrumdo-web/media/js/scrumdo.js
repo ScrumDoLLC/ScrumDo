@@ -18,7 +18,7 @@ function setStatus(storyID, project_slug, status, return_type)
 		success: function(responseText) {
 		$("#story_" + storyID).replaceWith(responseText);
 		setUpStoryLinks();		
-		
+		if(typeof updatePanel == 'function') { updatePanel(); }   
 	    }
 	});
 		
@@ -51,11 +51,12 @@ function deleteTask( story_id, task_id )
     }
  
     if(typeof reloadStoryCallback == 'function') { reloadStoryCallback(); }   
+    
     $.ajax({
 	    url: "/projects/task/" + task_id + "/delete",
 		type: "POST",
 		success: function(responseText) {
-		    reloadStory(story_id, false, true);
+		    reloadStory(story_id, false, true);		    
 	    }
 	}); 
 }

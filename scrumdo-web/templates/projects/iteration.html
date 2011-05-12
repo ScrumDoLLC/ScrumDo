@@ -227,7 +227,7 @@ function filterByTag(tag)
 
 function calculateBothPoints()
  {
-    setUpStoryLinks();
+    setUpStoryLinks();    
 }
 
 
@@ -263,6 +263,7 @@ function moveCurrentlyOpenStoryToIteration(iteration_id)
         success: function() {
             $("#loadingIcon").hide();
             $("#story_" + current_story_popup).hide(true);
+            if(typeof updateStoryList == 'function') { updateStoryList(); }
         }
     });
 
@@ -277,8 +278,26 @@ function moveCurrentlyOpenStoryToIteration(iteration_id)
 function updateStoryList()
  {
     loadIteration("{{ iteration.id }}", "", "");
+    updatePanel();
 }
 
+function updatePanel()
+{
+  $.ajax({
+	  url: "{% url iteration_list project.slug %}",
+		type: "GET",
+		success: function(responseText) {
+ 		   $("#iteration_list").html(responseText);
+	    }
+	});  	
+  $.ajax({
+	  url: "{% url iteration_stats project.slug iteration.id %}",
+		type: "GET",
+		success: function(responseText) {
+ 		   $("#iteration_stats").html(responseText);
+	    }
+	});
+}
 
 $(".hide_burndown_chart_link").click(function() {
     $("#burnup_chart").toggle();

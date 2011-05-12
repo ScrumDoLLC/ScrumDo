@@ -181,6 +181,14 @@ def iteration_report(request, group_slug, iteration_id):
     return render_to_response('projects/iteration_report.html', { 'project':project, 'iteration':iteration  }, context_instance=RequestContext(request))
 
 @login_required
+def iteration_stats(request, group_slug, iteration_id):
+    project = get_object_or_404( Project, slug=group_slug )
+    admin_access_or_403(project, request.user, ignore_active=True)
+    iteration = get_object_or_404( Iteration, id=iteration_id )
+    return render_to_response("projects/iteration_stats.html", {"project":project, "iteration":iteration}, context_instance=RequestContext(request))    
+
+
+@login_required
 def iteration_export(request, group_slug, iteration_id):
     project = get_object_or_404(Project, slug=group_slug)
     iteration = get_object_or_404(Iteration, id=iteration_id)

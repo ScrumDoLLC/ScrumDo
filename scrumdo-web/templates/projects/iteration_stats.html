@@ -1,0 +1,9 @@
+{% load theme_tags %}
+
+ {% if daysLeft %}
+ 	{% silk "hourglass" %} {{ daysLeft }} Day{{ daysLeft|pluralize }} Left<br/>
+ {% endif %}
+
+<span title="The total number of stories in this iteration.">{% silk "note" %} Stories: <b>{{iteration.stories.count}}</b></span> <br/>
+<span title="The total number of points across all the stories in this iteration.">{% silk "chart_bar" %} Points: <b>{{iteration.total_points|floatformat}}</b></span> <br/>
+<span title="The completed points of this iteration.">{% silk "accept" %} Points Completed: <b>{{iteration.completed_points|floatformat}}</b></span> <br/>

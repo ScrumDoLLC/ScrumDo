@@ -79,6 +79,15 @@
           {
             var val = parseInt( $("#story_count").text() )
             $("#story_count").text( (val + 1) + "" )
+
+            $.ajax({
+          	  url: "{% url iteration_list project.slug %}",
+          		type: "GET",
+          		success: function(responseText) {
+           		   $("#iteration_list").html(responseText);
+          	    }
+          	});
+          	
           }
           catch( err )
           {  // ignore errors

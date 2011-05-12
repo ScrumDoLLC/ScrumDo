@@ -144,7 +144,13 @@ def activate( request, group_slug ):
     project.active = True
     project.save()
     return HttpResponseRedirect( reverse("project_detail", kwargs={"group_slug":project.slug} ) )
-    
+
+@login_required
+def iteration_list(request, group_slug):
+    project = get_object_or_404( Project, slug=group_slug )
+    admin_access_or_403(project, request.user, ignore_active=True)
+    return render_to_response("projects/iteration_list.html", {"project":project}, context_instance=RequestContext(request))
+
     
 # The project admin page, this is where you can change the title, description, etc. of a project.
 @login_required
