@@ -20,6 +20,8 @@
 {% block breadcrumbs %}
   {% if project.organization %}
      <a href="{% url organization_detail project.organization.slug %}">{{ project.organization.name }}</a> /
+  {% else %}
+        {{ project.creator.username }} /     
   {% endif %}
   <a href="{% url project_detail project.slug %}">{{ project.name }}</a> /
   Project History

@@ -21,7 +21,7 @@
     <h1>{% trans "Create Project" %}</h1>
     
     <p>{% trans "A <b>project</b> is a collection of user stories." %}</p>
-    {% if user.is_authenticated %}
+
         <form class="uniForm" id="project_form" method="POST" action="">
             <fieldset class="inlineLabels">
               
@@ -48,11 +48,6 @@
                 </div>
             </fieldset>
         </form>
-    {% else %}
-        {% url acct_signup as signup_url %}
-        {% url acct_login as login_url %}
-        <p>{% blocktrans %}<a href="{{ signup_url }}">Sign up</a> and <a href="{{ login_url }}">log in </a> to create your own project or join an existing one.{% endblocktrans %}</p>
-    {% endif %}
     
     
     <script type="text/javascript" charset="utf-8">
