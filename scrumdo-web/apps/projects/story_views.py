@@ -228,11 +228,26 @@ def _calculate_rank( iteration, general_rank ):
     0=top, 1=middle, 2=bottom
     TODO (Improvement) - I'd like to re-think how ranking is done for both initial and adjustments of ranks.
     """
-    if( general_rank == 0):
-        return 0
-    if( general_rank == 1):
-        return round( iteration.stories.all().count() / 2)
-    return iteration.stories.all().count()+1
+    try:
+        stories = iteration.stories.all().order_by("rank")    
+        story_count = len(stories)
+        print "%d %s" % (story_count, [story.rank for story in stories])
+        if story_count == 0:
+            return 10
+    
+        if( general_rank == 0): # top
+            return int(stories[0].rank / 2)
+        
+        if( general_rank == 1): # middle
+            if story_count < 2:
+                return 10
+            s1_rank = stories[ int(story_count/2) - 1 ].rank
+            s2_rank = stories[ int(story_count/2) ].rank
+            return int( (s1_rank + s2_rank) / 2 )
+        
+        return stories[ story_count - 1 ].rank + 10
+    except:
+        return 10
 
 @login_required
 def story_block(request, story_id):
