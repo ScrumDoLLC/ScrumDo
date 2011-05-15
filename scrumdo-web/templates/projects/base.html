@@ -158,7 +158,11 @@
 
   	{% for extra_mapping in project.extras.all %}
   	<div class="title">
-  	  {% extra_buttons extra_mapping.extra_slug project %}
+  	  {% if iteration %}
+  	    {% extra_buttons extra_mapping.extra_slug iteration %}
+  	  {% else %}
+  	    {% extra_buttons extra_mapping.extra_slug project %}
+  	  {% endif %}
   	</div>
   	{% endfor %}
     </div><!--box-content-->

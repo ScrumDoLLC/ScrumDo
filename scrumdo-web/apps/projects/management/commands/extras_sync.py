@@ -33,6 +33,7 @@ from apps.extras.manager import manager
 import logging
 import sys, traceback
 import getopt
+import urllib2
 
 from django.core.management.base import BaseCommand, CommandError
 
@@ -112,6 +113,10 @@ def processQueue():
         except RuntimeError:
             logger.error("RuntimeError occured while processing a syncronization queue item.")
             traceback.print_exc(file=sys.stdout)
+        except urllib2.HTTPError as e:
+            logger.error("HTTP Error occured while processing a syncronization queue item.")
+            logger.error(e.headers)            
+            logger.error(e.read())
         except:
             logger.error("Error occured while processing a syncronization queue item.")
             traceback.print_exc(file=sys.stdout)

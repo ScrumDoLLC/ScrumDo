@@ -9,9 +9,16 @@ from extras.manager import manager as extras_manager
 register = template.Library()
 
 @register.inclusion_tag('extras/extras_buttons.html')
-def extra_buttons(extra_slug, project):    
+def extra_buttons(extra_slug, projectOrIteration):
+    if hasattr(projectOrIteration,"project"):
+        project = projectOrIteration.project
+        iteration = projectOrIteration
+    else:
+        project = projectOrIteration
+        iteration = None
+        
     extra = extras_manager.getExtra( extra_slug )        
-    return {'extra':extra, 'project':project, 'actions':extra.getExtraActions(project)}
+    return {'extra':extra, 'project':project, 'actions':extra.getExtraActions(project, iteration=iteration)}
 
     
     
