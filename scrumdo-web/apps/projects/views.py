@@ -114,11 +114,13 @@ def home( request ):
     else:
         return render_to_response("unauthenticated_homepage.html", context_instance=RequestContext(request))
 
-@login_required
 def usage(request):
-    organizations = Organization.getOrganizationsForUser( request.user )
+    if request.user.is_anonymous():
+        organizations = None
+    else:
+        organizations = Organization.getOrganizationsForUser( request.user )
+        
     return render_to_response("usage_restrictions.html", {"organizations":organizations}, context_instance=RequestContext(request))
-
 
 def remove_user( request, group_slug ):
         project = get_object_or_404( Project, slug=group_slug )
