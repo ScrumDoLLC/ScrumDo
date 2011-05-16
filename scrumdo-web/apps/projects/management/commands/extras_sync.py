@@ -37,6 +37,7 @@ import urllib2
 
 from django.core.management.base import BaseCommand, CommandError
 
+logging.basicConfig()
 logger = logging.getLogger(__name__)
 
 class Command(BaseCommand):
