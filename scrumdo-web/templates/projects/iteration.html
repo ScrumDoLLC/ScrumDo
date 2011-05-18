@@ -115,18 +115,25 @@
 var project_slug = "{{ iteration.project.slug }}";
 var current_story_popup = "";
 
-function loadIteration(iterationID, tags, search)
+function loadIteration(iterationID, tags, search, page)
  {
-    $("#loadingIcon").show();
+    
     $.ajax({
-        url: "/projects/project/" + project_slug + "/stories/" + iterationID,
+        url: "/projects/project/" + project_slug + "/stories/" + iterationID + "/" + page,
         data: {
             display_type: "block",
             tags: tags,
             search: search
         },
         success: function(html) {
-            $("#story_list").html(html);
+            if( page == 1)
+            {
+              $("#story_list").html(html);
+            }
+            else
+            {
+              $("#story_list").append(html);
+            }
             $("#story_list").attr("iteration_id", iterationID);
             $("#loadingIcon").hide();
             /* if we came here with the name of a specific story in the url, scroll to it */
@@ -149,6 +156,8 @@ function loadIteration(iterationID, tags, search)
             
         }
     });
+    
+    $("#loadingIcon").show();
 }
 $(document).ready(function() {
     $(".showFilter").click(function() {
@@ -279,7 +288,7 @@ function moveCurrentlyOpenStoryToIteration(iteration_id)
 
 function updateStoryList()
  {
-    loadIteration("{{ iteration.id }}", "", "");
+    loadIteration("{{ iteration.id }}", "", "", 1);
     updatePanel();
 }
 
@@ -334,7 +343,7 @@ $(document).ready(function() {
         moveCurrentlyOpenStoryToIteration(iteration_id);
     });
 
-    loadIteration("{{ iteration.id }}", "", "");
+    loadIteration("{{ iteration.id }}", "", "", 1);
 
 
 

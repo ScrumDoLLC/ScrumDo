@@ -9,3 +9,10 @@
     {% include "stories/single_mini_story.html" %}
   {% endifequal %}
 {% endfor %} 
+
+{% if load_next_page %}
+<script type="text/javascript" charset="utf-8">
+  loadIteration({{iteration_id}}, "", "", {{next_page_num}});
+  
+</script>
+{% endif %}

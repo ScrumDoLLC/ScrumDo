@@ -28,8 +28,10 @@ from django.utils.datastructures import SortedDict
 from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponse
 from django.core import serializers
+from django.core.paginator import Paginator, InvalidPage, EmptyPage
 
 from projects.calculation import onDemandCalculateVelocity
+
 
 from xlrd import open_workbook
 
@@ -337,7 +339,8 @@ def stories_scrum_board(request, group_slug, iteration_id, status):
 # Returns the stories for a given iteration as an html snippet.  The iteration planning page uses this
 # uplon load, and then also upon filtering by the user
 @login_required
-def stories_iteration(request, group_slug, iteration_id):
+def stories_iteration(request, group_slug, iteration_id, page=1):
+    page = int(page)
     project = get_object_or_404(Project, slug=group_slug)
     read_access_or_403(project,request.user)
     iteration = get_object_or_404(Iteration, id=iteration_id, project=project)
@@ -348,6 +351,7 @@ def stories_iteration(request, group_slug, iteration_id):
     tags_search = request.GET.get("tags","")
     category = request.GET.get("category","")
     only_assigned = request.GET.get("only_assigned", False)
+    
 
     tags_list = re.split('[, ]+', tags_search)
 
@@ -377,11 +381,18 @@ def stories_iteration(request, group_slug, iteration_id):
     else:        
         stories = stories.select_related('project', 'project__organization','project__organization__subscription',  'iteration','iteration__project',).order_by(order_by)
     
+    paginator = Paginator(stories, 20)
+    page_obj = paginator.page(page)
+    stories = page_obj.object_list
+    
     return render_to_response("stories/mini_story_list.html", {
       "stories": stories,
       "project":project,
       "return_type":display_type,
-      "display_type": display_type
+      "display_type": display_type,
+      "load_next_page": page_obj.has_next(),
+      "next_page_num": page+1,
+      "iteration_id": iteration.id
     }, context_instance=RequestContext(request))
 
 
