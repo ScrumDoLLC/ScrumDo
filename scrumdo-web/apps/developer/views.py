@@ -15,8 +15,8 @@ def home(request):
   keys = DeveloperApiKey.objects.filter(developer = request.user)
   return render_to_response("developer/index.html", {
     "keys" : keys,
-    "name": "API", 
-    "pages": docs["API"]
+    "name": "api", 
+    "pages": docs["api"]
   }, context_instance=RequestContext(request))
 
 @login_required
@@ -33,8 +33,8 @@ def apply(request):
       
   return render_to_response("developer/apply.html", {
              "form": form,
-             "name": "API", 
-             "pages": docs["API"]
+             "name": "api", 
+             "pages": docs["api"]
              }, context_instance=RequestContext(request))
       
          
@@ -53,7 +53,7 @@ def user_keys(request):
 
 # syntax is name_of_tutorial: {url_of_page: name_of_page...
 # this must match the templates found in tutorial/ . ie tutorial/name_of_tutorial/url_of_page.html
-docs = { "API":[("start","Getting Started"), 
+docs = { "api":[("start","Getting Started"), 
                 ("permissions", "Permissions"), 
                 ("traversing", "Traversing Data"), 
                 ("updating", "Updating, deleting"),
@@ -78,7 +78,7 @@ def docs_page(request, name, page="start"):
         return join("developer", name, page+".html")
     if not docs.has_key(name) or not list_has_key(docs[name], page) :
         raise Http404
-
+    
     return render_to_response("developer/base.html", {
             "page_template": mk_path(page),
             "name": name, 

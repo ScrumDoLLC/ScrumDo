@@ -25,6 +25,7 @@ from api.models import DeveloperApiKey, UserApiKey
 class UserResource(ModelResource):
   teams = fields.ToManyField('api.resources.TeamResource', 'teams')
   projects = fields.ToManyField('api.resources.ProjectResource', 'projects')  
+  assigned_stories = fields.ToManyField('api.resources.StoryResource', 'assigned_stories', null=True)
   
   class Meta:
     queryset = User.objects.all()
@@ -84,7 +85,7 @@ class StoryResource(ModelResource):
   iteration = fields.ToOneField('api.resources.IterationResource', 'iteration')
   project = fields.ToOneField('api.resources.ProjectResource', 'project')
   creator = fields.ToOneField('api.resources.UserResource', 'creator')
-  
+    
   class Meta:
     queryset = Story.objects.all()
     fields = ['id', 'summary','detail','assignee_id','points', 'iteration_id','project_id', 'status','extra_1','extra_2','extra_3']
@@ -117,9 +118,10 @@ class IterationResource(ModelResource):
 class ProjectResource(ModelResource):
   iterations = fields.ToManyField('api.resources.IterationResource', 'iterations')
   teams = fields.ToManyField('api.resources.TeamResource', 'teams')
-  organization = fields.ToOneField(OrganizationResource, 'organization', null=True)
+  organization = fields.ToOneField(OrganizationResource, 'organization', null=True, full=True)
   members = fields.ToManyField('api.resources.UserResource', 'members')
-
+  
+  
   class Meta:
     queryset = Project.objects.all()
     fields = ['slug', 'creator_id','organization_id','velocity','iterations_left']
@@ -133,15 +135,15 @@ class ActivityActionResource(ModelResource):
 
   class Meta:
     queryset = ActivityAction.objects.all()
-    fields = ['name ']
+    fields = ['name']
     
 class ActivityResource(ModelResource):
   def obj_get_list(self, request=None, **kwargs):
     """ overriding """
     return Activity.getActivitiesForUser(request.user)
   
-  creator = fields.ToOneField('api.resources.UserResource', 'user')
-  project = fields.ToOneField('api.resources.ProjectResource', 'project')
+  creator = fields.ToOneField('api.resources.UserResource', 'user', full=True)
+  project = fields.ToOneField('api.resources.ProjectResource', 'project', full=True)
   action = fields.ToOneField('api.resources.ActivityActionResource', 'action', full=True)
   
   class Meta:
