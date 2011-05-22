@@ -77,29 +77,18 @@
 </div>
 
 <script type="text/javascript" charset="utf-8">
-      var project_tags = [
-        {% for tag in tags %}
-        {label:"{{tag.name}}",value:"{{tag.name}}"},        
-        {% endfor %}
-        {label:"", value:""}
-      ];
-      
-      var all_tags = scrumdo_special_tags.concat( project_tags );
-
-      $("#story_details #id_tags2").tagit({availableTags:all_tags,input_field:"#id_tags"});
-
       $("#story_area .commentForm").show();
       
       $("#story_detail_form").ajaxForm({        
         success: function(responseText) {
           $("#story_{{story.id}}").replaceWith(responseText);
-          calculateBothPoints();
           $(document).trigger('close.facebox');   
           
           {% if GOOGLE_ANALYTICS %}     
              _gaq.push(['_trackEvent',"EditStory", "{{current_view}}", "", 1]); 
           {% endif %}
           
+          if(typeof calculateBothPoints == 'function') { calculateBothPoints(); }         
           if(typeof reloadStoryCallback == 'function') { reloadStoryCallback(); }         
           if(typeof updatePanel == 'function') { updatePanel(); }    
           
@@ -121,7 +110,17 @@
           $form.hide();
         }
       });
-        
+      
+      var project_tags = [
+        {% for tag in tags %}
+        {label:"{{tag.name}}",value:"{{tag.name}}"},        
+        {% endfor %}
+        {label:"", value:""}
+      ];
+      
+      var all_tags = scrumdo_special_tags.concat( project_tags );
+
+      $("#story_details #id_tags2").tagit({availableTags:all_tags,input_field:"#id_tags"});
       
 
 </script>

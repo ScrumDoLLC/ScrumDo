@@ -73,7 +73,7 @@ class ScrumdoProjectExtra( ScrumdoExtra ):
             Examples: 'Successfully synchronize on 1/1/2010' or 'Syncronization last failed' or 'Everything OK' """
         raise NotImplementedError("ScrumdoProjectExtra subclasses must implement getShortStatus()")
 
-    def getExtraActions( self, project):
+    def getExtraActions( self, project, **kwargs):
         """ Should return a list of tupples with a label, url, and silk icon that represent actions that a user can manually
             invoke for this extra. Example: ('Syncronize','/blah/blah/syncronize','') """
         return []

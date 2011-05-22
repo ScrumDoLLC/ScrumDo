@@ -22,6 +22,14 @@ $(document).ready( function() {
 	
 } );
 
+function reloadStoryCallback()
+{
+    loadTodo();
+    loadDoing();
+    loadDone();
+    loadReviewing();
+}
+
 function setStorySize()
 {
     switch( story_size )
@@ -102,7 +110,8 @@ function loadColumn( column_div, story_type )
     url: "/projects/project/" + project_slug + "/stories/" + iteration_id + "/board/" + story_type ,
     success: function(responseText){            
             $( column_div ).html(responseText); 
-            resizeColumns();               
+            setStorySize();             
+            resizeColumns();              
          } // end success function
     });
 }

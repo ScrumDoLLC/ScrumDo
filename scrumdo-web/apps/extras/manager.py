@@ -21,9 +21,6 @@ class ExtrasManager:
     def getExtra( self, slug ):
         return self.extras[ slug ]
 
-    # TODO (performance) - do some actions invalidate others?  For instance, if we have an ACTION_STORY_UPDATED sitting in the queue, and
-    #        a ACTION_STORY_DELETED action comes through, can we delete the ACTION_STORY_UPDATED?
-    #        what about duplicate actions?  Can we ignore those?
     def queueSyncAction( self, extra_slug, project, action, **kwargs):
         logger.debug("Queuing a syncronization action %d, %s, %s" % (action,project.slug,extra_slug))
         queueObject = SyncronizationQueue( project=project, extra_slug=extra_slug, action=action)

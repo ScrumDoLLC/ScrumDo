@@ -80,19 +80,13 @@ def home( request ):
     my_projects = [];
     member_projects = [];
     organizations = [];
-    activities=[]
     next_page = False
 
     if request.user.is_authenticated():
         organizations = Organization.getOrganizationsForUser(request.user)
-        activities = Activity.getActivitiesForUser(request.user)
 
         assigned_stories = Story.getAssignedStories(request.user)
 
-        paginator = Paginator(activities, 20)
-        page_obj = paginator.page(1)
-        activities = page_obj.object_list
-        next_page = page_obj.has_next()
 
         memberships = ProjectMember.objects.filter( user=request.user )
         for membership in memberships:
@@ -110,8 +104,6 @@ def home( request ):
         return render_to_response("homepage.html", {
            "my_projects":my_projects,
            "my_organizations": organizations,
-           "activities": activities,
-           "activities_next_page":next_page,
            "assigned_stories": assigned_stories,
            "return_type" : "queue", # for the queue mini stories
            "member_projects":member_projects,
@@ -122,11 +114,13 @@ def home( request ):
     else:
         return render_to_response("unauthenticated_homepage.html", context_instance=RequestContext(request))
 
-@login_required
 def usage(request):
-    organizations = Organization.getOrganizationsForUser( request.user )
+    if request.user.is_anonymous():
+        organizations = None
+    else:
+        organizations = Organization.getOrganizationsForUser( request.user )
+        
     return render_to_response("usage_restrictions.html", {"organizations":organizations}, context_instance=RequestContext(request))
-
 
 def remove_user( request, group_slug ):
         project = get_object_or_404( Project, slug=group_slug )

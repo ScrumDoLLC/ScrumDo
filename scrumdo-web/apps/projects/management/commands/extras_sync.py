@@ -33,9 +33,11 @@ from apps.extras.manager import manager
 import logging
 import sys, traceback
 import getopt
+import urllib2
 
 from django.core.management.base import BaseCommand, CommandError
 
+logging.basicConfig()
 logger = logging.getLogger(__name__)
 
 class Command(BaseCommand):
@@ -77,7 +79,7 @@ def processQueue():
             if not project.active:
                 continue
                 
-            logger.info("== Syncronizing %s" % project.slug)
+            logger.info("== Synchronizing %s / %s / %d" % (project.slug, queueItem.extra_slug, queueItem.action) )
             story = queueItem.story
             task = queueItem.task
             action = queueItem.action
@@ -109,8 +111,15 @@ def processQueue():
                 extra.taskStatusChange(project, task)
             elif action == SyncronizationQueue.ACTION_STORY_IMPORTED:
                 extra.storyImported(project, story)
+            
+            logger.info("Success.")
         except RuntimeError:
             logger.error("RuntimeError occured while processing a syncronization queue item.")
+            traceback.print_exc(file=sys.stdout)
+        except urllib2.HTTPError as e:
+            logger.error("HTTP Error %d occured while processing a syncronization queue item." % e.code)
+            logger.error(e.headers)            
+            logger.error(e.read())
             traceback.print_exc(file=sys.stdout)
         except:
             logger.error("Error occured while processing a syncronization queue item.")

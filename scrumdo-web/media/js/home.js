@@ -2,7 +2,7 @@
 // http://www.palewire.com/posts/2010/11/07/django-recipe-twitter-style-infinite-scroll/
 
 // Scroll globals
-var pageNum = 1;
+var pageNum = 0;
 var hasNextPage = true
 var baseUrl = '/activities/user/';
 
@@ -114,3 +114,5 @@ $(document).ready(function () {
 	
 	$("#announcements-box .buttons a").click(function () {$("#announcements-box").fadeOut()});
     });
+    
+loadItems();

@@ -15,7 +15,7 @@
           {% if project.use_assignee %}
             <tr><td>Assigned To:&nbsp;</td><td>{{add_story_form.assignee}}  {{add_story_form.assignee.errors}} </td></tr>
           {% endif %}
-          <tr><td>Backlog&nbsp;Position:&nbsp;</td><td>{{add_story_form.general_rank}}  {{add_story_form.general_rank.errors}} </td></tr>
+          <tr><td>Backlog&nbsp;Position:&nbsp;</td><td id="general-rank-cell">{{add_story_form.general_rank}}  {{add_story_form.general_rank.errors}} </td></tr>
           
           {% if project.categories %}
           <tr><td>Category:&nbsp;</td><td>{{add_story_form.category}}  {{add_story_form.category.errors}} </td></tr>
