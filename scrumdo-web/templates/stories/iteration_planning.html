@@ -180,7 +180,7 @@
   {
     $("#loadingIcon").show();
     $.ajax({
-      url: "/projects/project/" + project_slug + "/stories/" + iterationID,
+      url: "/projects/project/" + project_slug + "/stories/" + iterationID + "/1?paged=False",
       success: function(html){
         $("#iteration_column").html(html);  
         $("#iteration_column").attr("iteration_id", iterationID);      
@@ -259,7 +259,7 @@
 
     {# Load the intial backlog stories. #}
     $.ajax({
-      url: "/projects/project/" + project_slug + "/stories/" + default_iteration,
+      url: "/projects/project/" + project_slug + "/stories/" + default_iteration + "/1?paged=False",
       success: function(html){
         $("#backlog_column").append(html);
         calculatePoints("#backlog_column","#backlog_points");

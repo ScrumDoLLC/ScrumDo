@@ -12,7 +12,7 @@
 
 {% if load_next_page %}
 <script type="text/javascript" charset="utf-8">
-  loadIteration({{iteration_id}}, "", "", {{next_page_num}});
+  loadIteration({{iteration_id}}, {{next_page_num}}, "{{next_page_query_string|safe}}");
   
 </script>
 {% endif %}

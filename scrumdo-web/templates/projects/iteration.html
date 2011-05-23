@@ -115,16 +115,16 @@
 var project_slug = "{{ iteration.project.slug }}";
 var current_story_popup = "";
 
-function loadIteration(iterationID, tags, search, page)
+var last_load_iter_req = null;
+function loadIteration(iterationID, page, query_string)
  {
+   if( last_load_iter_req )
+   {
+     last_load_iter_req.abort();
+   }
     
-    $.ajax({
-        url: "/projects/project/" + project_slug + "/stories/" + iterationID + "/" + page,
-        data: {
-            display_type: "block",
-            tags: tags,
-            search: search
-        },
+  last_load_iter_req = $.ajax({
+        url: "/projects/project/" + project_slug + "/stories/" + iterationID + "/" + page + "?display_type=block&" + query_string,
         success: function(html) {
             if( page == 1)
             {
@@ -167,8 +167,12 @@ $(document).ready(function() {
 
 
     $(".filterForm").ajaxForm(
-    {
+    {      
         beforeSend: function() {
+            if( last_load_iter_req )
+            {
+               last_load_iter_req.abort();
+            }
             $("#loadingIcon").show();
         },
         success: function(html)
@@ -288,7 +292,7 @@ function moveCurrentlyOpenStoryToIteration(iteration_id)
 
 function updateStoryList()
  {
-    loadIteration("{{ iteration.id }}", "", "", 1);
+    loadIteration("{{ iteration.id }}", 1, "");
     updatePanel();
 }
 
@@ -343,7 +347,7 @@ $(document).ready(function() {
         moveCurrentlyOpenStoryToIteration(iteration_id);
     });
 
-    loadIteration("{{ iteration.id }}", "", "", 1);
+    loadIteration("{{ iteration.id }}",  1, "");
 
 
 
