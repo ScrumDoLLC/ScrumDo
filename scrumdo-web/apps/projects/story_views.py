@@ -397,7 +397,7 @@ def stories_iteration(request, group_slug, iteration_id, page=1):
         stories = stories.select_related('project', 'project__organization','project__organization__subscription',  'iteration','iteration__project',).order_by(order_by)
     
     if paged:
-        paginator = Paginator(stories, 20)
+        paginator = Paginator(stories, 50)
         page_obj = paginator.page(page)
         has_next = page_obj.has_next()
         stories = page_obj.object_list
