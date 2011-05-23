@@ -53,7 +53,7 @@
         &nbsp;<a class="showFilter" href="#">{% silk "wrench" %} Filter</a>              
         <div id="filterDialog" style="display:none">
           <a name="filterDialog"></a>
-          <form class="filterForm" action="{% url stories_iteration project.slug project.get_default_iteration.id %}" method="GET">
+          <form class="filterForm" action="{% url stories_iteration project.slug project.get_default_iteration.id 1 %}" method="GET">
             <table width="100%">
               <tr><td>Search Text:</td><td><input type="text" name="search"></tr>
               <tr><td>Tags:</td><td><input type="text" name="tags" id="tags_input"></tr>
@@ -180,7 +180,7 @@
   {
     $("#loadingIcon").show();
     $.ajax({
-      url: "/projects/project/" + project_slug + "/stories/" + iterationID,
+      url: "/projects/project/" + project_slug + "/stories/" + iterationID + "/1?paged=False",
       success: function(html){
         $("#iteration_column").html(html);  
         $("#iteration_column").attr("iteration_id", iterationID);      
@@ -259,7 +259,7 @@
 
     {# Load the intial backlog stories. #}
     $.ajax({
-      url: "/projects/project/" + project_slug + "/stories/" + default_iteration,
+      url: "/projects/project/" + project_slug + "/stories/" + default_iteration + "/1?paged=False",
       success: function(html){
         $("#backlog_column").append(html);
         calculatePoints("#backlog_column","#backlog_points");

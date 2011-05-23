@@ -28,13 +28,15 @@ from django.utils.datastructures import SortedDict
 from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponse
 from django.core import serializers
+from django.core.paginator import Paginator, InvalidPage, EmptyPage
 
 from projects.calculation import onDemandCalculateVelocity
+
 
 from xlrd import open_workbook
 
 from django.conf import settings
-
+import urllib
 import re
 
 if "notification" in settings.INSTALLED_APPS:
@@ -310,7 +312,12 @@ def story(request, group_slug, story_id):
         read_access_or_403(project,request.user)
         form = StoryForm(project, instance=story )
 
-    tags = project.tags.all().order_by("name")
+    all_tags = project.tags.all().order_by("name")
+    tags = []
+    for tag in all_tags:
+        if len([t for t in tags if t.name==tag.name]) == 0:
+            tags.append(tag)
+
     return   render_to_response("stories/story.html", {
         "story": story,
         "form": form,
@@ -337,7 +344,8 @@ def stories_scrum_board(request, group_slug, iteration_id, status):
 # Returns the stories for a given iteration as an html snippet.  The iteration planning page uses this
 # uplon load, and then also upon filtering by the user
 @login_required
-def stories_iteration(request, group_slug, iteration_id):
+def stories_iteration(request, group_slug, iteration_id, page=1):
+    page = int(page)
     project = get_object_or_404(Project, slug=group_slug)
     read_access_or_403(project,request.user)
     iteration = get_object_or_404(Iteration, id=iteration_id, project=project)
@@ -348,6 +356,17 @@ def stories_iteration(request, group_slug, iteration_id):
     tags_search = request.GET.get("tags","")
     category = request.GET.get("category","")
     only_assigned = request.GET.get("only_assigned", False)
+    paged = "True" == request.GET.get("paged", "True")
+    
+    if only_assigned == "False":
+        only_assigned = False
+    
+    query_string = urllib.urlencode( {   'order_by':order_by, 
+                                         'display_type':display_type, 
+                                         'search':text_search, 
+                                         'tags':tags_search, 
+                                         'category':category, 
+                                         'only_assigned':only_assigned})
 
     tags_list = re.split('[, ]+', tags_search)
 
@@ -377,11 +396,23 @@ def stories_iteration(request, group_slug, iteration_id):
     else:        
         stories = stories.select_related('project', 'project__organization','project__organization__subscription',  'iteration','iteration__project',).order_by(order_by)
     
+    if paged:
+        paginator = Paginator(stories, 50)
+        page_obj = paginator.page(page)
+        has_next = page_obj.has_next()
+        stories = page_obj.object_list
+    else:
+        has_next = False
+    
     return render_to_response("stories/mini_story_list.html", {
       "stories": stories,
       "project":project,
       "return_type":display_type,
-      "display_type": display_type
+      "display_type": display_type,
+      "load_next_page": has_next ,
+      "next_page_num": page+1,
+      "next_page_query_string":query_string,
+      "iteration_id": iteration.id
     }, context_instance=RequestContext(request))
 
 
