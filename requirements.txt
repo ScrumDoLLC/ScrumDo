@@ -1,0 +1,6 @@
+boto
+django-tastypie
+Django==1.1.1
+hookbox
+django-storages
+importlib
