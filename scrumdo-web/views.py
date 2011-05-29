@@ -41,6 +41,12 @@ def stats(request):
 
     return render_to_response( 'site_stats.html' , {'top_projects':topProjects}, context_instance=RequestContext(request))
 
+def status(request):
+    p = Project.objects.count()
+    if p <= 0:
+        raise Exception("Bad project count","Bad")
+    return HttpResponse("ok")
+    
 def stats_data(request):
     stats = SiteStats.objects.all();
     user_data = []

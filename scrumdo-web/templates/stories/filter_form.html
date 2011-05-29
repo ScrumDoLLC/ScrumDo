@@ -2,7 +2,7 @@
 <a class="showFilter" href="#filterDialog">{% silk "wrench" %} Filter</a>               
 <div id="filterDialog" style="display:none">
   <a name="filterDialog"></a>
-  <form class="filterForm" action="{% url stories_iteration project.slug iteration_id %}" method="GET">
+  <form class="filterForm" action="{% url stories_iteration project.slug iteration_id 1 %}" method="GET">
     <table width="100%">
       <tr><td>Search Text:</td><td><input type="text" name="search"><td>Order By</td><td rowspan="2"><input type="radio" name="order_by" value="rank" checked> Rank <br/>
       <input type="radio" name="order_by" value="local_id" > Story Number <br/>

@@ -1,0 +1,6 @@
+boto
+django-tastypie
+hookbox
+django-storages
+importlib
+django-ses

@@ -1,3 +1,3 @@
 #!/bin/bash
-source /home/ec2-user/backlog-site/pinax-env/bin/activate
-python /home/ec2-user/backlog-site/scrumdo-web/manage.py burnup_chart
+source /home/ec2-user/ScrumDo/pinax-env/bin/activate
+python /home/ec2-user/ScrumDo/scrumdo-web/manage.py burnup_chart

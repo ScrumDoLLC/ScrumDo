@@ -44,6 +44,7 @@ feeds = {
 urlpatterns = patterns('',
     url(r'^$', "projects.views.home" , name="home"),
     url(r'^robots.txt$', direct_to_template, {'template': 'robots.txt'}),
+    url(r'^status$', views.status),
     url(r'^crossdomain.xml$', direct_to_template, {'template': 'crossdomain.xml'}),
     url(r'^stats$', views.stats),
     url(r'^stats_data$', views.stats_data ),
