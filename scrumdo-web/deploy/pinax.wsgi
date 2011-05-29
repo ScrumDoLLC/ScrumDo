@@ -2,6 +2,16 @@
 
 import os
 import sys
+import logging
+
+logger = logging.getLogger('')
+logger.setLevel(logging.INFO)
+handler = logging.StreamHandler(sys.stderr)
+handler.setLevel(logging.INFO)
+formatter = logging.Formatter('%(levelname)-8s %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+
 
 # redirect sys.stdout to sys.stderr for bad libraries like geopy that uses
 # print statements for optional import exceptions.
