@@ -4,3 +4,5 @@ hookbox
 django-storages
 importlib
 django-ses
+pysolr
+django-haystack==1.1

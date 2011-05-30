@@ -68,7 +68,7 @@ urlpatterns = patterns('',
     (r'^admin/(.*)', include(admin.site.urls)),
     (r'^api/', include('api.urls')),
     (r'^developer/', include('developer.urls')),
-
+    # (r'^search/', include('haystack.urls')),
     url(r'^usage', "projects.views.usage", name="usage"),
 )
 

@@ -29,6 +29,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponse
 from django.core import serializers
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
+from haystack.query import SearchQuerySet
 
 from projects.calculation import onDemandCalculateVelocity
 
@@ -352,11 +353,16 @@ def stories_iteration(request, group_slug, iteration_id, page=1):
 
     order_by = request.GET.get("order_by","rank")
     display_type = request.GET.get("display_type","mini")
-    text_search = request.GET.get("search","")
-    tags_search = request.GET.get("tags","")
-    category = request.GET.get("category","")
+    text_search = request.GET.get("search","").strip()
+    tags_search = request.GET.get("tags","").strip()
+    category = request.GET.get("category","").strip()
     only_assigned = request.GET.get("only_assigned", False)
     paged = "True" == request.GET.get("paged", "True")
+    
+    if request.GET.get("clearButton") == "Clear Filter":
+        text_search = ""
+        tags_search = ""
+        category =""
     
     if only_assigned == "False":
         only_assigned = False
@@ -369,43 +375,14 @@ def stories_iteration(request, group_slug, iteration_id, page=1):
                                          'only_assigned':only_assigned,
                                          'clearButton':request.GET.get("clearButton",'')
                                          })
-
-    tags_list = re.split('[, ]+', tags_search)
-
-    stories = iteration.stories
-    
-    if order_by != "numeric_points":
-        stories = stories.order_by(order_by)
+    has_next = False
+    if text_search == "":
+        # Don't need to consult our solr search engine.
+        has_next, stories = _getStoriesNoTextSearch( iteration, order_by, tags_search, category, only_assigned, request.user, paged, page)
     else:
-        # Tried a few things here... CAST(points as SIGNED) in the order_by clause would have been preferred, but I couldn't get that through
-        # the ORM.  Secondary, I tried craeting a custom column assigned to that, but it caused the query to fail.  The 0+string is a bit
-        # of a mysql specific hack to convert a string to a number.
-        stories = stories.extra(select={'numeric_points': '0+points'}).order_by(order_by)
+        stories = _getStoriesWithTextSearch( iteration, text_search, order_by, tags_search, category, only_assigned)
+        # we need some fancy-schmancy searching
 
-    if request.GET.get("clearButton") != "Clear Filter":
-
-        if order_by == "numeric_points":
-            stories = stories
-        
-        if tags_search:
-            stories = stories.filter(story_tags__tag__name__in=tags_list).distinct().order_by(order_by)                                
-        if only_assigned:
-            stories = stories.filter(assignee=request.user)        
-        if category:
-            stories = stories.filter(category=category)
-        if text_search:
-            stories = stories.extra( where = ["MATCH(summary, detail, extra_1, extra_2, extra_3) AGAINST (%s IN BOOLEAN MODE)"], params=[text_search]).order_by(order_by)
-    else:        
-        stories = stories.select_related('project', 'project__organization','project__organization__subscription',  'iteration','iteration__project',).order_by(order_by)
-        
-    
-    if paged:
-        paginator = Paginator(stories, 50)
-        page_obj = paginator.page(page)
-        has_next = page_obj.has_next()
-        stories = page_obj.object_list        
-    else:
-        has_next = False
     
     return render_to_response("stories/mini_story_list.html", {
       "stories": stories,
@@ -418,6 +395,48 @@ def stories_iteration(request, group_slug, iteration_id, page=1):
       "iteration_id": iteration.id
     }, context_instance=RequestContext(request))
 
+def _getStoriesWithTextSearch( iteration, text_search, order_by, tags_search, category, only_assigned):
+    search_results = SearchQuerySet().filter(project_id=iteration.project.id).filter(iteration_id=iteration.id).filter(content=text_search).models(Story).order_by(order_by).load_all()
+    
+    if tags_search != "":
+        search_results = search_results.filter(tags=tags_search)
+    if category != "":
+        search_results = search_results.filter(category=category)
+        
+    stories = [ result.object for result in search_results]
+    return stories
+
+def _getStoriesNoTextSearch( iteration, order_by, tags_search, category, only_assigned, user, paged, page):
+    tags_list = re.split('[, ]+', tags_search)
+
+    stories = iteration.stories
+    
+    if order_by != "numeric_points":
+        stories = stories.order_by(order_by)
+    else:
+        # Tried a few things here... CAST(points as SIGNED) in the order_by clause would have been preferred, but I couldn't get that through
+        # the ORM.  Secondary, I tried craeting a custom column assigned to that, but it caused the query to fail.  The 0+string is a bit
+        # of a mysql specific hack to convert a string to a number.
+        stories = stories.extra(select={'numeric_points': '0+points'}).order_by(order_by)
+
+    if tags_search:
+        stories = stories.filter(story_tags__tag__name__in=tags_list).distinct().order_by(order_by)                                
+    if only_assigned:
+        stories = stories.filter(assignee=user)        
+    if category:
+        stories = stories.filter(category=category)
+
+    stories = stories.select_related('project', 'project__organization','project__organization__subscription',  'iteration','iteration__project',)
+    
+    if paged:
+        paginator = Paginator(stories, 50)
+        page_obj = paginator.page(page)
+        has_next = page_obj.has_next()
+        stories = page_obj.object_list        
+    else:
+        has_next = False
+    
+    return (has_next, stories)
 
 def ajax_add_story( request, group_slug):
     project = get_object_or_404(Project, slug=group_slug)

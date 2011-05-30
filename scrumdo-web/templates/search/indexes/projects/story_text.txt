@@ -1,0 +1,9 @@
+{{ object.summary }}
+{{ object.local_id }}
+{{ object.detail }}
+{{ object.assignee.username }}
+{{ object.category }}
+{{ object.extra_1 }}
+{{ object.extra_2 }}
+{{ object.extra_3 }}
+

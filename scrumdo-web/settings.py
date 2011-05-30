@@ -199,9 +199,16 @@ INSTALLED_APPS = (
     'tutorial',
     'api',
     'developer',
+    'haystack'
     
 #    'debug_toolbar',
 )
+
+
+HAYSTACK_SITECONF = "search_sites"
+HAYSTACK_SEARCH_ENGINE = "solr"
+HAYSTACK_SOLR_URL = 'http://localhost:8983/solr'
+
 
 ABSOLUTE_URL_OVERRIDES = {
     "auth.user": lambda o: "/profiles/profile/%s/" % o.username,
