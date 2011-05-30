@@ -366,7 +366,9 @@ def stories_iteration(request, group_slug, iteration_id, page=1):
                                          'search':text_search, 
                                          'tags':tags_search, 
                                          'category':category, 
-                                         'only_assigned':only_assigned})
+                                         'only_assigned':only_assigned,
+                                         'clearButton':request.GET.get("clearButton",'')
+                                         })
 
     tags_list = re.split('[, ]+', tags_search)
 
@@ -395,12 +397,13 @@ def stories_iteration(request, group_slug, iteration_id, page=1):
             stories = stories.extra( where = ["MATCH(summary, detail, extra_1, extra_2, extra_3) AGAINST (%s IN BOOLEAN MODE)"], params=[text_search]).order_by(order_by)
     else:        
         stories = stories.select_related('project', 'project__organization','project__organization__subscription',  'iteration','iteration__project',).order_by(order_by)
+        
     
     if paged:
         paginator = Paginator(stories, 50)
         page_obj = paginator.page(page)
         has_next = page_obj.has_next()
-        stories = page_obj.object_list
+        stories = page_obj.object_list        
     else:
         has_next = False
     

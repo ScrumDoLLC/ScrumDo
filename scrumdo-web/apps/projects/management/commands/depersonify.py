@@ -13,10 +13,6 @@ logger = logging.getLogger(__name__)
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        
-
-
-        
         if not settings.DEBUG:
             logger.error("Can only run this on sites in debug mode (for safety!)")
             return
