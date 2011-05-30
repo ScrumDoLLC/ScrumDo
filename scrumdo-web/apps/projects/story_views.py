@@ -380,7 +380,7 @@ def stories_iteration(request, group_slug, iteration_id, page=1):
         # Don't need to consult our solr search engine.
         has_next, stories = _getStoriesNoTextSearch( iteration, order_by, tags_search, category, only_assigned, request.user, paged, page)
     else:
-        stories = _getStoriesWithTextSearch( iteration, text_search, order_by, tags_search, category, only_assigned)
+        stories = _getStoriesWithTextSearch( iteration, text_search, order_by, tags_search, category, only_assigned, request.user)
         # we need some fancy-schmancy searching
 
     
@@ -395,14 +395,14 @@ def stories_iteration(request, group_slug, iteration_id, page=1):
       "iteration_id": iteration.id
     }, context_instance=RequestContext(request))
 
-def _getStoriesWithTextSearch( iteration, text_search, order_by, tags_search, category, only_assigned):
+def _getStoriesWithTextSearch( iteration, text_search, order_by, tags_search, category, only_assigned, user):
     search_results = SearchQuerySet().filter(project_id=iteration.project.id).filter(iteration_id=iteration.id).filter(content=text_search).models(Story).order_by(order_by).load_all()
-    
     if tags_search != "":
         search_results = search_results.filter(tags=tags_search)
     if category != "":
         search_results = search_results.filter(category=category)
-        
+    if only_assigned:
+        search_results = search_results.filter(user_id=user.id)
     stories = [ result.object for result in search_results]
     return stories
 
