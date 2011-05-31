@@ -180,6 +180,9 @@ class ProjectUpdateForm(forms.ModelForm):
         model = Project
         fields = ('name', 'description')
 
+class FindStoryForm(forms.Form):
+    text = forms.CharField(label="Search For")
+
 class IterationImportForm(forms.Form):
     import_file  = forms.FileField(required=False)
 

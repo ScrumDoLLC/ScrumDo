@@ -425,6 +425,7 @@ def project(request, group_slug=None, form_class=ProjectUpdateForm, adduser_form
         project_form = form_class(instance=project)
 
     add_story_form = handleAddStory(request, project)
+    
 
     return render_to_response(template_name, {
         "project_form": project_form,
