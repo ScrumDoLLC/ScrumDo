@@ -16,5 +16,17 @@ class StoryIndex(RealTimeSearchIndex):
     rank = IntegerField(model_attr='rank')
     tags = CharField(model_attr='tags')
     category = CharField(model_attr='category', null=True)
+    def prepare(self, object):
+        try:
+            self.prepared_data = super(StoryIndex, self).prepare(object)
+        except:
+            logger.error("Story Index super failed to run!")
+            
+        fields = ('user_id','category','status','numeric_points','tags')
+        for field in fields:
+            if not field in self.prepared_data:
+                self.prepared_data[field] = ""
+
+        return self.prepared_data
 
 site.register(Story, StoryIndex)
