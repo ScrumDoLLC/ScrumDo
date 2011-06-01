@@ -125,7 +125,7 @@ MIDDLEWARE_CLASSES = (
     'django_sorting.middleware.SortingMiddleware',
     'pinax.middleware.security.HideSensistiveFieldsMiddleware',
     'django.middleware.transaction.TransactionMiddleware',
-   'debug_toolbar.middleware.DebugToolbarMiddleware'
+   # '_toolbar.middleware.DebugToolbarMiddleware'
 )
 
 ROOT_URLCONF = 'urls'
@@ -201,7 +201,7 @@ INSTALLED_APPS = (
     'developer',
     'haystack',
     
-   'debug_toolbar',
+   # 'debug_toolbar',
 )
 
 
