@@ -291,6 +291,10 @@ class Story( models.Model ):
                     assigned_stories = assigned_stories + [(project, project_stories)]
         return assigned_stories
 
+    def story_tags_full(self):
+        "Helper function to return queryset of taggings with the tag object preloaded"
+        return self.story_tags.all().select_related("tag")
+
     def statusText(self):
         return Story.STATUS_CHOICES[ self.status - 1][1]
     

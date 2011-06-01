@@ -383,6 +383,10 @@ def stories_iteration(request, group_slug, iteration_id, page=1):
         stories = _getStoriesWithTextSearch( iteration, text_search, order_by, tags_search, category, only_assigned, request.user)
         # we need some fancy-schmancy searching
 
+    try:
+        organization = project.organization
+    except Organization.DoesNotExist:
+        organization = None
     
     return render_to_response("stories/mini_story_list.html", {
       "stories": stories,
@@ -392,7 +396,8 @@ def stories_iteration(request, group_slug, iteration_id, page=1):
       "load_next_page": has_next ,
       "next_page_num": page+1,
       "next_page_query_string":query_string,
-      "iteration_id": iteration.id
+      "iteration_id": iteration.id,
+      "organization": organization
     }, context_instance=RequestContext(request))
 
 def _getStoriesWithTextSearch( iteration, text_search, order_by, tags_search, category, only_assigned, user):
@@ -426,7 +431,7 @@ def _getStoriesNoTextSearch( iteration, order_by, tags_search, category, only_as
     if category:
         stories = stories.filter(category=category)
 
-    stories = stories.select_related('project', 'project__organization','project__organization__subscription',  'iteration','iteration__project',)
+    stories = stories.select_related('project', 'project__organization','project__organization__subscription', 'iteration',)
     
     if paged:
         paginator = Paginator(stories, 50)
