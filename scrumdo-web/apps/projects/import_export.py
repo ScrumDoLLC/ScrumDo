@@ -173,13 +173,13 @@ def _getHeaders( project ):
     def setDetail(story,value):
         story.detail=unicode(value)
     def setPoints(story,value):
-        try:
-            story.points=float(value)
-        except:
+        try:             
+            story.points="%g" % value
+        except ValueError:
             if value == "":
                 story.points = "?"
             else:
-                story.points = value
+                story.points = str(value)
 
 
     def setStatus(story,value):

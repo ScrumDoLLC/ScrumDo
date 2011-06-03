@@ -356,6 +356,7 @@ def stories_iteration(request, group_slug, iteration_id, page=1):
     text_search = request.GET.get("search","").strip()
     tags_search = request.GET.get("tags","").strip()
     category = request.GET.get("category","").strip()
+    clrbtn = request.GET.get("clearButton",'')
     only_assigned = request.GET.get("only_assigned", False)
     paged = "True" == request.GET.get("paged", "True")
     
@@ -369,11 +370,11 @@ def stories_iteration(request, group_slug, iteration_id, page=1):
     
     query_string = urllib.urlencode( {   'order_by':order_by, 
                                          'display_type':display_type, 
-                                         'search':text_search, 
-                                         'tags':tags_search, 
-                                         'category':category, 
+                                         'search':text_search.encode('utf-8'), 
+                                         'tags':tags_search.encode('utf-8'), 
+                                         'category':category.encode('utf-8'), 
                                          'only_assigned':only_assigned,
-                                         'clearButton':request.GET.get("clearButton",'')
+                                         'clearButton':clrbtn
                                          })
     has_next = False
     if text_search == "":
