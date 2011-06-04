@@ -51,7 +51,7 @@
     <a onClick="showCommentsForStory({{story.id}}); return false;" href="#">{{comment_count}} Comment{{comment_count|pluralize}}</a>
 
 
-  {% for tag in story.story_tags.all %}
+  {% for tag in story.story_tags_full %}
      <div class="tagsBox">{% silk "tag_blue" %}<a onclick="filterByTag('{{tag.name}}');  return false;" href="#">{{ tag.name }}</a></div>
   {% endfor %}
 

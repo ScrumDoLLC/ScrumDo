@@ -6,4 +6,3 @@
 {{ object.extra_1 }}
 {{ object.extra_2 }}
 {{ object.extra_3 }}
-
