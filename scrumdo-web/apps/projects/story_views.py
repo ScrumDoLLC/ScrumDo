@@ -70,6 +70,8 @@ def set_story_status( request, group_slug, story_id, status):
         statuses = [None, "TODO", "In Progress", "Reviewing", "Done"]
         story.activity_signal.send(sender=story, user=request.user, story=story, action="changed status", status=statuses[status], project=story.project)
         onDemandCalculateVelocity( story.project )
+
+    organization = _organizationOrNone( story.project )
     if( request.POST.get("return_type","mini") == "mini"):
         return render_to_response("stories/single_mini_story.html", {
             "story": story,
@@ -80,11 +82,12 @@ def set_story_status( request, group_slug, story_id, status):
         return render_to_response("stories/single_queue_story.html", {
             "story": story,
             "return_type": "queue",
-            "project": story.project
+            "project": story.project                        
           }, context_instance=RequestContext(request))
     return render_to_response("stories/single_block_story.html", {
         "story": story,
-        "project": story.project
+        "project": story.project,
+        "organization": organization
       }, context_instance=RequestContext(request))
 
 
@@ -256,10 +259,12 @@ def _calculate_rank( iteration, general_rank ):
 def story_block(request, story_id):
     story = get_object_or_404( Story, id=story_id )
     read_access_or_403( story.project, request.user )
+    organization = _organizationOrNone( story.project )
     return render_to_response("stories/single_block_story.html", {
         "story": story,
         "return_type": "block",
-        "project": story.project
+        "project": story.project,
+        "organization": organization
       }, context_instance=RequestContext(request))
 
 # Returns the edit-story form, with minimal html wrapper.  This is useful for displaying within
@@ -292,6 +297,7 @@ def story(request, group_slug, story_id):
             signals.story_updated.send( sender=request, story=story, user=request.user )
             onDemandCalculateVelocity( project )
 
+        organization = _organizationOrNone( project )
         if( request.POST['return_type'] == 'mini'):
             return render_to_response("stories/single_mini_story.html", {
                 "story": story,
@@ -301,7 +307,8 @@ def story(request, group_slug, story_id):
             return render_to_response("stories/single_block_story.html", {
                 "story": story,
                 "return_type": return_type,
-                "project": story.project
+                "project": story.project,
+                "organization": organization
               }, context_instance=RequestContext(request))
         if( request.POST['return_type'] == 'queue'):
             return render_to_response("stories/single_queue_story.html", {
@@ -384,10 +391,7 @@ def stories_iteration(request, group_slug, iteration_id, page=1):
         stories = _getStoriesWithTextSearch( iteration, text_search, order_by, tags_search, category, only_assigned, request.user)
         # we need some fancy-schmancy searching
 
-    try:
-        organization = project.organization
-    except Organization.DoesNotExist:
-        organization = None
+    organization = _organizationOrNone( project )
     
     return render_to_response("stories/mini_story_list.html", {
       "stories": stories,
@@ -400,6 +404,13 @@ def stories_iteration(request, group_slug, iteration_id, page=1):
       "iteration_id": iteration.id,
       "organization": organization
     }, context_instance=RequestContext(request))
+
+def _organizationOrNone(project):
+    try:
+        organization = project.organization
+    except Organization.DoesNotExist:
+        organization = None
+    return organization
 
 def _getStoriesWithTextSearch( iteration, text_search, order_by, tags_search, category, only_assigned, user):
     search_results = SearchQuerySet().filter(project_id=iteration.project.id).filter(iteration_id=iteration.id).filter(content=text_search).models(Story).order_by(order_by).load_all()
