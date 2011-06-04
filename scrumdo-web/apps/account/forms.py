@@ -290,7 +290,7 @@ class ResetPasswordKeyForm(forms.Form):
     
     def clean_temp_key(self):
         temp_key = self.cleaned_data.get("temp_key")
-        if not PasswordReset.objects.filter(temp_key=temp_key, reset=False).count() == 1:
+        if PasswordReset.objects.filter(temp_key=temp_key, reset=False).count() == 0:
             raise forms.ValidationError(_("Temporary key is invalid."))
         return temp_key
     
@@ -306,6 +306,8 @@ class ResetPasswordKeyForm(forms.Form):
         reset_records = PasswordReset.objects.filter(temp_key__exact=temp_key)
         if len(reset_records) > 0:
             password_reset = reset_records[0]
+        else:
+            raise forms.ValidationError(_("Could not find that password reset key"))
         
         # now set the new user password
         user = User.objects.get(passwordreset__exact=password_reset)
