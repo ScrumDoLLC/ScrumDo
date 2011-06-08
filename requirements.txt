@@ -6,3 +6,5 @@ importlib
 django-ses
 pysolr
 django-haystack==1.1
+mysql-python
+pil
