@@ -269,7 +269,7 @@ HOOKBOX_SECRET = "juy789"
 # like database and email that differ between development and production.
 try:
     from local_settings import *
-except ImportError:
-    pass
+except ImportError as e:
+    print "Could not import local_settings %s" % e
 
 
