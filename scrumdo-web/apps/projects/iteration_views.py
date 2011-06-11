@@ -45,6 +45,19 @@ def iteration(request, group_slug, iteration_id):
     project = get_object_or_404( Project, slug=group_slug )
     read_access_or_403(project,request.user)
     iteration = get_object_or_404( Iteration, id=iteration_id )
+    
+    if request.method == 'POST': # If the form has been submitted...
+        write_access_or_403(project,request.user)
+        form = IterationForm( request.POST, instance=iteration)
+        if form.is_valid(): # All validation rules pass
+            iteration = form.save(  )
+            request.user.message_set.create(message="Iteration Details Saved.")
+    else:
+        form = IterationForm( instance=iteration )
+    
+    
+    if iteration.backlog:
+        return backlog(request, project, iteration, form)
 
     if request.method == 'POST': # If the form has been submitted...
         write_access_or_403(project,request.user)
@@ -62,7 +75,7 @@ def iteration(request, group_slug, iteration_id):
             daysLeft = (iteration.end_date - today).days
     except:
         pass
-
+    
     add_story_form = handleAddStory(request, project)
 
     return render_to_response("projects/iteration.html", {
@@ -74,6 +87,30 @@ def iteration(request, group_slug, iteration_id):
         'add_story_form': add_story_form,
         "current_view":"iteration_page"
       }, context_instance=RequestContext(request))
+
+
+
+
+def backlog(request, project, iteration, form):
+  today = datetime.date.today()
+  daysLeft = None
+  try:
+      if iteration.start_date <= today and iteration.end_date >= today:
+          daysLeft = (iteration.end_date - today).days
+  except:
+      pass
+
+  add_story_form = handleAddStory(request, project)
+  add_epic_form = EpicForm(project, iteration)
+  return render_to_response("projects/backlog.html", {
+      "iteration": iteration,
+      "iterationinfo": True,
+      "project" : project,
+      "iteration_form": form,
+      'add_story_form': add_story_form,
+      "add_epic_form": add_epic_form,
+      "current_view":"backlog_page"
+    }, context_instance=RequestContext(request))
 
 
 

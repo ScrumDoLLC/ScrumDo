@@ -11,7 +11,7 @@ body {
     top: 90px;
 }
 
-#story_form #add_button {    
+.story_form #add_button {    
     vertical-align: text-bottom;
 }
 

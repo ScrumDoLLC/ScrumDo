@@ -1,0 +1,50 @@
+<div style="margin-left:auto; margin-right:auto;">
+  <div id="epic_form" class="story_form">
+    <form method="POST" id="addEpicForm" >
+      {{ add_epic_form.non_field_errors }}
+      {{add_epic_form.summary}}    {{add_epic_form.summary.errors}} <button id="add_button" type="submit">Add Epic</button><!-- <INPUT TYPE="Submit">Add Story</input>--><!--SRC="/site_media/static/images/addStoryButton.png"-->
+       <br/>
+      <div id="epic_details">
+        <table>
+          <tr><td>Detail:</td><td>{{add_epic_form.detail}}    {{add_epic_form.detail.errors}} </td></tr>
+          <tr><td>Points:&nbsp;</td><td id="points_section">{{add_epic_form.points}}  {{add_epic_form.points.errors}} </td></tr>
+         </table>
+      </div>
+    
+        <input type="hidden" name="action" value="addEpic" />
+    
+      {% if iteration %}
+        <input type="hidden" name="iteration" value="{{ iteration.id }}" />
+      {% endif %}
+    
+    </form>
+   </div>
+ </div>
+ 
+<script type="text/javascript" charset="utf-8">  
+    epic_form_expanded = false;
+    $(document).ready(function() {             
+      $("#addEpicForm").ajaxForm({ url:"{% url ajax_add_epic project.slug %}",
+                                    success:updateStoryListInternal });
+      
+      $('#epic_form #id_summary').keyup( function(self) 
+            { 
+                if( $(this).val().length > 0 )
+                {
+                  if( ! epic_form_expanded )
+                  {
+                    $("#epic_details").show(true);
+                  }
+                  epic_form_expanded = true;
+                }
+                else
+                {
+                  if( epic_form_expanded )
+                  {
+                    $("#epic_details").hide();              
+                  }
+                  epic_form_expanded = false;
+                }
+            } );
+      });
+</script>

@@ -266,31 +266,78 @@
     padding-left: 10px;
 }
 
-#story_form {
+.story_form {
     border: 1px solid #e1e1e1;
     background: #fafafa;
     margin: 10px;
     padding: 10px;
-
     max-width: 950px;
     border-radius: 3px;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     -o-border-radius: 3px;
-    -khtml-border-radius: 3px;
-    
+    -khtml-border-radius: 3px;    
     behavior: url(/site_media/static/css/PIE.htc);
 }
 
-#story_form #id_summary {
+#form-tabs .story_form {
+	margin: 0px;
+	padding: 0px;
+	border: none;
+	width: 100%;
+	max-width: 100%;
+}
+
+#form-tabs .ui-state-active a {
+	background-color: #fafafa;
+	border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+    -o-border-radius: 3px;
+    -khtml-border-radius: 3px;
+	border-bottom-width: 1px;
+}
+#form-tabs .ui-tabs-selected {
+	font-weight: bold;
+}
+#form-tabs {
+	padding: 0px;
+	margin: 0px;
+	border: none;	
+}
+
+#form-tabs ul  {
+	background-color: #fafafa;
+}
+
+#form-tabs #tabs-1 {
+	border-style: solid;
+	border-width: 1px;
+	margin-left: 2px;
+	background-color: #fafafa;
+}
+
+#form-tabs #tabs-2 {
+	border-style: solid;
+	border-width: 1px;
+	margin-left: 2px;
+	background-color: #fafafa;	
+}
+
+#form-tabs .ui-corner-all {
+	background: none;
+	border: none;
+}
+
+.story_form #id_summary {
     width: 70%;
 }
 
-#story_form #id_detail {
+.story_form #id_detail {
     width: 94%;
 }
 
-#story_form #add_button {
+.story_form #add_button {
     width: 25%;
     height: 25px;
     background-color: #e8e8e8;	
@@ -311,7 +358,7 @@
     font-weight: bold;
 }
 
-#story_form #add_button:hover {
+.story_form #add_button:hover {
     cursor: pointer;
     background-color: #444;	
     background: -webkit-gradient(linear, left top, left bottom, from(#666), to(#222));
@@ -342,8 +389,11 @@
     padding: 0px;
 }
 
+.story_form #epic_details {
+  display: none;
+}
 
-#story_form #story_details {
+.story_form #story_details {
   display: none;
 }
 

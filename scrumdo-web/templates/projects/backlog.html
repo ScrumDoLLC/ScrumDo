@@ -32,28 +32,28 @@
 
 {% block add_story %}
     {% if user.is_authenticated %}
-        {% canwrite project %}
-          {% include "stories/add_story_form.html" %}
-        {% endcanwrite %}
+    {% canwrite project %}
+    <script>
+    	$(function() {
+    		$( "#form-tabs" ).tabs();
+    	});
+	</script>
+    <div id="form-tabs">
+        <ul>
+    		<li><a href="#tabs-1">Story</a></li>
+    		<li><a href="#tabs-2">Epic</a></li>
+    	</ul>
+      <div id="tabs-1">{% include "stories/add_story_form.html" %}</div>
+      <div id="tabs-2">{% include "stories/add_epic_form.html" %}</div>
+    </div>
+    {% endcanwrite %}
+
     {% endif %}
 {% endblock %}
 
 
 {% block body %}
-        <h1>{{ iteration.name }}</h1>
-
-        {% if iteration.start_date %}<i>{{iteration.start_date|date:"M d, Y"}} - {{iteration.end_date|date:"M d, Y"}}</i>{% endif %}
-        
-
-        <div id="burnup_chart">
-          {% if iteration.points_log.count %}
-            <div id="iterationBurndown" style="width:100%;height:200px;"></div>              
-          {% else %}
-          <br/><img src="{{ STATIC_URL }}images/burndown.png">
-          {% endif %}
-        </div>
-          <a class="hide_burndown_chart_link" href="#">Hide Chart</a>
-        
+            
         <div style="clear:both;">&nbsp;</div>
 
         <img style="float:right" src="{{ STATIC_URL }}images/ajax-loader.gif" id="loadingIcon">
@@ -78,22 +78,22 @@
         {% endfor %}
       </div>
 
-
     
-    <div id="iterationDetails" style="display:none; width:500px;">
-      <h2>Iteration Details</h2>
-      <form method="POST" class="uniForm" action="" style="width:500px;">
-        <fieldset class="inlineLabels">
-         {{ iteration_form|as_uni_form }}
-         <div class="form_block">
-             <div class="buttonHolder">
-                <button class="primaryAction" type="submit" >Save</button>
-             </div
-         </div>
-         </fieldset>
-       </form>
-    </div>
-
+      <div id="iterationDetails" style="display:none; width:600px;">
+        <h2>Iteration Details</h2>
+        <form method="POST" class="uniForm" action="" style="width:600px;">
+          <fieldset class="inlineLabels">
+           {{ iteration_form|as_uni_form }}
+           <div class="form_block">
+               <div class="buttonHolder">
+                  <button class="primaryAction" type="submit" >Save</button>
+               </div
+           </div>
+           </fieldset>
+         </form>
+      </div>
+      
+      
     <div id="deleteIteration" style="display: none">
       <form method="POST" id="deleteForm" action="{% url delete_iteration project.slug iteration.id %}">
     	<strong>Are you sure you want to delete this iteration?</strong>
@@ -112,6 +112,7 @@
 
 {% block extra_body %}
 
+
 <script type="text/javascript" src="{{STATIC_URL}}js/iteration.js"></script>
 
 <script type="text/javascript">
@@ -123,6 +124,7 @@ var iteration_id = "{{ iteration.id }}";
 var iteration_list_url = "{% url iteration_list project.slug %}";
 var iteration_stats_url = "{% url iteration_stats project.slug iteration.id %}";
 
+
 $(document).ready(function() 
 {
     {% if iteration.points_log.count %}
@@ -130,29 +132,11 @@ $(document).ready(function()
     {% endif %}
 });
 
-$(".hide_burndown_chart_link").click(function() {
-    $("#burnup_chart").toggle();
-    if ($('#burnup_chart').is(':visible'))
-    {
-        $(".hide_burndown_chart_link").text("Hide Chart");
-        $.cookie("chart", "visible");
-        {% if iteration.points_log.count %}
-        generateBurnDown("#iterationBurndown", project_slug, iteration_id, 0);
-        {% endif %}
-    }
-    else
-    {
-        $(".hide_burndown_chart_link").text("Show Chart");
-        $.cookie("chart", "hidden");
-    }
-
-});
-
 {% if GOOGLE_ANALYTICS %}
-_gaq.push(['_trackEvent', "ViewPage", "Iteration", "", 1]);
+_gaq.push(['_trackEvent', "ViewPage", "Backlog", "", 1]);
 {% endif %}
 
-</script>
 
+</script>
     
 {% endblock %}

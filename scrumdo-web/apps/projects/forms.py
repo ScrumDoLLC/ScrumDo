@@ -37,13 +37,12 @@ else:
 class IterationForm(forms.ModelForm):
     def __init__(self,  *args, **kwargs):
         super(IterationForm, self).__init__(*args, **kwargs)
-
         self.fields['include_in_velocity'].label = "Include In Velocity Calculations"
-        # self.fields['end_date'].widget = SelectDateWidget()
+        self.fields['backlog'].label = "Treat this iteration as a backlog"
 
     class Meta:
         model = Iteration
-        fields = ('name', 'detail', 'start_date', 'end_date', 'include_in_velocity')
+        fields = ('name', 'start_date', 'end_date', 'include_in_velocity', "backlog")
 
 
 
@@ -106,6 +105,33 @@ class AddStoryForm( forms.ModelForm ):
     class Meta:
         model = Story
         fields = ('summary', 'detail', 'category', 'tags', 'points' , 'extra_1','extra_2','extra_3','assignee')
+
+class EpicForm( forms.ModelForm ):
+    def __init__(self, project, iteration, *args, **kwargs):
+        super(EpicForm, self).__init__(*args, **kwargs)
+        self.project = project
+        self.iteration = iteration
+        
+        self.fields["summary"].widget = forms.TextInput()
+        self.fields["summary"].widget.size = 200
+
+    def clean_points(self):
+        try:
+            self.cleaned_data["points"] = float(self.cleaned_data["points"])
+            if self.cleaned_data["points"] > 9999 :
+                raise forms.ValidationError("Points must be less than 10,000")
+        except:
+            self.cleaned_data["points"] = "?"
+        return self.cleaned_data["points"]
+        
+    def save(self,  **kwargs):
+        self.instance.project = self.project
+        self.instance.iteration = self.iteration
+        return super(EpicForm, self).save(**kwargs)
+    class Meta:
+        model = Story
+        fields = ('summary','detail','points')
+    
 
 class StoryForm( forms.ModelForm ):
     RANK_CHOICES = (

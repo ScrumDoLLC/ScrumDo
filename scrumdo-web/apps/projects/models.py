@@ -39,6 +39,10 @@ from organizations.models import Organization, Team
 from activities.models import Activity, StoryActivity, IterationActivity
 import django.dispatch
 
+STATUS_TODO = 1
+STATUS_DOING = 2
+STATUS_REVIEWING = 3
+STATUS_DONE = 4
 STATUS_CHOICES = ( (1, "TODO"), (2, "In Progress"),  (3, "Reviewing"), (4, "Done")   )
 STATUS_REVERSE = {"TODO":STATUS_TODO, "Doing":STATUS_DOING, "In Progress":STATUS_DOING,  "Reviewing":STATUS_REVIEWING,  "Done":STATUS_DONE }
 
@@ -203,6 +207,7 @@ class Iteration( models.Model):
     end_date = models.DateField( blank=True, null=True )
     project = models.ForeignKey(Project, related_name="iterations")
     default_iteration = models.BooleanField( default=False )
+    backlog = models.BooleanField( default=False )
     points_log = generic.GenericRelation( PointsLog )
     locked = models.BooleanField( default=False )
 
@@ -254,7 +259,7 @@ class Epic(models.Model):
     local_id = models.IntegerField()
     summary = models.TextField()
     detail = models.TextField()
-    points = models.CharField('points', max_length=3, default="?", blank=True)
+    points = models.CharField('points', max_length=4, default="?", blank=True)
     iteration = models.ForeignKey( Iteration , related_name="epics")
     project = models.ForeignKey( Project , related_name="epics")
     status = models.IntegerField( max_length=2, choices=STATUS_CHOICES, default=1 )
@@ -277,7 +282,6 @@ class Story( models.Model ):
     STATUS_DOING = 2
     STATUS_REVIEWING = 3
     STATUS_DONE = 4
-
     rank = models.IntegerField()
     board_rank = models.IntegerField(default=0)
     summary = models.TextField( )
