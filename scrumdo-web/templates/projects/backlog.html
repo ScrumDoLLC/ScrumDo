@@ -34,8 +34,11 @@
     {% if user.is_authenticated %}
     {% canwrite project %}
     <script>
-    	$(function() {
-    		$( "#form-tabs" ).tabs();
+    	$(function() {    
+			$( "#form-tabs" ).tabs();		
+			{% if show_epic %}
+			  $("#form-tabs").tabs('select', 1);
+			{% endif %}
     	});
 	</script>
     <div id="form-tabs">
@@ -57,12 +60,21 @@
         <div style="clear:both;">&nbsp;</div>
 
         <img style="float:right" src="{{ STATIC_URL }}images/ajax-loader.gif" id="loadingIcon">
-        <h1>Stories</h1>
+        
 
+		<h1>Epics</h1>
+		<ul id="epic_list">
+			{% for epic in iteration.epics.all %}
+				<li>{{epic.summary}}</li>
+			{% endfor %}
+		</ul>
+
+		<h1>Stories</h1>
+		
         {% with iteration.id as iteration_id %}
             {% include "stories/filter_form.html" %}
-        {% endwith %}
-                
+        {% endwith %}         
+       
         <ul id="story_list">
 
         </ul>
@@ -123,6 +135,7 @@ var static_url = "{{ STATIC_URL }}";
 var iteration_id = "{{ iteration.id }}";
 var iteration_list_url = "{% url iteration_list project.slug %}";
 var iteration_stats_url = "{% url iteration_stats project.slug iteration.id %}";
+
 
 
 $(document).ready(function() 

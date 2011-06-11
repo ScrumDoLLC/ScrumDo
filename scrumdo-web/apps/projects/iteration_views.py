@@ -40,12 +40,18 @@ import projects.import_export as import_export
 from activities.models import ActivityAction
 from story_views import handleAddStory
 
+import logging
+
+
+
+logger = logging.getLogger(__name__)
+
 @login_required
 def iteration(request, group_slug, iteration_id):
     project = get_object_or_404( Project, slug=group_slug )
     read_access_or_403(project,request.user)
     iteration = get_object_or_404( Iteration, id=iteration_id )
-    
+
     if request.method == 'POST': # If the form has been submitted...
         write_access_or_403(project,request.user)
         form = IterationForm( request.POST, instance=iteration)
@@ -54,8 +60,8 @@ def iteration(request, group_slug, iteration_id):
             request.user.message_set.create(message="Iteration Details Saved.")
     else:
         form = IterationForm( instance=iteration )
-    
-    
+
+
     if iteration.backlog:
         return backlog(request, project, iteration, form)
 
@@ -75,7 +81,7 @@ def iteration(request, group_slug, iteration_id):
             daysLeft = (iteration.end_date - today).days
     except:
         pass
-    
+
     add_story_form = handleAddStory(request, project)
 
     return render_to_response("projects/iteration.html", {
@@ -92,25 +98,38 @@ def iteration(request, group_slug, iteration_id):
 
 
 def backlog(request, project, iteration, form):
-  today = datetime.date.today()
-  daysLeft = None
-  try:
-      if iteration.start_date <= today and iteration.end_date >= today:
-          daysLeft = (iteration.end_date - today).days
-  except:
-      pass
+    today = datetime.date.today()
 
-  add_story_form = handleAddStory(request, project)
-  add_epic_form = EpicForm(project, iteration)
-  return render_to_response("projects/backlog.html", {
-      "iteration": iteration,
-      "iterationinfo": True,
-      "project" : project,
-      "iteration_form": form,
-      'add_story_form': add_story_form,
-      "add_epic_form": add_epic_form,
-      "current_view":"backlog_page"
-    }, context_instance=RequestContext(request))
+    if request.method == 'POST': # If the form has been submitted...
+        write_access_or_403(project,request.user)
+        logger.info("1")
+        add_epic_form = EpicForm( project, iteration, request.POST)
+        logger.info("2")
+        if add_epic_form.is_valid(): # All validation rules pass
+            logger.info("3")
+            epic = add_epic_form.save()
+            request.user.message_set.create(message="Epic %d created" % epic.local_id)
+            add_epic_form = EpicForm(project, iteration)
+        logger.debug(add_epic_form.__dict__)
+        show_epic = True
+    else:
+        logger.info("4")
+        add_epic_form = EpicForm(project, iteration)
+        show_epic = False
+
+    logger.info("5")
+    add_story_form = handleAddStory(request, project)
+
+    return render_to_response("projects/backlog.html", {
+        "iteration": iteration,
+        "iterationinfo": True,
+        "project" : project,
+        "iteration_form": form,
+        'add_story_form': add_story_form,
+        "add_epic_form": add_epic_form,
+        "current_view":"backlog_page",
+        "show_epic":show_epic
+      }, context_instance=RequestContext(request))
 
 
 
@@ -222,7 +241,7 @@ def iteration_stats(request, group_slug, iteration_id):
     project = get_object_or_404( Project, slug=group_slug )
     admin_access_or_403(project, request.user, ignore_active=True)
     iteration = get_object_or_404( Iteration, id=iteration_id )
-    return render_to_response("projects/iteration_stats.html", {"project":project, "iteration":iteration}, context_instance=RequestContext(request))    
+    return render_to_response("projects/iteration_stats.html", {"project":project, "iteration":iteration}, context_instance=RequestContext(request))
 
 
 @login_required
@@ -232,7 +251,7 @@ def iteration_export(request, group_slug, iteration_id):
     write_access_or_403(project,request.user)
     if iteration.project != project:
         raise PermissionDenied()
-    
+
     if request.method == "POST":
         form = ExportForm(request.POST)
         if form.is_valid():
@@ -254,6 +273,6 @@ def scrum_board(request, group_slug, iteration_id):
     iteration = get_object_or_404(Iteration, id=iteration_id)
     read_access_or_403(project,request.user)
     if iteration.project != project:
-        raise PermissionDenied()    
-    add_story_form = handleAddStory(request, project)    
+        raise PermissionDenied()
+    add_story_form = handleAddStory(request, project)
     return render_to_response('projects/scrum_board.html', { 'project':project, 'iteration':iteration, "add_story_form":add_story_form  }, context_instance=RequestContext(request))

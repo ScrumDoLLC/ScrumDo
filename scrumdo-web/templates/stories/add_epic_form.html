@@ -1,8 +1,8 @@
 <div style="margin-left:auto; margin-right:auto;">
   <div id="epic_form" class="story_form">
     <form method="POST" id="addEpicForm" >
-      {{ add_epic_form.non_field_errors }}
-      {{add_epic_form.summary}}    {{add_epic_form.summary.errors}} <button id="add_button" type="submit">Add Epic</button><!-- <INPUT TYPE="Submit">Add Story</input>--><!--SRC="/site_media/static/images/addStoryButton.png"-->
+      {{add_epic_form.non_field_errors}}
+      {{add_epic_form.summary}}    {{add_epic_form.summary.errors}} <button id="add_button" type="submit">Add Epic</button>
        <br/>
       <div id="epic_details">
         <table>
@@ -24,8 +24,7 @@
 <script type="text/javascript" charset="utf-8">  
     epic_form_expanded = false;
     $(document).ready(function() {             
-      $("#addEpicForm").ajaxForm({ url:"{% url ajax_add_epic project.slug %}",
-                                    success:updateStoryListInternal });
+
       
       $('#epic_form #id_summary').keyup( function(self) 
             { 

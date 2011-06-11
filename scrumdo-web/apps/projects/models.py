@@ -120,6 +120,11 @@ class Project(Group):
     def getPointScale( self ):
         return self.POINT_RANGES[ self.point_scale_type ]
 
+    def getNextEpicId( self ):
+        if self.epics.count() == 0:
+            return 1
+        return self.epics.order_by('-local_id')[0].local_id + 1
+        
     def getNextId( self ):
         if self.stories.count() == 0:
             return 1
@@ -258,7 +263,7 @@ class Epic(models.Model):
     """Represents an epic in your backlog."""
     local_id = models.IntegerField()
     summary = models.TextField()
-    detail = models.TextField()
+    detail = models.TextField(blank=True)
     points = models.CharField('points', max_length=4, default="?", blank=True)
     iteration = models.ForeignKey( Iteration , related_name="epics")
     project = models.ForeignKey( Project , related_name="epics")
@@ -273,7 +278,11 @@ class Epic(models.Model):
             return 0
 
     def __unicode__(self):
-        return u"Epic %d %s" % (self.local_id, self.summary)
+        if self.local_id == None:
+            local_id = -1
+        else:
+            local_id = self.local_id
+        return u"Epic %d %s" % (local_id, self.summary)
 
     
 

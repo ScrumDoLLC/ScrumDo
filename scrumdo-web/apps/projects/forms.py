@@ -21,7 +21,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
-from projects.models import Project, ProjectMember, Iteration, Story, Task
+from projects.models import Project, ProjectMember, Iteration, Story, Task, Epic
 from django.forms.extras.widgets import SelectDateWidget
 
 from projects.limits import userIncreasedAlowed
@@ -127,9 +127,11 @@ class EpicForm( forms.ModelForm ):
     def save(self,  **kwargs):
         self.instance.project = self.project
         self.instance.iteration = self.iteration
+        self.instance.local_id = self.project.getNextEpicId()
         return super(EpicForm, self).save(**kwargs)
+        
     class Meta:
-        model = Story
+        model = Epic
         fields = ('summary','detail','points')
     
 
