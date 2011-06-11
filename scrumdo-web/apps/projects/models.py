@@ -39,6 +39,10 @@ from organizations.models import Organization, Team
 from activities.models import Activity, StoryActivity, IterationActivity
 import django.dispatch
 
+STATUS_CHOICES = ( (1, "TODO"), (2, "In Progress"),  (3, "Reviewing"), (4, "Done")   )
+STATUS_REVERSE = {"TODO":STATUS_TODO, "Doing":STATUS_DOING, "In Progress":STATUS_DOING,  "Reviewing":STATUS_REVIEWING,  "Done":STATUS_DONE }
+
+
 class SiteStats( models.Model ):
     user_count = models.IntegerField()
     project_count = models.IntegerField()
@@ -98,17 +102,17 @@ class Project(Group):
     category = models.CharField( max_length=25, blank=True, null=True, default="")
     categories = models.CharField(max_length=256, blank=True, null=True)
     token = models.CharField(max_length=7, default=lambda: "".join(random.sample(string.lowercase + string.digits, 7)))
-    
+
     class Meta:
         ordering = ['-active','name']
-        
+
 
     def getCategoryList( self ):
         if self.categories:
             return [c.strip() for c in self.categories.split(",")]
         else:
             return []
-            
+
     def getPointScale( self ):
         return self.POINT_RANGES[ self.point_scale_type ]
 
@@ -225,7 +229,7 @@ class Iteration( models.Model):
         except:
             pass
         return None
-        
+
 
     def stats():
         points = 0
@@ -242,17 +246,37 @@ class Iteration( models.Model):
         ordering = ["-default_iteration","end_date"]
 
     def __unicode__(self):
-        return "%s / %s" % (self.project.name, self.name) 
+        return "%s / %s" % (self.project.name, self.name)
 
+
+class Epic(models.Model):
+    """Represents an epic in your backlog."""
+    local_id = models.IntegerField()
+    summary = models.TextField()
+    detail = models.TextField()
+    points = models.CharField('points', max_length=3, default="?", blank=True)
+    iteration = models.ForeignKey( Iteration , related_name="epics")
+    project = models.ForeignKey( Project , related_name="epics")
+    status = models.IntegerField( max_length=2, choices=STATUS_CHOICES, default=1 )
+    
+    def points_value(self):
+        if self.points.lower() == "inf" :
+            return 0
+        try:
+            return float(self.points)
+        except:
+            return 0
+
+    def __unicode__(self):
+        return u"Epic %d %s" % (self.local_id, self.summary)
+
+    
 
 class Story( models.Model ):
     STATUS_TODO = 1
     STATUS_DOING = 2
     STATUS_REVIEWING = 3
     STATUS_DONE = 4
-
-    STATUS_CHOICES = ( (1, "TODO"), (2, "In Progress"),  (3, "Reviewing"), (4, "Done")   )
-    STATUS_REVERSE = {"TODO":STATUS_TODO, "Doing":STATUS_DOING, "In Progress":STATUS_DOING,  "Reviewing":STATUS_REVIEWING,  "Done":STATUS_DONE }
 
     rank = models.IntegerField()
     board_rank = models.IntegerField(default=0)
@@ -271,6 +295,7 @@ class Story( models.Model ):
     extra_1 = models.TextField( blank=True , null=True)
     extra_2 = models.TextField( blank=True , null=True)
     extra_3 = models.TextField( blank=True , null=True)
+    epic = models.ForeignKey(Epic, null=True, blank=True)
 
     tags_to_delete = []
     tags_to_add = []
@@ -281,7 +306,7 @@ class Story( models.Model ):
     def getAssignedStories(user):
         projects = ProjectMember.getProjectsForUser(user)
         assigned_stories = []
-        for project in projects:            
+        for project in projects:
             if project.active and project.use_assignee:
                 project_stories = []
                 iterations = project.get_current_iterations()
@@ -296,8 +321,8 @@ class Story( models.Model ):
         return self.story_tags.all().select_related("tag")
 
     def statusText(self):
-        return Story.STATUS_CHOICES[ self.status - 1][1]
-    
+        return STATUS_CHOICES[ self.status - 1][1]
+
     def getPointsLabel(self):
         result = filter( lambda v: v[0]==self.points, self.getPointScale() )
         if len(result) > 0:
@@ -368,7 +393,7 @@ def tag_callback(sender, instance, **kwargs):
     for tag_to_delete in instance.tags_to_delete:
         tag_to_delete.delete()
     for tag_to_add in instance.tags_to_add:
-        tag_to_add = tag_to_add.strip()        
+        tag_to_add = tag_to_add.strip()
         if len(tag_to_add) == 0:
             continue
         tag = None
@@ -378,11 +403,11 @@ def tag_callback(sender, instance, **kwargs):
                 tag = tags[0]
         except:
             pass
-            
+
         if tag == None:
             tag = StoryTag( project=instance.project, name=tag_to_add)
             tag.save()
-            
+
         tagging = StoryTagging( tag=tag, story=instance)
         tagging.save()
     instance.tags_to_delete = []

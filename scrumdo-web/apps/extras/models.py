@@ -3,7 +3,7 @@ from django.db import models
 import time
 
 from django.core.urlresolvers import reverse
-from projects.models import Project, Iteration, Story, Task
+from projects.models import Project, Iteration, Story, Task, STATUS_CHOICES
 
 
 # Determines which extras are active for which projects.
@@ -32,7 +32,7 @@ class StoryQueue( models.Model ):
     summary = models.TextField( )
     detail = models.TextField( blank=True )
     points = models.CharField('points', max_length=3, default="?" ,blank=True)
-    status = models.IntegerField( max_length=2, choices=Story.STATUS_CHOICES, default=1 )
+    status = models.IntegerField( max_length=2, choices=STATUS_CHOICES, default=1 )
     extra_1 = models.TextField( blank=True , null=True)
     extra_2 = models.TextField( blank=True , null=True)
     extra_3 = models.TextField( blank=True , null=True)

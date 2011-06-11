@@ -28,7 +28,7 @@ import cStringIO
 import xlwt
 from xlrd import open_workbook
 
-from projects.models import Story
+from projects.models import Story, STATUS_CHOICES, STATUS_REVERSE
 import logging
 
 logger = logging.getLogger(__name__)
@@ -184,7 +184,7 @@ def _getHeaders( project ):
 
     def setStatus(story,value):
         try:
-            story.status = Story.STATUS_REVERSE[value]
+            story.status = STATUS_REVERSE[value]
         except:
             pass # Ignore invalid statuses?
     def setAssignee(story,value):
@@ -211,7 +211,7 @@ def _getHeaders( project ):
                (350,"Summary", lambda story: story.summary,wrap_xf, setSummary),
                (300,"Detail", lambda story: story.detail ,wrap_xf, setDetail),
                (50,"Points", lambda story: int(story.points) if story.points.isdigit() else story.points, numeric_xf, setPoints),
-               (70,"Status", lambda story: Story.STATUS_CHOICES[story.status-1][1] ,wrap_xf, setStatus),
+               (70,"Status", lambda story: STATUS_CHOICES[story.status-1][1] ,wrap_xf, setStatus),
                (50,"Rank", lambda story: story.rank,numeric_xf ,  setRank),
                (80,"Tags", lambda story: story.tags,wrap_xf,  setTags),
                (80,"Category", lambda story: story.category,wrap_xf, setCategory) ]

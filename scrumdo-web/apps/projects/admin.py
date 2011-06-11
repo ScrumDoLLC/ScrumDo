@@ -17,7 +17,7 @@
 
 
 from django.contrib import admin
-from projects.models import Project, Iteration, SiteStats, Story, StoryTag, Task
+from projects.models import *
 from django.conf import settings
 
 
@@ -34,5 +34,6 @@ class TaskAdmin(admin.ModelAdmin):
 
 admin.site.register(Iteration)
 admin.site.register(SiteStats)
+admin.site.register(Epic)
 admin.site.register(StoryTag)
 admin.site.register(Task, TaskAdmin)

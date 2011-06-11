@@ -45,7 +45,7 @@ if "notification" in settings.INSTALLED_APPS:
 else:
     notification = None
 
-from projects.models import Project, ProjectMember, Iteration, Story
+from projects.models import Project, ProjectMember, Iteration, Story, STATUS_REVERSE
 from projects.forms import *
 from projects.access import *
 import projects.signals as signals
@@ -334,7 +334,7 @@ def stories_scrum_board(request, group_slug, iteration_id, status):
     iteration = get_object_or_404(Iteration, id=iteration_id, project=project)
 
     
-    stories = iteration.stories.select_related('project', 'project__organization','project__organization__subscription',  'iteration','iteration__project',).filter(status=Story.STATUS_REVERSE[status]).order_by("board_rank")
+    stories = iteration.stories.select_related('project', 'project__organization','project__organization__subscription',  'iteration','iteration__project',).filter(status=STATUS_REVERSE[status]).order_by("board_rank")
 
     return render_to_response("stories/scrum_board_story_list.html", {
     "stories": stories,
