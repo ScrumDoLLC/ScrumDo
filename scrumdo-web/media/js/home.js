@@ -32,6 +32,7 @@ var loadItems = function() {
 		success: function(html) {
 		// Update global next page variable
 		// Pop all our items out into the page
+		$("#loadingIcon").hide();
 		$("#feedContent").append(html);
 	    },
 		error: function () {

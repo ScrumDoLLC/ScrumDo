@@ -45,7 +45,7 @@ register.simple_tag(avatar_url)
 def avatar(user, size=80):
     return real_avatar(user, size)
 
-@cache(3)
+@cache(120)
 def real_avatar(user, size):
     if not isinstance(user, User):
         try:

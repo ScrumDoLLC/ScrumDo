@@ -1,20 +1,18 @@
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
-import datetime
-from itertools import groupby
-
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import  User
-
-from threadedcomments.models import ThreadedComment
-
-from activities.utils import allinstances, instanceof
-
 from django.core.cache import cache
 
+from itertools import groupby
+
+from threadedcomments.models import ThreadedComment
+from activities.utils import allinstances, instanceof
 from scrumdo_model_utils.models import InheritanceCastModel
 
+import datetime
 import logging
+
 
 logger = logging.getLogger(__name__)
 
@@ -104,7 +102,7 @@ class Activity(InheritanceCastModel):
                 groups = groupby(activities, lambda act: (act.user_id, act.action, not instanceof(act, [StoryActivity, CommentActivity, PointsChangeActivity]) or act.story.iteration_id))
                 # this goes through the groupings and combines them if necessary
                 activities = reduce(lambda x,y: x+y, [combine(u,a,it or stories[0].iteration_id,list(stories)) for (u,a,it),stories in groups])
-                cache.set(str(userl.id)+"_activities", activities, 60*10)
+                cache.set(str(userl.id)+"_activities", activities, 60*5) #Cache activities for this user for 5 minutes
                 return activities
             else:
                 return []
