@@ -70,24 +70,21 @@ def set_story_status( request, group_slug, story_id, status):
         statuses = [None, "TODO", "In Progress", "Reviewing", "Done"]
         story.activity_signal.send(sender=story, user=request.user, story=story, action="changed status", status=statuses[status], project=story.project)
         onDemandCalculateVelocity( story.project )
+
+    organization = _organizationOrNone( story.project )
     if( request.POST.get("return_type","mini") == "mini"):
         return render_to_response("stories/single_mini_story.html", {
             "story": story,
             "return_type": "mini",
             "project": story.project,
-            "organization": story.project.organization
+            "organization": organization
           }, context_instance=RequestContext(request))
     if( request.POST.get("return_type","mini") == "queue"):
         return render_to_response("stories/single_queue_story.html", {
             "story": story,
             "return_type": "queue",
             "project": story.project,
-            "organization": story.project.organization
-          }, context_instance=RequestContext(request))
-    return render_to_response("stories/single_block_story.html", {
-        "story": story,
-        "project": story.project,
-        "organization": story.project.organization
+            "organization": organization
       }, context_instance=RequestContext(request))
 
 
@@ -259,11 +256,12 @@ def _calculate_rank( iteration, general_rank ):
 def story_block(request, story_id):
     story = get_object_or_404( Story, id=story_id )
     read_access_or_403( story.project, request.user )
+    organization = _organizationOrNone( story.project )
     return render_to_response("stories/single_block_story.html", {
         "story": story,
         "return_type": "block",
         "project": story.project,
-        "organization": story.project.organization
+        "organization": organization
       }, context_instance=RequestContext(request))
 
 # Returns the edit-story form, with minimal html wrapper.  This is useful for displaying within
@@ -296,6 +294,7 @@ def story(request, group_slug, story_id):
             signals.story_updated.send( sender=request, story=story, user=request.user )
             onDemandCalculateVelocity( project )
 
+        organization = _organizationOrNone( project )
         if( request.POST['return_type'] == 'mini'):
             return render_to_response("stories/single_mini_story.html", {
                 "story": story,
@@ -306,7 +305,7 @@ def story(request, group_slug, story_id):
                 "story": story,
                 "return_type": return_type,
                 "project": story.project,
-                "organization": story.project.organization
+                "organization": organization
               }, context_instance=RequestContext(request))
         if( request.POST['return_type'] == 'queue'):
             return render_to_response("stories/single_queue_story.html", {
@@ -361,6 +360,7 @@ def stories_iteration(request, group_slug, iteration_id, page=1):
     text_search = request.GET.get("search","").strip()
     tags_search = request.GET.get("tags","").strip()
     category = request.GET.get("category","").strip()
+    clrbtn = request.GET.get("clearButton",'')
     only_assigned = request.GET.get("only_assigned", False)
     paged = "True" == request.GET.get("paged", "True")
     
@@ -374,11 +374,11 @@ def stories_iteration(request, group_slug, iteration_id, page=1):
     
     query_string = urllib.urlencode( {   'order_by':order_by, 
                                          'display_type':display_type, 
-                                         'search':text_search, 
-                                         'tags':tags_search, 
-                                         'category':category, 
+                                         'search':text_search.encode('utf-8'), 
+                                         'tags':tags_search.encode('utf-8'), 
+                                         'category':category.encode('utf-8'), 
                                          'only_assigned':only_assigned,
-                                         'clearButton':request.GET.get("clearButton",'')
+                                         'clearButton':clrbtn
                                          })
     has_next = False
     if text_search == "":
@@ -388,10 +388,7 @@ def stories_iteration(request, group_slug, iteration_id, page=1):
         stories = _getStoriesWithTextSearch( iteration, text_search, order_by, tags_search, category, only_assigned, request.user)
         # we need some fancy-schmancy searching
 
-    try:
-        organization = project.organization
-    except Organization.DoesNotExist:
-        organization = None
+    organization = _organizationOrNone( project )
     
     return render_to_response("stories/mini_story_list.html", {
       "stories": stories,
@@ -404,6 +401,13 @@ def stories_iteration(request, group_slug, iteration_id, page=1):
       "iteration_id": iteration.id,
       "organization": organization
     }, context_instance=RequestContext(request))
+
+def _organizationOrNone(project):
+    try:
+        organization = project.organization
+    except Organization.DoesNotExist:
+        organization = None
+    return organization
 
 def _getStoriesWithTextSearch( iteration, text_search, order_by, tags_search, category, only_assigned, user):
     search_results = SearchQuerySet().filter(project_id=iteration.project.id).filter(iteration_id=iteration.id).filter(content=text_search).models(Story).order_by(order_by).load_all()
