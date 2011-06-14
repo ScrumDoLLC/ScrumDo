@@ -128,6 +128,7 @@ def backlog(request, project, iteration, form):
         'add_story_form': add_story_form,
         "add_epic_form": add_epic_form,
         "current_view":"backlog_page",
+        "organization":project.organization,
         "show_epic":show_epic
       }, context_instance=RequestContext(request))
 

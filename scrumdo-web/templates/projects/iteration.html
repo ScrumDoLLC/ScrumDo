@@ -26,9 +26,6 @@
   {{ iteration.name }}
 {% endblock %}
 
-{% block extra_head %}
-  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.cookie.js"></script>
-{% endblock %}
 
 {% block add_story %}
     {% if user.is_authenticated %}
@@ -110,9 +107,9 @@
     
 {% endblock %}
 
-{% block extra_body %}
 
-<script type="text/javascript" src="{{STATIC_URL}}js/iteration.js"></script>
+
+{% block extra_body %}
 
 <script type="text/javascript">
 var project_slug = "{{ iteration.project.slug }}";
@@ -122,12 +119,31 @@ var static_url = "{{ STATIC_URL }}";
 var iteration_id = "{{ iteration.id }}";
 var iteration_list_url = "{% url iteration_list project.slug %}";
 var iteration_stats_url = "{% url iteration_stats project.slug iteration.id %}";
+</script>
 
+<script type="text/javascript" src="{{STATIC_URL}}js/jquery.cookie.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/iteration.js"></script>
+
+<script type="text/javascript">
 $(document).ready(function() 
 {
     {% if iteration.points_log.count %}
     generateBurnDown("#iterationBurndown", project_slug, iteration_id, 0);
     {% endif %}
+	
+	loadIteration(iteration_id, 1, "");
+	
+	$("#story_list").sortable({
+        update: updateStoryPosition,
+        tolerance: 'pointer',
+        distance: 5,
+        opacity: 0.6,
+        placeholder: "ui-state-highlight",
+        cancel: ".block_story_body"
+    });
+
+
+    
 });
 
 $(".hide_burndown_chart_link").click(function() {
@@ -153,6 +169,7 @@ _gaq.push(['_trackEvent', "ViewPage", "Iteration", "", 1]);
 {% endif %}
 
 </script>
+
 
     
 {% endblock %}

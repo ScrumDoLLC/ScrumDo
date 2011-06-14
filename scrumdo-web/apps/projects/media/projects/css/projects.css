@@ -675,4 +675,43 @@ div.add_task {
 	z-index: 8;
 }
 
+#epic_list {
+	margin-left: 0px;
+	padding-left: 0px;
+}
+.epic_block {
+	list-style: none;
+	border: 1px solid #bebebe;
+	margin-bottom: 5px;
+	padding: 5px;
+	
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;	
+}
+.epic_header {
+	font-weight: bold;
+}
+
+.on_active {
+    display: none;
+}
+.active .on_active {
+    display: inline;
+}
+
+.on_inactive {
+    display: inline;
+}
+.active .on_inactive {
+    display: none;
+}
+
+
+
+
+
+
+
+
 

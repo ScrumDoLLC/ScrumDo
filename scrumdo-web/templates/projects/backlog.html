@@ -26,9 +26,6 @@
   {{ iteration.name }}
 {% endblock %}
 
-{% block extra_head %}
-  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.cookie.js"></script>
-{% endblock %}
 
 {% block add_story %}
     {% if user.is_authenticated %}
@@ -59,20 +56,34 @@
             
         <div style="clear:both;">&nbsp;</div>
 
-        <img style="float:right" src="{{ STATIC_URL }}images/ajax-loader.gif" id="loadingIcon">
+        <img style="float:right" src="{{ STATIC_URL }}images/ajax-loader.gif" id="loaderoadingIcon">
         
 
 		<h1>Epics</h1>
 		<ul id="epic_list">
 			{% for epic in iteration.epics.all %}
-				<li>{{epic.summary}}</li>
+				<li class="epic_story_list">	
+					<div class="epic_block">
+						<h3 class="epic_header"><span class="on_active"><img src="{{STATIC_URL}}images/downTriangle.png"></span>
+												<span class="on_inactive"><img src="{{STATIC_URL}}images/rightTriangle.png"></span> 
+												#{{epic.local_id}} {{epic.summary}} {{epic.detail}} {{epic.points}}
+						</h3>
+						<ul class="epic_story_list_item">
+							{% for story in epic.stories.all %}
+								{% include "stories/single_block_story.html" %}
+							{% endfor %}
+						</ul>
+					</div>
+				</li>
 			{% endfor %}
 		</ul>
 
 		<h1>Stories</h1>
 		
         {% with iteration.id as iteration_id %}
-            {% include "stories/filter_form.html" %}
+			{% with 1 as backlog_mode %}
+              {% include "stories/filter_form.html" %}
+			{% endwith %}
         {% endwith %}         
        
         <ul id="story_list">
@@ -124,9 +135,6 @@
 
 {% block extra_body %}
 
-
-<script type="text/javascript" src="{{STATIC_URL}}js/iteration.js"></script>
-
 <script type="text/javascript">
 var project_slug = "{{ iteration.project.slug }}";
 var current_story_popup = "";
@@ -135,21 +143,60 @@ var static_url = "{{ STATIC_URL }}";
 var iteration_id = "{{ iteration.id }}";
 var iteration_list_url = "{% url iteration_list project.slug %}";
 var iteration_stats_url = "{% url iteration_stats project.slug iteration.id %}";
+</script>
 
+<script type="text/javascript" src="{{STATIC_URL}}js/jquery.cookie.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/jquery.collapse.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/iteration.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/backlog.js"></script>
 
+<script type="text/javascript">
+$(document).ready(function(){
+	// $("#story_list").sortable({
+	//         update: updateStoryPosition,
+	//         tolerance: 'pointer',
+	//         distance: 5,
+	//         opacity: 0.6,
+	//         placeholder: "ui-state-highlight",
+	//         cancel: ".block_story_body"
+	//     });
 
-$(document).ready(function() 
-{
-    {% if iteration.points_log.count %}
-    generateBurnDown("#iterationBurndown", project_slug, iteration_id, 0);
-    {% endif %}
+	loadIteration(iteration_id, 1, "backlog_mode=true");
+	
+	$(".epic_story_list_item").sortable({
+        update: updateStoryPosition,
+        tolerance: 'pointer',
+        distance: 5,
+        opacity: 0.6,
+        placeholder: "ui-state-highlight",
+        cancel: ".block_story_body",
+		connectWith: ".epic_story_list_item"
+    });
+
+	$(".epic_block").collapse({
+		head:"h3",
+		group:".epic_story_list_item",
+		show: function() {
+	        this.animate({
+	            opacity: 'toggle', 
+	            height: 'toggle'
+	        }, 300);
+		},
+		hide: function() {
+	        this.animate({
+	            opacity: 'toggle', 
+	            height: 'toggle'
+	        }, 300);
+		}
+	});
+	
+	
 });
+
 
 {% if GOOGLE_ANALYTICS %}
 _gaq.push(['_trackEvent', "ViewPage", "Backlog", "", 1]);
 {% endif %}
-
-
 </script>
     
 {% endblock %}

@@ -268,6 +268,7 @@ class Epic(models.Model):
     iteration = models.ForeignKey( Iteration , related_name="epics")
     project = models.ForeignKey( Project , related_name="epics")
     status = models.IntegerField( max_length=2, choices=STATUS_CHOICES, default=1 )
+    order = models.IntegerField( max_length=5, default=5000)
     
     def points_value(self):
         if self.points.lower() == "inf" :
@@ -308,7 +309,7 @@ class Story( models.Model ):
     extra_1 = models.TextField( blank=True , null=True)
     extra_2 = models.TextField( blank=True , null=True)
     extra_3 = models.TextField( blank=True , null=True)
-    epic = models.ForeignKey(Epic, null=True, blank=True)
+    epic = models.ForeignKey(Epic, null=True, blank=True, related_name="stories")
 
     tags_to_delete = []
     tags_to_add = []
