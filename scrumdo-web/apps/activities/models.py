@@ -63,8 +63,8 @@ class Activity(InheritanceCastModel):
     @staticmethod
     def getActivitiesForUser( userl ):
         # try to get from cache first
-        # activities = cache.get(str(userl.id)+"_activities")
-        activities = None
+        activities = cache.get(str(userl.id)+"_activities")
+        # activities = None
         if activities:
             return activities
         else:
