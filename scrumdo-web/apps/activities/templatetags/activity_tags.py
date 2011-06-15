@@ -26,7 +26,7 @@ def iteration_link(iteration, project):
 def story_link(s, project):
     url = iteration_uri(s.iteration, project)
     summary = escape(smart_truncate(s.summary,length=40))
-    return "<a href='%s#story_%s'> #%d %s</a>" % (url, s.id, s.local_id, summary )
+    return "<a title='%s' href='%s#story_%s'> #%d %s</a>" % (s.summary,url, s.id, s.local_id, summary )
 
 
 def smart_truncate(content, length=100, suffix='...'):

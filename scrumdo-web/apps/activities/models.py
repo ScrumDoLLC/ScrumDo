@@ -11,6 +11,7 @@ from activities.utils import allinstances, instanceof
 from scrumdo_model_utils.models import InheritanceCastModel
 
 import datetime
+import traceback
 import logging
 
 
@@ -62,7 +63,8 @@ class Activity(InheritanceCastModel):
     @staticmethod
     def getActivitiesForUser( userl ):
         # try to get from cache first
-        activities = cache.get(str(userl.id)+"_activities")
+        # activities = cache.get(str(userl.id)+"_activities")
+        activities = None
         if activities:
             return activities
         else:
@@ -87,7 +89,7 @@ class Activity(InheritanceCastModel):
                 try:
                     if a.name == "reordered" and len(acts) > 1:
                         story = acts[0].story
-                        return [IterationActivity(project = story.project, user=u, iteration=story.iteration, created=story.created, action=a, numstories=len(acts))]
+                        return [IterationActivity(project = story.project, user=acts[0].user, iteration=story.iteration, created=story.created, action=a, numstories=len(acts))]
                     elif allinstances(acts, StoryActivity):
                         # if they are the same action about the same story, together, only show the most recent one
                         return [list(acts)[0] for (st,s),acts in groupby(acts, lambda act: (act.story_id, act.status))]
