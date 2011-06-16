@@ -270,6 +270,9 @@ class Epic(models.Model):
     status = models.IntegerField( max_length=2, choices=STATUS_CHOICES, default=1 )
     order = models.IntegerField( max_length=5, default=5000)
     
+    def stories_by_order(self):
+        return self.stories.all().order_by("rank")
+    
     def points_value(self):
         if self.points.lower() == "inf" :
             return 0
@@ -284,6 +287,9 @@ class Epic(models.Model):
         else:
             local_id = self.local_id
         return u"Epic %d %s" % (local_id, self.summary)
+    class Meta:
+        ordering = [ 'order' ]
+    
 
     
 

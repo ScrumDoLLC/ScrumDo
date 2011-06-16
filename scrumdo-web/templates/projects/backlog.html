@@ -62,14 +62,14 @@
 		<h1>Epics</h1>
 		<ul id="epic_list">
 			{% for epic in iteration.epics.all %}
-				<li class="epic_story_list">	
+				<li class="epic_story_list" id="epic_{{epic.id}}">	
 					<div class="epic_block">
 						<h3 class="epic_header"><span class="on_active"><img src="{{STATIC_URL}}images/downTriangle.png"></span>
 												<span class="on_inactive"><img src="{{STATIC_URL}}images/rightTriangle.png"></span> 
 												#{{epic.local_id}} {{epic.summary}} {{epic.detail}} {{epic.points}}
 						</h3>
-						<ul class="epic_story_list_item">
-							{% for story in epic.stories.all %}
+						<ul class="epic_story_list_item" epic_id="{{epic.id}}" id="epic_{{epic.id}}_list">
+							{% for story in epic.stories_by_order %}
 								{% include "stories/single_block_story.html" %}
 							{% endfor %}
 						</ul>
@@ -163,14 +163,14 @@ $(document).ready(function(){
 
 	loadIteration(iteration_id, 1, "backlog_mode=true");
 	
-	$(".epic_story_list_item").sortable({
-        update: updateStoryPosition,
+	$(".epic_story_list_item, #story_list").sortable({
+        stop: updateBacklogStoryPosition,
         tolerance: 'pointer',
         distance: 5,
         opacity: 0.6,
         placeholder: "ui-state-highlight",
         cancel: ".block_story_body",
-		connectWith: ".epic_story_list_item"
+		connectWith: ".epic_story_list_item, #story_list"
     });
 
 	$(".epic_block").collapse({

@@ -159,6 +159,17 @@ def reorder_story( request, group_slug, story_id):
         if request.POST.get("action","") == "reorder" :
             reorderStory( story, request.POST.get("before"), request.POST.get("after"), iteration)
             story.activity_signal.send(sender=story, user=request.user, story=story, action="reordered", project=project)
+        
+        if request.POST.get("epic","-1") != "-1":
+            epic_id = request.POST.get("epic")
+            epic = Epic.objects.get(id=epic_id)
+            if epic and epic.project == project:
+                story.epic = epic
+        elif request.POST.get("epic","") == "-1":
+            # Explicitly moving it out of any epic
+            story.epic = None
+            
+        
         story.iteration = iteration;
         story.save()
         
