@@ -273,6 +273,14 @@ class Epic(models.Model):
     def stories_by_order(self):
         return self.stories.all().order_by("rank")
     
+    
+    def normalized_points_value(self):
+        "Returns the point value of this epic, minus the point value of the stories within it, minimum of 0"
+        pv = self.points_value()
+        for story in self.stories.all():
+            pv -= story.points_value()
+        return max(pv, 0)
+    
     def points_value(self):
         if self.points.lower() == "inf" :
             return 0

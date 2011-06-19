@@ -13,7 +13,7 @@ def onDemandCalculateVelocity( project ):
         return
     calculateProject( project )
 
-def calculatePoints( stories ):
+def calculatePoints( stories, epics ):
     points_total = 0;
     points_claimed = 0;
     for story in stories:
@@ -26,7 +26,13 @@ def calculatePoints( stories ):
         except ValueError:
             pass # probably ? or infinity
 
-    #print (points_total, points_claimed)
+    for epic in epics:
+        try:
+            points_total += epic.normalized_points_value()
+        except ValueError:
+            pass
+        
+
     return (points_total, points_claimed)
 
 def calculateProjectVelocity( project, total_project_points ):
@@ -102,8 +108,10 @@ def logPoints( related_object, points_claimed, points_total ):
 def calculateProject( project ):
     if not project.active:
         return
-    stories = project.stories.all();
-    points = calculatePoints( stories )
+    stories = project.stories.all()
+    epics = project.epics.all()
+    points = calculatePoints( stories, epics )
+
     total_project_points = points[0]
 
     today = date.today()
@@ -121,7 +129,7 @@ def calculateProject( project ):
 
     for iteration in project.iterations.filter( start_date__lte=tomorrow, end_date__gte=yesterday):
         if( iteration != project.get_default_iteration() ):
-            points = calculatePoints( iteration.stories.all() );
+            points = calculatePoints( iteration.stories.all(), [] );
             if points[0] > 0:  # only logging active iterations with stuff in them
                 logPoints(iteration, points[1], points[0])
                 # log = PointsLog( points_claimed=points[1], points_total=points[0], related_object=iteration)
