@@ -13,6 +13,7 @@
 {% load wiki_tags %}
 {% load theme_tags %}
 {% load iteration_tags %}
+{% load story_tags %}
 
 {% block head_title %}{{ project.name }}{% endblock %}
 
@@ -59,25 +60,6 @@
         <img style="float:right" src="{{ STATIC_URL }}images/ajax-loader.gif" id="loaderoadingIcon">
         
 
-		<h1>Epics</h1>
-		<ul id="epic_list">
-			{% for epic in iteration.epics.all %}
-				<li class="epic_story_list" id="epic_{{epic.id}}">	
-					<div class="epic_block">
-						<h3 class="epic_header"><span class="on_active"><img src="{{STATIC_URL}}images/downTriangle.png"></span>
-												<span class="on_inactive"><img src="{{STATIC_URL}}images/rightTriangle.png"></span> 
-												#{{epic.local_id}} {{epic.summary}} {{epic.detail}} {{epic.points}}
-						</h3>
-						<ul class="epic_story_list_item" epic_id="{{epic.id}}" id="epic_{{epic.id}}_list">
-							{% for story in epic.stories_by_order %}
-								{% include "stories/single_block_story.html" %}
-							{% endfor %}
-						</ul>
-					</div>
-				</li>
-			{% endfor %}
-		</ul>
-
 		<h1>Stories</h1>
 		
         {% with iteration.id as iteration_id %}
@@ -86,10 +68,35 @@
 			{% endwith %}
         {% endwith %}         
        
-        <ul id="story_list">
+        <ul id="story_list" style="min-height:20px">
 
         </ul>
     
+
+		<h1>Epics</h1>
+		<ul id="epic_list">
+			{% for epic in iteration.epics.all %}
+				<li class="epic_story_list" id="epic_{{epic.id}}">	
+					<div class="epic_block">
+						<h3 class="epic_header"><!-- <span class="on_active"><img src="{{STATIC_URL}}images/downTriangle.png"></span>
+																		<span class="on_inactive"><img src="{{STATIC_URL}}images/rightTriangle.png"></span>  -->
+												#E{{epic.local_id}} {{epic.summary}}  
+												{% if epic.points_value %}
+												<div class="pointsBox">{{ epic|show_points }}</div>
+												{% endif %}
+						</h3>
+						{{epic.detail}}
+						<div class="epic_list_holder">
+							<ul class="epic_story_list_item" epic_id="{{epic.id}}" id="epic_{{epic.id}}_list">
+								{% for story in epic.stories_by_order %}
+									{% include "stories/single_block_story.html" %}
+								{% endfor %}
+							</ul>
+						</div>
+					</div>
+				</li>
+			{% endfor %}
+		</ul>
     
 
       <div id="subIterationList" style="display:none">
@@ -167,29 +174,41 @@ $(document).ready(function(){
         stop: updateBacklogStoryPosition,
         tolerance: 'pointer',
         distance: 5,
-        opacity: 0.6,
+		dropOnEmpty: true,
+        opacity: 0.5,
+		greedy: true,
         placeholder: "ui-state-highlight",
         cancel: ".block_story_body",
-		connectWith: ".epic_story_list_item, #story_list"
+		connectWith: ".epic_story_list_item, #story_list, .epic_block"
     });
 
-	$(".epic_block").collapse({
-		head:"h3",
-		group:".epic_story_list_item",
-		show: function() {
-	        this.animate({
-	            opacity: 'toggle', 
-	            height: 'toggle'
-	        }, 300);
-		},
-		hide: function() {
-	        this.animate({
-	            opacity: 'toggle', 
-	            height: 'toggle'
-	        }, 300);
-		}
-	});
-	
+	// $('.epic_block').droppable(
+	// {
+	//   accept: '.epic_story_list_item li, #story_list li',
+	//   drop: function(event, ui)
+	//   {
+	//     ui.draggable.clone().attr("style", "").appendTo( $(this).find("ul") );
+	//     ui.draggable.remove();
+	//   }
+	// });
+	// 
+	// $(".epic_block").collapse({
+	// 	head:"h4",
+	// 	group:".epic_story_list_item",
+	// 	show: function() {
+	//         this.animate({
+	//             opacity: 'toggle', 
+	//             height: 'toggle'
+	//         }, 200);
+	// 	},
+	// 	hide: function() {
+	//         this.animate({
+	//             opacity: 'toggle', 
+	//             height: 'toggle'
+	//         }, 100);
+	// 	}
+	// });
+	// 
 	
 });
 

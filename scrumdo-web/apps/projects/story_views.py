@@ -373,6 +373,7 @@ def stories_iteration(request, group_slug, iteration_id, page=1):
     category = request.GET.get("category","").strip()
     clrbtn = request.GET.get("clearButton",'')
     only_assigned = request.GET.get("only_assigned", False)
+    backlog_mode = request.GET.get("backlog_mode", False)
     paged = "True" == request.GET.get("paged", "True")
     
     if request.GET.get("clearButton") == "Clear Filter":
@@ -383,6 +384,7 @@ def stories_iteration(request, group_slug, iteration_id, page=1):
     if only_assigned == "False":
         only_assigned = False
     
+    # Store the query string, so it can be passed back for subsequent page requests.
     query_string = urllib.urlencode( {   'order_by':order_by, 
                                          'display_type':display_type, 
                                          'search':text_search.encode('utf-8'), 
@@ -394,10 +396,10 @@ def stories_iteration(request, group_slug, iteration_id, page=1):
     has_next = False
     if text_search == "":
         # Don't need to consult our solr search engine.
-        has_next, stories = _getStoriesNoTextSearch( iteration, order_by, tags_search, category, only_assigned, request.user, paged, page)
+        has_next, stories = _getStoriesNoTextSearch( iteration, order_by, tags_search, category, only_assigned, request.user, paged, page, backlog_mode)
     else:
-        stories = _getStoriesWithTextSearch( iteration, text_search, order_by, tags_search, category, only_assigned, request.user)
         # we need some fancy-schmancy searching
+        stories = _getStoriesWithTextSearch( iteration, text_search, order_by, tags_search, category, only_assigned, request.user, backlog_mode)        
 
     organization = _organizationOrNone( project )
     
@@ -420,7 +422,7 @@ def _organizationOrNone(project):
         organization = None
     return organization
 
-def _getStoriesWithTextSearch( iteration, text_search, order_by, tags_search, category, only_assigned, user):
+def _getStoriesWithTextSearch( iteration, text_search, order_by, tags_search, category, only_assigned, user, backlog_mode):
     search_results = SearchQuerySet().filter(project_id=iteration.project.id).filter(iteration_id=iteration.id).filter(content=text_search).models(Story).order_by(order_by).load_all()
     if tags_search != "":
         search_results = search_results.filter(tags=tags_search)
@@ -431,7 +433,7 @@ def _getStoriesWithTextSearch( iteration, text_search, order_by, tags_search, ca
     stories = [ result.object for result in search_results]
     return stories
 
-def _getStoriesNoTextSearch( iteration, order_by, tags_search, category, only_assigned, user, paged, page):
+def _getStoriesNoTextSearch( iteration, order_by, tags_search, category, only_assigned, user, paged, page, backlog_mode):
     tags_list = re.split('[, ]+', tags_search)
 
     stories = iteration.stories
@@ -450,6 +452,8 @@ def _getStoriesNoTextSearch( iteration, order_by, tags_search, category, only_as
         stories = stories.filter(assignee=user)        
     if category:
         stories = stories.filter(category=category)
+    if backlog_mode:
+        stories = stories.filter(epic=None)
 
     stories = stories.select_related('project', 'project__organization','project__organization__subscription', 'iteration',)
     

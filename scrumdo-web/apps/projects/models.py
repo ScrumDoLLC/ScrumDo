@@ -280,6 +280,12 @@ class Epic(models.Model):
             return float(self.points)
         except:
             return 0
+            
+    def getPointsLabel(self):
+        result = filter( lambda v: v[0]==self.points, Project.POINT_RANGES[ self.project.point_scale_type ] )
+        if len(result) > 0:
+            return result[0][1]
+        return self.points
 
     def __unicode__(self):
         if self.local_id == None:

@@ -4,13 +4,16 @@ function updateBacklogStoryPosition(event, ui)
     $("#loadingIcon").show();
     
     
-
+    console.log("UBSP");
     
     
     var ind = ui.item.index();
     var before = "";
     var after = "";
     var epic = ui.item.parent().attr("epic_id");
+
+    console.log(ui.item.parent().attr("epic_id"));
+
     
     children = ui.item.parent().children();
     

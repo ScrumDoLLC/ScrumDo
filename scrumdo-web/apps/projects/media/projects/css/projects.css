@@ -147,6 +147,14 @@
 .storyIcons {
   float: right;
   margin-top: 4px;
+  opacity: 0.1;
+}
+
+.block_story_body:hover .storyIcons, .block_story_body:focus .storyIcons {
+  opacity: 1;
+}
+.scrum_board_story_block:hover .storyIcons, .scrum_board_story_block:focus .storyIcons {
+  opacity: 1;
 }
 
 .storyIcons img {
@@ -679,25 +687,45 @@ div.add_task {
 	margin-left: 0px;
 	padding-left: 0px;
 }
-.epic_block {
-	list-style: none;
+.epic_block {	
 	border: 1px solid #bebebe;
-	margin-bottom: 5px;
-	padding: 5px;
-	
 	-webkit-border-radius: 4px;
+	-webkit-border-top-right-radius: 0;
 	-moz-border-radius: 4px;
-	border-radius: 4px;	
+	-moz-border-radius-topright: 0;
+	border-radius: 4px;
+	border-top-right-radius: 0;	margin-bottom: 15px;
+
+	padding: 0 2px 5px 5px;
 }
 .epic_header {
 	font-weight: bold;
+	margin-top: 2px;
+	margin-bottom: 5px;
 }
 
+.epic_header .pointsBox {
+	width: 50px;
+}
+.epic_story_list {
+	list-style: none;
+}
 .on_active {
     display: none;
 }
 .active .on_active {
     display: inline;
+}
+
+.epic_list_holder {	
+
+}
+
+.epic_block .ui-sortable {
+
+	min-height: 25px;
+	padding-top: 5px;
+	padding-right: 5px;	
 }
 
 .on_inactive {
