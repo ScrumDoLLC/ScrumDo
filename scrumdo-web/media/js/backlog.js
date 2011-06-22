@@ -1,3 +1,32 @@
+
+function setSmallEpics()
+{
+    $(".epic_list_holder").slideUp();
+    $(".epic_detail").slideUp();
+    $(".epicPointsBox").slideUp();
+      
+}
+function setMedEpics()
+{
+    $(".epic_list_holder").slideUp();
+    $(".epic_detail").slideDown();
+    $(".epicPointsBox").slideDown();
+}
+function setBigEpics()
+{
+    $(".epic_list_holder").slideDown();
+    $(".epic_detail").slideDown();   
+    $(".epicPointsBox").slideDown();
+}
+
+$(document).ready(function(){
+    $( "#size-options" ).buttonset();
+    $("#small_epics").click( setSmallEpics );
+    $("#med_epics").click( setMedEpics );
+    $("#big_epics").click( setBigEpics );
+         
+});
+
 function updateBacklogStoryPosition(event, ui)
  {
     $("#loadingIcon").show();
