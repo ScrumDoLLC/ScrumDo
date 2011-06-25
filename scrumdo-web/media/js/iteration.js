@@ -146,11 +146,6 @@ function moveCurrentlyOpenStoryToIteration(iteration_id)
 }
 
 
-function updateStoryList()
-{
-    loadIteration(iteration_id, 1, "");
-    updatePanel();
-}
 
 /**
  * Updates the left hand side panel with number of stories in the iterations and the stats 

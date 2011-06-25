@@ -158,6 +158,13 @@ $(document).ready(function(){
 
 	loadIteration(iteration_id, 1, "backlog_mode=true");
 	
+	function updateStoryList()
+	{
+	    loadIteration(iteration_id, 1, "backlog_mode=true");
+	    updatePanel();
+	}
+	
+	
 	$("#epic_list").sortable({
 		tolerance: 'pointer',
         distance: 5,
@@ -175,41 +182,12 @@ $(document).ready(function(){
         cancel: ".block_story_body",
 		connectWith: ".epic_story_list_item, #story_list, .epic_block"
     });
-
-	// $('.epic_block').droppable(
-	// {
-	//   accept: '.epic_story_list_item li, #story_list li',
-	//   drop: function(event, ui)
-	//   {
-	//     ui.draggable.clone().attr("style", "").appendTo( $(this).find("ul") );
-	//     ui.draggable.remove();
-	//   }
-	// });
-	// 
-	// $(".epic_block").collapse({
-	// 	head:"h4",
-	// 	group:".epic_story_list_item",
-	// 	show: function() {
-	//         this.animate({
-	//             opacity: 'toggle', 
-	//             height: 'toggle'
-	//         }, 200);
-	// 	},
-	// 	hide: function() {
-	//         this.animate({
-	//             opacity: 'toggle', 
-	//             height: 'toggle'
-	//         }, 100);
-	// 	}
-	// });
-	// 
 	
 });
 
 
 {% if GOOGLE_ANALYTICS %}
-_gaq.push(['_trackEvent', "ViewPage", "Backlog", "", 1]);
+  _gaq.push(['_trackEvent', "ViewPage", "Backlog", "", 1]);
 {% endif %}
-</script>
-    
+</script>  
 {% endblock %}

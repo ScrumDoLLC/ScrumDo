@@ -164,6 +164,13 @@ $(".hide_burndown_chart_link").click(function() {
 
 });
 
+
+function updateStoryList()
+{
+    loadIteration(iteration_id, 1, "");
+    updatePanel();
+}
+
 {% if GOOGLE_ANALYTICS %}
 _gaq.push(['_trackEvent', "ViewPage", "Iteration", "", 1]);
 {% endif %}

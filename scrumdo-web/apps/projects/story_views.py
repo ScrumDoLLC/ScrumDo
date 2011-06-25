@@ -355,6 +355,17 @@ def stories_scrum_board(request, group_slug, iteration_id, status):
     }, context_instance=RequestContext(request))
 
 
+@login_required
+def epic(request, epic_id):
+    "Returns a snippet of html suitable for use in replacing an epic block on the backlog pages."
+    epic = get_object_or_404(Epic, id=epic_id)
+    project = epic.project
+    read_access_or_403(project,request.user)
+    return render_to_response("projects/epic.html", {
+    "epic": epic,
+    "project":project
+    }, context_instance=RequestContext(request))
+
 # Returns the stories for a given iteration as an html snippet.  The iteration planning page uses this
 # uplon load, and then also upon filtering by the user
 @login_required

@@ -19,19 +19,15 @@ function setBigEpics()
     $(".epicPointsBox").slideDown();
 }
 
-$(document).ready(function(){
-    $( "#size-options" ).buttonset();
-    $("#small_epics").click( setSmallEpics );
-    $("#med_epics").click( setMedEpics );
-    $("#big_epics").click( setBigEpics );
-    
-    $(".show_assigned_stories").click(function(){
-       $(this).siblings(".epic_assigned_stories").show();
-       $(this).hide();
-       return false;
+function reloadEpic( epic_id )
+{
+    $.ajax({
+        url: "/projects/epic/" + epic_id ,       
+        success: function(responseText) {
+            $("epic_" + epic_id).html(responseText);
+        }
     });
-         
-});
+}
 
 function updateBacklogStoryPosition(event, ui)
  {
@@ -55,7 +51,6 @@ function updateBacklogStoryPosition(event, ui)
         epic = -1;
     }
     
-    
     $.ajax({
         url: "/projects/project/" + project_slug + "/story/" + $(ui.item).attr("story_id") + "/reorder",
         data: ({
@@ -73,3 +68,19 @@ function updateBacklogStoryPosition(event, ui)
     });
 
 }
+
+
+
+$(document).ready(function(){
+    $( "#size-options" ).buttonset();
+    $("#small_epics").click( setSmallEpics );
+    $("#med_epics").click( setMedEpics );
+    $("#big_epics").click( setBigEpics );
+    
+    $(".show_assigned_stories").click(function(){
+       $(this).siblings(".epic_assigned_stories").show();
+       $(this).hide();
+       return false;
+    });
+         
+});
