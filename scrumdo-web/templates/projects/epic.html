@@ -2,16 +2,23 @@
 {% load story_tags %}
 <li class="epic_story_list" id="epic_{{epic.id}}" epic_id="{{epic.id}}">	
 	<div class="epic_block">						
-		
-		
+	
 		{% if epic.points_value %}
 		<div class="pointsBox epicPointsBox">{{ epic|show_points }}</div>
 		{% endif %}
 		
 		<div class="epic_gripper"></div>
+		{% canwrite project %}
+		<div class="epicIcons">
+	        <a onclick="jQuery.facebox({ ajax: '/projects/project/{{ project.slug }}/epic/{{ epic.id }}/edit'}, 'edit_epic'); return false;" 
+			   href="#"><img title="Edit Epic" src="{{ STATIC_URL }}pinax/images/silk/icons/pencil.png" /></a>
+		</div>
+	    {% endcanwrite %}
 		<h3 class="epic_header">								
 			#E{{epic.local_id}} {{epic.summary}}  
 		</h3>
+		
+
 		
 		<span class="epic_detail">{{epic.detail}}</span>
 		<div class="epic_list_holder">

@@ -150,7 +150,13 @@
   opacity: 0.1;
 }
 
-.block_story_body:hover .storyIcons, .block_story_body:focus .storyIcons {
+.epicIcons {
+  float: right;
+  margin-top: 4px;
+  margin-right: 10px;
+  opacity: 0.1;
+}
+.block_story_body:hover .storyIcons, .block_story_body:focus .storyIcons, .epic_block:hover .epicIcons, .epic_block:focus .epicIcons {
   opacity: 1;
 }
 .scrum_board_story_block:hover .storyIcons, .scrum_board_story_block:focus .storyIcons {

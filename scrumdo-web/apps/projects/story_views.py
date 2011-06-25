@@ -163,7 +163,10 @@ def reorder_epic( request, group_slug, epic_id):
         return HttpResponse("OK")
     return  HttpResponse("Fail")
 
-
+@login_required
+def edit_epic(request, group_slug, epic_id):
+    return render_to_response("projects/epic_edit.html", {
+      }, context_instance=RequestContext(request))
 
 # This is the request handler that gets called from the story_list and iteraqtion pages when the user drags & drops a story to a
 # new ranking or a new iteration.  It should have two post variables, index and iteration
