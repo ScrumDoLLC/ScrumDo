@@ -81,38 +81,8 @@
 		</div>
 				<h1>Epics</h1>
 		<ul id="epic_list">
-			{% for epic in iteration.epics.all %}
-				<li class="epic_story_list" id="epic_{{epic.id}}">	
-					<div class="epic_block">						
-						
-						
-						{% if epic.points_value %}
-						<div class="pointsBox epicPointsBox">{{ epic|show_points }}</div>
-						{% endif %}
-						
-						<div class="epic_gripper"></div>
-						<h3 class="epic_header"><!-- <span class="on_active"><img src="{{STATIC_URL}}images/downTriangle.png"></span>
-																		<span class="on_inactive"><img src="{{STATIC_URL}}images/rightTriangle.png"></span>  -->
-												#E{{epic.local_id}} {{epic.summary}}  
-						</h3>
-						
-						<span class="epic_detail">{{epic.detail}}</span>
-						<div class="epic_list_holder">
-							<ul class="epic_story_list_item" epic_id="{{epic.id}}" id="epic_{{epic.id}}_list">
-								{% for story in epic.stories_by_order %}
-								   {% ifequal story.iteration.id iteration.id %}
-									  {% include "stories/single_block_story.html" %}
-								   {% else %}
-								     <div style="opacity:0.5">
- 									   Scheduled for {{ story.iteration.name }}:
-								       {% include "stories/single_block_story.html" %}								       
-								     </div>
-  								   {% endifequal %}
-								{% endfor %}
-							</ul>
-						</div>
-					</div>
-				</li>
+			{% for epic in epics %}
+				{% include "projects/epic.html" %}
 			{% endfor %}
 		</ul>
     

@@ -729,15 +729,16 @@ div.add_task {
 	padding-right: 5px;	
 }
 
+.epic_assigned_stories {
+	padding-right: 5px;
+}
+
 .on_inactive {
     display: inline;
 }
 .active .on_inactive {
     display: none;
 }
-
-
-
 
 .epic_gripper {
     -webkit-border-radius: 4px;
@@ -751,3 +752,12 @@ div.add_task {
     margin-left: -3px;
     margin-right: -3px;
 }
+
+.epic_iteration_note {
+	background-color: #e0e0e0;
+	border-top: 1px solid #c2c2c2;
+	border-left: 1px solid #c2c2c2;
+	border-right: 1px solid #c2c2c2;
+	padding-left: 15px;
+}
+

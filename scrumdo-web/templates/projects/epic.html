@@ -1,0 +1,44 @@
+{% load projects_tags %}
+{% load story_tags %}
+
+<li class="epic_story_list" id="epic_{{epic.id}}">	
+	<div class="epic_block">						
+		
+		
+		{% if epic.points_value %}
+		<div class="pointsBox epicPointsBox">{{ epic|show_points }}</div>
+		{% endif %}
+		
+		<div class="epic_gripper"></div>
+		<h3 class="epic_header">								
+			#E{{epic.local_id}} {{epic.summary}}  
+		</h3>
+		
+		<span class="epic_detail">{{epic.detail}}</span>
+		<div class="epic_list_holder">
+			{% with epic.stories_by_order as stories %}
+				<ul class="epic_story_list_item" epic_id="{{epic.id}}" id="epic_{{epic.id}}_list">
+					{% for story in stories.0 %}
+					   {% ifequal story.iteration.id iteration.id %}
+						  {% include "stories/single_block_story.html" %}								  
+					   {% endifequal %}
+					{% endfor %}
+				</ul>
+				{% if stories.1.count %}
+				<a href="#" class="show_assigned_stories">{{ stories.1.count }} more stories</a>
+				<ul style="display:none" class="epic_assigned_stories">
+					{% for story in stories.1 %}
+					   {% ifequal story.iteration.id iteration.id %}									  
+					   {% else %}
+					     <div style="opacity:0.5" class="other_iteration_story">
+						   <div class="epic_iteration_note">In <a href="{% url iteration project.slug story.iteration.id %}">{{ story.iteration.name }}</a>:</div>
+					       {% include "stories/single_block_story.html" %}								       
+					     </div>
+					   {% endifequal %}
+					{% endfor %}
+				</ul>
+				{% endif %}
+			{% endwith %}
+		</div>
+	</div>
+</li>

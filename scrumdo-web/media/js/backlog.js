@@ -24,6 +24,12 @@ $(document).ready(function(){
     $("#small_epics").click( setSmallEpics );
     $("#med_epics").click( setMedEpics );
     $("#big_epics").click( setBigEpics );
+    
+    $(".show_assigned_stories").click(function(){
+       $(this).siblings(".epic_assigned_stories").show();
+       $(this).hide();
+       return false;
+    });
          
 });
 

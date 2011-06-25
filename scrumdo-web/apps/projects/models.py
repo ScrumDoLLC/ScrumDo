@@ -271,7 +271,7 @@ class Epic(models.Model):
     order = models.IntegerField( max_length=5, default=5000)
     
     def stories_by_order(self):
-        return self.stories.all().order_by("rank")
+        return (self.stories.all().order_by("rank").filter(iteration=self.iteration), self.stories.all().order_by("rank").exclude(iteration=self.iteration))
     
     
     def normalized_points_value(self):

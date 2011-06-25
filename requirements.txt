@@ -8,3 +8,4 @@ pysolr
 django-haystack==1.1
 mysql-python
 pil
+Werkzeug

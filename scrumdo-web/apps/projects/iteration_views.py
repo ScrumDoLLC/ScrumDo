@@ -124,6 +124,7 @@ def backlog(request, project, iteration, form):
         "iteration": iteration,
         "iterationinfo": True,
         "project" : project,
+        "epics": iteration.epics.all(),
         "iteration_form": form,
         'add_story_form': add_story_form,
         "add_epic_form": add_epic_form,

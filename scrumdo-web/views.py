@@ -16,16 +16,19 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 from django.shortcuts import render_to_response, get_object_or_404
-from projects.models import SiteStats
 from django.template import RequestContext
 from django.http import HttpResponse
 from django.core import serializers
+from django.core.exceptions import PermissionDenied
+from django.contrib.auth.decorators import login_required
+from django.db import connection
 from datetime import datetime, date
+
 import time
 import json
-from django.contrib.auth.decorators import login_required
-from projects.models import Project
-from django.db import connection
+
+from projects.models import Project, SiteStats
+
 
 @login_required
 def stats(request):

@@ -14,45 +14,35 @@
 # You should have received a copy (See file COPYING) of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-
 import sys
+import urllib
+import re
+import logging
 
-from django.shortcuts import render_to_response, get_object_or_404
-from django.template import RequestContext
-from django.http import HttpResponseRedirect, HttpResponseForbidden
-from django.core.urlresolvers import reverse
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
+from django.core.urlresolvers import reverse
+from django.core import serializers
+from django.core.exceptions import PermissionDenied
+from django.core.paginator import Paginator, InvalidPage, EmptyPage
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
+from django.shortcuts import render_to_response, get_object_or_404
+from django.template import RequestContext
 from django.utils.datastructures import SortedDict
 from django.utils.translation import ugettext_lazy as _
-from django.http import HttpResponse
-from django.core import serializers
-from django.core.paginator import Paginator, InvalidPage, EmptyPage
+
 from haystack.query import SearchQuerySet
-
-from projects.calculation import onDemandCalculateVelocity
-
-
 from xlrd import open_workbook
 
-from django.conf import settings
-import urllib
-import re
-
-if "notification" in settings.INSTALLED_APPS:
-    from notification import models as notification
-else:
-    notification = None
-
-from projects.models import Project, ProjectMember, Iteration, Story, STATUS_REVERSE
+from projects.models import Project, ProjectMember, Iteration, Story, STATUS_REVERSE, Epic
 from projects.forms import *
 from projects.access import *
+from projects.calculation import onDemandCalculateVelocity
+import activities.utils as utils
 import projects.signals as signals
 
-import logging
-
-import activities.utils as utils
 
 logger = logging.getLogger(__name__)
 
@@ -70,8 +60,9 @@ def set_story_status( request, group_slug, story_id, status):
         statuses = [None, "TODO", "In Progress", "Reviewing", "Done"]
         story.activity_signal.send(sender=story, user=request.user, story=story, action="changed status", status=statuses[status], project=story.project)
         onDemandCalculateVelocity( story.project )
-
+    
     organization = _organizationOrNone( story.project )
+
     if( request.POST.get("return_type","mini") == "mini"):
         return render_to_response("stories/single_mini_story.html", {
             "story": story,
@@ -86,6 +77,13 @@ def set_story_status( request, group_slug, story_id, status):
             "project": story.project,
             "organization": organization
       }, context_instance=RequestContext(request))
+    return render_to_response("stories/single_block_story.html", {
+            "story": story,
+            "return_type": "block",
+            "project": story.project,
+            "organization": organization
+      }, context_instance=RequestContext(request))
+      
 
 
 @login_required
@@ -488,14 +486,21 @@ def _handleAddStoryInternal( form , project, request):
     story.project = project
     story.creator = request.user
     iteration_id = request.POST.get("iteration",None)
+    epic_id = request.POST.get("epic",None)
+    
     if iteration_id != None:
         iteration = get_object_or_404(Iteration, id=iteration_id)
-        if iteration.project != project:
-            # Shenanigans!
-            raise PermissionDenied()
+        if iteration.project != project:            
+            raise PermissionDenied() # Shenanigans!
         story.iteration = iteration
     else:
         story.iteration = project.get_default_iteration()
+
+    if epic_id != None and epic_id != "":
+        epic = Epic.objects.get(id=epic_id)
+        if epic.project != project:
+            raise PermissionDenied() # Shenanigans!
+        story.epic = epic
 
     try:
         general_rank = int(form.cleaned_data['general_rank'])
