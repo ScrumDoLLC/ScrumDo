@@ -25,8 +25,8 @@ class StoryIndex(RealTimeSearchIndex):
         except Exception as e:
             logger.error("Story Index super failed to run! %s" % e)
             traceback.print_exc()
-            
-            
+
+
         fields = ('user_id','category','status','numeric_points','tags')
         for field in fields:
             if not field in self.prepared_data:

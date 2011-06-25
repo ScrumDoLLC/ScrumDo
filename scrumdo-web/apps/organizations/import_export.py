@@ -63,9 +63,9 @@ def export_organization( organization ):
     _write_headers( projects_ws, [("Project",250),("Stories",50),("Stories Claimed",60),("Points",50),("Points Claimed",60) ] )
     _write_headers( tags_ws, [("Project",250),("Tag",100),("Stories",50),("Stories Claimed",60),("Points",50),("Points Claimed",60) ] )
     _write_headers( iterations_ws, [("Project",250),("Iteration",100),("Start",80),("End",80),("Stories",50),("Stories Claimed",60),("Points",50),("Points Claimed",60) ] )
-    _write_headers( it_ws, [("Project",250),("Iteration",100),("Tag",110),("Start",80),("End",80),("Stories",50),("Stories Claimed",60),("Points",50),("Points Claimed",60) ] )    
+    _write_headers( it_ws, [("Project",250),("Iteration",100),("Tag",110),("Start",80),("End",80),("Stories",50),("Stories Claimed",60),("Points",50),("Points Claimed",60) ] )
     _write_headers( category_ws, [("Project",250),("Category",100),("Stories",50),("Stories Claimed",60),("Points",50),("Points Claimed",60) ] )
-    _write_headers( ic_ws, [("Project",250),("Iteration",100),("Category",110),("Start",80),("End",80),("Stories",50),("Stories Claimed",60),("Points",50),("Points Claimed",60) ] )    
+    _write_headers( ic_ws, [("Project",250),("Iteration",100),("Category",110),("Start",80),("End",80),("Stories",50),("Stories Claimed",60),("Points",50),("Points Claimed",60) ] )
 
 
     project_row = 1
@@ -131,26 +131,26 @@ def export_organization( organization ):
         iteration_categories_row += 1
         iterations_row += 1
         iteration_tags_row += 1
-        
+
         tags = {}
         categories = {}
-        
-        
+
+
         # Summarize the stories in each tag/category
         for story in stories:
             if story.category in categories:
                 categories[story.category].append(story)
             else:
                 categories[story.category] = [story]
-                
+
             for tag in story.story_tags.all():
                 tagname = tag.name
                 if tagname in tags:
                     tags[tagname].append( story )
                 else:
                     tags[tagname] = [story]
-         
-        # Write out the tag sheet           
+
+        # Write out the tag sheet
         for tag in tags :
             stories = tags[tag]
             completed_stories = [story for story in stories if story.status==Story.STATUS_DONE ]
@@ -176,19 +176,19 @@ def export_organization( organization ):
             itags = {}
             icategories = {}
             stories = iteration.stories.all()
-            
+
             # Summarize the stories in categories / tags
             for story in stories:
                 if story.category in icategories:
                     icategories[story.category].append(story)
                 else:
-                    icategories[story.category] = [story]                    
+                    icategories[story.category] = [story]
                 for tag in story.story_tags.all():
                     tagname = tag.name
                     if tagname in itags:
                         itags[tagname].append( story )
                     else:
-                        itags[tagname] = [story]            
+                        itags[tagname] = [story]
             completed_stories = [story for story in stories if story.status==Story.STATUS_DONE ]
             iterations_ws.write(iterations_row,1, iteration.name)
             iterations_ws.write(iterations_row,2, iteration.start_date , date_xf)
@@ -197,7 +197,7 @@ def export_organization( organization ):
             iterations_ws.write(iterations_row,5, len(completed_stories) )
             iterations_ws.write(iterations_row,6, reduce( lambda total,story: total+story.points_value(), stories, 0 ) )
             iterations_ws.write(iterations_row,7, reduce( lambda total,story: total+story.points_value(), completed_stories, 0 ) )
-            
+
             ic_ws.write(iteration_categories_row,1, iteration.name)
             ic_ws.write(iteration_categories_row,3, iteration.start_date , date_xf)
             ic_ws.write(iteration_categories_row,4, iteration.end_date , date_xf)
@@ -205,7 +205,7 @@ def export_organization( organization ):
             ic_ws.write(iteration_categories_row,6, len(completed_stories) )
             ic_ws.write(iteration_categories_row,7, reduce( lambda total,story: total+story.points_value(), stories, 0 ) )
             ic_ws.write(iteration_categories_row,8, reduce( lambda total,story: total+story.points_value(), completed_stories, 0 ) )
-            
+
             it_ws.write(iteration_tags_row,1, iteration.name)
             it_ws.write(iteration_tags_row,3, iteration.start_date , date_xf)
             it_ws.write(iteration_tags_row,4, iteration.end_date , date_xf)
@@ -225,7 +225,7 @@ def export_organization( organization ):
                 ic_ws.write(iteration_categories_row,7, reduce( lambda total,story: total+story.points_value(), stories, 0 ) )
                 ic_ws.write(iteration_categories_row,8, reduce( lambda total,story: total+story.points_value(), completed_stories, 0 ) )
                 iteration_categories_row += 1
-                
+
             for tag in itags :
                 stories = itags[tag]
                 completed_stories = [story for story in stories if story.status==Story.STATUS_DONE ]

@@ -16,13 +16,13 @@ def extra_buttons(extra_slug, projectOrIteration):
     else:
         project = projectOrIteration
         iteration = None
-        
-    extra = extras_manager.getExtra( extra_slug )        
+
+    extra = extras_manager.getExtra( extra_slug )
     return {'extra':extra, 'project':project, 'actions':extra.getExtraActions(project, iteration=iteration)}
 
-    
-    
-    
+
+
+
 @register.tag(name='ifloaded')
 def do_ifloaded(parser, token):
     bits = token.split_contents()[1:]

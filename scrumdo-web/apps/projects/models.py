@@ -124,7 +124,7 @@ class Project(Group):
         if self.epics.count() == 0:
             return 1
         return self.epics.order_by('-local_id')[0].local_id + 1
-        
+
     def getNextId( self ):
         if self.stories.count() == 0:
             return 1
@@ -269,18 +269,18 @@ class Epic(models.Model):
     project = models.ForeignKey( Project , related_name="epics")
     status = models.IntegerField( max_length=2, choices=STATUS_CHOICES, default=1 )
     order = models.IntegerField( max_length=5, default=5000)
-    
+
     def stories_by_order(self):
         return (self.stories.all().order_by("rank").filter(iteration=self.iteration), self.stories.all().order_by("rank").exclude(iteration=self.iteration))
-    
-    
+
+
     def normalized_points_value(self):
         "Returns the point value of this epic, minus the point value of the stories within it, minimum of 0"
         pv = self.points_value()
         for story in self.stories.all():
             pv -= story.points_value()
         return max(pv, 0)
-    
+
     def points_value(self):
         if self.points.lower() == "inf" :
             return 0
@@ -288,7 +288,7 @@ class Epic(models.Model):
             return float(self.points)
         except:
             return 0
-            
+
     def getPointsLabel(self):
         result = filter( lambda v: v[0]==self.points, Project.POINT_RANGES[ self.project.point_scale_type ] )
         if len(result) > 0:
@@ -303,9 +303,9 @@ class Epic(models.Model):
         return u"Epic %d %s" % (local_id, self.summary)
     class Meta:
         ordering = [ 'order' ]
-    
 
-    
+
+
 
 class Story( models.Model ):
     STATUS_TODO = 1

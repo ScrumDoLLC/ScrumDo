@@ -30,7 +30,7 @@ def import_story(request, project_slug, queue_id):
         story = StoryQueue.objects.get(id=queue_id)
     except:
         return HttpResponseRedirect(reverse("story_queue_url", kwargs={'project_slug':project_slug} ))
-        
+
     if story.project != project:
         # Shenanigans here!
         raise PermissionDenied()

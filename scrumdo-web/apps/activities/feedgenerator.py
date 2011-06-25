@@ -241,9 +241,9 @@ class Rss201rev2Feed(RssFeed):
             handler.addQuickElement(u"pubDate", rfc2822_date(item['pubdate']).decode('utf-8'))
         if item['comments'] is not None:
             handler.addQuickElement(u"comments", item['comments'])
-        if item['unique_id'] is not None:            
+        if item['unique_id'] is not None:
             handler.addQuickElement(u"guid", item['unique_id'], {u"isPermaLink": "false"})
-            
+
         if item['ttl'] is not None:
             handler.addQuickElement(u"ttl", item['ttl'])
 

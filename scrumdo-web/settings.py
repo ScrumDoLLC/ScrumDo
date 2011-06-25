@@ -105,8 +105,8 @@ ADMIN_MEDIA_PREFIX = posixpath.join(STATIC_URL, "admin/")
 SECRET_KEY = 'cl@#$@#!%$^!42164363246y@18*^@-!+$fu^q!sa6yh2^'
 
 # List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (    
-    'django.template.loaders.filesystem.load_template_source',    
+TEMPLATE_LOADERS = (
+    'django.template.loaders.filesystem.load_template_source',
     'django.template.loaders.app_directories.load_template_source',
 )
 
@@ -200,7 +200,7 @@ INSTALLED_APPS = (
     'api',
     'developer',
     'haystack',
-    
+
    # 'debug_toolbar',
 )
 
@@ -271,5 +271,3 @@ try:
     from local_settings import *
 except ImportError as e:
     print "Could not import local_settings %s" % e
-
-

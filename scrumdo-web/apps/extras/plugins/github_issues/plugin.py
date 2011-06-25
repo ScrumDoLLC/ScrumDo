@@ -170,7 +170,7 @@ class Plugin( ScrumdoProjectExtra ):
 
     # def getExtraActions( self, project):
     #     return [("Synchronize",
-    #              "%s?syncronize=now" % reverse("configure_extra_url",kwargs={'project_slug':project.slug,'extra_slug':self.getSlug()}), 
+    #              "%s?syncronize=now" % reverse("configure_extra_url",kwargs={'project_slug':project.slug,'extra_slug':self.getSlug()}),
     #              'arrow_refresh')]
 
     def initialSync( self, project):

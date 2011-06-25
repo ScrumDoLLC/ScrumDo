@@ -47,7 +47,7 @@ def google_chart_url(iteration_or_project):
         claimed_dates = []
         claimed_values = []
         total_dates = []
-        total_values = []        
+        total_values = []
 
         # Chart Size...
         if hasattr(iteration_or_project,"slug"):
@@ -55,18 +55,18 @@ def google_chart_url(iteration_or_project):
             # Project charts are bigger than iteration charts.
         else:
             size = "550x80"
-        
+
         # Gather up all the points_log entries.
         for log in iteration_or_project.points_log.all():
             total_points.append( [log.timestamp(), log.points_total] )
             claimed_points.append( [log.timestamp(), log.points_claimed] )
-            if log.points_total > max_val: 
+            if log.points_total > max_val:
                 max_val = log.points_total
-    
+
         # If we don't have enough points to draw a chart, bail.
         if len(total_points) <= 1:
             return "cht=lxy&chs=1x1"
-        
+
         # Remove redundant data in chart data.
         total_points = reduce_burndown_data(total_points)
         claimed_points = reduce_burndown_data(claimed_points)
@@ -82,12 +82,12 @@ def google_chart_url(iteration_or_project):
         for piece in total_points:
             total_dates.append( _googleChartValue(piece[0], start_date, end_date) )
             total_values.append( _googleChartValue( piece[1] ,0, max_val) )
-        
+
         # Create the entries for the claimed points series.
         for piece in claimed_points:
             claimed_dates.append( _googleChartValue(piece[0], start_date, end_date) )
             claimed_values.append( _googleChartValue( piece[1] ,0, max_val) )
-        
+
         # Put it all together in google chart format.  (Docs: http://code.google.com/apis/chart/)
         data = "http://chart.googleapis.com/chart?chxr=0,0,%d&cht=lxy&chs=%s&chd=s:%s,%s,%s,%s&chxt=y,x&chxs=0,444444,8,0,lt&chxl=1:|%s|%s&chco=9ED147,197AFF&chm=B,7EAEE3,1,0,0|B,99CBB0,0,0,0" % ( max_val,size,"".join(claimed_dates), "".join(claimed_values), "".join(total_dates), "".join(total_values), start_date_s, end_date_s )
         #logger.debug(data)
@@ -95,15 +95,15 @@ def google_chart_url(iteration_or_project):
     except:
         return "cht=lxy&chs=1x1"
 
-        
+
 def _googleChartValue(val, min_val, max_val):
     """ Google charts can encode values in a 62 value range using alpha numeric characters.  This
         method does that for a given value, and a given range (min/max) of values """
     codes = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-    percent = (val-min_val) / float(max_val - min_val) 
+    percent = (val-min_val) / float(max_val - min_val)
     new_val = int( 61 * percent )
     return codes[ new_val ]
-            
+
 @register.filter("urlify2")
 def urlify2(value):
     return urlfinder.sub(r'<a target="_blank" href="\1">\1</a>', value)
@@ -134,10 +134,10 @@ def probable_email(user):
 @register.filter
 def gt(a, b):
     return a > b
-    
+
 @stringfilter
 def link_stories(value, project):
-    """ Creates links to stories in a body of text.  
+    """ Creates links to stories in a body of text.
         Example: 'Story #4' would open up the edit window for story with local_id #4 """
     def replaceLink( value ):
         try:
@@ -268,7 +268,7 @@ class CanEmailNode(template.Node):
             access = org_email_limit.increaseAllowed(organization=project.organization)
         else:
             access = personal_email_limit.increaseAllowed(project=project)
-        
+
         if access:
             output = self.nodelist.render(context)
             return output
@@ -310,4 +310,4 @@ class CanReadNode(template.Node):
             output = self.nodelist.render(context)
             return output
         else:
-            return "" 
+            return ""

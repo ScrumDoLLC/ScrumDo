@@ -14,34 +14,34 @@ from timezones.fields import TimeZoneField
 from emailconfirmation.signals import email_confirmed
 
 class Account(models.Model):
-    
+
     user = models.ForeignKey(User, unique=True, verbose_name=_('user'))
-    
+
     timezone = TimeZoneField(_('timezone'))
     language = models.CharField(_('language'), max_length=10, choices=settings.LANGUAGES, default=settings.LANGUAGE_CODE)
-    
+
     def __unicode__(self):
         return self.user.username
 
 
 class OtherServiceInfo(models.Model):
-    
+
     # eg blogrss, twitter_user, twitter_password
-    
+
     user = models.ForeignKey(User, verbose_name=_('user'))
     key = models.CharField(_('Other Service Info Key'), max_length=50)
     value = models.TextField(_('Other Service Info Value'))
-    
+
     class Meta:
         unique_together = [('user', 'key')]
-    
+
     def __unicode__(self):
         return u"%s for %s" % (self.key, self.user)
 
 def other_service(user, key, default_value=""):
     """
     retrieve the other service info for given key for the given user.
-    
+
     return default_value ("") if no value.
     """
     try:
@@ -53,7 +53,7 @@ def other_service(user, key, default_value=""):
 def update_other_services(user, **kwargs):
     """
     update the other service info for the given user using the given keyword args.
-    
+
     e.g. update_other_services(user, twitter_user=..., twitter_password=...)
     """
     for key, value in kwargs.items():

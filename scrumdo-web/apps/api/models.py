@@ -22,29 +22,29 @@ class DeveloperApiKey(models.Model):
     application_name = models.CharField(max_length=30)
     created = models.DateTimeField(default=datetime.now)
     approved = models.BooleanField(default=False)
-    
+
     def __unicode__(self):
         return u"%s for developer %s" % (self.key, self.developer)
-    
+
     def save(self, *args, **kwargs):
         if not self.key:
             self.key = generate_key()
-        
+
         return super(DeveloperApiKey, self).save(*args, **kwargs)
-    
+
 
 class UserApiKey(models.Model):
     user = models.ForeignKey(User, related_name='api_key')
     key = models.CharField(max_length=256, blank=True, default='')
     developer_key = models.ForeignKey(DeveloperApiKey,related_name="user_key")
-    
+
     created = models.DateTimeField(default=datetime.now)
-    
+
     def __unicode__(self):
         return u"%s for %s" % (self.key, self.user)
-    
+
     def save(self, *args, **kwargs):
         if not self.key:
             self.key = generate_key()
-        
+
         return super(UserApiKey, self).save(*args, **kwargs)

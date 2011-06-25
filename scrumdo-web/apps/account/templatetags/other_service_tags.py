@@ -10,12 +10,12 @@ class OtherServiceNode(template.Node):
         self.user = user
         self.key = key
         self.asvar = asvar
-    
+
     def render(self, context):
         user = self.user.resolve(context)
         key = self.key
         value = other_service(user, key)
-                    
+
         if self.asvar:
             context[self.asvar] = value
             return ''
@@ -38,5 +38,5 @@ def other_service_tag(parser, token):
         asvar = bits[4]
     else:
         raise template.TemplateSyntaxError("wrong number of arguments to %s" % bits[0])
-    
+
     return OtherServiceNode(user, key, asvar)

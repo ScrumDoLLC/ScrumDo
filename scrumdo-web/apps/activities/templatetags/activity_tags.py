@@ -18,7 +18,7 @@ def iteration_name(iteration):
             return "Iteration %s" % iteration.name
 
 def iteration_uri(iteration, project):
-        return reverse("iteration", args=[project.slug, iteration.id])
+    return reverse("iteration", args=[project.slug, iteration.id])
 
 def iteration_link(iteration, project):
     return ("<a href='%s'>" % iteration_uri(iteration, project)) + iteration_name(iteration) + "</a>"
@@ -66,8 +66,8 @@ def activity_object(activity):
                 return mark_safe(" for " + story_link(s, activity.project) + " in " + iteration_link(s.iteration, activity.project))
             else:
                 return mark_safe(story_link(s, activity.project) + " in " + iteration_link(s.iteration, activity.project))
-        
-        
+
+
         elif isinstance(activity,IterationActivity):
             if activity.numstories:
                 # this is a reorder activity

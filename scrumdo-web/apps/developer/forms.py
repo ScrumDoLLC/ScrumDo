@@ -5,4 +5,3 @@ class DeveloperApiKeyForm(forms.ModelForm):
     class Meta:
         model = DeveloperApiKey
         fields = ('application_name',)
-

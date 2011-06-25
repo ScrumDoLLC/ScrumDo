@@ -42,7 +42,7 @@ urlpatterns = patterns('projects.views',
     url(r'^project/(?P<group_slug>[-\w]+)/project_prediction$', 'project_prediction', name="project_prediction"),
     url(r'^project/(?P<group_slug>[-\w]+)/export$', 'export_project', name="export_project"),
     url(r'^project/(?P<group_slug>[-\w]+)/iteration_list$', 'iteration_list', name="iteration_list"),
-    
+
     # url(r'^project/(?P<group_slug>[-\w]+)/burnup_chart.png$', 'burnup_chart', name="burnup_chart"),
 
 )
@@ -55,7 +55,7 @@ urlpatterns += patterns('projects.iteration_views',
     url(r'^project/(?P<group_slug>[-\w]+)/iteration/(?P<iteration_id>[-\w]+)/export$', 'iteration_export', name="iteration_export"),
     url(r'^project/(?P<group_slug>[-\w]+)/iteration/(?P<iteration_id>[-\w]+)/report$', 'iteration_report', name="iteration_report"),
     url(r'^project/(?P<group_slug>[-\w]+)/iteration/(?P<iteration_id>[-\w]+)/board$', 'scrum_board', name="scrum_board"),
-    url(r'^project/(?P<group_slug>[-\w]+)/iteration/(?P<iteration_id>[-\w]+)/iteration_stats$', 'iteration_stats', name="iteration_stats"),    
+    url(r'^project/(?P<group_slug>[-\w]+)/iteration/(?P<iteration_id>[-\w]+)/iteration_stats$', 'iteration_stats', name="iteration_stats"),
     url(r'^project/(?P<group_slug>[-\w]+)/iteration/(?P<iteration_id>[-\w]+)$', 'iteration', name="iteration"),
 
 )
@@ -65,7 +65,7 @@ urlpatterns += patterns('projects.story_views',
     url(r'^project/(?P<group_slug>[-\w]+)/stories/$', 'stories', name="stories"),
     url(r'^project/(?P<group_slug>[-\w]+)/stories/createAsync$', 'ajax_add_story', name="ajax_add_story"),
     url(r'^project/(?P<group_slug>[-\w]+)/epics/createAsync$', 'ajax_add_epic', name="ajax_add_epic"),
-    
+
     url(r'^project/(?P<group_slug>[-\w]+)/stories/(?P<iteration_id>[-\w]+)/board/(?P<status>[-\w]+)$', 'stories_scrum_board', name="stories_scrum_board"),
     url(r'^project/(?P<group_slug>[-\w]+)/stories/(?P<iteration_id>[-\w]+)/(?P<page>[0-9]+)$', 'stories_iteration', name="stories_iteration"),
     url(r'^story/(?P<story_id>[-\w]+)/comments', 'story_comments'),

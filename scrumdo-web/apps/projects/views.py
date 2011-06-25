@@ -119,17 +119,17 @@ def usage(request):
         organizations = None
     else:
         organizations = Organization.getOrganizationsForUser( request.user )
-        
+
     return render_to_response("usage_restrictions.html", {"organizations":organizations}, context_instance=RequestContext(request))
 
 def remove_user( request, group_slug ):
-        project = get_object_or_404( Project, slug=group_slug )
-        admin_access_or_403(project, request.user )
-        user_id = int(request.POST.get("user_id"))
-        # logger.debug("Removing user %d from project %s" % (user_id, group_slug))
-        membership = project.members.get( user__id=user_id )
-        membership.delete()
-        return HttpResponse("ok")
+    project = get_object_or_404( Project, slug=group_slug )
+    admin_access_or_403(project, request.user )
+    user_id = int(request.POST.get("user_id"))
+    # logger.debug("Removing user %d from project %s" % (user_id, group_slug))
+    membership = project.members.get( user__id=user_id )
+    membership.delete()
+    return HttpResponse("ok")
 
 @login_required
 def activate( request, group_slug ):
@@ -145,7 +145,7 @@ def iteration_list(request, group_slug):
     admin_access_or_403(project, request.user, ignore_active=True)
     return render_to_response("projects/iteration_list.html", {"project":project}, context_instance=RequestContext(request))
 
-    
+
 # The project admin page, this is where you can change the title, description, etc. of a project.
 @login_required
 def project_admin( request, group_slug ):
@@ -191,10 +191,10 @@ def project_admin( request, group_slug ):
             project.active = False
             project.save()
             return HttpResponseRedirect( reverse("project_detail", kwargs={"group_slug":project.slug} ) )
-                
 
-            
-                
+
+
+
 
     if project.organization:
         organizations = None
@@ -425,7 +425,7 @@ def project(request, group_slug=None, form_class=ProjectUpdateForm, adduser_form
         project_form = form_class(instance=project)
 
     add_story_form = handleAddStory(request, project)
-    
+
 
     return render_to_response(template_name, {
         "project_form": project_form,
@@ -445,7 +445,7 @@ def project(request, group_slug=None, form_class=ProjectUpdateForm, adduser_form
 #     response = HttpResponse(data, mimetype="image/png")
 #     return response
 
-    
+
 
 
 # Drives the prediction page

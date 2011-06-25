@@ -40,11 +40,11 @@ def activities_test(request):
 @login_required
 def activity_subscriptions(request):
     organizations = Organization.getOrganizationsForUser(request.user)
-    
+
     subscription_objs =  ProjectEmailSubscription.objects.filter(user=request.user)
     if request.method == "POST":
         subscriptions = request.POST.getlist('subscriptions')
-        subscriptions = [int(sub) for sub in subscriptions]        
+        subscriptions = [int(sub) for sub in subscriptions]
         # remove any unchecked...
         for old_sub in subscription_objs:
             if not old_sub.project.id in subscriptions:
@@ -52,7 +52,7 @@ def activity_subscriptions(request):
         # add any new ones
         for new_sub in subscriptions:
             if len([ sub for sub in subscription_objs if sub.project.id==new_sub ]) == 0 :
-                project = Project.objects.get(id=new_sub)                
+                project = Project.objects.get(id=new_sub)
                 s = ProjectEmailSubscription( user=request.user, project=project)
                 s.save()
     else:

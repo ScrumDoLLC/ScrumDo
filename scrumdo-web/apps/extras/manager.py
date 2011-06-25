@@ -150,7 +150,7 @@ class ExtrasManager:
         project_signals.story_status_changed.connect(self.onStoryStatusChanged, dispatch_uid="extra_signal_hookup")
         project_signals.story_deleted.connect(self.onStoryDeleted, dispatch_uid="extra_signal_hookup")
         project_signals.story_created.connect(self.onStoryCreated, dispatch_uid="extra_signal_hookup")
-        
+
 
         project_signals.task_updated.connect(self.onTaskUpdated, dispatch_uid="extra_signal_hookup")
         project_signals.task_status_changed.connect(self.onTaskStatusChanged, dispatch_uid="extra_signal_hookup")

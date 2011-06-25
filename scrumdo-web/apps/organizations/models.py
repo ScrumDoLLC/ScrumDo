@@ -46,7 +46,7 @@ class Team(models.Model):
         if len(access) == 1:
             return access[0]
         return "Read Only"
-        
+
     def __unicode__(self):
         return "[%s] %s" % (self.organization.name, self.name)
 
@@ -59,7 +59,7 @@ class Organization(models.Model):
     creator = models.ForeignKey(User, verbose_name=_('creator'), related_name="organizations_created")
     created = models.DateTimeField(_('created'), default=datetime.datetime.now)
     description = models.TextField(_('description'),  null=True, default="")
-    
+
 
     def activeProjects(self):
         return self.projects.filter(active=True);
@@ -86,7 +86,7 @@ class Organization(models.Model):
 
     def hasReadAccess( self, user ):
         if user.is_staff:
-            return True        
+            return True
         if self.creator == user:
             return True
         return (self.teams.filter( members=user ).count() > 0)

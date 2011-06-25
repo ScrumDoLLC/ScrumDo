@@ -49,7 +49,7 @@ def status(request):
     if p <= 0:
         raise Exception("Bad project count","Bad")
     return HttpResponse("ok")
-    
+
 def stats_data(request):
     stats = SiteStats.objects.all();
     user_data = []

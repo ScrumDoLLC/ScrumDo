@@ -78,7 +78,7 @@ def processQueue():
             project = queueItem.project
             if not project.active:
                 continue
-                
+
             logger.info("== Synchronizing %s / %s / %d" % (project.slug, queueItem.extra_slug, queueItem.action) )
             story = queueItem.story
             task = queueItem.task
@@ -111,14 +111,14 @@ def processQueue():
                 extra.taskStatusChange(project, task)
             elif action == SyncronizationQueue.ACTION_STORY_IMPORTED:
                 extra.storyImported(project, story)
-            
+
             logger.info("Success.")
         except RuntimeError:
             logger.error("RuntimeError occured while processing a syncronization queue item.")
             traceback.print_exc(file=sys.stdout)
         except urllib2.HTTPError as e:
             logger.error("HTTP Error %d occured while processing a syncronization queue item." % e.code)
-            logger.error(e.headers)            
+            logger.error(e.headers)
             logger.error(e.read())
             traceback.print_exc(file=sys.stdout)
         except:

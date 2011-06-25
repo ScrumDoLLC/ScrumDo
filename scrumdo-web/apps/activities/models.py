@@ -22,7 +22,7 @@ class ProjectEmailSubscription(models.Model):
     user = models.ForeignKey(User,related_name="email_subscriptions")
     def __unicode__(self):
         return "Subscription: %s %s" % (self.user, self.project)
-    
+
 
 class ActivityAction(models.Model):
     name = models.TextField(_("action"), max_length=100)
@@ -34,7 +34,7 @@ class Activity(InheritanceCastModel):
     created = models.DateTimeField(_('created'), default=datetime.datetime.now)
 
     def title( self ):
-        try:            
+        try:
             return "Story #%d changed" % (self.storyactivity.story.local_id)
         except:
             pass
@@ -52,12 +52,12 @@ class Activity(InheritanceCastModel):
             return "New Comment"
         except:
             pass
-        try:            
+        try:
             return "Story %d sized" % self.pointschangeactivity.story.local_id
         except:
             pass
         return ""
-        
+
 
     # Returns all activities for user
     @staticmethod
@@ -176,10 +176,10 @@ class CommentActivity(Activity):
         return (self.story.iteration.get_absolute_url() + "#story_" + str(self.story.id))
 
     @staticmethod
-    def activity_handler(sender, **kwargs):        
+    def activity_handler(sender, **kwargs):
         action = ActivityAction.objects.get(name="commented")
         t_comment = kwargs['instance']
-        from projects.models import Story        
+        from projects.models import Story
         # check if this is a comment on a story, the only kind we know how to deal with, and that its a new comment.
         if t_comment.content_type.id == ContentType.objects.get_for_model(Story).id and kwargs['created']:
             story = Story.objects.get(id=t_comment.object_id)
@@ -225,9 +225,8 @@ class IterationActivity(Activity):
         iterationActivity.save()
 
 class DeletedActivity(Activity):
-  """ For an activity about a story that was deleted, archive it's name. The current behavior is that all other activities about the deleted story or iteration are not saved, because since this is not an undoable operation, there doesn't seem to be much value in keeping them. But, we do want to know that the story was deleted, hence this model. """
-  name = models.TextField("name")
+    """ For an activity about a story that was deleted, archive it's name. The current behavior is that all other activities about the deleted story or iteration are not saved, because since this is not an undoable operation, there doesn't seem to be much value in keeping them. But, we do want to know that the story was deleted, hence this model. """
+    name = models.TextField("name")
 
-  def get_absolute_url(self):
-    return self.project.get_absolute_url()
-
+    def get_absolute_url(self):
+        return self.project.get_absolute_url()

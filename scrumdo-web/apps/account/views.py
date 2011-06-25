@@ -185,11 +185,11 @@ def password_reset(request, form_class=ResetPasswordForm,
             }, context_instance=RequestContext(request))
     else:
         password_reset_form = form_class()
-    
+
     return render_to_response(template_name, {
         "password_reset_form": password_reset_form,
     }, context_instance=RequestContext(request))
-    
+
 def password_reset_from_key(request, key, form_class=ResetPasswordKeyForm,
         template_name="account/password_reset_from_key.html"):
     if request.method == "POST":
@@ -199,11 +199,11 @@ def password_reset_from_key(request, key, form_class=ResetPasswordKeyForm,
             password_reset_key_form = None
     else:
         password_reset_key_form = form_class(initial={"temp_key": key})
-    
+
     return render_to_response(template_name, {
         "form": password_reset_key_form,
     }, context_instance=RequestContext(request))
-    
+
 @login_required
 def timezone_change(request, form_class=ChangeTimezoneForm,
         template_name="account/timezone_change.html"):

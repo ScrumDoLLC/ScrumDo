@@ -12,7 +12,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 class ProjectStories(Feed):
-    
+
     def __init__(self, slug, request):
         self.feed_type = feedgenerator.DefaultFeed
         self.slug = slug
@@ -20,8 +20,8 @@ class ProjectStories(Feed):
         self.feed_url = self.feed_url or request.path
         self.title_template_name = self.title_template or ('feeds/%s_title.html' % slug)
         self.description_template_name = self.description_template or ('feeds/%s_description.html' % slug)
-        
-        
+
+
     def get_object(self,key_and_token):
         if len(key_and_token) != 2:
             raise FeedDoesNotExist
@@ -34,7 +34,7 @@ class ProjectStories(Feed):
     def item_pubdate(self, item):
         # Returning the time the action was created, lets RSS readers sort them properly.
         return item.created
-    
+
     def title(self, obj):
         return "Scrumdo - %s" % obj.name
 
@@ -48,7 +48,7 @@ class ProjectStories(Feed):
             return obj.get_absolute_url()
         except:
             return ""
-            
+
     def item_link(self, obj):
         try:
             return obj.get_absolute_url()
@@ -58,7 +58,7 @@ class ProjectStories(Feed):
     def item_guid(self, obj):
         # We need to return unique GUIDs for each activity, or RSS readers will assume they're the same entry
         return "GUID-%d" % obj.id
-                
+
     def description(self, obj):
         return "Recent work in all iterations of project."
 
@@ -90,7 +90,7 @@ class ProjectCurrentStories(ProjectStories):
         return getIterationsStories(iterations)
 
 class ProjectIterationStories(Feed):
-    
+
     def __init__(self, slug, request):
         self.feed_type = feedgenerator.DefaultFeed
         self.slug = slug
@@ -98,7 +98,7 @@ class ProjectIterationStories(Feed):
         self.feed_url = self.feed_url or request.path
         self.title_template_name = self.title_template or ('feeds/%s_title.html' % slug)
         self.description_template_name = self.description_template or ('feeds/%s_description.html' % slug)
-    
+
     def get_object(self,project_and_iteration):
         logger.debug( project_and_iteration )
         if len(project_and_iteration) != 3:
@@ -113,7 +113,7 @@ class ProjectIterationStories(Feed):
     def item_guid(self, obj):
         # We need to return unique GUIDs for each activity, or RSS readers will assume they're the same entry
         return "GUID-%d" % obj.id
-                
+
     def title(self, obj):
         return "Scrumdo - %s / %s" % (obj[0].name, obj[1].name)
 

@@ -7,20 +7,20 @@ from os.path import isfile, join
 
 # syntax is name_of_tutorial: {url_of_page: name_of_page...
 # this must match the templates found in tutorial/ . ie tutorial/name_of_tutorial/url_of_page.html
-tutorials = { "scrumdo":[("start","What Is ScrumDo?"), 
-                         ("organizations", "Organizations"), 
-                         ("projects", "Projects"), 
+tutorials = { "scrumdo":[("start","What Is ScrumDo?"),
+                         ("organizations", "Organizations"),
+                         ("projects", "Projects"),
                          ("iterations", "Iteration Planning"),
                          ("basecamp", "Basecamp Integration"),
                          ],
-                         
-                         
-              "scrum":[("start", "Start"), 
-                       ("roles", "Roles"), 
-                       ("backlog", "Backlog"), 
+
+
+              "scrum":[("start", "Start"),
+                       ("roles", "Roles"),
+                       ("backlog", "Backlog"),
                        ("planning", "Planning"),
-                       ("stories", "Stories"), 
-                       ("releases", "Releases")], 
+                       ("stories", "Stories"),
+                       ("releases", "Releases")],
               }
 
 def list_has_key(lis,key):
@@ -34,7 +34,7 @@ def list_get(lis, key):
         if k == key:
             return (k,v)
     return None
-    
+
 
 def tutorial(request, name, page="start"):
     def mk_path(page):
@@ -44,9 +44,9 @@ def tutorial(request, name, page="start"):
 
     return render_to_response("tutorial/base.html", {
             "page_template": mk_path(page),
-            "name": name, 
+            "name": name,
             "this": list_get(tutorials[name], page),
-            "pages": tutorials[name], 
+            "pages": tutorials[name],
     }, context_instance=RequestContext(request))
 
 def tutorial_print(request, name):
@@ -58,5 +58,5 @@ def tutorial_print(request, name):
             "name":name,
             "this": ("print", "Print Version"),
             "pages": tutorials[name],
-            }, 
+            },
                               context_instance=RequestContext(request))

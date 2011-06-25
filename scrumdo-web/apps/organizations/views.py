@@ -93,9 +93,9 @@ def organization(request, organization_slug):
                 users.append(user)
                 members.append("#%d %s (Team %s)" % (member_count,  user, team.name))
                 member_count+=1
-    
+
     projects = organization.projects.all().order_by("-active","category","name")
-    
+
     for project in projects:
         for member in project.members.all():
             if (not member.user in users) and (member.user != project.creator):

@@ -31,7 +31,7 @@ def calculatePoints( stories, epics ):
             points_total += epic.normalized_points_value()
         except ValueError:
             pass
-        
+
 
     return (points_total, points_claimed)
 

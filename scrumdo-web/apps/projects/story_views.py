@@ -60,7 +60,7 @@ def set_story_status( request, group_slug, story_id, status):
         statuses = [None, "TODO", "In Progress", "Reviewing", "Done"]
         story.activity_signal.send(sender=story, user=request.user, story=story, action="changed status", status=statuses[status], project=story.project)
         onDemandCalculateVelocity( story.project )
-    
+
     organization = _organizationOrNone( story.project )
 
     if( request.POST.get("return_type","mini") == "mini"):
@@ -83,7 +83,7 @@ def set_story_status( request, group_slug, story_id, status):
             "project": story.project,
             "organization": organization
       }, context_instance=RequestContext(request))
-      
+
 
 
 @login_required
@@ -135,9 +135,9 @@ def scrum_board( request, group_slug, story_id):
         else:
             story.save()
     return HttpResponse("OK")
-        
-    
-    
+
+
+
 # This is the request handler that gets called from the story_list and iteraqtion pages when the user drags & drops a story to a
 # new ranking or a new iteration.  It should have two post variables, index and iteration
 @login_required
@@ -157,7 +157,7 @@ def reorder_story( request, group_slug, story_id):
         if request.POST.get("action","") == "reorder" :
             reorderStory( story, request.POST.get("before"), request.POST.get("after"), iteration)
             story.activity_signal.send(sender=story, user=request.user, story=story, action="reordered", project=project)
-        
+
         if request.POST.get("epic","-1") != "-1":
             epic_id = request.POST.get("epic")
             epic = Epic.objects.get(id=epic_id)
@@ -166,12 +166,12 @@ def reorder_story( request, group_slug, story_id):
         elif request.POST.get("epic","") == "-1":
             # Explicitly moving it out of any epic
             story.epic = None
-            
-        
+
+
         story.iteration = iteration;
         story.save()
-        
-        signals.story_updated.send( sender=request, story=story, user=request.user )        
+
+        signals.story_updated.send( sender=request, story=story, user=request.user )
         return HttpResponse("OK")
     return  HttpResponse("Fail")
 
@@ -180,21 +180,21 @@ def reorderStory( story, before_id, after_id, iteration, field_name="rank"):
     "Reorders a story between two others."
     story_rank_before = 0
     story_rank_after = 999999 # max value of the DB field
-    
+
     # If there is a story that should be before this one, grab it's rank
     try:
         story_before = Story.objects.get( id=before_id )
         story_rank_before = story_before.__dict__[field_name]
     except:
         pass
-        
+
     # If  there is a story that should be after this one, grab it's rank.
     try:
         story_after = Story.objects.get( id=after_id )
         story_rank_after = story_after.__dict__[field_name]
     except:
         pass
-    
+
     diff = abs(story_rank_after - story_rank_before)
     # logger.debug("Before %d , after %d, diff %d" % (story_rank_after, story_rank_before, diff) )
     try:
@@ -215,13 +215,13 @@ def reorderStory( story, before_id, after_id, iteration, field_name="rank"):
         if other_story.__dict__[field_name] == story_rank_after:
             # We should always have a story_rank_after if we get here.
             story.__dict__[field_name] = rank
-            rank += 10                
+            rank += 10
         other_story.__dict__[field_name] = rank
         other_story.save()
         rank += 10
 
-            
-            
+
+
 
 
 # On the iteration planning page, this renders one story view.  Generally called
@@ -241,22 +241,22 @@ def _calculate_rank( iteration, general_rank ):
     TODO (Improvement) - I'd like to re-think how ranking is done for both initial and adjustments of ranks.
     """
     try:
-        stories = iteration.stories.all().order_by("rank")    
+        stories = iteration.stories.all().order_by("rank")
         story_count = len(stories)
         print "%d %s" % (story_count, [story.rank for story in stories])
         if story_count == 0:
             return 10
-    
+
         if( general_rank == 0): # top
             return int(stories[0].rank / 2)
-        
+
         if( general_rank == 1): # middle
             if story_count < 2:
                 return 10
             s1_rank = stories[ int(story_count/2) - 1 ].rank
             s2_rank = stories[ int(story_count/2) ].rank
             return int( (s1_rank + s2_rank) / 2 )
-        
+
         return stories[ story_count - 1 ].rank + 10
     except:
         return 10
@@ -346,12 +346,12 @@ def stories_scrum_board(request, group_slug, iteration_id, status):
     read_access_or_403(project,request.user)
     iteration = get_object_or_404(Iteration, id=iteration_id, project=project)
 
-    
+
     stories = iteration.stories.select_related('project', 'project__organization','project__organization__subscription',  'iteration','iteration__project',).filter(status=STATUS_REVERSE[status]).order_by("board_rank")
 
     return render_to_response("stories/scrum_board_story_list.html", {
     "stories": stories,
-    "project":project   
+    "project":project
     }, context_instance=RequestContext(request))
 
 
@@ -373,21 +373,21 @@ def stories_iteration(request, group_slug, iteration_id, page=1):
     only_assigned = request.GET.get("only_assigned", False)
     backlog_mode = request.GET.get("backlog_mode", False)
     paged = "True" == request.GET.get("paged", "True")
-    
+
     if request.GET.get("clearButton") == "Clear Filter":
         text_search = ""
         tags_search = ""
         category =""
-    
+
     if only_assigned == "False":
         only_assigned = False
-    
+
     # Store the query string, so it can be passed back for subsequent page requests.
-    query_string = urllib.urlencode( {   'order_by':order_by, 
-                                         'display_type':display_type, 
-                                         'search':text_search.encode('utf-8'), 
-                                         'tags':tags_search.encode('utf-8'), 
-                                         'category':category.encode('utf-8'), 
+    query_string = urllib.urlencode( {   'order_by':order_by,
+                                         'display_type':display_type,
+                                         'search':text_search.encode('utf-8'),
+                                         'tags':tags_search.encode('utf-8'),
+                                         'category':category.encode('utf-8'),
                                          'only_assigned':only_assigned,
                                          'clearButton':clrbtn
                                          })
@@ -397,10 +397,10 @@ def stories_iteration(request, group_slug, iteration_id, page=1):
         has_next, stories = _getStoriesNoTextSearch( iteration, order_by, tags_search, category, only_assigned, request.user, paged, page, backlog_mode)
     else:
         # we need some fancy-schmancy searching
-        stories = _getStoriesWithTextSearch( iteration, text_search, order_by, tags_search, category, only_assigned, request.user, backlog_mode)        
+        stories = _getStoriesWithTextSearch( iteration, text_search, order_by, tags_search, category, only_assigned, request.user, backlog_mode)
 
     organization = _organizationOrNone( project )
-    
+
     return render_to_response("stories/mini_story_list.html", {
       "stories": stories,
       "project":project,
@@ -435,7 +435,7 @@ def _getStoriesNoTextSearch( iteration, order_by, tags_search, category, only_as
     tags_list = re.split('[, ]+', tags_search)
 
     stories = iteration.stories
-    
+
     if order_by != "numeric_points":
         stories = stories.order_by(order_by)
     else:
@@ -445,24 +445,24 @@ def _getStoriesNoTextSearch( iteration, order_by, tags_search, category, only_as
         stories = stories.extra(select={'numeric_points': '0+points'}).order_by(order_by)
 
     if tags_search:
-        stories = stories.filter(story_tags__tag__name__in=tags_list).distinct().order_by(order_by)                                
+        stories = stories.filter(story_tags__tag__name__in=tags_list).distinct().order_by(order_by)
     if only_assigned:
-        stories = stories.filter(assignee=user)        
+        stories = stories.filter(assignee=user)
     if category:
         stories = stories.filter(category=category)
     if backlog_mode:
         stories = stories.filter(epic=None)
 
     stories = stories.select_related('project', 'project__organization','project__organization__subscription', 'iteration',)
-    
+
     if paged:
         paginator = Paginator(stories, 50)
         page_obj = paginator.page(page)
         has_next = page_obj.has_next()
-        stories = page_obj.object_list        
+        stories = page_obj.object_list
     else:
         has_next = False
-    
+
     return (has_next, stories)
 
 def ajax_add_story( request, group_slug):
@@ -487,10 +487,10 @@ def _handleAddStoryInternal( form , project, request):
     story.creator = request.user
     iteration_id = request.POST.get("iteration",None)
     epic_id = request.POST.get("epic",None)
-    
+
     if iteration_id != None:
         iteration = get_object_or_404(Iteration, id=iteration_id)
-        if iteration.project != project:            
+        if iteration.project != project:
             raise PermissionDenied() # Shenanigans!
         story.iteration = iteration
     else:
@@ -506,7 +506,7 @@ def _handleAddStoryInternal( form , project, request):
         general_rank = int(form.cleaned_data['general_rank'])
     except:
         general_rank = 2 # bottom
-        
+
     story.rank = _calculate_rank( story.iteration, general_rank )
     logger.info("New Story %s" % story.summary)
     story.save()

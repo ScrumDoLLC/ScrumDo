@@ -173,7 +173,7 @@ def _getHeaders( project ):
     def setDetail(story,value):
         story.detail=unicode(value)
     def setPoints(story,value):
-        try:             
+        try:
             story.points="%g" % value
         except ValueError:
             if value == "":
@@ -206,7 +206,7 @@ def _getHeaders( project ):
         story.tags = unicode(value)
     def setCategory( story, value ):
         story.category = unicode(value)
-        
+
     headers = [ (50,"Story ID", lambda story: story.local_id ,numeric_xf, setId),
                (350,"Summary", lambda story: story.summary,wrap_xf, setSummary),
                (300,"Detail", lambda story: story.detail ,wrap_xf, setDetail),

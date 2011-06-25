@@ -52,9 +52,9 @@ class ProjectOptionsForm(forms.ModelForm):
         self.fields["name"].widget.attrs["style"] = 'width:595px;'
         self.fields["categories"].widget.attrs["style"] = 'width:595px;'
         self.fields["description"].widget.attrs["style"] = 'width:600px; height:75px;'
-        
 
-        
+
+
     class Meta:
         model = Project
         fields = ('category','categories','velocity_type','point_scale_type', 'use_extra_1', 'use_extra_2', 'use_extra_3', 'use_tasks', 'use_assignee', 'extra_1_label', 'extra_2_label', 'extra_3_label','name', 'description' )
@@ -92,7 +92,7 @@ class AddStoryForm( forms.ModelForm ):
         self.fields["extra_3"].widget = forms.widgets.Textarea(attrs={'rows':3, 'cols':50})
         if project.categories:
             choices = [(c.strip(),c.strip()) for c in project.categories.split(",")]
-            choices.insert(0,("",""))            
+            choices.insert(0,("",""))
             self.fields["category"] = forms.ChoiceField(choices=choices, required=False)
         self.fields["assignee"].required = False
         self.fields["extra_1"].required = False
@@ -111,7 +111,7 @@ class EpicForm( forms.ModelForm ):
         super(EpicForm, self).__init__(*args, **kwargs)
         self.project = project
         self.iteration = iteration
-        
+
         self.fields["summary"].widget = forms.TextInput()
         self.fields["summary"].widget.size = 200
 
@@ -123,17 +123,17 @@ class EpicForm( forms.ModelForm ):
         except:
             self.cleaned_data["points"] = "?"
         return self.cleaned_data["points"]
-        
+
     def save(self,  **kwargs):
         self.instance.project = self.project
         self.instance.iteration = self.iteration
         self.instance.local_id = self.project.getNextEpicId()
         return super(EpicForm, self).save(**kwargs)
-        
+
     class Meta:
         model = Epic
         fields = ('summary','detail','points')
-    
+
 
 class StoryForm( forms.ModelForm ):
     RANK_CHOICES = (
@@ -157,7 +157,7 @@ class StoryForm( forms.ModelForm ):
         if project.categories:
             choices = [(c.strip(),c.strip()) for c in project.categories.split(",")]
             choices.insert(0,("",""))
-            self.fields["category"] = forms.ChoiceField(choices=choices, required=False)        
+            self.fields["category"] = forms.ChoiceField(choices=choices, required=False)
         self.fields["assignee"].required = False
         self.fields["extra_1"].required = False
         self.fields["extra_2"].required = False
