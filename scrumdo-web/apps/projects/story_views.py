@@ -138,6 +138,33 @@ def scrum_board( request, group_slug, story_id):
 
 
 
+@login_required
+def reorder_epic( request, group_slug, epic_id):
+    epic = get_object_or_404( Epic, id=epic_id )
+    project = get_object_or_404( Project, slug=group_slug )
+    if epic.project != project:
+        raise PermissionDenied()
+    write_access_or_403(project,request.user)
+    if request.method == 'POST':
+        rank = 0
+        target_iteration = request.POST["iteration"]
+
+        try:
+            iteration = get_object_or_404( Iteration, id=target_iteration )
+        except:
+            iteration = story.iteration
+
+        if request.POST.get("action","") == "reorder" :
+            reorderEpic( epic, request.POST.get("before"), request.POST.get("after"), iteration)            
+
+        epic.iteration = iteration
+        epic.save()
+        
+        return HttpResponse("OK")
+    return  HttpResponse("Fail")
+
+
+
 # This is the request handler that gets called from the story_list and iteraqtion pages when the user drags & drops a story to a
 # new ranking or a new iteration.  It should have two post variables, index and iteration
 @login_required
@@ -168,12 +195,56 @@ def reorder_story( request, group_slug, story_id):
             story.epic = None
 
 
-        story.iteration = iteration;
+        story.iteration = iteration
         story.save()
 
         signals.story_updated.send( sender=request, story=story, user=request.user )
         return HttpResponse("OK")
     return  HttpResponse("Fail")
+
+def reorderEpic(epic, before_id, after_id, iteration, field_name="order"):
+    "Reorders an epic between two others."
+    epic_rank_before = 0
+    epic_rank_after = 999999 # max value of the DB field
+
+    # If there is a epic that should be before this one, grab it's rank
+    try:
+        epic_before = Epic.objects.get( id=before_id )
+        epic_rank_before = epic_before.__dict__[field_name]
+    except:
+        pass
+
+    # If  there is a epic that should be after this one, grab it's rank.
+    try:
+        epic_after = Epic.objects.get( id=after_id )
+        epic_rank_after = epic_after.__dict__[field_name]
+    except:
+        pass
+
+    diff = abs(epic_rank_after - epic_rank_before)
+    try:
+        if diff > 1:
+            # It fits between them            
+            epic.__dict__[field_name] = round(diff/2) + epic_rank_before
+            logger.debug("Reordering epic fit %d %d %d" % (epic_rank_before, epic.__dict__[field_name], epic_rank_after) )
+            return
+    except:
+        pass # do an emergency re-order below if things are falling out of bounds.
+
+    # It doesn't fit!  reorder everything!
+    epics = iteration.epics.all().order_by(field_name)
+
+    rank = 10
+    for other_epic in epics:
+        if other_epic.__dict__[field_name] == epic_rank_after:
+            # We should always have a epic_rank_after if we get here.
+            epic.__dict__[field_name] = rank
+            rank += 20
+        other_epic.__dict__[field_name] = rank
+        other_epic.save()
+        rank += 20
+
+
 
 
 def reorderStory( story, before_id, after_id, iteration, field_name="rank"):
@@ -215,10 +286,10 @@ def reorderStory( story, before_id, after_id, iteration, field_name="rank"):
         if other_story.__dict__[field_name] == story_rank_after:
             # We should always have a story_rank_after if we get here.
             story.__dict__[field_name] = rank
-            rank += 10
+            rank += 20
         other_story.__dict__[field_name] = rank
         other_story.save()
-        rank += 10
+        rank += 20
 
 
 

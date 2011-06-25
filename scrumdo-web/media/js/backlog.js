@@ -29,6 +29,36 @@ function reloadEpic( epic_id )
     });
 }
 
+function updateEpicPosition(event, ui)
+{
+    $("#loadingIcon").show();
+        
+    var ind = ui.item.index();
+    var before = "";
+    var after = "";
+    
+    children = ui.item.parent().children();
+    
+    // Try to find the epic before/after this one so the sorting algorithm know where this story goes.
+    if (ind > 0) { before = $(children[ind - 1]).attr("epic_id");  }
+    if (children.length > (1 + ind)) { after = $(children[ind + 1]).attr("epic_id"); }
+    
+    
+    $.ajax({
+        url: "/projects/project/" + project_slug + "/epic/" + $(ui.item).attr("epic_id") + "/reorder",
+        data: ({
+            action: "reorder",
+            before: before,
+            after: after,
+            iteration: iteration_id
+        }),
+        type: "POST",
+        success: function() {            
+            $("#loadingIcon").hide();
+        }
+    });
+}
+
 function updateBacklogStoryPosition(event, ui)
  {
     $("#loadingIcon").show();
@@ -38,8 +68,6 @@ function updateBacklogStoryPosition(event, ui)
     var after = "";
     var epic = ui.item.parent().attr("epic_id");
 
-    console.log(ui.item.parent().attr("epic_id"));
-    
     children = ui.item.parent().children();
     
     // Try to find the story before/after this one so the sorting algorithm know where this story goes.

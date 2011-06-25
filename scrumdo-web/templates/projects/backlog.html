@@ -147,14 +147,6 @@ var iteration_stats_url = "{% url iteration_stats project.slug iteration.id %}";
 
 <script type="text/javascript">
 $(document).ready(function(){
-	// $("#story_list").sortable({
-	//         update: updateStoryPosition,
-	//         tolerance: 'pointer',
-	//         distance: 5,
-	//         opacity: 0.6,
-	//         placeholder: "ui-state-highlight",
-	//         cancel: ".block_story_body"
-	//     });
 
 	loadIteration(iteration_id, 1, "backlog_mode=true");
 	
@@ -164,11 +156,12 @@ $(document).ready(function(){
 	    updatePanel();
 	}
 	
-	
 	$("#epic_list").sortable({
 		tolerance: 'pointer',
         distance: 5,
+		handle: ".epic_gripper",
 		placeholder: "ui-state-highlight",
+		stop: updateEpicPosition,
 	});
 	
 	$(".epic_story_list_item, #story_list").sortable({
