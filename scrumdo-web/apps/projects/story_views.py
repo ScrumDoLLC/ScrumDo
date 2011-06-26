@@ -165,7 +165,22 @@ def reorder_epic( request, group_slug, epic_id):
 
 @login_required
 def edit_epic(request, group_slug, epic_id):
+    epic = get_object_or_404(Epic, id=epic_id)
+    project = epic.project
+    write_access_or_403(project, request.user)
+    
+    if request.method == 'POST': # If the form has been submitted...        
+        form = EpicForm( project, epic.iteration, request.POST, instance=epic)
+        if form.is_valid(): # All validation rules pass
+            epic = form.save()
+            return HttpResponse("OK")
+    else:
+        form = EpicForm( project, epic.iteration, instance=epic)
+    
     return render_to_response("projects/epic_edit.html", {
+        "form":form,
+        "epic":epic,
+        "project":project
       }, context_instance=RequestContext(request))
 
 # This is the request handler that gets called from the story_list and iteraqtion pages when the user drags & drops a story to a
@@ -435,8 +450,11 @@ def epic(request, epic_id):
     epic = get_object_or_404(Epic, id=epic_id)
     project = epic.project
     read_access_or_403(project,request.user)
+    organization = _organizationOrNone( project )
     return render_to_response("projects/epic.html", {
     "epic": epic,
+    "organization":organization,
+    "iteration":epic.iteration,
     "project":project
     }, context_instance=RequestContext(request))
 

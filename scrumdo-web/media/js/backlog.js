@@ -24,7 +24,12 @@ function reloadEpic( epic_id )
     $.ajax({
         url: "/projects/epic/" + epic_id ,       
         success: function(responseText) {
-            $("epic_" + epic_id).html(responseText);
+            $("#epic_" + epic_id).html(responseText);
+            $("#epic_" + epic_id + " .show_assigned_stories").click(function(){
+               $(this).siblings(".epic_assigned_stories").show();
+               $(this).hide();
+               return false;
+            });
         }
     });
 }

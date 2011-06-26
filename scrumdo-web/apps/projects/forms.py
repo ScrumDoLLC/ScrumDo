@@ -113,7 +113,7 @@ class EpicForm( forms.ModelForm ):
         self.iteration = iteration
 
         self.fields["summary"].widget = forms.TextInput()
-        self.fields["summary"].widget.size = 200
+        self.fields["summary"].widget.attrs['size'] = 60
 
     def clean_points(self):
         try:
@@ -127,7 +127,8 @@ class EpicForm( forms.ModelForm ):
     def save(self,  **kwargs):
         self.instance.project = self.project
         self.instance.iteration = self.iteration
-        self.instance.local_id = self.project.getNextEpicId()
+        if not self.instance.local_id:
+            self.instance.local_id = self.project.getNextEpicId()
         return super(EpicForm, self).save(**kwargs)
 
     class Meta:
