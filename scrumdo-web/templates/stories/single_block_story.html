@@ -23,7 +23,7 @@
     {% canwrite project %}
         <a story_id="{{ story.id }}" class="moveIterationIcon"  href="#"><img title="Move To Another Iteration" src="{{ STATIC_URL }}pinax/images/silk/icons/page_white_go.png" /></a>
         <a onclick="setupAutoClose('#todoButtons_{{story.id}}'); jQuery('#todoButtons_{{story.id}}').show();  return false;" href="#"><img title="Set Status" src="{{ STATIC_URL }}pinax/images/silk/icons/tag_red.png" /></a>
-        <a onclick="jQuery.facebox({ ajax: '/projects/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=block'}, 'edit_story'); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=block"><img title="Edit Story" src="{{ STATIC_URL }}pinax/images/silk/icons/pencil.png" /></a>
+        <a onclick="openOverlay( '/projects/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=block' ); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=block"><img title="Edit Story" src="{{ STATIC_URL }}pinax/images/silk/icons/pencil.png" /></a>
         {% include "stories/single_extra_icons.html" %}
     {% endcanwrite %}
     

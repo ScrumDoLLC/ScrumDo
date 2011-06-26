@@ -156,6 +156,11 @@ $(document).ready(function(){
 	    updatePanel();
 	}
 	
+});
+
+function setupSortableLists()
+{
+	$("#epic_list").sortable("destroy");
 	$("#epic_list").sortable({
 		tolerance: 'pointer',
         distance: 5,
@@ -164,7 +169,8 @@ $(document).ready(function(){
 		stop: updateEpicPosition,
 	});
 	
-	$(".epic_story_list_item, #story_list").sortable({
+	$(".epic_story_list_item, #story_list, #epic_assigned_stories li").sortable("destroy");
+	$(".epic_story_list_item, #story_list, #epic_assigned_stories li").sortable({
         stop: updateBacklogStoryPosition,
         tolerance: 'intersect',
         distance: 5,
@@ -175,8 +181,9 @@ $(document).ready(function(){
         cancel: ".block_story_body",
 		connectWith: ".epic_story_list_item, #story_list, .epic_block"
     });
-	
-});
+}
+
+setUpStoryLinksCallback = setupSortableLists;
 
 
 {% if GOOGLE_ANALYTICS %}

@@ -152,6 +152,7 @@ class StoryForm( forms.ModelForm ):
         members = project.all_member_choices()
         members.insert(0,("","---------"))
         self.fields["assignee"].choices = members
+        self.fields["detail"].widget = forms.widgets.Textarea(attrs={'rows':3, 'cols':50})
         self.fields["extra_1"].widget = forms.widgets.Textarea(attrs={'rows':3, 'cols':50})
         self.fields["extra_2"].widget = forms.widgets.Textarea(attrs={'rows':3, 'cols':50})
         self.fields["extra_3"].widget = forms.widgets.Textarea(attrs={'rows':3, 'cols':50})

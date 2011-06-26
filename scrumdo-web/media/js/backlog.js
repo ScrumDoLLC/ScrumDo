@@ -33,7 +33,7 @@ function reloadEpic( epic_id )
             if (typeof updateStoryList == 'function') {
                 updateStoryList();
             }
-            
+            setUpStoryLinks();
         }
     });
 }

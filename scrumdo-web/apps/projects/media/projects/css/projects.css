@@ -411,6 +411,10 @@
   display: none;
 }
 
+#story_details textarea {
+	height: 70px;
+}
+
 #story_details table tr td {
   padding-bottom: 3px;
   padding-right: 2px;
@@ -419,16 +423,18 @@
 #story_details #points_section ul {
   margin: 0px;
   padding: 0px;
+  width: 100%;
 }
 #story_details #points_section li {
   list-style-type: none;
   display: inline-block;
   background-color: #ededed;
   padding-top: 5px;
-  padding-bottom: 3px;
+  padding-bottom: 4px;
   padding-right: 10px;
-  padding-left: 6px;
+  padding-left: 7px;
   margin: 1px;
+  font-size: 16px;
 }
 
 #story_area input[type='text'] {
@@ -450,11 +456,7 @@
 }
 
 #story_area {
-  max-height: 500px;
-  width: 500px;
-  overflow: auto;
-  overflow-x: hidden;
-  padding: 10px;
+	
 }
 
 h1 a {
@@ -767,3 +769,42 @@ div.add_task {
 	padding-left: 15px;
 }
 
+#scrumdo_overlay {
+    display: none;
+    border: 5px solid #444444;
+    min-width: 150px;
+    min-height: 150px;
+    z-index: 2000;
+	position: fixed;
+	top: 15px;
+	left: 25px;
+	bottom: 15px;
+	right: 25px;
+	-webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
+	-moz-box-shadow: 0px 0px 16px #000;
+    -webkit-box-shadow: 0px 0px 16px #000;
+
+	border-radius: 15px;
+	padding: 10px;
+	overflow: auto;
+    overflow-x: hidden;
+    background-color: #ddd;
+    text-shadow: 0px 1px 0px #ffffff;
+}
+
+.edit_story_table {
+	width: 100%;
+}
+.edit_story_table tr td {
+	padding: 5px;
+}
+
+.edit_story_table tr:focus {
+	background-color: #333;
+}
+.edit_story_table tr td:first-child {
+	text-align: right;
+	font-size: 16px;
+	
+}

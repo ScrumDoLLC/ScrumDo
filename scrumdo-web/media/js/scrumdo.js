@@ -214,3 +214,25 @@ function setUpStoryLinks()
     });
 
 }
+
+function openOverlay( url )
+{
+    $("body").append("<div id='scrumdo_overlay'>Loading...</div>");
+    $.ajax({
+        url: url,
+        success: function(data) {
+            $("#scrumdo_overlay").fadeIn();
+            $("#scrumdo_overlay").html(data);            
+            $("body").css("overflow", "hidden");
+        }
+    });
+}
+
+function closeOverlay()
+{
+    $("#scrumdo_overlay").fadeOut(250, function(){
+        $("#scrumdo_overlay").remove();
+    });
+    $("body").css("overflow", "auto");
+}
+

@@ -120,30 +120,6 @@ function() {
 });
 
 
-/** 
- * Moving a story to an iteration is a 2-step process.  First, display the menu of iterations to pick form,
- * and then actually move it when the user selects one.  This function handles the second step.
- **/
-function moveCurrentlyOpenStoryToIteration(iteration_id)
- {
-    $("#loadingIcon").show();
-    $.ajax({
-        url: "/projects/project/" + project_slug + "/story/" + current_story_popup + "/reorder",
-        data: ({
-            action: "move_iteration",
-            iteration: iteration_id
-        }),
-        type: "POST",
-        success: function() {
-            $("#loadingIcon").hide();
-            $("#story_" + current_story_popup).hide(true);
-            if (typeof updateStoryList == 'function') {
-                updateStoryList();
-            }
-        }
-    });
-
-}
 
 
 

@@ -1,21 +1,17 @@
-{% load i18n %}{% load comments_tag %}{% load theme_tags %}{% load projects_tags %}<div id="story_area" style="width: 860px;">
+{% load i18n %}{% load comments_tag %}{% load theme_tags %}{% load projects_tags %}<div id="story_area" >
 
-<form id="story_detail_form" method="POST" action="{% url story_form group_slug=project.slug story_id=story.id %}" style="width: 100%">
+<form id="story_detail_form" class="uniForm" method="POST" action="{% url story_form group_slug=project.slug story_id=story.id %}" style="width: 100%">
    {{ form.non_field_errors }}
-
     <h1>Story #{{story.local_id}}</h1><br/>
-  
-    
-    
     {% locked story %}
       <div style="background-color:#ffaaaa ; text-align: center; min-height:32px;">
         <h2>Read Only: The iteration this story belongs to is locked.</h2>
       </div>
     {% endlocked %}
     
-   <div id="story_details"  style="width: 840px;">
-    <table style="width: 840px;">
-      <tr><td>Summary</td><td width="740">{{form.summary}}    {{form.summary.errors}} </td></tr>
+   <div id="story_details">
+    <table class="edit_story_table">
+      <tr><td width="140">Summary</td><td>{{form.summary}}    {{form.summary.errors}} </td></tr>
       <tr><td>Detail</td><td>{{form.detail}}    {{form.detail.errors}} </td></tr>
       <tr><td>Tags</td>
         <td>
@@ -46,7 +42,14 @@
    <input type="hidden" name="return_type" value="{{return_type}}" />
    <input type="hidden" name="rank" value="{{ story.rank }}" />
    {% notlocked story %}
-   <input class="button blue large" type="submit" style="float:right; " value="Update Story" />
+	<div class="form_block">
+          <div class="buttonHolder" style="margin-left: 150px; margin-right:110px">
+             <!-- <button class="primaryAction" type="submit" >Save</button> -->
+			 <input class="primaryAction" type="submit" value="Update Story" />
+          </div
+      </div>
+
+   
    {% endnotlocked %}
    
 
@@ -82,7 +85,7 @@
       $("#story_detail_form").ajaxForm({        
         success: function(responseText) {
           $("#story_{{story.id}}").replaceWith(responseText);
-          $(document).trigger('close.facebox');   
+          closeOverlay();
           
           {% if GOOGLE_ANALYTICS %}     
              _gaq.push(['_trackEvent',"EditStory", "{{current_view}}", "", 1]); 
