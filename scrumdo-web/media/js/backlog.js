@@ -30,6 +30,10 @@ function reloadEpic( epic_id )
                $(this).hide();
                return false;
             });
+            if (typeof updateStoryList == 'function') {
+                updateStoryList();
+            }
+            
         }
     });
 }
@@ -102,6 +106,27 @@ function updateBacklogStoryPosition(event, ui)
 
 }
 
+
+function moveCurrentlyOpenStoryToIteration(iteration_id)
+ {
+    $("#loadingIcon").show();
+    $.ajax({
+        url: "/projects/project/" + project_slug + "/story/" + current_story_popup + "/reorder",
+        data: ({
+            action: "move_iteration",
+            iteration: iteration_id
+        }),
+        type: "POST",
+        success: function() {
+            $("#loadingIcon").hide();
+            $("#story_" + current_story_popup).hide(true);            
+            if (typeof updateStoryList == 'function') {
+                updateStoryList();
+            }
+            reloadEpic( $(this).parent().attr("epic_id") );
+        }
+    });
+}
 
 
 $(document).ready(function(){

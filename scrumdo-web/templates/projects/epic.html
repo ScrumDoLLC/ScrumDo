@@ -32,7 +32,7 @@
 				</ul>
 				{% if stories.1.count %}
 				<a href="#" class="show_assigned_stories">{{ stories.1.count }} more stories</a>
-				<ul style="display:none" class="epic_assigned_stories">
+				<ul style="display:none" epic_id="{{epic.id}}" class="epic_assigned_stories">
 					{% for story in stories.1 %}
 					   {% ifequal story.iteration.id iteration.id %}									  
 					   {% else %}
