@@ -14,9 +14,8 @@
       <tr><td width="140">Summary</td><td>{{form.summary}}    {{form.summary.errors}} </td></tr>
       <tr><td>Detail</td><td>{{form.detail}}    {{form.detail.errors}} </td></tr>
       <tr><td>Tags</td>
-        <td>
-            <ul id="id_tags2" style="width: 100%"></ul>
-            {{form.tags}} {{form.tags.errors}} 
+        <td>            
+            <div class="tag_holder">{{form.tags}}</div> {{form.tags.errors}} 
         </td></tr>
       <tr><td>Points&nbsp;</td><td id="points_section">{{form.points}}  {{form.points.errors}} </td></tr>
       {% if project.use_assignee %}
@@ -63,16 +62,16 @@
  
  
 <br/><br/><br/><br/>
-<h2>Comments {% silk "comments" %}</h2>
+<!-- <h2>Comments {% silk "comments" %}</h2>
 <div class="comments_area">
-{% comments story %}
-</div>
+ comments story 
+</div> -->
 
 <hr/>
 
 {% notlocked story %}
   <form method="POST" id="deleteStoryForm" action="{% url delete_story project.slug story.id %}">
-    <input class="button red" style="margin-top: -25px; margin-right: 5px" type="submit" value="Delete Story" />
+    <input class="button red" style="margin-right: 5px" type="submit" value="Delete Story" />
   </form>
 {% endnotlocked %}
 
@@ -115,15 +114,17 @@
       });
       
       var project_tags = [
-        {% for tag in tags %}
-        {label:"{{tag.name}}",value:"{{tag.name}}"},        
+        {% for tag in project.unique_tags %}
+        "{{tag.name}}",        
         {% endfor %}
-        {label:"", value:""}
+        ""
       ];
       
       var all_tags = scrumdo_special_tags.concat( project_tags );
 
-      $("#story_details #id_tags2").tagit({availableTags:all_tags,input_field:"#id_tags"});
+	// $("#addStoryForm #id_tags").tagit({ availableTags: all_tags, removeConfirmation:true });        
+    $(".edit_story_table #id_tags").tagit({availableTags:all_tags, removeConfirmation:true});
+
       
 
 </script>

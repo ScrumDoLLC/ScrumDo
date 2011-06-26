@@ -338,7 +338,7 @@
 	background-color: #fafafa;	
 }
 
-#form-tabs .ui-corner-all {
+#form-tabs .ui-widget-header  {
 	background: none;
 	border: none;
 }
@@ -777,9 +777,9 @@ div.add_task {
     z-index: 2000;
 	position: fixed;
 	top: 15px;
-	left: 25px;
+	left: 45px;
 	bottom: 15px;
-	right: 25px;
+	right: 45px;
 	-webkit-border-radius: 15px;
 	-moz-border-radius: 15px;
 	-moz-box-shadow: 0px 0px 16px #000;

@@ -147,16 +147,14 @@ var iteration_stats_url = "{% url iteration_stats project.slug iteration.id %}";
 
 <script type="text/javascript">
 $(document).ready(function(){
-
 	loadIteration(iteration_id, 1, "backlog_mode=true");
-	
-	function updateStoryList()
-	{
-	    loadIteration(iteration_id, 1, "backlog_mode=true");
-	    updatePanel();
-	}
-	
 });
+
+function updateStoryList()
+{
+    loadIteration(iteration_id, 1, "backlog_mode=true");
+    updatePanel();
+}
 
 function setupSortableLists()
 {

@@ -203,6 +203,15 @@ class Project(Group):
 
     def get_url_kwargs(self):
         return {'group_slug': self.slug}
+    
+    def unique_tags(self):
+        all_tags = self.tags.all().order_by("name")
+        tags = []
+        for tag in all_tags:
+            if len([t for t in tags if t.name==tag.name]) == 0: #remove duplicates
+                tags.append(tag) 
+        return tags
+    
 
 
 class Iteration( models.Model):

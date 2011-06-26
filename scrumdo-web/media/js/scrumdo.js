@@ -1,6 +1,5 @@
 
-scrumdo_special_tags = [ {label:"Bug", desc:"Represents a bug report.", value:"Bug"}                         
-                        ];
+scrumdo_special_tags = [ ];
 
 function setupAutoClose( divID )
 {  

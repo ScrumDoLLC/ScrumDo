@@ -415,17 +415,12 @@ def story(request, group_slug, story_id):
         read_access_or_403(project,request.user)
         form = StoryForm(project, instance=story )
 
-    all_tags = project.tags.all().order_by("name")
-    tags = []
-    for tag in all_tags:
-        if len([t for t in tags if t.name==tag.name]) == 0:
-            tags.append(tag)
+    tags = project.unique_tags()
 
     return   render_to_response("stories/story.html", {
         "story": story,
         "form": form,
         "project": project,
-        "tags": tags,
         "return_type": return_type
       }, context_instance=RequestContext(request))
 
