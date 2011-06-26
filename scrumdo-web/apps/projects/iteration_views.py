@@ -100,24 +100,19 @@ def iteration(request, group_slug, iteration_id):
 def backlog(request, project, iteration, form):
     today = datetime.date.today()
 
-    if request.method == 'POST': # If the form has been submitted...
+    if request.method == 'POST' and request.POST.get("action") == "addEpic": # If the form has been submitted...
         write_access_or_403(project,request.user)
-        logger.info("1")
         add_epic_form = EpicForm( project, iteration, request.POST)
-        logger.info("2")
         if add_epic_form.is_valid(): # All validation rules pass
-            logger.info("3")
             epic = add_epic_form.save()
             request.user.message_set.create(message="Epic %d created" % epic.local_id)
             add_epic_form = EpicForm(project, iteration)
         logger.debug(add_epic_form.__dict__)
         show_epic = True
     else:
-        logger.info("4")
         add_epic_form = EpicForm(project, iteration)
         show_epic = False
 
-    logger.info("5")
     add_story_form = handleAddStory(request, project)
 
     return render_to_response("projects/backlog.html", {
