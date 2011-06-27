@@ -71,6 +71,7 @@
 
 {% notlocked story %}
   <form method="POST" id="deleteStoryForm" action="{% url delete_story project.slug story.id %}">
+	<input type="hidden" name="action" value="deleteStory">
     <input class="button red" style="margin-right: 5px" type="submit" value="Delete Story" />
   </form>
 {% endnotlocked %}
@@ -97,9 +98,10 @@
         }});
         
       $("#deleteStoryForm").ajaxForm({
-        beforeSubmit: function(arr, $form, options) { return confirm ("Are you sure you want to delete this story?"); },
+        beforeSubmit: function(arr, $form, options) { return confirm("Are you sure you want to delete this story?"); },
         success: function(responseText) { 
-          $("#story_{{story.id}}").hide(); $(document).trigger('close.facebox'); 
+          $("#story_{{story.id}}").hide(); 
+		  closeOverlay();
           if(typeof updateStoryList == 'function') { updateStoryList(); }
         }
       });

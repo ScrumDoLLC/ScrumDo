@@ -62,8 +62,8 @@ def iteration(request, group_slug, iteration_id):
         form = IterationForm( instance=iteration )
 
 
-    if iteration.backlog:
-        return backlog(request, project, iteration, form)
+    # if iteration.backlog:
+    #     return backlog(request, project, iteration, form)
 
     if request.method == 'POST': # If the form has been submitted...
         write_access_or_403(project,request.user)
@@ -96,37 +96,37 @@ def iteration(request, group_slug, iteration_id):
 
 
 
-
-def backlog(request, project, iteration, form):
-    today = datetime.date.today()
-
-    if request.method == 'POST' and request.POST.get("action") == "addEpic": # If the form has been submitted...
-        write_access_or_403(project,request.user)
-        add_epic_form = EpicForm( project, iteration, request.POST)
-        if add_epic_form.is_valid(): # All validation rules pass
-            epic = add_epic_form.save()
-            request.user.message_set.create(message="Epic %d created" % epic.local_id)
-            add_epic_form = EpicForm(project, iteration)
-        logger.debug(add_epic_form.__dict__)
-        show_epic = True
-    else:
-        add_epic_form = EpicForm(project, iteration)
-        show_epic = False
-
-    add_story_form = handleAddStory(request, project)
-
-    return render_to_response("projects/backlog.html", {
-        "iteration": iteration,
-        "iterationinfo": True,
-        "project" : project,
-        "epics": iteration.epics.all(),
-        "iteration_form": form,
-        'add_story_form': add_story_form,
-        "add_epic_form": add_epic_form,
-        "current_view":"backlog_page",
-        "organization":project.organization,
-        "show_epic":show_epic
-      }, context_instance=RequestContext(request))
+# 
+# def backlog(request, project, iteration, form):
+#     today = datetime.date.today()
+# 
+#     if request.method == 'POST' and request.POST.get("action") == "addEpic": # If the form has been submitted...
+#         write_access_or_403(project,request.user)
+#         add_epic_form = EpicForm( project, iteration, request.POST)
+#         if add_epic_form.is_valid(): # All validation rules pass
+#             epic = add_epic_form.save()
+#             request.user.message_set.create(message="Epic %d created" % epic.local_id)
+#             add_epic_form = EpicForm(project, iteration)
+#         logger.debug(add_epic_form.__dict__)
+#         show_epic = True
+#     else:
+#         add_epic_form = EpicForm(project, iteration)
+#         show_epic = False
+# 
+#     add_story_form = handleAddStory(request, project)
+# 
+#     return render_to_response("projects/backlog.html", {
+#         "iteration": iteration,
+#         "iterationinfo": True,
+#         "project" : project,
+#         "epics": iteration.epics.all(),
+#         "iteration_form": form,
+#         'add_story_form': add_story_form,
+#         "add_epic_form": add_epic_form,
+#         "current_view":"backlog_page",
+#         "organization":project.organization,
+#         "show_epic":show_epic
+#       }, context_instance=RequestContext(request))
 
 
 

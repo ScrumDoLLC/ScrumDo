@@ -21,7 +21,7 @@
 		    <tr>
 			  <td>Epic:&nbsp;</td>
 			  <td> 
-				 <select name="epic">
+				 <select id="epic_dropdown" name="epic">
 					<option value="">------</option>
 					{% for epic in epics %}
 					  <option value="{{epic.id}}">E{{epic.local_id}} {{epic.summary|truncatewords:25}}</option>
@@ -73,12 +73,16 @@
 
 
     function updateStoryListInternal( newStory )
-    {
-      
+    {      
       $("#createdStories").append( newStory );
+
+	  if( $("#epic_dropdown") && $("#epic_dropdown").val() != "" )
+  	  {
+	     reloadEpic( $("#epic_dropdown").val() );
+	  }
             
       // Clear the form...
-      $(':input','#addStoryForm').not(':button, :submit, :reset, :hidden, :radio').val('');       
+      $(':input','#addStoryForm').not(':button, :submit, :reset, :hidden, :radio, #epic_dropdown').val('');       
        
        $("#id_summary").focus();
       

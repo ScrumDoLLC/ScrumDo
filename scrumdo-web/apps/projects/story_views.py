@@ -101,6 +101,7 @@ def story_comments( request, story_id ):
 # to send us to next.
 @login_required
 def delete_story( request, group_slug, story_id ):
+    logger.debug("Deleting story %s" % str(story_id))
     if request.method == "POST":
         story = get_object_or_404( Story, id=story_id )
         write_access_or_403(story.project,request.user)
@@ -112,7 +113,7 @@ def delete_story( request, group_slug, story_id ):
 
         redirTo = request.GET.get("redirectTo", "")
         if redirTo:
-            return HttpResponseRedirect(redirTo );
+            return HttpResponseRedirect(redirTo);
         else:
             return HttpResponse("OK");
     else:

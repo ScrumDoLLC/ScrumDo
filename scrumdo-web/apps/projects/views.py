@@ -132,6 +132,39 @@ def remove_user( request, group_slug ):
     return HttpResponse("ok")
 
 @login_required
+def epics(request, group_slug):
+    project = get_object_or_404( Project, slug=group_slug )
+    read_access_or_403(project, request.user )
+    epics = project.epics.filter(parent__isnull=True)
+    epics_list = _flattenEpics(epics)
+    organization = _organizationOrNone(project)
+    return render_to_response("projects/epics.html", 
+                              {
+                                "project":project,
+                                "epic_list":epics_list,
+                                "organization":organization
+                              },
+                              context_instance=RequestContext(request))
+
+def _flattenEpics(epics):
+    """You need to flatten out a tree structure before passing it to the Django template engine, because
+       templates can't recurse."""
+
+    yield 'in'
+
+    for epic in epics:
+      yield epic
+      subepics = epic.children.all()
+      if len(subepics):
+          epic.leaf=False
+          for x in _flattenEpics(subepics):
+              yield x
+      else:
+          epic.leaf=True
+    yield 'out'
+
+
+@login_required
 def activate( request, group_slug ):
     project = get_object_or_404( Project, slug=group_slug )
     admin_access_or_403(project, request.user, ignore_active=True)
@@ -542,3 +575,10 @@ def export_project(request, group_slug):
     # else:
     #     form = ExportProjectForm()
     # return render_to_response("projects/project_export_options.html", { "project":project, "form":form }, context_instance=RequestContext(request))
+
+def _organizationOrNone(project):
+    try:
+        organization = project.organization
+    except Organization.DoesNotExist:
+        organization = None
+    return organization

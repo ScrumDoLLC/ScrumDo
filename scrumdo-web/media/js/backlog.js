@@ -110,6 +110,7 @@ function updateBacklogStoryPosition(event, ui)
 function moveCurrentlyOpenStoryToIteration(iteration_id)
  {
     $("#loadingIcon").show();
+    epic_id = $("#story_" + current_story_popup).parent().attr("epic_id");
     $.ajax({
         url: "/projects/project/" + project_slug + "/story/" + current_story_popup + "/reorder",
         data: ({
@@ -123,7 +124,7 @@ function moveCurrentlyOpenStoryToIteration(iteration_id)
             if (typeof updateStoryList == 'function') {
                 updateStoryList();
             }
-            reloadEpic( $(this).parent().attr("epic_id") );
+            reloadEpic( epic_id );
         }
     });
 }
@@ -134,6 +135,7 @@ $(document).ready(function(){
     $("#small_epics").click( setSmallEpics );
     $("#med_epics").click( setMedEpics );
     $("#big_epics").click( setBigEpics );
+    
     
     $(".show_assigned_stories").click(function(){
        $(this).siblings(".epic_assigned_stories").show();

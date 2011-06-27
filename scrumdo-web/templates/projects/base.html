@@ -71,6 +71,7 @@
     <div class="box">
       <div class="box-title">Project Tools</div>
       <div class="box-content">
+		<a title="Plan big chunks of work." href="{% url epics project.slug %}">{% silk "chart_organisation" %} Epics</a><br/>
         {% canwrite project %}
           {% if iterationinfo %}
             <a title="Easily rank your stories and move them into an iteration." href="{% url stories project.slug  %}?iteration={{iteration.id}}">{% silk "date" %} Iteration Planning</a><br/>

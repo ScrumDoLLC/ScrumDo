@@ -4,10 +4,9 @@
 	<div class="epic_block">						
 	
 		{% if epic.points_value %}
-		<div class="pointsBox epicPointsBox">{{ epic|show_points }}</div>
+		<div class="epicPointsBox">{{ epic|show_points }}</div>
 		{% endif %}
 		
-		<div class="epic_gripper"></div>
 		{% canwrite project %}
 		<div class="epicIcons">
 	        <a onclick="jQuery.facebox({ ajax: '/projects/project/{{ project.slug }}/epic/{{ epic.id }}/edit'}, 'edit_epic'); return false;" 
@@ -18,16 +17,12 @@
 			#E{{epic.local_id}} {{epic.summary}}  
 		</h3>
 		
-
-		
 		<span class="epic_detail">{{epic.detail}}</span>
 		<div class="epic_list_holder">
-			{% with epic.stories_by_order as stories %}
+			
 				<ul class="epic_story_list_item" epic_id="{{epic.id}}" id="epic_{{epic.id}}_list">
-					{% for story in stories.0 %}
-					   {% ifequal story.iteration.id iteration.id %}
+					{% for story in epic.stories.all %}
 						  {% include "stories/single_block_story.html" %}								  
-					   {% endifequal %}
 					{% endfor %}
 				</ul>
 				{% if stories.1.count %}
@@ -44,7 +39,7 @@
 					{% endfor %}
 				</ul>
 				{% endif %}
-			{% endwith %}
+
 		</div>
 	</div>
 </li>

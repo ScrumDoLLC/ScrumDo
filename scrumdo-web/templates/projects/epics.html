@@ -1,0 +1,74 @@
+{% extends "projects/base.html" %}
+
+{% load i18n %}
+{% load uni_form %}
+{% load avatar_tags %}
+{% load threadedcommentstags %}
+{% load pagination_tags %}
+{% load extra_tagging_tags %}
+{% load projects_tags %}
+{% load group_tags %}
+{% load topics_tags %}
+{% load wiki_tags %}
+{% load theme_tags %}
+{% load iteration_tags %}
+
+{% block head_title %}{{ project.name }}{% endblock %}
+
+{% block breadcrumbs %}
+  {% if project.organization %}
+     <a href="{% url organization_detail project.organization.slug %}">{{ project.organization.name }}</a> /
+  {% else %}
+     {{ project.creator.username }} /
+  {% endif %}
+  <a href="{% url project_detail project.slug %}">{{ project.name }}</a> /
+  Epics
+{% endblock %}
+
+{% block body %}
+
+
+
+
+{% for epic in epic_list %}
+     {% ifequal epic "in" %}         
+         <ul class="epic_list">   
+     {% else %}                    
+         {% ifequal epic "out" %}            
+                 </ul>       
+
+             </li>                 
+         {% else %}                    
+
+                 <li>                          
+                     {% include "projects/epic.html" %}
+                     {% if epic.leaf %} 
+
+                     </li>                     
+                     {% endif %}           
+
+         {% endifequal %}           
+     {% endifequal %}                   
+{% endfor %}
+
+
+  
+
+<script type="text/javascript" charset="utf-8">
+
+  {# Inject some page values into javascript variables so we know them at runtime. #}  
+  var project_slug = "{{ project.slug }}";
+  var default_iteration = "{{ project.get_default_iteration.id }}";
+  
+
+       
+  $(document).ready( function() 
+  {
+    
+    {% if GOOGLE_ANALYTICS %}     
+       _gaq.push(['_trackEvent',"ViewPage", "Epics", "", 1]); 
+    {% endif %}
+  } ); 
+</script>
+
+{% endblock %}

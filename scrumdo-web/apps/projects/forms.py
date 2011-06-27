@@ -38,11 +38,10 @@ class IterationForm(forms.ModelForm):
     def __init__(self,  *args, **kwargs):
         super(IterationForm, self).__init__(*args, **kwargs)
         self.fields['include_in_velocity'].label = "Include In Velocity Calculations"
-        self.fields['backlog'].label = "Treat this iteration as a backlog"
 
     class Meta:
         model = Iteration
-        fields = ('name', 'start_date', 'end_date', 'include_in_velocity', "backlog")
+        fields = ('name', 'start_date', 'end_date', 'include_in_velocity')
 
 
 

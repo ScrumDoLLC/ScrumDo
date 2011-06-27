@@ -221,7 +221,6 @@ class Iteration( models.Model):
     end_date = models.DateField( blank=True, null=True )
     project = models.ForeignKey(Project, related_name="iterations")
     default_iteration = models.BooleanField( default=False )
-    backlog = models.BooleanField( default=False )
     points_log = generic.GenericRelation( PointsLog )
     locked = models.BooleanField( default=False )
 
@@ -272,16 +271,12 @@ class Epic(models.Model):
     """Represents an epic in your backlog."""
     local_id = models.IntegerField()
     summary = models.TextField()
+    parent = models.ForeignKey('self', related_name="children", null=True)
     detail = models.TextField(blank=True)
     points = models.CharField('points', max_length=4, default="?", blank=True)
-    iteration = models.ForeignKey( Iteration , related_name="epics")
     project = models.ForeignKey( Project , related_name="epics")
     status = models.IntegerField( max_length=2, choices=STATUS_CHOICES, default=1 )
     order = models.IntegerField( max_length=5, default=5000)
-
-    def stories_by_order(self):
-        return (self.stories.all().order_by("rank").filter(iteration=self.iteration), self.stories.all().order_by("rank").exclude(iteration=self.iteration))
-
 
     def normalized_points_value(self):
         "Returns the point value of this epic, minus the point value of the stories within it, minimum of 0"

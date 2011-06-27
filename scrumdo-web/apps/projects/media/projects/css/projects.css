@@ -696,28 +696,42 @@ div.add_task {
 	padding-left: 0px;
 }
 .epic_block {	
-	border: 1px solid #bebebe;
-	-webkit-border-radius: 4px;
-	-webkit-border-top-right-radius: 0;
-	-moz-border-radius: 4px;
-	-moz-border-radius-topright: 0;
-	border-radius: 4px;
-	border-top-right-radius: 0;	margin-bottom: 15px;
-
 	padding: 0 2px 5px 5px;
+	margin-bottom: 5px;
+	font-size: 12px;
+	color: #666;
 }
 .epic_header {
 	font-weight: bold;
 	margin-top: 2px;
 	margin-bottom: 5px;
+	font-size: 14px;
+	background-color: #ededed;
+	padding: 5px;
+	color: #000;
 }
 
 .epicPointsBox {
-	width: 50px;
-	margin-top:0px;
+	  display: inline;
+	  padding: 0px 5px;
+	  background-color: #fef9dd;
+	  text-align: center;
+	  vertical-align: middle;
+	  border: 1px solid #c8caca;
+	  width: 40px;	  
+	  float: right;
+	  margin-top: 5px;
+	  margin-right: 5px;
+	  -webkit-border-radius: 3px;
+	  -moz-border-radius: 3px;
+ 	  border-radius: 3px;
 }
 .epic_story_list {
 	list-style: none;
+}
+.epic_list {
+	list-style: none;
+	padding-left: 25px;	
 }
 .on_active {
     display: none;
