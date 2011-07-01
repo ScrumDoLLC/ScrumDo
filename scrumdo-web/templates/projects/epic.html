@@ -1,45 +1,39 @@
 {% load projects_tags %}
 {% load story_tags %}
-<li class="epic_story_list" id="epic_{{epic.id}}" epic_id="{{epic.id}}">	
-	<div class="epic_block">						
-	
-		{% if epic.points_value %}
-		<div class="epicPointsBox">{{ epic|show_points }}</div>
-		{% endif %}
+<div class="epic_list_block" id="epic_{{epic.id}}" epic_id="{{epic.id}}">	
+
+	<!-- 		{% if epic.points_value %}
+			<div class="epicPointsBox">{{ epic|show_points }}</div>
+			{% endif %} -->
 		
-		{% canwrite project %}
+		<!-- {% canwrite project %}
 		<div class="epicIcons">
 	        <a onclick="jQuery.facebox({ ajax: '/projects/project/{{ project.slug }}/epic/{{ epic.id }}/edit'}, 'edit_epic'); return false;" 
 			   href="#"><img title="Edit Epic" src="{{ STATIC_URL }}pinax/images/silk/icons/pencil.png" /></a>
 		</div>
-	    {% endcanwrite %}
-		<h3 class="epic_header">								
+	    {% endcanwrite %} -->
+
 			#E{{epic.local_id}} {{epic.summary}}  
-		</h3>
+
 		
-		<span class="epic_detail">{{epic.detail}}</span>
-		<div class="epic_list_holder">
+
+
 			
-				<ul class="epic_story_list_item" epic_id="{{epic.id}}" id="epic_{{epic.id}}_list">
+				<ul epic_id="{{epic.id}}" id="epic_{{epic.id}}_list">
 					{% for story in epic.stories.all %}
-						  {% include "stories/single_block_story.html" %}								  
+						  {# % include "stories/single_block_story.html" % #}		
+						<li class="epic_story_list_item">
+							#{{story.local_id}} {{story.summary}}
+							{% if story.detail %}
+							  <br/>{{story.detail}}
+						    {% endif %}
+ 						</li> 
 					{% endfor %}
 				</ul>
 				{% if stories.1.count %}
 				<a href="#" class="show_assigned_stories">{{ stories.1.count }} more stories</a>
-				<ul style="display:none" epic_id="{{epic.id}}" class="epic_assigned_stories">
-					{% for story in stories.1 %}
-					   {% ifequal story.iteration.id iteration.id %}									  
-					   {% else %}
-					     <div style="opacity:0.5" class="other_iteration_story">
-						   <div class="epic_iteration_note">In <a href="{% url iteration project.slug story.iteration.id %}">{{ story.iteration.name }}</a>:</div>
-					       {% include "stories/single_block_story.html" %}								       
-					     </div>
-					   {% endifequal %}
-					{% endfor %}
-				</ul>
+
 				{% endif %}
 
-		</div>
-	</div>
-</li>
+
+</div>

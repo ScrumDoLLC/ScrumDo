@@ -32,33 +32,35 @@
 
 {% for epic in epic_list %}
      {% ifequal epic "in" %}         
-         <ul class="epic_list">   
+         <ul>  
      {% else %}                    
-         {% ifequal epic "out" %}            
+        {% ifequal epic "out" %}            
                  </ul>       
-
+<a class="epic_edit_links" href="#">Add Story | Add Epic</a>
              </li>                 
          {% else %}                    
 
-                 <li>                          
+                  <li class="epic_list_item">                          
                      {% include "projects/epic.html" %}
                      {% if epic.leaf %} 
-
+                      <a class="epic_edit_links" href="#">Add Story | Add Epic</a>
                      </li>                     
                      {% endif %}           
-
          {% endifequal %}           
      {% endifequal %}                   
 {% endfor %}
 
 
   
-
+<script type="text/javascript" src="{{STATIC_URL}}js/epics.js"></script>
 <script type="text/javascript" charset="utf-8">
 
-  {# Inject some page values into javascript variables so we know them at runtime. #}  
+  {# Inject some page values into javascript variables so we know them at runtime and can use them in our .js files #}  
   var project_slug = "{{ project.slug }}";
   var default_iteration = "{{ project.get_default_iteration.id }}";
+  var current_story_popup = "";
+  var last_load_iter_req = null;
+  var static_url = "{{ STATIC_URL }}";
   
 
        

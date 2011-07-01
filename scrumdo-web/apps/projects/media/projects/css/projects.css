@@ -691,48 +691,6 @@ div.add_task {
 	z-index: 8;
 }
 
-#epic_list {
-	margin-left: 0px;
-	padding-left: 0px;
-}
-.epic_block {	
-	padding: 0 2px 5px 5px;
-	margin-bottom: 5px;
-	font-size: 12px;
-	color: #666;
-}
-.epic_header {
-	font-weight: bold;
-	margin-top: 2px;
-	margin-bottom: 5px;
-	font-size: 14px;
-	background-color: #ededed;
-	padding: 5px;
-	color: #000;
-}
-
-.epicPointsBox {
-	  display: inline;
-	  padding: 0px 5px;
-	  background-color: #fef9dd;
-	  text-align: center;
-	  vertical-align: middle;
-	  border: 1px solid #c8caca;
-	  width: 40px;	  
-	  float: right;
-	  margin-top: 5px;
-	  margin-right: 5px;
-	  -webkit-border-radius: 3px;
-	  -moz-border-radius: 3px;
- 	  border-radius: 3px;
-}
-.epic_story_list {
-	list-style: none;
-}
-.epic_list {
-	list-style: none;
-	padding-left: 25px;	
-}
 .on_active {
     display: none;
 }
@@ -740,47 +698,11 @@ div.add_task {
     display: inline;
 }
 
-.epic_list_holder {	
-
-}
-
-.epic_block .ui-sortable {
-
-	min-height: 25px;
-	padding-top: 5px;
-	padding-right: 5px;	
-}
-
-.epic_assigned_stories {
-	padding-right: 5px;
-}
-
 .on_inactive {
     display: inline;
 }
 .active .on_inactive {
     display: none;
-}
-
-.epic_gripper {
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-    height: 10px;
-    width:100%;
-    background-color: #999;
-    cursor: move;
-    margin-top: 1px;
-    margin-left: -3px;
-    margin-right: -3px;
-}
-
-.epic_iteration_note {
-	background-color: #e0e0e0;
-	border-top: 1px solid #c2c2c2;
-	border-left: 1px solid #c2c2c2;
-	border-right: 1px solid #c2c2c2;
-	padding-left: 15px;
 }
 
 #scrumdo_overlay {
@@ -822,3 +744,29 @@ div.add_task {
 	font-size: 16px;
 	
 }
+
+
+
+.epic_list_item {
+	font-weight: bold;
+	border-style: solid;
+	border-width: 1px;
+	margin-bottom: 9px;
+	list-style: none;
+	font-size: 16px;
+	margin-right: -6px;
+	padding: 5px;
+}
+
+.epic_story_list_item  {
+	font-weight: normal;
+	font-size: 12px;
+	list-style: none;
+	padding: 3px;
+}
+
+.epic_edit_links {
+	font-size: 12px;
+	font-weight: normal;
+}
+
