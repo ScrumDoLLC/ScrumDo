@@ -136,6 +136,19 @@ $(document).ready(function(){
     $("#med_epics").click( setMedEpics );
     $("#big_epics").click( setBigEpics );
     
+    $(".add_epic_link").click(function(){
+
+        jQuery.facebox({ div: '#add_epic_popup' });        
+
+        return false;
+    });
+
+    $(".add_story_link").click(function(){
+        jQuery.facebox({ div: '#add_story_popup' });        
+
+        return false;
+    });
+    
     
     $(".show_assigned_stories").click(function(){
        $(this).siblings(".epic_assigned_stories").show();

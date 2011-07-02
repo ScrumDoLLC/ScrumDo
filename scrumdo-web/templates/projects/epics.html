@@ -32,23 +32,28 @@
 
 {% for epic in epic_list %}
      {% ifequal epic "in" %}         
-         <ul>  
+         <ul class="epic_list">  
      {% else %}                    
         {% ifequal epic "out" %}            
                  </ul>       
-<a class="epic_edit_links" href="#">Add Story | Add Epic</a>
+				<div class="add_story_epic_links"><a class="add_story_link" href="#">Add Story</a> - <a class="add_epic_link" href="#">Add Epic</a></div>
              </li>                 
          {% else %}                    
 
                   <li class="epic_list_item">                          
                      {% include "projects/epic.html" %}
                      {% if epic.leaf %} 
-                      <a class="epic_edit_links" href="#">Add Story | Add Epic</a>
+                      	<div class="add_story_epic_links"><a class="add_story_link" href="#">Add Story</a> - <a class="add_epic_link" href="#">Add Epic</a></div>
                      </li>                     
                      {% endif %}           
          {% endifequal %}           
      {% endifequal %}                   
 {% endfor %}
+
+
+
+<div id="add_story_popup">{% include "stories/add_story_form.html" %}</div>
+<div id="add_epic_popup">{% include "stories/add_epic_form.html" %}</div>
 
 
   
@@ -62,11 +67,35 @@
   var last_load_iter_req = null;
   var static_url = "{{ STATIC_URL }}";
   
+  function setupSortableLists()
+	{
+		// $(".epic_list").sortable("destroy");
+		// $(".epic_list").sortable({
+		// 	tolerance: 'pointer',
+		// 	        distance: 5,
+		// 	placeholder: "ui-state-highlight",
+		// 	stop: updateEpicPosition,
+		// 	connectWith: ".epic_list"
+		// });
 
+		$(".epic_story_list").sortable("destroy");
+		$(".epic_story_list").sortable({
+	        tolerance: 'intersect',
+	        distance: 5,
+			dropOnEmpty: true,
+	        opacity: 0.5,
+			greedy: true,
+	        placeholder: "ui-state-highlight",
+	        cancel: ".block_story_body",
+			connectWith: ".epic_story_list"
+	    });
+	}
+
+	setUpStoryLinksCallback = setupSortableLists;
        
   $(document).ready( function() 
   {
-    
+    setupSortableLists();
     {% if GOOGLE_ANALYTICS %}     
        _gaq.push(['_trackEvent',"ViewPage", "Epics", "", 1]); 
     {% endif %}

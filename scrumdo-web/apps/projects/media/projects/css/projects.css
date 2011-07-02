@@ -745,17 +745,31 @@ div.add_task {
 	
 }
 
+.add_story_epic_links {
+	width: 100%;
+	opacity: 0.1;
+}
+.add_story_epic_links:hover {
+	opacity: 1;
+}
 
+.add_story_epic_links a {
+	text-decoration: none;
+	font-size: 12px;
+	font-weight: normal;
+}
 
+.add_story_epic_links a:hover {
+	text-decoration: underline;
+}
 .epic_list_item {
 	font-weight: bold;
-	border-style: solid;
-	border-width: 1px;
 	margin-bottom: 9px;
 	list-style: none;
-	font-size: 16px;
+	font-size: 14px;
 	margin-right: -6px;
 	padding: 5px;
+	border: 1px solid #8c8c8c;
 }
 
 .epic_story_list_item  {
@@ -763,10 +777,63 @@ div.add_task {
 	font-size: 12px;
 	list-style: none;
 	padding: 3px;
+	border: 1px solid #dcdcdc;
+	margin-bottom: 3px;
+	min-height: 22px;
 }
 
-.epic_edit_links {
+.epic_story_list_item .pointsBox {
+	font-size: 12px;	
+	height: 10px;
+	margin-top: -3px;
+	margin-right: -3px;
+}
+
+.epic_story_list_item:hover .storyIcons, .epic_story_list_item:focus .storyIcons{
+  opacity: 1;
+}
+
+
+.formatted_story_text p {
+	margin: 0px;
+	display: inline-block;
+}
+
+.formatted_story_text h1 {
+	font-size: 14px;
+	margin: 3px;
+	font-weight: bold;
+}
+.formatted_story_text h2 {
+	font-size: 14px;
+	margin: 2px;
+}
+.formatted_story_text h3, .formatted_story_text h4 {
 	font-size: 12px;
-	font-weight: normal;
+	font-weight: bold;
+	margin: 1px;
 }
 
+
+.epic_story_list {
+	margin-top: 5px;
+	min-height: 10px;
+}
+.epic_story_list .gripper_reviewing {
+    border-left: 6px solid #ff7f0e;
+}
+.epic_story_list .gripper_todo {
+    border-left: 6px solid #444;
+}
+.epic_story_list .gripper_doing {
+    border-left: 6px solid #448cca;
+}
+.epic_story_list .gripper_done {
+    border-left: 6px solid #8dc73e;
+}
+
+#add_story_popup, #add_epic_popup {
+    width: 850px;
+    height: 600px;
+    display: none;
+}

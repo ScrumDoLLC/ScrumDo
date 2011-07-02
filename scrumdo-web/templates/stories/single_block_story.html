@@ -6,6 +6,7 @@
 {% load story_tags %}
 {% load tasks_tags %}
 {% load avatar_tags %}
+{% load markup %}
 
 <li class="story_block gripper_{% ifequal story.status 1 %}todo{% endifequal %}{% ifequal story.status 3 %}reviewing{% endifequal %}{% ifequal story.status 2 %}doing{% endifequal %}{% ifequal story.status 4 %}done{% endifequal %}" story_id="{{story.id}}" id="story_{{story.id}}" rank="{{ story.rank }}" >
   <div class="block_story_body">
@@ -30,10 +31,11 @@
 
     </span>
     
-  <h1><span style="color:#cccccc;">#{{story.local_id}} {% if story.category %}({{story.category}}){% endif %}</span> {{ story.summary|escape|link_stories:story.project|safe }}</h1>
+  <h1 class="formatted_story_text"><span style="color:#cccccc;">#{{story.local_id}} {% if story.category %}({{story.category}}){% endif %}</span> {{ story.summary|markdown|link_stories:story.project|safe }}</h1>
 
-
-  {{ story.detail|escape|link_stories:story.project|safe }}
+  <span class="formatted_story_text">
+  {{ story.detail|markdown|link_stories:story.project|safe }}
+  </span>
   
     
 
