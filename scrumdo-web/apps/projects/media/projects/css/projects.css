@@ -746,8 +746,9 @@ div.add_task {
 }
 
 .add_story_epic_links {
-	width: 100%;
+    margin-left: 20px;
 	opacity: 0.1;
+	display: inline-block;
 }
 .add_story_epic_links:hover {
 	opacity: 1;
@@ -774,6 +775,15 @@ div.add_task {
 	margin-right: -6px;
 	padding: 5px;
 	border: 1px solid #8c8c8c;
+}
+
+.epicIcons {
+    opacity: 0.2;
+    margin-top: -2px;
+}
+
+.epicIcons:hover {
+    opacity: 1;
 }
 
 .epic_story_list_item  {

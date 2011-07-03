@@ -220,7 +220,7 @@ function openOverlay( url )
     $.ajax({
         url: url,
         success: function(data) {
-            $("#scrumdo_overlay").fadeIn();
+            $("#scrumdo_overlay").fadeIn(150);
             $("#scrumdo_overlay").html(data);            
             $("body").css("overflow", "hidden");
         }

@@ -1,5 +1,4 @@
 {% extends "projects/base.html" %}
-
 {% load i18n %}
 {% load uni_form %}
 {% load avatar_tags %}
@@ -25,37 +24,28 @@
   Epics
 {% endblock %}
 
+
 {% block body %}
 
-
-
-
-{% for epic in epic_list %}
+  {% for epic in epic_list %}
      {% ifequal epic "in" %}         
          <ul class="epic_list">  
      {% else %}                    
         {% ifequal epic "out" %}            
-                 </ul>       
-				<div class="add_story_epic_links"><a class="add_story_link" href="#">Add Story</a> - <a class="add_epic_link" href="#">Add Epic</a></div>
-             </li>                 
+           </ul>       
+           </li>                 
          {% else %}                    
-
-                  <li class="epic_list_item">                          
-                     {% include "projects/epic.html" %}
-                     {% if epic.leaf %} 
-                      	<div class="add_story_epic_links"><a class="add_story_link" href="#">Add Story</a> - <a class="add_epic_link" href="#">Add Epic</a></div>
-                     </li>                     
-                     {% endif %}           
+           <li class="epic_list_item">                          
+              {% include "projects/epic.html" %}
+              {% if epic.leaf %}                 
+                 </li>                     
+              {% endif %}           
          {% endifequal %}           
      {% endifequal %}                   
-{% endfor %}
+  {% endfor %}
 
-
-
-<div id="add_story_popup"><div style="width:800px">{% include "stories/add_story_form.html" %}</div></div>
-<div id="add_epic_popup"><div style="width:800px">{% include "stories/add_epic_form.html" %}</div></div>
-
-
+  <div id="add_story_popup"><div style="width:800px">{% include "stories/add_story_form.html" %}</div></div>
+  <div id="add_epic_popup"><div style="width:800px">{% include "stories/add_epic_form.html" %}</div></div>
   
 <script type="text/javascript" src="{{STATIC_URL}}js/epics.js"></script>
 <script type="text/javascript" charset="utf-8">
@@ -69,15 +59,6 @@
   
   function setupSortableLists()
 	{
-		// $(".epic_list").sortable("destroy");
-		// $(".epic_list").sortable({
-		// 	tolerance: 'pointer',
-		// 	        distance: 5,
-		// 	placeholder: "ui-state-highlight",
-		// 	stop: updateEpicPosition,
-		// 	connectWith: ".epic_list"
-		// });
-
 		$(".epic_story_list").sortable("destroy");
 		$(".epic_story_list").sortable({
 	        tolerance: 'intersect',

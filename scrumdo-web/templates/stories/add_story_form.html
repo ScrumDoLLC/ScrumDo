@@ -17,19 +17,12 @@
           {% endif %}
           <tr><td>Backlog&nbsp;Position:&nbsp;</td><td id="general-rank-cell">{{add_story_form.general_rank}}  {{add_story_form.general_rank.errors}} </td></tr>
           
-		  {% if epics %}
 		    <tr>
 			  <td>Epic:&nbsp;</td>
 			  <td> 
-				 <select id="epic_dropdown" name="epic">
-					<option value="">------</option>
-					{% for epic in epics %}
-					  <option value="{{epic.id}}">E{{epic.local_id}} {{epic.summary|truncatewords:25}}</option>
-					{% endfor %}
- 				 </select>
+				 {{add_story_form.epic}}{{add_story_form.epic.errors}}
 			  </td>
 		   </tr>
-  		  {% endif %}
 
           {% if project.categories %}
           <tr><td>Category:&nbsp;</td><td>{{add_story_form.category}}  {{add_story_form.category.errors}} </td></tr>

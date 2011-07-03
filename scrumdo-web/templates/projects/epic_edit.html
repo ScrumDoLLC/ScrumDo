@@ -1,5 +1,5 @@
 {% load i18n %}{% load uni_form %}{% load theme_tags %}{% load projects_tags %}<div id="epic_area" style="width: 860px;">
-<form id="epic_detail_form" method="POST" action="{% url edit_epic project.slug epic.id%}" class="uniForm" style="width: 100%">
+<form id="epic_detail_form" method="POST" action="{% url edit_epic epic.id%}" class="uniForm" style="width: 100%">
 	<fieldset class="inlineLabels">
 		{{ form|as_uni_form }}
 		<div class="form_block">
@@ -10,7 +10,7 @@
 	</fieldset>
 </form>
 <br/><br/>
-  <form method="POST" id="deleteEpicForm" action="{% url delete_epic project.slug epic.id%}">
+  <form method="POST" id="deleteEpicForm" action="{% url delete_epic epic.id%}">
     <input class="button red" style="margin-top: -25px; margin-right: 5px" type="submit" value="Delete Epic" />
   </form>
 </div>
@@ -23,7 +23,8 @@
 			$(document).trigger('close.facebox');   
 	        if(typeof calculateBothPoints == 'function') { calculateBothPoints(); }         
 	        if(typeof reloadStoryCallback == 'function') { reloadStoryCallback(); }         
-	        if(typeof updatePanel == 'function') { updatePanel(); }    			
+	        if(typeof updatePanel == 'function') { updatePanel(); }    	
+			closeOverlay();
 		}
 		else
 		{

@@ -142,7 +142,7 @@ $(document).ready(function(){
     $(".add_epic_link").click(function(){
 
         jQuery.facebox({ div: '#add_epic_popup' });        
-
+        $("#id_parent").val($(this).parents(".epic_list_block").attr("epic_id"));
         return false;
     });
 

@@ -89,6 +89,12 @@ class AddStoryForm( forms.ModelForm ):
         self.fields["extra_1"].widget = forms.widgets.Textarea(attrs={'rows':3, 'cols':50})
         self.fields["extra_2"].widget = forms.widgets.Textarea(attrs={'rows':3, 'cols':50})
         self.fields["extra_3"].widget = forms.widgets.Textarea(attrs={'rows':3, 'cols':50})
+        
+        epics = [ (epic.id, "#E%d %s" % (epic.local_id, epic.summary) ) for epic in project.epics.all().order_by("local_id") ]
+        epics.insert(0,("","----------") )
+        self.fields["epic"].choices=epics
+        self.fields["epic"].required = False
+        
         if project.categories:
             choices = [(c.strip(),c.strip()) for c in project.categories.split(",")]
             choices.insert(0,("",""))
@@ -103,7 +109,7 @@ class AddStoryForm( forms.ModelForm ):
         return super(AddStoryForm, self).save(**kwargs)
     class Meta:
         model = Story
-        fields = ('summary', 'detail', 'category', 'tags', 'points' , 'extra_1','extra_2','extra_3','assignee')
+        fields = ('summary', 'detail', 'category', 'tags', 'points' , 'extra_1','extra_2','extra_3','assignee','epic')
 
 class EpicForm( forms.ModelForm ):
     def __init__(self, project,  *args, **kwargs):
@@ -113,9 +119,10 @@ class EpicForm( forms.ModelForm ):
         self.fields["summary"].widget = forms.TextInput()
         self.fields["summary"].widget.attrs['size'] = 60
         
-        epics = [ (epic.id, epic.summary) for epic in project.epics.all() ]
+        epics = [ (epic.id, "#E%d %s" % (epic.local_id, epic.summary) ) for epic in project.epics.all().order_by("local_id") ]
         epics.insert(0,("","----------") )
-        self.fields["epic"].choices=epics
+        self.fields["parent"].choices=epics
+        self.fields["parent"].required = False        
         
 
     def clean_points(self):
@@ -155,9 +162,10 @@ class StoryForm( forms.ModelForm ):
         members.insert(0,("","---------"))
         self.fields["assignee"].choices = members
         
-        epics = [ (epic.id, epic.summary) for epic in project.epics.all() ]
+        epics = [ (epic.id, "#E%d %s" % (epic.local_id, epic.summary) ) for epic in project.epics.all().order_by("local_id") ]
         epics.insert(0,("","----------") )
         self.fields["epic"].choices=epics
+        self.fields["epic"].required = False
         
         self.fields["detail"].widget = forms.widgets.Textarea(attrs={'rows':3, 'cols':50})
         self.fields["extra_1"].widget = forms.widgets.Textarea(attrs={'rows':3, 'cols':50})

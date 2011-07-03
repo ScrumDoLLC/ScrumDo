@@ -3,29 +3,30 @@
 {% load markup %}
 <div class="epic_list_block" id="epic_{{epic.id}}" epic_id="{{epic.id}}">	
 
-	<!-- 		{% if epic.points_value %}
+			{% if epic.points_value %}
 			<div class="epicPointsBox">{{ epic|show_points }}</div>
-			{% endif %} -->
-		
-		<!-- {% canwrite project %}
-		<div class="epicIcons">
-	        <a onclick="jQuery.facebox({ ajax: '/projects/project/{{ project.slug }}/epic/{{ epic.id }}/edit'}, 'edit_epic'); return false;" 
-			   href="#"><img title="Edit Epic" src="{{ STATIC_URL }}pinax/images/silk/icons/pencil.png" /></a>
-		</div>
-	    {% endcanwrite %} -->
+			{% endif %} 
 
-			<span class="epic_text">#E{{epic.local_id}} {{epic.summary}}</span>
-
-		
-
-
-			
-				<ul epic_id="{{epic.id}}" id="epic_{{epic.id}}_list" class="epic_story_list">
-					{% for story in epic.stories.all %}
-						  {% include "stories/single_block_story.html" %}
- 						</li> 
-					{% endfor %}
-				</ul>			
-
-
+	 <span class="epicIcons">
+	    {% canwrite project %}
+	        <a onclick="openOverlay( '/projects/epic/{{ epic.id }}/edit' ); return false;" 
+			   href="/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=block">
+				<img title="Edit Epic" src="{{ STATIC_URL }}pinax/images/silk/icons/pencil.png" />
+			</a>
+	    {% endcanwrite %}
+	 </span>
+	
+	 <span class="epic_text">#E{{epic.local_id}} {{epic.summary}} 
+	   <div class="add_story_epic_links">
+	     <a class="add_story_link"  epic_id="{{epic.id}}" href="#">Add Story</a> - 
+		 <a class="add_epic_link"  epic_id="{{epic.id}}" href="#">Add Epic</a>
+	   </div>
+	 </span>
+	 
+	 <ul epic_id="{{epic.id}}" id="epic_{{epic.id}}_list" class="epic_story_list">
+		{% for story in epic.stories.all %}
+			  {% include "stories/single_block_story.html" %}
+		{% endfor %}
+	 </ul>			
+	
 </div>
