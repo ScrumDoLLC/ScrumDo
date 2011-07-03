@@ -14,7 +14,7 @@
 		</div>
 	    {% endcanwrite %} -->
 
-			#E{{epic.local_id}} {{epic.summary}}  
+			<span class="epic_text">#E{{epic.local_id}} {{epic.summary}}</span>
 
 		
 
@@ -22,27 +22,7 @@
 			
 				<ul epic_id="{{epic.id}}" id="epic_{{epic.id}}_list" class="epic_story_list">
 					{% for story in epic.stories.all %}
-						  {# % include "stories/single_block_story.html" % #}		
-						<li class="formatted_story_text epic_story_list_item gripper_{% ifequal story.status 1 %}todo{% endifequal %}{% ifequal story.status 3 %}reviewing{% endifequal %}{% ifequal story.status 2 %}doing{% endifequal %}{% ifequal story.status 4 %}done{% endifequal %}	">
-							<div class="pointsBox">{{ story|show_points }}</div>
-							
-							
-							<span class="storyIcons">
-						    <a class="hoverDetails" onclick="jQuery.facebox({ ajax: '/projects/project/{{story.project.slug}}/story/{{story.id}}/pretty'}, 'pretty_print'); return false;" href="/projects/project/{{story.project.slug}}/story/{{story.id}}/pretty"><img title="Quick View" src="{{STATIC_URL}}pinax/images/silk/icons/magnifier.png" /></a>
-
-
-						    {% canwrite project %}
-						        <a story_id="{{ story.id }}" class="moveIterationIcon"  href="#"><img title="Move To Another Iteration" src="{{ STATIC_URL }}pinax/images/silk/icons/page_white_go.png" /></a>
-						        <a onclick="setupAutoClose('#todoButtons_{{story.id}}'); jQuery('#todoButtons_{{story.id}}').show();  return false;" href="#"><img title="Set Status" src="{{ STATIC_URL }}pinax/images/silk/icons/tag_red.png" /></a>
-						        <a onclick="openOverlay( '/projects/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=block' ); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=block"><img title="Edit Story" src="{{ STATIC_URL }}pinax/images/silk/icons/pencil.png" /></a>
-						        {% include "stories/single_extra_icons.html" %}
-						    {% endcanwrite %}
-						    </span>
-						
-							#{{story.local_id}} {{story.summary|markdown}}
-							{% if story.detail %}
-							  <br/>{{story.detail|markdown}}
-						    {% endif %}
+						  {% include "stories/single_block_story.html" %}
  						</li> 
 					{% endfor %}
 				</ul>			

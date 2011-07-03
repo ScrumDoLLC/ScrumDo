@@ -135,6 +135,9 @@ $(document).ready(function(){
     $("#small_epics").click( setSmallEpics );
     $("#med_epics").click( setMedEpics );
     $("#big_epics").click( setBigEpics );
+    $("#story_details").show();
+    $("#epic_details").show();
+    
     
     $(".add_epic_link").click(function(){
 

@@ -106,10 +106,9 @@ class AddStoryForm( forms.ModelForm ):
         fields = ('summary', 'detail', 'category', 'tags', 'points' , 'extra_1','extra_2','extra_3','assignee')
 
 class EpicForm( forms.ModelForm ):
-    def __init__(self, project, iteration, *args, **kwargs):
+    def __init__(self, project,  *args, **kwargs):
         super(EpicForm, self).__init__(*args, **kwargs)
         self.project = project
-        self.iteration = iteration
 
         self.fields["summary"].widget = forms.TextInput()
         self.fields["summary"].widget.attrs['size'] = 60
@@ -125,7 +124,6 @@ class EpicForm( forms.ModelForm ):
 
     def save(self,  **kwargs):
         self.instance.project = self.project
-        self.instance.iteration = self.iteration
         if not self.instance.local_id:
             self.instance.local_id = self.project.getNextEpicId()
         return super(EpicForm, self).save(**kwargs)
@@ -151,6 +149,11 @@ class StoryForm( forms.ModelForm ):
         members = project.all_member_choices()
         members.insert(0,("","---------"))
         self.fields["assignee"].choices = members
+        
+        epics = [ (epic.id, epic.summary) for epic in project.epics.all() ]
+        epics.insert(0,("","----------") )
+        self.fields["epic"].choices=epics
+        
         self.fields["detail"].widget = forms.widgets.Textarea(attrs={'rows':3, 'cols':50})
         self.fields["extra_1"].widget = forms.widgets.Textarea(attrs={'rows':3, 'cols':50})
         self.fields["extra_2"].widget = forms.widgets.Textarea(attrs={'rows':3, 'cols':50})
@@ -169,7 +172,7 @@ class StoryForm( forms.ModelForm ):
         return super(StoryForm, self).save(**kwargs)
     class Meta:
         model = Story
-        fields = ('summary', 'detail', 'tags', 'points' , 'category', 'extra_1','extra_2','extra_3','assignee')
+        fields = ('summary', 'detail', 'tags', 'points' , 'category', 'extra_1','extra_2','extra_3','assignee', 'epic')
 
 
 class ProjectForm(forms.ModelForm):

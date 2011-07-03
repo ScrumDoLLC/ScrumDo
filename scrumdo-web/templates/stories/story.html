@@ -26,6 +26,8 @@
       <tr><td>Category:&nbsp;</td><td>{{form.category}}  {{form.category.errors}} </td></tr>
       {% endif %}
 
+	  <tr><td>Epic:&nbsp;</td><td>{{form.epic}}  {{form.epic.errors}} </td></tr>
+
       {% if project.use_extra_1 %}
         <tr><td>{{project.extra_1_label}}&nbsp;</td><td>{{form.extra_1}}  {{form.extra_1.errors}} </td></tr>
       {% endif %}

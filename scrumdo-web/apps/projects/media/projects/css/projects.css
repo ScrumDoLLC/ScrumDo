@@ -762,11 +762,15 @@ div.add_task {
 .add_story_epic_links a:hover {
 	text-decoration: underline;
 }
+
+.epic_text {
+	font-weight: bold;    
+	font-size: 14px;
+}
+
 .epic_list_item {
-	font-weight: bold;
 	margin-bottom: 9px;
 	list-style: none;
-	font-size: 14px;
 	margin-right: -6px;
 	padding: 5px;
 	border: 1px solid #8c8c8c;

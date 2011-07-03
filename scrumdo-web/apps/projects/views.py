@@ -138,11 +138,15 @@ def epics(request, group_slug):
     epics = project.epics.filter(parent__isnull=True)
     epics_list = _flattenEpics(epics)
     organization = _organizationOrNone(project)
+    add_story_form = handleAddStory(request, project)
+    add_epic_form = EpicForm(project)
     return render_to_response("projects/epics.html", 
                               {
                                 "project":project,
                                 "epic_list":epics_list,
-                                "organization":organization
+                                "organization":organization,
+                                "add_story_form":add_story_form,
+                                "add_epic_form":add_epic_form
                               },
                               context_instance=RequestContext(request))
 
