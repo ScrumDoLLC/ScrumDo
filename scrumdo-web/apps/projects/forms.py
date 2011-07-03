@@ -112,6 +112,11 @@ class EpicForm( forms.ModelForm ):
 
         self.fields["summary"].widget = forms.TextInput()
         self.fields["summary"].widget.attrs['size'] = 60
+        
+        epics = [ (epic.id, epic.summary) for epic in project.epics.all() ]
+        epics.insert(0,("","----------") )
+        self.fields["epic"].choices=epics
+        
 
     def clean_points(self):
         try:
@@ -130,7 +135,7 @@ class EpicForm( forms.ModelForm ):
 
     class Meta:
         model = Epic
-        fields = ('summary','detail','points')
+        fields = ('summary','detail','points','parent')
 
 
 class StoryForm( forms.ModelForm ):
