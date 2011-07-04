@@ -74,7 +74,7 @@
       <h1>Iteration {{prediction.num}} ({{prediction.points}} points) {{prediction.start|date:"M d Y"}} - {{prediction.end|date:"M d Y"}}</h1>
       <ul>
         {% for story in prediction.stories %}
-          <li><span class="storyNumber"><a onclick="jQuery.facebox({ ajax: '/projects/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=mini'}); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}">#{{story.local_id}}</a></span> {{story.summary}} <div class="predictedPointsBox">{{story.points}}</div></li>
+          <li><span class="storyNumber"><a onclick="openOverlay( '/projects/project/{{ project.slug }}/story/{{ story.id }}?return_type=block' ); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}">#{{story.local_id}}</a></span> {{story.summary}} <div class="predictedPointsBox">{{story.points}}</div></li>
         {% endfor %}
       </ul>
       {% if carry_over %}      
@@ -89,7 +89,7 @@
       <p>These stories are in the above plan, but they're not currently sized which will affect the accuracy of the predictions.</p>
       <ul>
         {% for story in unsized_stories %}
-          <li><span class="storyNumber"><a onclick="jQuery.facebox({ ajax: '/projects/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=mini'}); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}">#{{story.local_id}}</a></span> {{story.summary}} <div class="predictedPointsBox">{{story.points}}</div></li>
+          <li><span class="storyNumber"><a onclick="openOverlay( '/projects/project/{{ project.slug }}/story/{{ story.id }}?return_type=block' ); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}">#{{story.local_id}}</a></span> {{story.summary}} <div class="predictedPointsBox">{{story.points}}</div></li>
         {% endfor %}
       </ul>
     </div>    
@@ -102,11 +102,9 @@
       
       $(".changeAssumptionLink").click( function() { $(this).hide(); $("#assumption_form").show(); } );
       
-      // TODO - horrible name for this method, but the story template calls it.
-      function calculateBothPoints() 
-      {
+      $("body").bind("storyEdited", function() {
         window.location.reload();
-      }
+      });
       
       {% if GOOGLE_ANALYTICS %}     
          _gaq.push(['_trackEvent',"ViewPage", "Prediction"]); 

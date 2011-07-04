@@ -1,5 +1,6 @@
 scrumdo_special_tags = [ ];
 
+
 function setupAutoClose( divID )
 {  
   setTimeout( "$('body').one('click',function() { $(\"" + divID + "\").fadeOut(100); });" , 100);
@@ -8,15 +9,13 @@ function setupAutoClose( divID )
 function setStatus(storyID, project_slug, status, return_type)
 {
     $(".todoButtons").hide();
-    if(typeof reloadStoryCallback == 'function') { reloadStoryCallback(); }
     $.ajax({
 	    url: "/projects/project/" + project_slug + "/story/" + storyID + "/set_" + status,
 		type: "POST",
 		data: ({return_type : return_type}),
 		success: function(responseText) {
 		$("#story_" + storyID).replaceWith(responseText);
-		setUpStoryLinks();		
-		if(typeof updatePanel == 'function') { updatePanel(); }   
+		$("#story_" + storyID).trigger("storyEdited");
 	    }
 	});
 }
@@ -47,20 +46,18 @@ function deleteTask( story_id, task_id )
         return;
     }
  
-    if(typeof reloadStoryCallback == 'function') { reloadStoryCallback(); }   
-    
     $.ajax({
 	    url: "/projects/task/" + task_id + "/delete",
 		type: "POST",
 		success: function(responseText) {
-		    reloadStory(story_id, false, true);		    
+		    reloadStory(story_id, false, true);			     
 	    }
 	}); 
 }
 
 function setTaskStatus(story_id, task_id, status)
 {
-    if(typeof reloadStoryCallback == 'function') { reloadStoryCallback(); }
+
     $.ajax({
 	    url: "/projects/task/" + task_id + "/set_status",
 		type: "POST",
@@ -123,8 +120,8 @@ function reloadStory( story_id , display_comments, display_tasks)
 	    url: "/projects/story/" + story_id,
 		type: "GET",
 		success: function(responseText) {
-    		$("#story_" + story_id).replaceWith(responseText);
-    		setUpStoryLinks();
+    		$("#story_" + story_id).replaceWith(responseText);    		
+    		$("#story_" + storyID).trigger("storyEdited");
     		
     		if( display_tasks ) { showTasksForStory( story_id , false);}
     		if( display_comments ) { showCommentsForStory(story_id, false);}   
@@ -140,7 +137,6 @@ function reloadStory( story_id , display_comments, display_tasks)
 // event.
 function setUpStoryLinks() 
 {
-    if(typeof setUpStoryLinksCallback == 'function') { setUpStoryLinksCallback(); }
        
     $(".tasks_task").mouseenter(function() {      
       $(this).find(".task_controls").css("visibility","visible");
@@ -226,3 +222,10 @@ function closeOverlay()
     });
     $("body").css("overflow", "auto");
 }
+
+
+$(document).ready(function() {
+    $("body").bind("storyListChanged", setUpStoryLinks );
+    $('body').bind("epicEdited", setUpStoryLinks );    
+    $('body').bind("storyEdited", setUpStoryLinks );    
+});

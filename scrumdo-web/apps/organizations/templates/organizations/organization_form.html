@@ -24,36 +24,13 @@
 </div>
 
 <script type="text/javascript" charset="utf-8">
-
-      $("#story_area .commentForm").show();
-      
-      $("#story_detail_form").ajaxForm({        
-        success: function(responseText) { 
-          $("#story_{{story.id}}").replaceWith(responseText);
-          calculateBothPoints();
-          $(document).trigger('close.facebox');   
-        }});
-        
-      $("#deleteForm").ajaxForm({
-        beforeSubmit: function(arr, $form, options) { return confirm ("Are you sure you want to delete this story?"); },
-        success: function(responseText) { $("#story_{{story.id}}").hide(); $(document).trigger('close.facebox'); }
-      });
-      
-      $(".comments_area form").ajaxForm({
-          replaceTarget: true,
-          target: $("#story_area"),
-          beforeSubmit: function(arr, $form, options) { 
-            $form.hide();
-          }        
-      }); 
-      
+     
       $(".deleteOrgLink").click( function() {
         if( confirm("Are you sure you want to delete this organization?") )
         {
           $.post("{% url delete_organization organization.slug %}", function(data) {
             window.location="/";
-          });
-          
+          });          
         }
       });
 

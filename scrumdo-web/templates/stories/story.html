@@ -40,7 +40,7 @@
      </table>
    </div>
    
-   <input type="hidden" name="return_type" value="{{return_type}}" />
+   <input type="hidden" name="return_type" value="{{ return_type }}" />
    <input type="hidden" name="rank" value="{{ story.rank }}" />
    {% notlocked story %}
 	<div class="form_block">
@@ -93,18 +93,23 @@
              _gaq.push(['_trackEvent',"EditStory", "{{current_view}}", "", 1]); 
           {% endif %}
           
-          if(typeof calculateBothPoints == 'function') { calculateBothPoints(); }         
-          if(typeof reloadStoryCallback == 'function') { reloadStoryCallback(); }         
-          if(typeof updatePanel == 'function') { updatePanel(); }    
+		  if( $("#story_{{story.id}}").length > 0 )
+		  {
+		    $("#story_{{story.id}}").trigger("storyEdited");
+		  }
+  		  else
+	 	  {
+			$("body").trigger("storyEdited");
+		  }
           
         }});
         
       $("#deleteStoryForm").ajaxForm({
         beforeSubmit: function(arr, $form, options) { return confirm("Are you sure you want to delete this story?"); },
         success: function(responseText) { 
-          $("#story_{{story.id}}").hide(); 
+          $("#story_{{story.id}}").remove(); 
 		  closeOverlay();
-          if(typeof updateStoryList == 'function') { updateStoryList(); }
+          $("body").trigger("storyListChanged"); 
         }
       });
       
@@ -124,7 +129,7 @@
         ""
       ];
       
-      var all_tags = scrumdo_special_tags.concat( project_tags );
+      var all_tags = project_tags; //scrumdo_special_tags.concat( project_tags );
 
 	// $("#addStoryForm #id_tags").tagit({ availableTags: all_tags, removeConfirmation:true });        
     $(".edit_story_table #id_tags").tagit({availableTags:all_tags, removeConfirmation:true});

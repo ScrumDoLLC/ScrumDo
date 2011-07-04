@@ -60,7 +60,7 @@
       ""
     ];
     
-    var all_tags = scrumdo_special_tags.concat( project_tags );
+    var all_tags = project_tags; //scrumdo_special_tags.concat( project_tags );
 
 
 
@@ -69,22 +69,16 @@
     {      
       $("#createdStories").append( newStory );
 
-	  if( $("#epic_dropdown") && $("#epic_dropdown").val() != "" )
+	  if( $("#epic_dropdown") && $("#epic_dropdown").val() != "" && (typeof reloadEpic == 'function') )
   	  {
 	     reloadEpic( $("#epic_dropdown").val() );
 	  }
             
       // Clear the form...
-      $(':input','#addStoryForm').not(':button, :submit, :reset, :hidden, :radio, #epic_dropdown').val('');       
-       
-       $("#id_summary").focus();
+      $(':input','#addStoryForm').not(':button, :submit, :reset, :hidden, :radio, #epic_dropdown').val('');              
+      $("#id_summary").focus();
+      $("body").trigger("storyListChanged"); 
       
-      if(typeof updateStoryList == 'function') 
-      {
-        // The page hosting this form can define an updateStoryList method to be notified when
-        // stories are added.
-         updateStoryList();
-      }
       {% if GOOGLE_ANALYTICS %}     
         _gaq.push(['_trackEvent',"AddStory", "{{current_view}}", "", 1]);      
       {% endif %}

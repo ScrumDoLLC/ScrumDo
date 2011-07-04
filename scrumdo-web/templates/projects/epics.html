@@ -72,10 +72,11 @@
 	    });
 	}
 
-	setUpStoryLinksCallback = setupSortableLists;
-       
+		
+	   
   $(document).ready( function() 
   {
+	$("body").bind("storyListChanged",setupSortableLists);
     setupSortableLists();
     {% if GOOGLE_ANALYTICS %}     
        _gaq.push(['_trackEvent',"ViewPage", "Epics", "", 1]); 

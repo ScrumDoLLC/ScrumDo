@@ -42,7 +42,8 @@ function loadIteration(iterationID, page, query_string)
                 closeImage: static_url + 'images/facebox/closelabel.png'
             });
 
-            setUpStoryLinks();
+            $("body").trigger("storyListChanged");
+            
             $("a.delete").confirm("Are you sure you want to delete this?");            
             $("#story_count").text($("#story_list").children().length + " stories");
         }
@@ -81,7 +82,7 @@ function updateStoryPosition(event, ui)
         }),
         type: "POST",
         success: function() {
-            calculateBothPoints();
+            $("body").trigger("storyListChanged");
             $("#loadingIcon").hide();
         }
     });
@@ -95,10 +96,7 @@ function filterByTag(tag)
     $("#filter_button").submit();
 }
 
-function calculateBothPoints()
- {
-    setUpStoryLinks();
-}
+
 
 
 
@@ -172,8 +170,7 @@ $(document).ready(function() {
             $("#loadingIcon").hide();
 
             $("ul").sortable("disable");
-            setUpStoryLinks();
-
+            $("body").trigger("storyListChanged");
             $("#story_count").text($("#story_list").children().length + " stories");
         }
     });

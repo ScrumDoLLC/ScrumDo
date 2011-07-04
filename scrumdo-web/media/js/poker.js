@@ -196,7 +196,7 @@ function update_current_story()
         success: function(data) {
             $("#current_story_block").html(data);
             $(".moveIterationIcon").hide();
-            setUpStoryLinks();            
+            $("body").trigger("storyListChanged");
         }
     });
 }
@@ -334,10 +334,7 @@ function poker_become_scrum_master()
     hookbox_connection.publish(hookbox_channel_id, { message:"scrum_master" } );   
 }
 
-function reloadStoryCallback() 
-{
-    refresh_story();
-}
+
 
 function refresh_story( )
 {
@@ -362,4 +359,6 @@ function poker_make_estimate( value )
     
 }
 
-function calculateBothPoints() { }
+$(document).ready(function(){
+    $("body").bind("storyEdited", refresh_story );
+});

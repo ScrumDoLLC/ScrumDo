@@ -106,15 +106,12 @@
                              points: { radius:5, show: true, fill: true} 
                                }                   
                 };
-
+				
+				
+				$("body").bind("storyListChanged", updateStoryList );
        
                 generateBurnDown( "#overallBurndown", "{{project.slug}}" , null , 0);
-                
-         
-                // var backlog_data_total = [{% for log in project.points_log.all %} [{{log.timestamp}},{{log.points_total}}], {% endfor %}];
-                //                   var backlog_data_claimed = [{% for log in project.points_log.all %} [{{log.timestamp}},{{log.points_claimed}}], {% endfor %}];                 
-                //                   $.plot($("#overallBurndown"), [{label:" Total Points", data:backlog_data_total},{label:" Claimed Points",data:backlog_data_claimed}], options);
-                //   
+                 
                {% for iteration in project.get_current_iterations %}
                  generateBurnDown( "#iterationBurndown_{{iteration.id}}", "{{project.slug}}" , "{{iteration.id}}" , 0.25);
                {% endfor %}
@@ -124,7 +121,7 @@
                {% endif %}           
                
         });
-        function calculateBothPoints() {} // need this for the story popup - TODO: do this better.
+
     </script>
     
 {% endblock %}

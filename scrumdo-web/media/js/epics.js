@@ -28,10 +28,9 @@ function reloadEpic( epic_id )
                $(this).hide();
                return false;
             });
-            if (typeof updateStoryList == 'function') {
-                updateStoryList();
-            }
-            setUpStoryLinks();
+            $("body").trigger("storyListChanged"); 
+            $("#epic_" + epic_id).trigger("epicEdited");
+            
         }
     });
 }
@@ -97,7 +96,7 @@ function updateBacklogStoryPosition(event, ui)
         }),
         type: "POST",
         success: function() {
-            calculateBothPoints();
+            $("body").trigger("storyListChanged");
             $("#loadingIcon").hide();
         }
     });
@@ -118,10 +117,7 @@ function moveCurrentlyOpenStoryToIteration(iteration_id)
         type: "POST",
         success: function() {
             $("#loadingIcon").hide();
-            $("#story_" + current_story_popup).hide(true);            
-            if (typeof updateStoryList == 'function') {
-                updateStoryList();
-            }
+            $("#story_" + current_story_popup).hide(true);
             reloadEpic( epic_id );
         }
     });

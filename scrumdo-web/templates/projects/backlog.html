@@ -146,9 +146,7 @@ var iteration_stats_url = "{% url iteration_stats project.slug iteration.id %}";
 <script type="text/javascript" src="{{STATIC_URL}}js/backlog.js"></script>
 
 <script type="text/javascript">
-$(document).ready(function(){
-	loadIteration(iteration_id, 1, "backlog_mode=true");
-});
+
 
 function updateStoryList()
 {
@@ -181,7 +179,13 @@ function setupSortableLists()
     });
 }
 
-setUpStoryLinksCallback = setupSortableLists;
+
+$(document).ready(function(){
+	loadIteration(iteration_id, 1, "backlog_mode=true");
+	$("body").bind("storyListChanged",setupSortableLists);
+	$("body").bind("storyListChanged",updateStoryList);
+	
+});
 
 
 {% if GOOGLE_ANALYTICS %}

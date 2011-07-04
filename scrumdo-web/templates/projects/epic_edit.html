@@ -20,10 +20,8 @@
 		if( responseText == "OK" )
 		{
 			reloadEpic({{epic.id}})
-			$(document).trigger('close.facebox');   
-	        if(typeof calculateBothPoints == 'function') { calculateBothPoints(); }         
-	        if(typeof reloadStoryCallback == 'function') { reloadStoryCallback(); }         
-	        if(typeof updatePanel == 'function') { updatePanel(); }    	
+			$(document).trigger('close.facebox');
+			$("#epic_" + epic_id).trigger("epicEdited");   
 			closeOverlay();
 		}
 		else

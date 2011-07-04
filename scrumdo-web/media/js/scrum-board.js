@@ -1,10 +1,9 @@
 story_size = 3;
 
 $(document).ready( function() {
-    loadTodo();
-    loadDoing();
-    loadDone();
-    loadReviewing();    
+    reloadAllColumns();
+    $("body").bind("storyEdited", reloadAllColumns );
+	$("body").bind("storyListChanged", reloadAllColumns );
     
     $( ".scrum_board_list" ).sortable({
 		connectWith: ".scrum_board_list",
@@ -22,7 +21,7 @@ $(document).ready( function() {
 	
 } );
 
-function reloadStoryCallback()
+function reloadAllColumns()
 {
     loadTodo();
     loadDoing();

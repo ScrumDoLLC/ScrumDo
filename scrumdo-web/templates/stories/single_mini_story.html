@@ -19,7 +19,7 @@
         <img title="Set Status" src="{{ STATIC_URL }}pinax/images/silk/icons/tag_red.png" />
     </a>
     {% endnotlocked %}
-    <a onclick="jQuery.facebox({ ajax: '/projects/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=mini'}, 'edit_story'); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=mini">
+    <a onclick="openOverlay( '/projects/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=mini' ); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=mini">
         <img title="Edit Story" src="{{ STATIC_URL }}pinax/images/silk/icons/pencil.png" /></a></span>
   <h1><span style="color:#cccccc;">#{{story.local_id}}</span> {{ story.summary }}</h1>
 

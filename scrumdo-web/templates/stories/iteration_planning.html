@@ -194,22 +194,22 @@
   {# This is the method that handles the user-drop event and records that fact on the server. #}
   function updateStoryPosition(event, ui)
   {  
-    iterationId = $(ui.item).parent().attr("iteration_id");
+    var iterationId = $(ui.item).parent().attr("iteration_id");
+    var storyID = $(ui.item).attr("story_id");
     $("#loadingIcon").show();
     $.ajax({
-      url: "/projects/project/" + project_slug + "/story/" + $(ui.item).attr("story_id") + "/reorder",
+      url: "/projects/project/" + project_slug + "/story/" + storyID + "/reorder",
       data:({ action:"reorder", index:ui.item.index(), iteration:iterationId }),
       type: "POST",
       success: function() {
-        calculateBothPoints();
+		$("#story_" + storyID).trigger("storyEdited");
         $("#loadingIcon").hide();
       }
     });
 
   }
   
-  {# Calculates the points that go into the column headers. #}
-  function calculateBothPoints()
+  function updateColumnPoints()
   {
      calculatePoints("#iteration_column","#iteration_points");
      calculatePoints("#backlog_column","#backlog_points");
@@ -326,6 +326,11 @@
        
   $(document).ready( function() 
   {
+	$("body").bind("storyEdited", updateColumnPoints );
+	$("body").bind("storyListChanged", updateStoryList );
+	$("body").bind("storyListChanged", updateColumnPoints );
+	
+	
     loadIterationFromChooser(); 
     $("#loadingIcon").hide();
     $('a[rel*=facebox]').facebox();
