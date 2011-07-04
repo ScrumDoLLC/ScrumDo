@@ -796,6 +796,21 @@ div.add_task {
 	min-height: 22px;
 }
 
+.epicPointsBox {
+	font-size: 12px;	
+	height: 10px;
+	margin-top: -5px;
+	margin-right: -5px;
+	float: right;
+	padding: 5px;
+    background-color: #fef9dd;
+    text-align: center;
+    vertical-align: middle;
+    border-left: 1px solid #c8caca;
+    border-bottom: 1px solid #c8caca;
+    font-style: italic;
+}
+
 .epic_story_list_item .pointsBox {
 	font-size: 12px;	
 	height: 10px;
@@ -850,4 +865,14 @@ div.add_task {
     width: 850px;
     height: 600px;
     display: none;
+}
+
+.overlay_close {
+    float: right;
+    margin-top: -5px;
+}
+
+.overlay_close a {
+    color: #000000;
+    text-decoration: none;
 }

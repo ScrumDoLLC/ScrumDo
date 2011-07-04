@@ -17,16 +17,13 @@
       {% if iteration %}
         <input type="hidden" name="iteration" value="{{ iteration.id }}" />
       {% endif %}
-    
     </form>
    </div>
  </div>
  
 <script type="text/javascript" charset="utf-8">  
     epic_form_expanded = false;
-    $(document).ready(function() {             
-
-      
+    $(document).ready(function() {
       $('#epic_form #id_summary').keyup( function(self) 
             { 
                 if( $(this).val().length > 0 )

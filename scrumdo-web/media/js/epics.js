@@ -1,10 +1,8 @@
-
 function setSmallEpics()
 {
     $(".epic_list_holder").slideUp();
     $(".epic_detail").slideUp();
     $(".epicPointsBox").slideUp();
-      
 }
 function setMedEpics()
 {
@@ -138,20 +136,17 @@ $(document).ready(function(){
     $("#story_details").show();
     $("#epic_details").show();
     
-    
     $(".add_epic_link").click(function(){
-
         jQuery.facebox({ div: '#add_epic_popup' });        
-        $("#id_parent").val($(this).parents(".epic_list_block").attr("epic_id"));
+        $("#addEpicForm select").val( $(this).parents(".epic_list_block").attr("epic_id") );
         return false;
     });
 
     $(".add_story_link").click(function(){
         jQuery.facebox({ div: '#add_story_popup' });        
-
+        $("#addStoryForm select").val( $(this).parents(".epic_list_block").attr("epic_id") );
         return false;
     });
-    
     
     $(".show_assigned_stories").click(function(){
        $(this).siblings(".epic_assigned_stories").show();

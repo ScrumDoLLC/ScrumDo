@@ -1,4 +1,3 @@
-
 scrumdo_special_tags = [ ];
 
 function setupAutoClose( divID )
@@ -20,7 +19,6 @@ function setStatus(storyID, project_slug, status, return_type)
 		if(typeof updatePanel == 'function') { updatePanel(); }   
 	    }
 	});
-		
 }
 
 function showTaskEditForm( task_id )
@@ -62,7 +60,6 @@ function deleteTask( story_id, task_id )
 
 function setTaskStatus(story_id, task_id, status)
 {
-
     if(typeof reloadStoryCallback == 'function') { reloadStoryCallback(); }
     $.ajax({
 	    url: "/projects/task/" + task_id + "/set_status",
@@ -143,17 +140,13 @@ function reloadStory( story_id , display_comments, display_tasks)
 // event.
 function setUpStoryLinks() 
 {
-
     if(typeof setUpStoryLinksCallback == 'function') { setUpStoryLinksCallback(); }
-
-    
+       
     $(".tasks_task").mouseenter(function() {      
       $(this).find(".task_controls").css("visibility","visible");
     }).mouseleave(function() {
       $(this).find(".task_controls").css("visibility","hidden");
     });
-    
-    
 
     // Set up the move-iteration button
     $(".moveIterationIcon").unbind("click");
@@ -202,26 +195,25 @@ function setUpStoryLinks()
              {
                  $("#story_" + storyID).find(".tasks_add_task_link").hide();
                  $("#story_" + storyID).find(".tasks_add_task_form").show();       
-                 $("#story_" + storyID).find(".tasks_add_task_form input[type='text']").focus();                    
-                 
+                 $("#story_" + storyID).find(".tasks_add_task_form input[type='text']").focus();
              }, 100);
           }
         });
-        
-        
         return false;
     });
-
 }
 
 function openOverlay( url )
 {
-    $("body").append("<div id='scrumdo_overlay'>Loading...</div>");
+    $("body").append("<div id='scrumdo_overlay'><div class='overlay_close'><a href='#'>Close</a></div><div id='overlay_body'>Loading...</div></div>");
+    $(".overlay_close").click(function(){
+        closeOverlay();
+    });
+    $("#scrumdo_overlay").fadeIn(150);
     $.ajax({
         url: url,
-        success: function(data) {
-            $("#scrumdo_overlay").fadeIn(150);
-            $("#scrumdo_overlay").html(data);            
+        success: function(data) {            
+            $("#scrumdo_overlay #overlay_body").html(data);            
             $("body").css("overflow", "hidden");
         }
     });
@@ -234,4 +226,3 @@ function closeOverlay()
     });
     $("body").css("overflow", "auto");
 }
-
