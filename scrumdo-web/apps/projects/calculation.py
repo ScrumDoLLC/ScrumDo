@@ -20,7 +20,6 @@ def calculatePoints( stories, epics ):
         try:
             story_points = story.points_value()
             points_total += story_points
-            # print "%d %f" % ( story.id,story_points)
             if( story.status == Story.STATUS_DONE):
                 points_claimed += story_points
         except ValueError:

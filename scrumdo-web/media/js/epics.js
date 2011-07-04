@@ -18,7 +18,7 @@ function setBigEpics()
 }
 
 function reloadEpic( epic_id )
-{
+{    
     $.ajax({
         url: "/projects/epic/" + epic_id ,       
         success: function(responseText) {
@@ -35,35 +35,6 @@ function reloadEpic( epic_id )
     });
 }
 
-function updateEpicPosition(event, ui)
-{
-    $("#loadingIcon").show();
-        
-    var ind = ui.item.index();
-    var before = "";
-    var after = "";
-    
-    children = ui.item.parent().children();
-    
-    // Try to find the epic before/after this one so the sorting algorithm know where this story goes.
-    if (ind > 0) { before = $(children[ind - 1]).attr("epic_id");  }
-    if (children.length > (1 + ind)) { after = $(children[ind + 1]).attr("epic_id"); }
-    
-    
-    $.ajax({
-        url: "/projects/project/" + project_slug + "/epic/" + $(ui.item).attr("epic_id") + "/reorder",
-        data: ({
-            action: "reorder",
-            before: before,
-            after: after,
-            iteration: iteration_id
-        }),
-        type: "POST",
-        success: function() {            
-            $("#loadingIcon").hide();
-        }
-    });
-}
 
 function updateBacklogStoryPosition(event, ui)
  {
@@ -91,8 +62,7 @@ function updateBacklogStoryPosition(event, ui)
             action: "reorder",
             before: before,
             after: after,
-            epic: epic,
-            iteration: iteration_id
+            epic: epic
         }),
         type: "POST",
         success: function() {
@@ -107,7 +77,7 @@ function updateBacklogStoryPosition(event, ui)
 function moveCurrentlyOpenStoryToIteration(iteration_id)
  {
     $("#loadingIcon").show();
-    epic_id = $("#story_" + current_story_popup).parent().attr("epic_id");
+    var epic_id = $("#story_" + current_story_popup).parent().attr("epic_id");
     $.ajax({
         url: "/projects/project/" + project_slug + "/story/" + current_story_popup + "/reorder",
         data: ({
@@ -134,13 +104,13 @@ $(document).ready(function(){
     
     $(".add_epic_link").click(function(){
         jQuery.facebox({ div: '#add_epic_popup' });        
-        $("#addEpicForm select").val( $(this).parents(".epic_list_block").attr("epic_id") );
+        $("#addEpicForm #id_parent").val( $(this).parents(".epic_list_block").attr("epic_id") );
         return false;
     });
 
     $(".add_story_link").click(function(){
         jQuery.facebox({ div: '#add_story_popup' });        
-        $("#addStoryForm select").val( $(this).parents(".epic_list_block").attr("epic_id") );
+        $("#addStoryForm #id_epic").val( $(this).parents(".epic_list_block").attr("epic_id") );
         return false;
     });
     

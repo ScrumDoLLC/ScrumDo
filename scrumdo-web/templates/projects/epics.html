@@ -26,7 +26,7 @@
 
 
 {% block body %}
-
+<img id="loadingIcon" src="{{ STATIC_URL }}images/ajax-loader.gif">
   {% for epic in epic_list %}
      {% ifequal epic "in" %}         
          <ul class="epic_list">  
@@ -35,7 +35,7 @@
            </ul>       
            </li>                 
          {% else %}                    
-           <li class="epic_list_item">                          
+           <li class="epic_list_item" epic_id="{{epic.id}}">                          
               {% include "projects/epic.html" %}
               {% if epic.leaf %}                 
                  </li>                     
@@ -68,15 +68,38 @@
 			greedy: true,
 	        placeholder: "ui-state-highlight",
 	        cancel: ".block_story_body",
-			connectWith: ".epic_story_list"
+			connectWith: ".epic_story_list",
+			stop: updateBacklogStoryPosition
 	    });
 	}
 
+  function getTopLevelEpic( div )
+  {
+	if( $(div).parents(".epic_list_item").length > 0)
+	{
+		return getTopLevelEpic( $(div).parents(".epic_list_item")[0] );
+	}
+	return $(div).attr("epic_id");
+  }
+
+  function onStoryEdited(event, target_epic)
+  {
+	// Reload the top level epic containing where the story was.
+	var epic = getTopLevelEpic(event.target);
+	reloadEpic( epic );
+	if( target_epic != "" && target_epic != epic)
+	{
+		reloadEpic( target_epic );
+	}
+	
+  }
 		
 	   
   $(document).ready( function() 
   {
+	$("#loadingIcon").hide();
 	$("body").bind("storyListChanged",setupSortableLists);
+	$("body").bind("storyEdited", onStoryEdited );
     setupSortableLists();
     {% if GOOGLE_ANALYTICS %}     
        _gaq.push(['_trackEvent',"ViewPage", "Epics", "", 1]); 

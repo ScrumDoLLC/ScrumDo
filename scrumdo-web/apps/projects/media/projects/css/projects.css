@@ -876,3 +876,10 @@ div.add_task {
     color: #000000;
     text-decoration: none;
 }
+
+#loadingIcon {
+    display: none;
+    position:fixed;
+    left:5px;
+    bottom:5px;
+}

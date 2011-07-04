@@ -277,12 +277,19 @@ class Epic(models.Model):
     project = models.ForeignKey( Project , related_name="epics")
     status = models.IntegerField( max_length=2, choices=STATUS_CHOICES, default=1 )
     order = models.IntegerField( max_length=5, default=5000)
+    
+    def save(self, *args, **kwargs):
+        if parent == self:
+            parent = None
+        super(Epic, self).save(*args, **kwargs) 
 
     def normalized_points_value(self):
         "Returns the point value of this epic, minus the point value of the stories within it, minimum of 0"
         pv = self.points_value()
         for story in self.stories.all():
             pv -= story.points_value()
+        for epic in self.children.all():
+            pv -= epic.normalized_points_value()
         return max(pv, 0)
 
     def points_value(self):

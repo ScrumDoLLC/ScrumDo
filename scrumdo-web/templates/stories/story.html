@@ -82,24 +82,31 @@
 </div>
 
 <script type="text/javascript" charset="utf-8">
+	  var target_epic;
       $("#story_area .commentForm").show();
       
-      $("#story_detail_form").ajaxForm({        
+      $("#story_detail_form").ajaxForm({     
+		beforeSerialize: function($form, options) { 
+		    target_epic = $form.find("#id_epic").val();
+		},
         success: function(responseText) {
           $("#story_{{story.id}}").replaceWith(responseText);
+
+
           closeOverlay();
           
           {% if GOOGLE_ANALYTICS %}     
              _gaq.push(['_trackEvent',"EditStory", "{{current_view}}", "", 1]); 
           {% endif %}
           
+		 
 		  if( $("#story_{{story.id}}").length > 0 )
 		  {
-		    $("#story_{{story.id}}").trigger("storyEdited");
+		    $("#story_{{story.id}}").trigger("storyEdited",target_epic);
 		  }
   		  else
 	 	  {
-			$("body").trigger("storyEdited");
+			$("body").trigger("storyEdited",target_epic);
 		  }
           
         }});

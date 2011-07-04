@@ -193,7 +193,7 @@ def reorder_story( request, group_slug, story_id):
     write_access_or_403(project,request.user)
     if request.method == 'POST':
         rank = 0
-        target_iteration = request.POST["iteration"]
+        target_iteration = request.POST.get("iteration","")
 
         try:
             iteration = get_object_or_404( Iteration, id=target_iteration )

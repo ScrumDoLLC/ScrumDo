@@ -21,7 +21,7 @@
 		{
 			reloadEpic({{epic.id}})
 			$(document).trigger('close.facebox');
-			$("#epic_" + epic_id).trigger("epicEdited");   
+			$("#epic_" + {{epic.id}}).trigger("epicEdited");   
 			closeOverlay();
 		}
 		else

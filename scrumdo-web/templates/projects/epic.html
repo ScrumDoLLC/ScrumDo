@@ -10,7 +10,7 @@
 	 <span class="epicIcons">
 	    {% canwrite project %}
 	        <a onclick="openOverlay( '/projects/epic/{{ epic.id }}/edit' ); return false;" 
-			   href="/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=block">
+			   href="/projects/epic/{{ epic.id }}/edit">
 				<img title="Edit Epic" src="{{ STATIC_URL }}pinax/images/silk/icons/pencil.png" />
 			</a>
 	    {% endcanwrite %}
