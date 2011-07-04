@@ -279,9 +279,14 @@ class Epic(models.Model):
     order = models.IntegerField( max_length=5, default=5000)
     
     def save(self, *args, **kwargs):
-        if parent == self:
-            parent = None
+        if self.parent == self:
+            self.parent = None
         super(Epic, self).save(*args, **kwargs) 
+
+    def full_name(self):
+        if self.parent_id:
+            return "%s / #E%d %s" % (self.parent.full_name(), self.local_id, self.summary)
+        return "#E%d %s" % (self.local_id,self.summary)
 
     def normalized_points_value(self):
         "Returns the point value of this epic, minus the point value of the stories within it, minimum of 0"

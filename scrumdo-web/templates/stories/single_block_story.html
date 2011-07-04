@@ -26,13 +26,18 @@
         <a onclick="setupAutoClose('#todoButtons_{{story.id}}'); jQuery('#todoButtons_{{story.id}}').show();  return false;" href="#"><img title="Set Status" src="{{ STATIC_URL }}pinax/images/silk/icons/tag_red.png" /></a>
         <a onclick="openOverlay( '/projects/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=block' ); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=block"><img title="Edit Story" src="{{ STATIC_URL }}pinax/images/silk/icons/pencil.png" /></a>
         {% include "stories/single_extra_icons.html" %}
-    {% endcanwrite %}
-    
-
+    {% endcanwrite %}  
     </span>
-    
-  <h1 class="formatted_story_text"><span style="color:#cccccc;">#{{story.local_id}} {% if story.category %}({{story.category}}){% endif %}</span> {{ story.summary|markdown|link_stories:story.project|safe }}</h1>
 
+
+    
+  <h1 class="formatted_story_text"><span style="color:#cccccc;">#{{story.local_id}} {% if story.category %}({{story.category}}){% endif %}</span>
+	 {{ story.summary|markdown|link_stories:story.project|safe }}</h1>
+    {% if not epic %}
+      {% if story.epic %}
+        <span class="story_epic_line">{{story.epic.full_name}}</span><br/>
+      {% endif %}
+    {% endif %}
   <span class="formatted_story_text">
   {{ story.detail|markdown|link_stories:story.project|safe }}
   </span>

@@ -204,6 +204,7 @@ function openOverlay( url )
     $("body").append("<div id='scrumdo_overlay'><div class='overlay_close'><a href='#'>Close</a></div><div id='overlay_body'>Loading...</div></div>");
     $(".overlay_close").click(function(){
         closeOverlay();
+        return false;
     });
     $("#scrumdo_overlay").fadeIn(150);
     $.ajax({
