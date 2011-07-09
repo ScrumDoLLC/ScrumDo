@@ -266,7 +266,6 @@ class Iteration( models.Model):
     def __unicode__(self):
         return "%s / %s" % (self.project.name, self.name)
 
-
 class Epic(models.Model):
     """Represents an epic in your backlog."""
     local_id = models.IntegerField()

@@ -22,26 +22,10 @@
  </div>
  
 <script type="text/javascript" charset="utf-8">  
-    epic_form_expanded = false;
-    $(document).ready(function() {
-      $('#epic_form #id_summary').keyup( function(self) 
-            { 
-                if( $(this).val().length > 0 )
-                {
-                  if( ! epic_form_expanded )
-                  {
-                    $("#epic_details").show(true);
-                  }
-                  epic_form_expanded = true;
-                }
-                else
-                {
-                  if( epic_form_expanded )
-                  {
-                    $("#epic_details").hide();              
-                  }
-                  epic_form_expanded = false;
-                }
-            } );
-      });
+	function onEpicAdded( newEpic )
+	{
+      $("body").trigger("epicListChanged"); 
+	}
+	$("#addEpicForm").ajaxForm({ url:"{% url ajax_add_epic project.slug %}",
+                                success:onEpicAdded });
 </script>

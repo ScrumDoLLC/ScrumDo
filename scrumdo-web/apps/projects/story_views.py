@@ -660,5 +660,11 @@ def pretty_print_story(request, group_slug, story_id):
         "story": story
     }, context_instance=RequestContext(request))
 
-def ajax_add_epic(request):
-    pass
+def ajax_add_epic(request, group_slug):
+    project = get_object_or_404(Project, slug=group_slug)
+    write_access_or_403(project,request.user)
+    if request.method == 'POST': # If the form has been submitted...        
+        form = EpicForm( project, request.POST)
+        if form.is_valid(): # All validation rules pass
+            epic = form.save()
+            return HttpResponse(epic.id)

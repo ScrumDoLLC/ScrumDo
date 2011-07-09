@@ -1,19 +1,5 @@
 
-function setupSortableLists()
-	{
-		$(".epic_story_list").sortable("destroy");
-		$(".epic_story_list").sortable({
-	        tolerance: 'intersect',
-	        distance: 5,
-			dropOnEmpty: true,
-	        opacity: 0.5,
-			greedy: true,
-	        placeholder: "ui-state-highlight",
-	        cancel: ".block_story_body",
-			connectWith: ".epic_story_list",
-			stop: updateBacklogStoryPosition
-	    });
-	}
+
 
 
 
@@ -70,6 +56,7 @@ function setBigEpics()
 
 function reloadEpic( epic_id )
 {    
+    
     $.ajax({
         url: "/projects/epic/" + epic_id ,       
         success: function(responseText) {
@@ -77,6 +64,7 @@ function reloadEpic( epic_id )
             $("body").trigger("storyListChanged"); 
             $("#epic_" + epic_id).trigger("epicLoaded");
             setupEpicLinks();            
+            setupSortableLists();
         }
     });
 }
@@ -120,6 +108,22 @@ function updateBacklogStoryPosition(event, ui)
 }
 
 
+function setupSortableLists()
+{
+	$(".epic_story_list").sortable("destroy");
+	$(".epic_story_list").sortable({
+        tolerance: 'intersect',
+        distance: 5,
+		dropOnEmpty: true,
+        opacity: 0.5,
+		greedy: true,
+        placeholder: "ui-state-highlight",
+        cancel: ".block_story_body",
+		connectWith: ".epic_story_list",
+		stop: updateBacklogStoryPosition
+    });
+}
+
 function moveCurrentlyOpenStoryToIteration(iteration_id)
  {
     $("#loadingIcon").show();
@@ -143,7 +147,7 @@ function setupEpicLinks()
 {
     $(".add_epic_link").unbind("click");
     $(".add_epic_link").click(function(){
-        jQuery.facebox({ div: '#add_epic_popup' });        
+        openOverlayDiv('#add_epic_popup');
         $("#addEpicForm #id_parent").val( $(this).parents(".epic_list_block").attr("epic_id") );
         return false;
     });
@@ -157,6 +161,9 @@ function setupEpicLinks()
 }
 
 $(document).ready(function(){
+    setupSortableLists();
+    setupEpicLinks();
+
     $("#size-options").buttonset();
     $("#small_epics").click( setSmallEpics );
     $("#med_epics").click( setMedEpics );
@@ -164,13 +171,9 @@ $(document).ready(function(){
     $("#story_details").show();
     $("#epic_details").show();    
     $("#loadingIcon").hide();
-    
+    $("body").bind("epicListChanged", function(){window.location.reload();} );         
   	$("body").bind("storyListChanged",setupSortableLists);
   	$("body").bind("storyEdited", onStoryEdited );
   	$("body").bind("epicEdited", onEpicEdited );
-
-    setupSortableLists();
-    setupEpicLinks();
-
-         
+    
 });
