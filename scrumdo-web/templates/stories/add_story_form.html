@@ -62,16 +62,13 @@
     
     var all_tags = project_tags; //scrumdo_special_tags.concat( project_tags );
 
-
-
-
-    function updateStoryListInternal( newStory )
+    function onStoryAdded( newStory )
     {      
       $("#createdStories").append( newStory );
 
-	  if( $("#epic_dropdown") && $("#epic_dropdown").val() != "" && (typeof reloadEpic == 'function') )
+	  if( $("#id_epic") && $("#id_epic").val() != "" )
   	  {
-	     reloadEpic( $("#epic_dropdown").val() );
+		$("#epic_" + $("#id_epic").val() ).trigger("epicEdited");
 	  }
             
       // Clear the form...
@@ -86,12 +83,13 @@
       window.location.hash = "";
     }
 
+
     $(document).ready(function() {
     
 	$("#addStoryForm #id_tags").tagit({ availableTags: all_tags, removeConfirmation:true });        
           
     $("#addStoryForm").ajaxForm({ url:"{% url ajax_add_story project.slug %}",
-                                    success:updateStoryListInternal });
+                                    success:onStoryAdded });
       
     $('#id_summary').keyup( function(self) 
             { 

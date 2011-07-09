@@ -283,6 +283,9 @@ class Epic(models.Model):
             self.parent = None
         super(Epic, self).save(*args, **kwargs) 
 
+    def stories_by_rank(self):
+        return self.stories.all().order_by("rank")
+
     def full_name(self):
         if self.parent_id:
             return "%s / #E%d %s" % (self.parent.full_name(), self.local_id, self.summary)

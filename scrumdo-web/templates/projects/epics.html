@@ -27,6 +27,12 @@
 
 {% block body %}
 <img id="loadingIcon" src="{{ STATIC_URL }}images/ajax-loader.gif">
+<div id="size-options" style="float:right">
+<input type="radio" id="small_epics" name="radio" /><label for="small_epics">_</label>
+<input type="radio" id="med_epics" name="radio" /><label for="med_epics">=</label>
+<input type="radio" id="big_epics" name="radio" checked="checked"  /><label for="big_epics">≡</label>
+</div>
+<br/><br/>
   {% for epic in epic_list %}
      {% ifequal epic "in" %}         
          <ul class="epic_list">  
@@ -44,8 +50,12 @@
      {% endifequal %}                   
   {% endfor %}
 
-  <div id="add_story_popup"><div style="width:800px">{% include "stories/add_story_form.html" %}</div></div>
-  <div id="add_epic_popup"><div style="width:800px">{% include "stories/add_epic_form.html" %}</div></div>
+
+  <a class="add_epic_link"  epic_id="{{epic.id}}" href="#">Add Epic</a>
+
+
+  <div id="add_story_popup">{% include "stories/add_story_form.html" %}</div>
+  <div id="add_epic_popup">{% include "stories/add_epic_form.html" %}</div>
   
 <script type="text/javascript" src="{{STATIC_URL}}js/epics.js"></script>
 <script type="text/javascript" charset="utf-8">
@@ -56,55 +66,9 @@
   var current_story_popup = "";
   var last_load_iter_req = null;
   var static_url = "{{ STATIC_URL }}";
-  
-  function setupSortableLists()
-	{
-		$(".epic_story_list").sortable("destroy");
-		$(".epic_story_list").sortable({
-	        tolerance: 'intersect',
-	        distance: 5,
-			dropOnEmpty: true,
-	        opacity: 0.5,
-			greedy: true,
-	        placeholder: "ui-state-highlight",
-	        cancel: ".block_story_body",
-			connectWith: ".epic_story_list",
-			stop: updateBacklogStoryPosition
-	    });
-	}
-
-  function getTopLevelEpic( div )
-  {
-	if( $(div).parents(".epic_list_item").length > 0)
-	{
-		return getTopLevelEpic( $(div).parents(".epic_list_item")[0] );
-	}
-	return $(div).attr("epic_id");
-  }
-
-  function onStoryEdited(event, target_epic)
-  {
-	// Reload the top level epic containing where the story was.
-	var epic = getTopLevelEpic(event.target);
-	reloadEpic( epic );
-	if( target_epic != "" && target_epic != epic)
-	{
-		reloadEpic( target_epic );
-	}
-	
-  }
-		
-	   
-  $(document).ready( function() 
-  {
-	$("#loadingIcon").hide();
-	$("body").bind("storyListChanged",setupSortableLists);
-	$("body").bind("storyEdited", onStoryEdited );
-    setupSortableLists();
-    {% if GOOGLE_ANALYTICS %}     
-       _gaq.push(['_trackEvent',"ViewPage", "Epics", "", 1]); 
-    {% endif %}
-  } ); 
+  {% if GOOGLE_ANALYTICS %}     
+     _gaq.push(['_trackEvent',"ViewPage", "Epics", "", 1]); 
+  {% endif %}
 </script>
 
 {% endblock %}

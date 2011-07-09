@@ -38,7 +38,7 @@
         <span class="story_epic_line">{{story.epic.full_name}}</span><br/>
       {% endif %}
     {% endif %}
-  <span class="formatted_story_text">
+  <span class="formatted_story_text story_detail">
   {{ story.detail|markdown|link_stories:story.project|safe }}
   </span>
   

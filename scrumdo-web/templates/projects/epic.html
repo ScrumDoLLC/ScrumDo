@@ -24,7 +24,7 @@
 	 </span>
 	 
 	 <ul epic_id="{{epic.id}}" id="epic_{{epic.id}}_list" class="epic_story_list">
-		{% for story in epic.stories.all %}
+		{% for story in epic.stories_by_rank %}
 			  {% include "stories/single_block_story.html" %}
 		{% endfor %}
 	 </ul>			

@@ -1,20 +1,71 @@
+
+function setupSortableLists()
+	{
+		$(".epic_story_list").sortable("destroy");
+		$(".epic_story_list").sortable({
+	        tolerance: 'intersect',
+	        distance: 5,
+			dropOnEmpty: true,
+	        opacity: 0.5,
+			greedy: true,
+	        placeholder: "ui-state-highlight",
+	        cancel: ".block_story_body",
+			connectWith: ".epic_story_list",
+			stop: updateBacklogStoryPosition
+	    });
+	}
+
+
+
+function onStoryEdited(event, target_epic)
+{
+	// Reload the epic containing where the story was.
+	var old_epic = $(event.target).parents(".epic_list_item").attr("epic_id");
+	if( old_epic )
+	{
+		reloadEpic( old_epic );
+	}
+	if( target_epic != "" && target_epic != old_epic)
+	{
+		// Reload the epic continaing where the story is now
+		reloadEpic( target_epic );
+	}
+}
+
+function onEpicEdited(event)
+{
+	var epic = $(event.target).attr("epic_id");
+	reloadEpic( epic );
+	closeOverlay();
+}
+
 function setSmallEpics()
 {
-    $(".epic_list_holder").slideUp();
-    $(".epic_detail").slideUp();
-    $(".epicPointsBox").slideUp();
+    $(".epic_story_list").slideUp();
+    $(".story_footer").slideUp();
+    $(".pointsBox").hide();
+    $(".storyIcons").hide();
+    $(".story_detail").hide();
+    $(".story_block").addClass("story_block_collapsed");
 }
 function setMedEpics()
 {
-    $(".epic_list_holder").slideUp();
-    $(".epic_detail").slideDown();
-    $(".epicPointsBox").slideDown();
+    $(".epic_story_list").slideDown();
+    $(".story_footer").slideUp();
+    $(".pointsBox").hide();
+    $(".storyIcons").hide();
+    $(".story_detail").hide();
+    $(".story_block").addClass("story_block_collapsed");
 }
 function setBigEpics()
 {
-    $(".epic_list_holder").slideDown();
-    $(".epic_detail").slideDown();   
-    $(".epicPointsBox").slideDown();
+    $(".epic_story_list").slideDown();
+    $(".story_footer").slideDown();
+    $(".pointsBox").show();
+    $(".storyIcons").show();
+    $(".story_detail").show();
+    $(".story_block").removeClass("story_block_collapsed");
+
 }
 
 function reloadEpic( epic_id )
@@ -23,14 +74,9 @@ function reloadEpic( epic_id )
         url: "/projects/epic/" + epic_id ,       
         success: function(responseText) {
             $("#epic_" + epic_id).html(responseText);
-            $("#epic_" + epic_id + " .show_assigned_stories").click(function(){
-               $(this).siblings(".epic_assigned_stories").show();
-               $(this).hide();
-               return false;
-            });
             $("body").trigger("storyListChanged"); 
-            $("#epic_" + epic_id).trigger("epicEdited");
-            
+            $("#epic_" + epic_id).trigger("epicLoaded");
+            setupEpicLinks();            
         }
     });
 }
@@ -93,31 +139,38 @@ function moveCurrentlyOpenStoryToIteration(iteration_id)
     });
 }
 
-
-$(document).ready(function(){
-    $( "#size-options" ).buttonset();
-    $("#small_epics").click( setSmallEpics );
-    $("#med_epics").click( setMedEpics );
-    $("#big_epics").click( setBigEpics );
-    $("#story_details").show();
-    $("#epic_details").show();
-    
+function setupEpicLinks()
+{
+    $(".add_epic_link").unbind("click");
     $(".add_epic_link").click(function(){
         jQuery.facebox({ div: '#add_epic_popup' });        
         $("#addEpicForm #id_parent").val( $(this).parents(".epic_list_block").attr("epic_id") );
         return false;
     });
 
+    $(".add_story_link").unbind("click");
     $(".add_story_link").click(function(){
-        jQuery.facebox({ div: '#add_story_popup' });        
+        openOverlayDiv("#add_story_popup")  ;
         $("#addStoryForm #id_epic").val( $(this).parents(".epic_list_block").attr("epic_id") );
         return false;
     });
+}
+
+$(document).ready(function(){
+    $("#size-options").buttonset();
+    $("#small_epics").click( setSmallEpics );
+    $("#med_epics").click( setMedEpics );
+    $("#big_epics").click( setBigEpics );
+    $("#story_details").show();
+    $("#epic_details").show();    
+    $("#loadingIcon").hide();
     
-    $(".show_assigned_stories").click(function(){
-       $(this).siblings(".epic_assigned_stories").show();
-       $(this).hide();
-       return false;
-    });
+  	$("body").bind("storyListChanged",setupSortableLists);
+  	$("body").bind("storyEdited", onStoryEdited );
+  	$("body").bind("epicEdited", onEpicEdited );
+
+    setupSortableLists();
+    setupEpicLinks();
+
          
 });

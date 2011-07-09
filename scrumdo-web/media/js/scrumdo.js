@@ -199,8 +199,28 @@ function setUpStoryLinks()
     });
 }
 
+var overlay_div = false;
+
+function openOverlayDiv(div_selector)
+{
+    var div = $(div_selector);
+    overlay_div = true;
+    $("body").append("<div id='scrumdo_overlay'><div class='overlay_close'><a href='#'>Close</a></div><div id='overlay_body'></div></div>");
+    $("#overlay_body").append(div[0]);
+    div.show();
+    div.attr("display","block");
+    $(".overlay_close").click(function(){
+        closeOverlay();
+        return false;
+    });
+    $("#scrumdo_overlay").fadeIn(150);
+
+    
+}
+
 function openOverlay( url )
 {
+    overlay_div = false;
     $("body").append("<div id='scrumdo_overlay'><div class='overlay_close'><a href='#'>Close</a></div><div id='overlay_body'>Loading...</div></div>");
     $(".overlay_close").click(function(){
         closeOverlay();
@@ -219,7 +239,13 @@ function openOverlay( url )
 function closeOverlay()
 {
     $("#scrumdo_overlay").fadeOut(250, function(){
-        $("#scrumdo_overlay").remove();
+        if( overlay_div )
+        {
+            var div = $("#overlay_body div:first");
+            $("body").append( div[0] );
+            div.hide();
+        }
+        $("#scrumdo_overlay").remove();        
     });
     $("body").css("overflow", "auto");
 }

@@ -169,6 +169,7 @@
 
 .story_block h1 {
   font-size: 16px;
+
 }
 
 .story_small h1 {
@@ -665,6 +666,23 @@ div.add_task {
     cursor: move;  	
 }
 
+.story_block_collapsed {
+	min-height: 10px;	
+	border-top: none;
+	border-right: none;
+}
+
+.story_block_collapsed {
+	margin: 0px;
+}
+
+.story_block_collapsed h1 {
+	margin-right: 0px;
+	margin-left: 0px;
+	margin-bottom: 0px;
+	font-size: 11px;
+}
+
 .comment_section {
 	margin-left: 42px;
 }
@@ -774,7 +792,7 @@ div.add_task {
 	list-style: none;
 	margin-right: -6px;
 	padding: 5px;
-	border: 1px solid #8c8c8c;
+	border: 2px solid #bebebe;
 }
 
 .epicIcons {
