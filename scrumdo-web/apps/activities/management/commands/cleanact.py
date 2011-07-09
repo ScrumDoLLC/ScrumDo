@@ -19,4 +19,4 @@ class Command(BaseCommand):
 
     def purge(self, *app_labels, **options):
         print 'Purging Activities'
-        Activity.purgeMonthOld()
+        Activity.purgeOld(14)

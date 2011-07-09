@@ -134,9 +134,9 @@ class Activity(InheritanceCastModel):
         return self
 
     @staticmethod
-    def purgeMonthOld():
+    def purgeOld(days=30):
         today = datetime.date.today()
-        mdiff = datetime.timedelta(days=-30)
+        mdiff = datetime.timedelta(days=-days)
         date_30days_Agoago = today + mdiff
         Activity.objects.filter(created__lte=date_30days_Agoago).delete()
 
