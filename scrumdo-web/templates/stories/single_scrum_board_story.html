@@ -6,6 +6,7 @@
 {% load story_tags %}
 {% load tasks_tags %}
 {% load avatar_tags %}
+{% load markup %}
 
 <li class="scrum_board_story_block" story_id="{{story.id}}" id="story_{{story.id}}" rank="{{ story.rank }}" >
   <div class="scrum_board_gripper"></div>
@@ -18,7 +19,9 @@
     <a class="hoverDetails" onclick="jQuery.facebox({ ajax: '/projects/project/{{story.project.slug}}/story/{{story.id}}/pretty'}, 'pretty_print'); return false;" href="/projects/project/{{story.project.slug}}/story/{{story.id}}/pretty"><img title="Quick View" src="{{STATIC_URL}}pinax/images/silk/icons/magnifier.png" /></a>
   </span>
     
-  <h1><span style="color:#cccccc;">#{{story.local_id}} {% if story.category %}({{story.category}}){% endif %}</span> {{ story.summary|escape|link_stories:story.project|safe }}</h1>
+  <h1 class="formatted_story_text"><span style="color:#cccccc;">#{{story.local_id}}</span>
+	 {{ story.summary|markdown|link_stories:story.project|safe }}</h1>
+
 
 
   <div class="story_detail">
@@ -32,6 +35,40 @@
   {% if story.project.use_assignee and story.assignee %}
       {% avatar story.assignee 20 %} <b>{{story.assignee}}</b>
   {% endif %}
+
+
+<div class="story_footer">
+  {% if story.project.use_assignee and story.assignee %}
+      {% avatar story.assignee 20 %} <b>{{story.assignee}}</b> -
+  {% endif %}
+
+
+	{% if story.category %}
+ 	  <div class="tagsBox">{% silk "folder" %} {{story.category}}</div>
+	{% endif %}
+
+    {# If there is an epic defined, we're likely rendering within that epic, so no need to display the epic info #}
+    {% if story.epic %}
+      <div class="tagsBox">{% silk "chart_organisation" %} <a href="{% url epics project.slug %}" title="{{story.epic.full_name|escape}}">{{story.epic.short_name}}</a></div>
+    {% endif %}
+
+  {% for tag in story.story_tags_full %}
+     <div class="tagsBox">{% silk "tag_blue" %}<a onclick="filterByTag('{{tag.name}}');  return false;" href="#">{{ tag.name }}</a></div>
+  {% endfor %}
+
+  {% for link in story.external_links.all %}
+   {% if link.external_url %}
+     <div class="tagsBox">{% silk "link" %} <a href="{{ link.external_url }}">{{ link.extra_slug }}</a></div>
+   {% endif %}
+  {% endfor %}
+
+
+
+
+  {% include "stories/single_extra.html" %}
+
+</div>
+
 </div>
 
 

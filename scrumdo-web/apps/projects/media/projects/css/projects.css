@@ -112,7 +112,7 @@
     padding-right:9px;
     padding-top: 1px;
     padding-bottom: 1px;
-    margin-top: -1px;
+    margin-top: 1px;
     border-radius: 6px;
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
@@ -846,8 +846,15 @@ div.add_task {
 
 
 .formatted_story_text p {
-	margin: 0px;
-	display: inline-block;
+	margin-right: 0px;
+	margin-top: 0px;
+	margin-left: 0px;
+	
+}
+.formatted_story_text .story_number {
+	float: left;
+	display: inline;
+	margin-right: 5px;
 }
 
 .formatted_story_text h1 {

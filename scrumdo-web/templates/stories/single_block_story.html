@@ -31,7 +31,7 @@
 
 
     
-  <h1 class="formatted_story_text"><span style="color:#cccccc;">#{{story.local_id}} {% if story.category %}({{story.category}}){% endif %}</span>
+  <h1 class="formatted_story_text"><span class="story_number" style="color:#cccccc;">#{{story.local_id}}</span>
 	 {{ story.summary|markdown|link_stories:story.project|safe }}</h1>
 
   <span class="formatted_story_text story_detail">
