@@ -182,10 +182,6 @@ $(document).ready(function() {
         $(".hide_burndown_chart_link").text("Show Chart");
     }
 
-    $(".subIteration").click(function()
-    {
-        var iteration_id = $(this).attr("iteration_id");
-        moveCurrentlyOpenStoryToIteration(iteration_id);
-    });
+
 
 });

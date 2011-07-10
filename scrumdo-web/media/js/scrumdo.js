@@ -262,4 +262,9 @@ $(document).ready(function() {
     $("body").bind("storyListChanged", setUpStoryLinks );
     $('body').bind("epicEdited", setUpStoryLinks );    
     $('body').bind("storyEdited", setUpStoryLinks );    
+    $(".subIteration").click(function()
+    {
+        var iteration_id = $(this).attr("iteration_id");
+        moveCurrentlyOpenStoryToIteration(iteration_id);
+    });
 });

@@ -166,6 +166,8 @@ function setupEpicLinks()
         $("#addStoryForm #id_epic").val( $(this).parents(".epic_list_block").attr("epic_id") );
         return false;
     });
+    
+    setUpStoryLinks();
 }
 
 $(document).ready(function(){
