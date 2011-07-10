@@ -27,6 +27,14 @@
 
 {% block body %}
 <img id="loadingIcon" src="{{ STATIC_URL }}images/ajax-loader.gif">
+<h1>Epics</h1>
+{% if archived %}
+ Show Archived | <a href="?show_archived=false">Hide Archived</a>
+{% else %}
+ <a href="?show_archived=true">Show Archived</a> | Hide Archived
+{% endif %}
+
+
 <div id="size-options" style="float:right">
 <input type="radio" id="small_epics" name="radio" /><label for="small_epics">_</label>
 <input type="radio" id="med_epics" name="radio" /><label for="med_epics">=</label>

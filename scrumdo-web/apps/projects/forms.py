@@ -138,11 +138,16 @@ class EpicForm( forms.ModelForm ):
         self.instance.project = self.project
         if not self.instance.local_id:
             self.instance.local_id = self.project.getNextEpicId()
+        archived = self.cleaned_data["archived"]
+        for epic in self.instance.children.exclude(archived=archived):
+            epic.archived = archived
+            epic.save()
+            
         return super(EpicForm, self).save(**kwargs)
 
     class Meta:
         model = Epic
-        fields = ('summary','detail','points','parent')
+        fields = ('summary','detail','points','parent', 'archived')
 
 
 class StoryForm( forms.ModelForm ):
@@ -162,7 +167,7 @@ class StoryForm( forms.ModelForm ):
         members.insert(0,("","---------"))
         self.fields["assignee"].choices = members
         
-        epics = [ (epic.id, "#E%d %s" % (epic.local_id, epic.summary) ) for epic in project.epics.all().order_by("local_id") ]
+        epics = [ (epic.id, "#E%d %s" % (epic.local_id, epic.summary) ) for epic in project.epics.exclude(archived=True).order_by("local_id") ]
         epics.insert(0,("","----------") )
         self.fields["epic"].choices=epics
         self.fields["epic"].required = False

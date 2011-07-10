@@ -36,6 +36,7 @@ import datetime
 import math
 import logging
 
+from projects.calculation import onDemandCalculateVelocity
 from projects.limits import org_project_limit, personal_project_limit
 
 logger = logging.getLogger(__name__)
@@ -134,8 +135,11 @@ def remove_user( request, group_slug ):
 @login_required
 def epics(request, group_slug):
     project = get_object_or_404( Project, slug=group_slug )
+    archived = request.GET.get("show_archived","false") == "true"
     read_access_or_403(project, request.user )
     epics = project.epics.filter(parent__isnull=True)
+    if not archived:
+        epics = epics.filter(archived=False)
     epics_list = _flattenEpics(epics)
     organization = _organizationOrNone(project)
     add_story_form = handleAddStory(request, project)
@@ -146,7 +150,8 @@ def epics(request, group_slug):
                                 "epic_list":epics_list,
                                 "organization":organization,
                                 "add_story_form":add_story_form,
-                                "add_epic_form":add_epic_form
+                                "add_epic_form":add_epic_form,
+                                "archived":archived
                               },
                               context_instance=RequestContext(request))
 

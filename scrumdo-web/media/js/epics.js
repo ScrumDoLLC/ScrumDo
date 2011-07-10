@@ -1,4 +1,4 @@
-
+var load_delay = 0;
 
 
 
@@ -56,15 +56,20 @@ function setBigEpics()
 
 function reloadEpic( epic_id )
 {    
-    
     $.ajax({
         url: "/projects/epic/" + epic_id ,       
         success: function(responseText) {
             $("#epic_" + epic_id).html(responseText);
             $("body").trigger("storyListChanged"); 
             $("#epic_" + epic_id).trigger("epicLoaded");
-            setupEpicLinks();            
-            setupSortableLists();
+            $("div.epic_list_block[parent_id='" + epic_id + "']").each( function(index,ele){
+                load_delay += 100;
+                var eid = $(ele).attr("epic_id");
+                setTimeout( "reloadEpic('" + eid + "');", load_delay );                
+            });
+            
+            load_delay -= 100;
+            load_delay = Math.max(0,load_delay);
         }
     });
 }
@@ -173,6 +178,7 @@ $(document).ready(function(){
     $("#loadingIcon").hide();
     $("body").bind("epicListChanged", function(){window.location.reload();} );         
   	$("body").bind("storyListChanged",setupSortableLists);
+  	$("body").bind("storyListChanged",setupEpicLinks);
   	$("body").bind("storyEdited", onStoryEdited );
   	$("body").bind("epicEdited", onEpicEdited );
     

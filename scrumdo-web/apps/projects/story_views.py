@@ -174,6 +174,7 @@ def edit_epic(request,  epic_id):
         form = EpicForm( project, request.POST, instance=epic)
         if form.is_valid(): # All validation rules pass
             epic = form.save()
+            onDemandCalculateVelocity(project)
             return HttpResponse("OK")
     else:
         form = EpicForm( project,  instance=epic)
@@ -667,4 +668,5 @@ def ajax_add_epic(request, group_slug):
         form = EpicForm( project, request.POST)
         if form.is_valid(): # All validation rules pass
             epic = form.save()
+            onDemandCalculateVelocity(project)
             return HttpResponse(epic.id)

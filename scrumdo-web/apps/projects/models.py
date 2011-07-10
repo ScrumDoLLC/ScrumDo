@@ -276,6 +276,7 @@ class Epic(models.Model):
     project = models.ForeignKey( Project , related_name="epics")
     status = models.IntegerField( max_length=2, choices=STATUS_CHOICES, default=1 )
     order = models.IntegerField( max_length=5, default=5000)
+    archived = models.BooleanField( default=False )
     
     def save(self, *args, **kwargs):
         if self.parent == self:

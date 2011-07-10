@@ -19,8 +19,6 @@
       success: function(responseText) {
 		if( responseText == "OK" )
 		{
-			reloadEpic({{epic.id}})
-			$(document).trigger('close.facebox');
 			$("#epic_" + {{epic.id}}).trigger("epicEdited");   
 			closeOverlay();
 		}
@@ -28,9 +26,6 @@
 		{
 			$("#epic_area").replaceWith(responseText);
 		}
-        
-        
-               
         
       }});
 </script>

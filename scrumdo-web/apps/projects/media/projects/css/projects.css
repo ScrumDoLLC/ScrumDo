@@ -404,6 +404,10 @@
     padding: 0px;
 }
 
+.epic_archived {
+    opacity: 0.7;
+}
+
 .story_form #epic_details {
   display: none;
 }
