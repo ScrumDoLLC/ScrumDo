@@ -168,6 +168,11 @@ function setUpStoryLinks()
         return false;
     });
 
+    $(".tagsBox a").tipTip({
+        delay: 100,
+        edgeOffset: 10
+    });
+
     // Make sure all the tooltips will work with some good positioning.
     $(".storyIcons img").tipTip({
         delay: 100,
