@@ -201,6 +201,12 @@ function setUpStoryLinks()
 
 var overlay_div = false;
 
+function sizeOverlay()
+{
+
+    $("#scrumdo_overlay").css("max-height", $(window).height() - 50 + "px");
+}
+
 function openOverlayDiv(div_selector)
 {
     var div = $(div_selector);
@@ -214,7 +220,7 @@ function openOverlayDiv(div_selector)
         return false;
     });
     $("#scrumdo_overlay").fadeIn(150);
-
+    sizeOverlay();
     
 }
 
@@ -234,6 +240,7 @@ function openOverlay( url )
             $("body").css("overflow", "hidden");
         }
     });
+    sizeOverlay();
 }
 
 function closeOverlay()

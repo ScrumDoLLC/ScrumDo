@@ -304,6 +304,8 @@
     behavior: url(/site_media/static/css/PIE.htc);
 }
 
+
+
 #form-tabs .story_form {
 	margin: 0px;
 	padding: 0px;
@@ -738,15 +740,15 @@ div.add_task {
 
 #scrumdo_overlay {
     display: none;
-    border: 5px solid #444444;
+    border: 5px solid #ddd;
     min-width: 150px;
     min-height: 150px;
     z-index: 2000;
 	position: fixed;
 	top: 15px;
 	left: 45px;
-	bottom: 15px;
 	right: 45px;
+
 	-webkit-border-radius: 15px;
 	-moz-border-radius: 15px;
 	-moz-box-shadow: 0px 0px 16px #000;
@@ -756,8 +758,9 @@ div.add_task {
 	padding: 10px;
 	overflow: auto;
     overflow-x: hidden;
-    background-color: #ddd;
-    text-shadow: 0px 1px 0px #ffffff;
+    background-color: #fbfbfb;
+    text-shadow: 0px 1px 0px #ffffff;    
+    max-width: 900px;    
 }
 
 .edit_story_table {
@@ -891,8 +894,8 @@ div.add_task {
 }
 
 #add_story_popup, #add_epic_popup {
-    width: 850px;
-    height: 600px;
+    width: 100%;
+    height: 100%;
     display: none;
 }
 

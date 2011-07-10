@@ -77,6 +77,15 @@
   <div id="add_story_popup">{% include "stories/add_story_form.html" %}</div>
   <div id="add_epic_popup">{% include "stories/add_epic_form.html" %}</div>
   
+  <div id="subIterationList" style="display:none">
+    {% for subiteration in project.iterations.all %}
+      {% ifnotequal subiteration iteration %}
+      
+        <div class="subIteration" iteration_id="{{subiteration.id}}">{% iteration_icon subiteration %} {{subiteration.name}}</div>
+      {% endifnotequal %}
+    {% endfor %}
+  </div>
+
 <script type="text/javascript" src="{{STATIC_URL}}js/epics.js"></script>
 <script type="text/javascript" charset="utf-8">
 
