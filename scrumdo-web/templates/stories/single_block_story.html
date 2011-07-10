@@ -33,11 +33,7 @@
     
   <h1 class="formatted_story_text"><span style="color:#cccccc;">#{{story.local_id}} {% if story.category %}({{story.category}}){% endif %}</span>
 	 {{ story.summary|markdown|link_stories:story.project|safe }}</h1>
-    {% if not epic %}
-      {% if story.epic %}
-        <span class="story_epic_line">{{story.epic.full_name}}</span><br/>
-      {% endif %}
-    {% endif %}
+
   <span class="formatted_story_text story_detail">
   {{ story.detail|markdown|link_stories:story.project|safe }}
   </span>
@@ -57,6 +53,23 @@
     {% get_comment_count for story as comment_count %}
     <a onClick="showCommentsForStory({{story.id}}); return false;" href="#">{{comment_count}} Comment{{comment_count|pluralize}}</a>
 
+	{% if story.category %}
+ 	  <div class="tagsBox">{% silk "folder" %} {{story.category}}</div>
+	{% endif %}
+
+	{% if not iteration %}
+	  {# If there is an iteration defined, we're on a page about an iteration, so no need to display it. #}
+      <div class="tagsBox iterationTagsBox">{% silk "page_white" %} 
+	  <a href="{% url iteration project.slug story.iteration.id %}">{{story.iteration.name}}</a>
+	  </div>
+	{% endif %}
+
+  {% if not epic %}
+    {# If there is an epic defined, we're likely rendering within that epic, so no need to display the epic info #}
+    {% if story.epic %}
+      <div class="tagsBox">{% silk "chart_organisation" %} <a href="{% url epics project.slug %}" title="{{story.epic.full_name|escape}}">{{story.epic.short_name}}</a></div>
+    {% endif %}
+  {% endif %}
 
   {% for tag in story.story_tags_full %}
      <div class="tagsBox">{% silk "tag_blue" %}<a onclick="filterByTag('{{tag.name}}');  return false;" href="#">{{ tag.name }}</a></div>
@@ -68,6 +81,9 @@
      <div class="tagsBox">{% silk "link" %} <a href="{{ link.external_url }}">{{ link.extra_slug }}</a></div>
    {% endif %}
   {% endfor %}
+
+
+
   
   {% include "stories/single_extra.html" %}
 

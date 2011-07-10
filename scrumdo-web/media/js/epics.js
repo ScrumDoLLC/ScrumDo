@@ -33,6 +33,7 @@ function setSmallEpics()
     $(".storyIcons").hide();
     $(".story_detail").hide();
     $(".story_block").addClass("story_block_collapsed");
+    $(".epic_detail").slideUp();
 }
 function setMedEpics()
 {
@@ -42,6 +43,7 @@ function setMedEpics()
     $(".storyIcons").hide();
     $(".story_detail").hide();
     $(".story_block").addClass("story_block_collapsed");
+    $(".epic_detail").slideUp();
 }
 function setBigEpics()
 {
@@ -51,6 +53,7 @@ function setBigEpics()
     $(".storyIcons").show();
     $(".story_detail").show();
     $(".story_block").removeClass("story_block_collapsed");
+    $(".epic_detail").slideDown();
 
 }
 

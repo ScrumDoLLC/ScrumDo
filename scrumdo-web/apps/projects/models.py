@@ -286,6 +286,11 @@ class Epic(models.Model):
     def stories_by_rank(self):
         return self.stories.all().order_by("rank")
 
+    def short_name(self):
+        if self.parent_id:
+            return "%s / #E%d" % (self.parent.short_name(), self.local_id)
+        return "#E%d" % (self.local_id)
+
     def full_name(self):
         if self.parent_id:
             return "%s / #E%d %s" % (self.parent.full_name(), self.local_id, self.summary)

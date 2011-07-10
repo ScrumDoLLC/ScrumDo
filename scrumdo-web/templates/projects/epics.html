@@ -41,6 +41,18 @@
 <input type="radio" id="big_epics" name="radio" checked="checked"  /><label for="big_epics">≡</label>
 </div>
 <br/><br/>
+  {% if first_time %}
+   <div class="empty_state_box">
+     <h1>Welcome to the Epics tool</h1>
+     <p>This tool will let you create story <b>Epics</b>.</p>  
+	 <p>Epics are a way to do long term planning.  They represent
+	    a large, vaguely defined amount of work.</p>  
+	  <p>Later, when it's time to work on what the epics represent, you
+	    can create stories within the epics to narrow and define the work.</p>
+	Add your first epic now: <a class="add_epic_link button green"  epic_id="{{epic.id}}" href="#">Add Epic</a>
+   </div>
+  {% endif %}
+
   {% for epic in epic_list %}
      {% ifequal epic "in" %}         
          <ul class="epic_list">  
@@ -59,7 +71,7 @@
   {% endfor %}
 
 
-  <a class="add_epic_link"  epic_id="{{epic.id}}" href="#">Add Epic</a>
+  <a class="add_epic_link button green small"  epic_id="{{epic.id}}" href="#">Add Epic</a>
 
 
   <div id="add_story_popup">{% include "stories/add_story_form.html" %}</div>

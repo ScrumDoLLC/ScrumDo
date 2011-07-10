@@ -113,23 +113,32 @@
     padding-top: 1px;
     padding-bottom: 1px;
     margin-top: -1px;
-    border-radius: 8px;
-    -webkit-border-radius: 8px;
-    -moz-border-radius: 8px;
-    -o-border-radius: 8px;
-    -khtml-border-radius: 8px;
+    border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    -o-border-radius: 6px;
+    -khtml-border-radius: 6px;
     
     behavior: url(/site_media/static/css/PIE.htc);
-	border: 1px solid #b5b5b5;
+	border: 1px solid #e7e7e7;
+	font-size: 11px;
 }
 
 .tagsBox:hover {
 	border: 1px solid #92e5f7;
 }
 
+.tagsBox a:visited {
+    color: #2b1fdb;
+}
 
+.iteration_story_list .iterationTagsBox {
+    display: none;
+}
 .tagsBox img {
   vertical-align: text-top;
+  height: 12px;
+  width: 12px;
 }
 
 .story_column_header {
@@ -776,15 +785,6 @@ div.add_task {
 	opacity: 1;
 }
 
-.add_story_epic_links a {
-	text-decoration: none;
-	font-size: 12px;
-	font-weight: normal;
-}
-
-.add_story_epic_links a:hover {
-	text-decoration: underline;
-}
 
 .epic_text {
 	font-weight: bold;    

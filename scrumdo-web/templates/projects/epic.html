@@ -18,10 +18,15 @@
 	
 	 <span class="epic_text">{% if epic.archived %}(Archived) {% endif %}#E{{epic.local_id}} {{epic.summary}} 
 	   <div class="add_story_epic_links">
-	     <a class="add_story_link"  epic_id="{{epic.id}}" href="#">Add Story</a> - 
-		 <a class="add_epic_link"  epic_id="{{epic.id}}" href="#">Add Epic</a>
+	     <a class="add_story_link button green small"  epic_id="{{epic.id}}" href="#">Add Story</a> - 
+		 <a class="add_epic_link button blue small"  epic_id="{{epic.id}}" href="#">Add Epic</a>
 	   </div>
 	 </span>
+	{% if epic.detail %}
+	<div class="epic_detail formatted_story_text">
+		 {{ epic.detail|markdown|link_stories:epic.project|safe }}
+	</div>
+	{% endif %}
 	 
 	 <ul epic_id="{{epic.id}}" id="epic_{{epic.id}}_list" class="epic_story_list">
 		{% for story in epic.stories_by_rank %}
