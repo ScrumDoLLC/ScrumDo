@@ -108,7 +108,7 @@ def calculateProject( project ):
     if not project.active:
         return
     stories = project.stories.all()
-    epics = project.epics.all()
+    epics = project.epics.all().exclude(archived=True)
     points = calculatePoints( stories, epics )
 
     total_project_points = points[0]
