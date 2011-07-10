@@ -849,10 +849,7 @@ div.add_task {
 
 
 .formatted_story_text p {
-	margin-right: 0px;
-	margin-top: 0px;
-	margin-left: 0px;
-	
+	margin: 0px;	
 }
 .formatted_story_text .story_number {
 	float: left;
