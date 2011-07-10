@@ -1,0 +1,165 @@
+{% extends "projects/base.html" %}
+
+{% load i18n %}
+{% load uni_form %}
+{% load avatar_tags %}
+{% load threadedcommentstags %}
+{% load pagination_tags %}
+{% load extra_tagging_tags %}
+{% load projects_tags %}
+{% load iteration_tags %}
+{% load group_tags %}
+{% load topics_tags %}
+{% load wiki_tags %}
+{% load theme_tags %}
+{% load iteration_tags %}
+
+{% block head_title %}{{ project.name }}{% endblock %}
+
+{% block breadcrumbs %}
+  {% if project.organization %}
+     <a href="{% url organization_detail project.organization.slug %}">{{ project.organization.name }}</a> /
+  {% else %}
+    {{ project.creator.username }} /
+  {% endif %}  
+  <a href="{% url project_detail project.slug %}">{{ project.name }}</a> /
+  Tag: {{tag.name}}
+{% endblock %}
+
+{% block body %}
+        <h1>Tag: {{tag.name}}</h1>
+
+        
+		<img id="loadingIcon" src="{{ STATIC_URL }}images/ajax-loader.gif">
+        <h1>Stories</h1>
+                
+        <ul id="story_list">
+		  {% for story in stories %}
+		    {% include "stories/single_block_story.html" %}  
+  		  {% endfor %}
+        </ul>
+    
+    
+
+      <div id="subIterationList" style="display:none">
+        {% for subiteration in project.iterations.all %}
+          {% ifnotequal subiteration iteration %}
+          
+            <div class="subIteration" iteration_id="{{subiteration.id}}">{% iteration_icon subiteration %} {{subiteration.name}}</div>
+          {% endifnotequal %}
+        {% endfor %}
+      </div>
+
+      <div id="subIterationList" style="display:none">
+	    {% for subiteration in project.iterations.all %}
+	      {% ifnotequal subiteration iteration %}
+
+	        <div class="subIteration" iteration_id="{{subiteration.id}}">{% iteration_icon subiteration %} {{subiteration.name}}</div>
+	      {% endifnotequal %}
+	    {% endfor %}
+	  </div>
+    
+{% endblock %}
+
+
+
+{% block extra_body %}
+
+<script type="text/javascript">
+var project_slug = "{{ project.slug }}";
+var current_story_popup = "";
+var last_load_iter_req = null;
+var static_url = "{{ STATIC_URL }}";
+var iteration_list_url = "{% url iteration_list project.slug %}";
+
+</script>
+
+<script type="text/javascript" src="{{STATIC_URL}}js/jquery.cookie.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/iteration.js"></script>
+
+<script type="text/javascript">
+/** 
+ * Moving a story to an iteration is a 2-step process.  First, display the menu of iterations to pick form,
+ * and then actually move it when the user selects one.  This function handles the second step.
+ * This is in iteration.html because a different version is required on the backlog pages.
+ **/
+function moveCurrentlyOpenStoryToIteration(iteration_id)
+ {
+    $("#loadingIcon").show();
+    $.ajax({
+        url: "/projects/project/" + project_slug + "/story/" + current_story_popup + "/reorder",
+        data: ({
+            action: "move_iteration",
+            iteration: iteration_id
+        }),
+        type: "POST",
+        success: function() {
+            $("#loadingIcon").hide();         
+			reloadStory(current_story_popup, false, false);		   
+
+        }
+    });
+}
+
+
+function updateStoryPosition(event, ui)
+ {
+    if ($(ui.item).attr("draggedOffScreen") == "1")
+    {
+        // We were getting double sort/drag events sometimes when dragging to a different iteration, this fixes that.
+        return;
+    }
+    $("#loadingIcon").show();
+
+    var ind = ui.item.index();
+    var before = "";
+    var after = "";
+	var story_id = $(ui.item).attr("story_id");
+    children = ui.item.parent().children();
+    
+    // Try to find the story before/after this one so the sorting algorithm know where this story goes.
+    if (ind > 0) { before = $(children[ind - 1]).attr("story_id");  }
+    if (children.length > (1 + ind)) { after = $(children[ind + 1]).attr("story_id"); }
+
+
+
+    $.ajax({
+        url: "/projects/project/" + project_slug + "/story/" + story_id + "/reorder",
+        data: ({
+            action: "reorder",
+            before: before,
+            after: after
+        }),
+        type: "POST",
+        success: function() {				     
+            $("#loadingIcon").hide();
+        }
+    });
+
+}
+
+$(document).ready(function() 
+{	
+	$("#story_list").sortable({
+        update: updateStoryPosition,
+        tolerance: 'pointer',
+        distance: 5,
+        opacity: 0.5,
+        placeholder: "ui-state-highlight",
+        cancel: ".block_story_body"
+    });
+
+	setUpStoryLinks();
+
+});
+
+
+{% if GOOGLE_ANALYTICS %}
+_gaq.push(['_trackEvent', "ViewPage", "Iteration", "", 1]);
+{% endif %}
+
+</script>
+
+
+    
+{% endblock %}

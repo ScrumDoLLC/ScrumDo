@@ -62,6 +62,7 @@
       <div class="tagsBox iterationTagsBox">{% silk "page_white" %} 
 	  <a href="{% url iteration project.slug story.iteration.id %}">{{story.iteration.name}}</a>
 	  </div>
+
 	{% endif %}
 
   {% if not epic %}
@@ -72,7 +73,7 @@
   {% endif %}
 
   {% for tag in story.story_tags_full %}
-     <div class="tagsBox">{% silk "tag_blue" %}<a onclick="filterByTag('{{tag.name}}');  return false;" href="#">{{ tag.name }}</a></div>
+     <div class="tagsBox">{% silk "tag_blue" %}<a href="{% url tag_detail project.slug tag.name %}">{{ tag.name }}</a></div>
   {% endfor %}
 
 

@@ -61,19 +61,6 @@ def iteration(request, group_slug, iteration_id):
     else:
         form = IterationForm( instance=iteration )
 
-
-    # if iteration.backlog:
-    #     return backlog(request, project, iteration, form)
-
-    if request.method == 'POST': # If the form has been submitted...
-        write_access_or_403(project,request.user)
-        form = IterationForm( request.POST, instance=iteration)
-        if form.is_valid(): # All validation rules pass
-            iteration = form.save(  )
-            request.user.message_set.create(message="Iteration Details Saved.")
-    else:
-        form = IterationForm( instance=iteration )
-
     today = datetime.date.today()
     daysLeft = None
     try:

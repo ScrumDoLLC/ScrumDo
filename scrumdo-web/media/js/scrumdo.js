@@ -121,7 +121,7 @@ function reloadStory( story_id , display_comments, display_tasks)
 		type: "GET",
 		success: function(responseText) {
     		$("#story_" + story_id).replaceWith(responseText);    		
-    		$("#story_" + storyID).trigger("storyEdited");
+    		$("#story_" + story_id).trigger("storyEdited");
     		
     		if( display_tasks ) { showTasksForStory( story_id , false);}
     		if( display_comments ) { showCommentsForStory(story_id, false);}   

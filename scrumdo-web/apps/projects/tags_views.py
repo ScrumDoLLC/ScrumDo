@@ -26,7 +26,31 @@ from django.template import RequestContext
 
 from projects.models import Project, Story, StoryTag, StoryTagging
 from projects.access import *
-
+from story_views import handleAddStory
 
 def tag_detail(request, group_slug, tag_name):
-    pass
+    project = get_object_or_404( Project, slug=group_slug )
+    
+    read_access_or_403(project,request.user)
+    tags = StoryTag.objects.filter( project=project, name=tag_name )
+    if len(tags) > 0:
+        tag = tags[0]
+        
+    stories = [ tagging.story for tagging in tag.stories.all().order_by("story__rank") ]
+    add_story_form = handleAddStory(request, project)
+
+    return render_to_response("projects/tag_page.html", {
+        "tag": tag,
+        "stories":stories,
+        "organization":_organizationOrNone(project),
+        "project" : project,
+        'add_story_form': add_story_form,
+        "current_view":"tags_view"
+      }, context_instance=RequestContext(request))
+
+def _organizationOrNone(project):
+  try:
+      organization = project.organization
+  except Organization.DoesNotExist:
+      organization = None
+  return organization
