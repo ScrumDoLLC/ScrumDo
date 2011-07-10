@@ -48,6 +48,10 @@ urlpatterns = patterns('projects.views',
 
 )
 
+urlpatterns += patterns('projects.tags_views',
+    url(r'^project/(?P<group_slug>[-\w]+)/tag/(?P<tag_name>[-\w]+)$', 'tag_detail', name="tag_detail"),
+)
+
 urlpatterns += patterns('projects.iteration_views',
     url(r'^project/(?P<group_slug>[-\w]+)/iteration_create$', 'iteration_create', name="iteration_create"),
     url(r'^project/(?P<group_slug>[-\w]+)/iteration/(?P<iteration_id>[0-9]+)/delete', 'delete_iteration', name="delete_iteration"),
