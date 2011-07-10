@@ -26,7 +26,15 @@
 		else
 		{
 			$("#epic_area").replaceWith(responseText);
-		}
-        
+		}        
       }});
+
+
+      $("#deleteEpicForm").ajaxForm({
+        beforeSubmit: function(arr, $form, options) { return confirm("Are you sure you want to delete this epic?"); },
+        success: function(responseText) { 
+          $("body").trigger("epicListChanged"); 
+        }
+      });
+
 </script>

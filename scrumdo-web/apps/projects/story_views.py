@@ -164,6 +164,27 @@ def reorder_epic( request, group_slug, epic_id):
         return HttpResponse("OK")
     return  HttpResponse("Fail")
 
+
+def _deleteEpic( epic ):
+    for story in epic.stories.all():
+        story.epic = None
+        story.save()
+    for epic in epic.children.all():
+        epic.parent = None
+        epic.save()
+    epic.delete()    
+    
+
+@login_required
+def delete_epic(request,  epic_id):
+    epic = get_object_or_404(Epic, id=epic_id)
+    project = epic.project
+    write_access_or_403(project, request.user)
+    if request.method == 'POST': # If the form has been submitted...        
+        _deleteEpic( epic )
+        return HttpResponse("OK")
+    
+
 @login_required
 def edit_epic(request,  epic_id):
     epic = get_object_or_404(Epic, id=epic_id)
