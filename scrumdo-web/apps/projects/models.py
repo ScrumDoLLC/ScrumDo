@@ -270,13 +270,13 @@ class Epic(models.Model):
     """Represents an epic in your backlog."""
     local_id = models.IntegerField()
     summary = models.TextField()
-    parent = models.ForeignKey('self', related_name="children", null=True)
+    parent = models.ForeignKey('self', related_name="children", null=True, verbose_name="Parent Epic", help_text="What epic does this one belong within?", )
     detail = models.TextField(blank=True)
-    points = models.CharField('points', max_length=4, default="?", blank=True)
+    points = models.CharField('points', max_length=4, default="?", blank=True, help_text="Rough size of this epic (including size of sub-epics or stories).  Enter ? to specify no sizing.")
     project = models.ForeignKey( Project , related_name="epics")
     status = models.IntegerField( max_length=2, choices=STATUS_CHOICES, default=1 )
     order = models.IntegerField( max_length=5, default=5000)
-    archived = models.BooleanField( default=False )
+    archived = models.BooleanField( default=False, help_text="Archived epics are generally hidden and their points don't count towards the project." )
     
     def save(self, *args, **kwargs):
         if self.parent == self:

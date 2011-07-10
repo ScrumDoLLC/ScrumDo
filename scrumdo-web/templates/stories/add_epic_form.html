@@ -1,22 +1,22 @@
+{% load uni_form %}
 <div style="margin-left:auto; margin-right:auto;">
+	<h1>Add Epic</h1>
   <div id="epic_form" class="story_form">
-    <form method="POST" id="addEpicForm" >
-      {{add_epic_form.non_field_errors}}
-      {{add_epic_form.summary}}    {{add_epic_form.summary.errors}} <button id="add_button" type="submit">Add Epic</button>
-       <br/>
-      <div id="epic_details">
-        <table>
-          <tr><td>Detail:</td><td>{{add_epic_form.detail}}    {{add_epic_form.detail.errors}} </td></tr>
-          <tr><td>Points:&nbsp;</td><td id="points_section">{{add_epic_form.points}}  {{add_epic_form.points.errors}} </td></tr>
-		  <tr><td>Parent Epic:&nbsp;</td><td>{{add_epic_form.parent}}  {{add_epic_form.parent.errors}} </td></tr>
-         </table>
-      </div>
-    
-        <input type="hidden" name="action" value="addEpic" />
-    
-      {% if iteration %}
-        <input type="hidden" name="iteration" value="{{ iteration.id }}" />
-      {% endif %}
+    <form method="POST" id="addEpicForm" class="uniForm" style="width: 100%">
+	
+	
+		<fieldset class="inlineLabels">
+			{{ add_epic_form|as_uni_form }}
+			<div class="form_block">
+		           <div class="buttonHolder">
+		              <button class="primaryAction" type="submit" >Save</button>
+		           </div
+		       </div>
+		</fieldset>
+	
+
+
+
     </form>
    </div>
  </div>
