@@ -24,7 +24,7 @@ from api.models import DeveloperApiKey, UserApiKey
 
 class UserResource(ModelResource):
     teams = fields.ToManyField('api.resources.TeamResource', 'teams')
-    projects = fields.ToManyField('api.resources.ProjectResource', 'projects')
+    projects = fields.ToManyField('api.resources.ProjectResource', 'user_projects')
     assigned_stories = fields.ToManyField('api.resources.StoryResource', 'assigned_stories', null=True)
 
     class Meta:
@@ -119,7 +119,7 @@ class ProjectResource(ModelResource):
     iterations = fields.ToManyField('api.resources.IterationResource', 'iterations')
     teams = fields.ToManyField('api.resources.TeamResource', 'teams')
     organization = fields.ToOneField(OrganizationResource, 'organization', null=True, full=True)
-    members = fields.ToManyField('api.resources.UserResource', 'members')
+    member_users = fields.ToManyField('api.resources.UserResource', 'member_users')
 
 
     class Meta:

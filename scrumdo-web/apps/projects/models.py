@@ -83,7 +83,7 @@ class Project(Group):
     VELOCITY_TYPE_AVERAGE_3 = 3
 
     active = models.BooleanField( default=True )
-    member_users = models.ManyToManyField(User, through="ProjectMember", verbose_name=_('members'))
+    member_users = models.ManyToManyField(User, through="ProjectMember", related_name="user_projects", verbose_name=_('member_users'))
     # private means only members can see the project
     private = models.BooleanField(_('private'), default=True)
     points_log = generic.GenericRelation( PointsLog )
