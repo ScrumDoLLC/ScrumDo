@@ -165,6 +165,12 @@
   margin-right: 10px;
   opacity: 0.1;
 }
+
+
+.story_small:hover .storyIcons {
+    opacity: 1;
+}
+
 .block_story_body:hover .storyIcons, .block_story_body:focus .storyIcons, .epic_block:hover .epicIcons, .epic_block:focus .epicIcons {
   opacity: 1;
 }
@@ -480,7 +486,14 @@ h1 a {
     color: #000;
 }
 
-#story_list, .story_list {
+.story_list {
+    padding: 0px;
+    margin: 5px;
+    min-height: 900px;
+    height:100%;    
+}
+
+#story_list {
     padding: 0px;
     margin: 5px;
     border-top: 1px solid #e1e1e1;
