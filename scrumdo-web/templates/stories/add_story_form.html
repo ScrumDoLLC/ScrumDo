@@ -75,6 +75,7 @@
       $(':input','#addStoryForm').not(':button, :submit, :reset, :hidden, :radio, #epic_dropdown').val('');              
       $("#id_summary").focus();
       $("body").trigger("storyListChanged"); 
+	  $("body").trigger("storyAdded");
       
       {% if GOOGLE_ANALYTICS %}     
         _gaq.push(['_trackEvent',"AddStory", "{{current_view}}", "", 1]);      
