@@ -27,13 +27,10 @@
     {{ story.detail }}
   {% endfilter %} 
      
-  {% if story.story_tags.all %}
-    <div class="tagsBox">{% silk "tag_blue" %}
-    {% for tag in story.story_tags.all %}
-       {{ tag.name }} 
-    {% endfor %}
-    </div>
-  {% endif %}
+  {% for tag in story.story_tags_full %}
+     <div class="tagsBox">{% silk "tag_blue" %}<a href="{% url tag_detail story.project.slug tag.name %}">{{ tag.name }}</a></div>
+  {% endfor %}
+
   {% if story.assignee and story.project.use_assignee %}
     Assigned: <b>{{story.assignee}}</b> {% avatar story.assignee 22 %}
   {% endif %}

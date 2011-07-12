@@ -188,7 +188,8 @@ $(document).ready(function()
     });
 
 	$('body').bind("storyEdited", updatePanel );    
-	$('body').bind("storyListChanged", updatePanel );    
+	$('body').bind("storyListChanged", updatePanel );   
+	$('body').bind("storyAdded", function(){ loadIteration(iteration_id,1,""); });
 });
 
 

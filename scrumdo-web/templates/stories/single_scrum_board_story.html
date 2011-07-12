@@ -53,7 +53,7 @@
     {% endif %}
 
   {% for tag in story.story_tags_full %}
-     <div class="tagsBox">{% silk "tag_blue" %}<a onclick="filterByTag('{{tag.name}}');  return false;" href="#">{{ tag.name }}</a></div>
+     <div class="tagsBox">{% silk "tag_blue" %}<a href="{% url tag_detail story.project.slug tag.name %}">{{ tag.name }}</a></div>
   {% endfor %}
 
   {% for link in story.external_links.all %}
