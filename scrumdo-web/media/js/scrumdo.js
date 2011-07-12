@@ -208,8 +208,8 @@ var overlay_div = false;
 
 function sizeOverlay()
 {
-
-    $("#scrumdo_overlay").css("max-height", $(window).height() - 50 + "px");
+    $("#scrumdo_overlay").css("max-height", $(window).height() - 90 + "px");
+    $("#scrumdo_overlay").css("left", (($(window).width() - $("#scrumdo_overlay").outerWidth()) / 2) + $(window).scrollLeft() + "px");
 }
 
 function openOverlayDiv(div_selector)
