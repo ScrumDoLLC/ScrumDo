@@ -32,15 +32,18 @@ def tag_detail(request, group_slug, tag_name):
     project = get_object_or_404( Project, slug=group_slug )
     
     read_access_or_403(project,request.user)
-    tags = StoryTag.objects.filter( project=project, name=tag_name )
-    if len(tags) > 0:
-        tag = tags[0]
-        
-    stories = [ tagging.story for tagging in tag.stories.all().order_by("story__rank") ]
+    tags_list = StoryTag.objects.filter( project=project, name=tag_name )
+
+    stories = []
+    for tags in tags_list:
+        # TODO: there's a bug somewhere causing duplicate tags to be created
+        stories += [ tagging.story for tagging in tags.stories.all() ]
+    
+    stories = sorted(stories, key=lambda story: story.rank)
     add_story_form = handleAddStory(request, project)
 
     return render_to_response("projects/tag_page.html", {
-        "tag": tag,
+        "tag": tags_list[0],
         "stories":stories,
         "organization":_organizationOrNone(project),
         "project" : project,
