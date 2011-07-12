@@ -162,7 +162,8 @@ function setupEpicLinks()
 
     $(".add_story_link").unbind("click");
     $(".add_story_link").click(function(){
-        openOverlayDiv("#add_story_popup")  ;
+        openOverlayDiv("#add_story_popup");
+        $("#createdStories").hide();
         $("#addStoryForm #id_epic").val( $(this).parents(".epic_list_block").attr("epic_id") );
         return false;
     });

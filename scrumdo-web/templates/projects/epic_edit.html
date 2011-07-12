@@ -17,10 +17,20 @@
   </form>
 </div>
 <script type="text/javascript" charset="utf-8">
+	var parent_changed = false;
+	
+	$("#epic_detail_form #id_parent").change(function(){parent_changed=true;});
+	
 	$("#epic_detail_form").ajaxForm({        
       success: function(responseText) {
 		if( responseText == "OK" )
 		{
+			if( parent_changed )
+			{
+				
+				window.location.reload();
+				return;
+			}
 			$("#epic_" + {{epic.id}}).trigger("epicEdited");   
 			closeOverlay();
 		}

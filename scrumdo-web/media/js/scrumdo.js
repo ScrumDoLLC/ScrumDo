@@ -226,7 +226,7 @@ function openOverlayDiv(div_selector)
     });
     $("#scrumdo_overlay").fadeIn(150);
     sizeOverlay();
-    
+    $("#scrumdo_overlay input:first").focus();
 }
 
 function openOverlay( url )
@@ -243,9 +243,11 @@ function openOverlay( url )
         success: function(data) {            
             $("#scrumdo_overlay #overlay_body").html(data);            
             $("body").css("overflow", "hidden");
+            $("#scrumdo_overlay input:first").focus();
         }
     });
     sizeOverlay();
+    
 }
 
 function closeOverlay()
