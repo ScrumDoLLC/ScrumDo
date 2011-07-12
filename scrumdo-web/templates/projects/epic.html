@@ -17,10 +17,12 @@
 	 </span>
 	
 	 <span class="epic_text">{% if epic.archived %}(Archived) {% endif %}#E{{epic.local_id}} {{epic.summary}} 
+	   {% canwrite project %}
 	   <div class="add_story_epic_links">
 	     <a class="add_story_link button green small"  epic_id="{{epic.id}}" href="#">Add Story</a> - 
 		 <a class="add_epic_link button blue small"  epic_id="{{epic.id}}" href="#">Add Epic</a>
 	   </div>
+	   {% endcanwrite %}
 	 </span>
 	{% if epic.detail %}
 	<div class="epic_detail formatted_story_text">

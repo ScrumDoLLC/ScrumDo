@@ -49,7 +49,11 @@
 	    a large, vaguely defined amount of work.</p>  
 	  <p>Later, when it's time to work on what the epics represent, you
 	    can create stories within the epics to narrow and define the work.</p>
-	Add your first epic now: <a class="add_epic_link button green"  epic_id="{{epic.id}}" href="#">Add Epic</a>
+	Add your first epic now:   
+	{% canwrite project %}
+	    <a class="add_epic_link button green small"  epic_id="{{epic.id}}" href="#">Add Epic</a>
+	 {% endcanwrite %}
+	
    </div>
   {% endif %}
 
@@ -71,7 +75,10 @@
   {% endfor %}
 
 
-  <a class="add_epic_link button green small"  epic_id="{{epic.id}}" href="#">Add Epic</a>
+  {% canwrite project %}
+    <a class="add_epic_link button green small"  epic_id="{{epic.id}}" href="#">Add Epic</a>
+  {% endcanwrite %}
+  
 
 
   <div id="add_story_popup">{% include "stories/add_story_form.html" %}</div>
