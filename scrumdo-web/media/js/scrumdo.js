@@ -242,7 +242,7 @@ function openOverlay( url )
         url: url,
         success: function(data) {            
             $("#scrumdo_overlay #overlay_body").html(data);            
-            $("body").css("overflow", "hidden");
+            //$("body").css("overflow", "hidden");
             $("#scrumdo_overlay input:first").focus();
         }
     });
@@ -261,7 +261,7 @@ function closeOverlay()
         }
         $("#scrumdo_overlay").remove();        
     });
-    $("body").css("overflow", "auto");
+    //$("body").css("overflow", "auto");
 }
 
 
