@@ -58,3 +58,16 @@ body {
 .points_section li {
     display: inline;    
 }
+
+#story_details #points_section li {
+  display: inline;
+}
+
+
+.add_story_epic_links {
+ 	display: inline;
+}
+
+#story_details #general-rank-cell li {
+    display: inline-block;
+}

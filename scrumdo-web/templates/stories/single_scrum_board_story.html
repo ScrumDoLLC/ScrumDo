@@ -31,15 +31,10 @@
     
 
 
-<div class="story_footer">
-  {% if story.project.use_assignee and story.assignee %}
-      {% avatar story.assignee 20 %} <b>{{story.assignee}}</b>
-  {% endif %}
-
 
 <div class="story_footer">
   {% if story.project.use_assignee and story.assignee %}
-      {% avatar story.assignee 20 %} <b>{{story.assignee}}</b> -
+      {% avatar story.assignee 20 %} <b>{{story.assignee}}</b> 
   {% endif %}
 
 
