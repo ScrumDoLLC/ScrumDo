@@ -49,7 +49,7 @@ urlpatterns = patterns('projects.views',
 )
 
 urlpatterns += patterns('projects.tags_views',
-    url(r'^project/(?P<group_slug>[-\w]+)/tag/(?P<tag_name>[-\w]+)$', 'tag_detail', name="tag_detail"),
+    url(r'^project/(?P<group_slug>[-\w]+)/tag/(?P<tag_name>.+)$', 'tag_detail', name="tag_detail"),
 )
 
 urlpatterns += patterns('projects.iteration_views',
