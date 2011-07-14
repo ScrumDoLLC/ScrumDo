@@ -42,8 +42,13 @@ def tag_detail(request, group_slug, tag_name):
     stories = sorted(stories, key=lambda story: story.rank)
     add_story_form = handleAddStory(request, project)
 
+    if len(tags_list) == 0:
+        tag = None
+    else:
+        tag = tags_list[0]
+
     return render_to_response("projects/tag_page.html", {
-        "tag": tags_list[0],
+        "tag": tag,
         "stories":stories,
         "organization":_organizationOrNone(project),
         "project" : project,

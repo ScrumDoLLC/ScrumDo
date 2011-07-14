@@ -27,6 +27,7 @@
 {% endblock %}
 
 {% block body %}
+  {% if tag %}
         <h1>Tag: {{tag.name}}</h1>
 
         
@@ -58,7 +59,9 @@
 	      {% endifnotequal %}
 	    {% endfor %}
 	  </div>
-    
+  {% else %}
+    <h1>Tag not found.</h1>
+  {% endif %}
 {% endblock %}
 
 
