@@ -100,15 +100,25 @@ function filterByTag(tag)
 
 
 
-$(document).bind('afterReveal.facebox',
-function() {
-    $("#id_start_date-2").datepicker({
-        dateFormat: 'yy-mm-dd'
+
+function setupDatePickers() 
+{
+    $("#id_start_date").datepicker({
+        dateFormat: 'yy-mm-dd',
+        beforeShow: function(){
+            $(this).css("z-index", 6000);
+              $(this).dialog("widget").css("z-index", 6000);
+        }
     });
-    $("#id_end_date-2").datepicker({
-        dateFormat: 'yy-mm-dd'
+    $("#id_end_date").datepicker({
+        dateFormat: 'yy-mm-dd',
+        beforeShow: function(){
+              $(".ui-widget").css("z-index", 6000);
+              $(this).css("z-index", 6000);
+              $(this).dialog("widget").css("z-index", 6000);
+        }
     });
-});
+}
 
 $(document).bind('reveal.facebox',
 function() {

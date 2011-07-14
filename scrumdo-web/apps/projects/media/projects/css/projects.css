@@ -925,3 +925,7 @@ div.add_task {
     left:5px;
     bottom:5px;
 }
+
+#id_start_date, #id_end_date {
+    z-index: 2001;
+}

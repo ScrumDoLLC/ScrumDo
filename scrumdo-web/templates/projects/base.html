@@ -114,7 +114,7 @@
         <a rel="facebox" href="{% url unlock_iteration iteration.project.slug iteration.id %}">{% silk "lock_open" %} Unlock Iteration</a><br/>
 	{% endcanwrite %}
 	{% endif %}    
-	<a href="#iterationDetails" rel="facebox">{% silk "table_edit" %} Edit Iteration</a><br/>
+	<a href="#iterationDetails" onclick="openOverlayDiv('#iterationDetails'); setupDatePickers(); return false;">{% silk "table_edit" %} Edit Iteration</a><br/>
 	<a href="{% url scrum_board project.slug iteration.id %}">{% silk "application_view_icons" %} Scrum Board</a><br/>
 	<a rel="facebox" href="{% url iteration_export iteration.project.slug iteration.id %}">{% silk "lorry" %} Export Iteration</a><br/>
 	{% canwrite project %}
