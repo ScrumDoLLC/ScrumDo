@@ -62,9 +62,9 @@ def export_organization( organization ):
 
     _write_headers( projects_ws, [("Project",250),("Stories",50),("Stories Claimed",60),("Points",50),("Points Claimed",60) ] )
     _write_headers( tags_ws, [("Project",250),("Tag",100),("Stories",50),("Stories Claimed",60),("Points",50),("Points Claimed",60) ] )
-    _write_headers( iterations_ws, [("Project",250),("Iteration",100),("Start",80),("End",80),("Stories",50),("Stories Claimed",60),("Points",50),("Points Claimed",60) ] )
-    _write_headers( it_ws, [("Project",250),("Iteration",100),("Tag",110),("Start",80),("End",80),("Stories",50),("Stories Claimed",60),("Points",50),("Points Claimed",60) ] )
-    _write_headers( category_ws, [("Project",250),("Category",100),("Stories",50),("Stories Claimed",60),("Points",50),("Points Claimed",60) ] )
+    _write_headers( iterations_ws, [("Project",250),("Iteration",100),("Start",80),("End",80),("Stories",50),("Stories Claimed",60),("Points",50),("Points Claimed",60),("Starting Points", 60), ("Max Points",60) ] )
+    _write_headers( it_ws, [("Project",250),("Iteration",100),("Tag",110),("Start",80),("End",80),("Stories",50),("Stories Claimed",60),("Points",50),("Points Claimed",60)] )
+    _write_headers( category_ws, [("Project",250),("Category",100),("Stories",50),("Stories Claimed",60),("Points",50),("Points Claimed",60)] )
     _write_headers( ic_ws, [("Project",250),("Iteration",100),("Category",110),("Start",80),("End",80),("Stories",50),("Stories Claimed",60),("Points",50),("Points Claimed",60) ] )
 
 
@@ -112,6 +112,7 @@ def export_organization( organization ):
         iterations_ws.write(iterations_row,5, len(completed_stories) )
         iterations_ws.write(iterations_row,6, reduce( lambda total,story: total+story.points_value(), stories, 0 ) )
         iterations_ws.write(iterations_row,7, reduce( lambda total,story: total+story.points_value(), completed_stories, 0 ) )
+        
 
         tags_ws.write(tags_row,0, project.name )
         tags_ws.write(tags_row,2, len(stories) )
@@ -197,6 +198,8 @@ def export_organization( organization ):
             iterations_ws.write(iterations_row,5, len(completed_stories) )
             iterations_ws.write(iterations_row,6, reduce( lambda total,story: total+story.points_value(), stories, 0 ) )
             iterations_ws.write(iterations_row,7, reduce( lambda total,story: total+story.points_value(), completed_stories, 0 ) )
+            iterations_ws.write(iterations_row,8, iteration.starting_points()  )
+            iterations_ws.write(iterations_row,9, iteration.max_points() )
 
             ic_ws.write(iteration_categories_row,1, iteration.name)
             ic_ws.write(iteration_categories_row,3, iteration.start_date , date_xf)
@@ -213,6 +216,7 @@ def export_organization( organization ):
             it_ws.write(iteration_tags_row,6, len(completed_stories) )
             it_ws.write(iteration_tags_row,7, reduce( lambda total,story: total+story.points_value(), stories, 0 ) )
             it_ws.write(iteration_tags_row,8, reduce( lambda total,story: total+story.points_value(), completed_stories, 0 ) )
+            
             iterations_row += 1
             iteration_tags_row += 1
             iteration_categories_row += 1

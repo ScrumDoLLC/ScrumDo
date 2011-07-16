@@ -206,10 +206,13 @@ class ArchivedNode(template.Node):
         self.nodelist = nodelist
         self.project = project
     def render(self, context):
-        if not context[self.project].active:
-            output = self.nodelist.render(context)
-            return output
-        else:
+        try:
+            if not context[self.project].active:
+                output = self.nodelist.render(context)
+                return output
+            else:
+                return ""
+        except:
             return ""
 
 

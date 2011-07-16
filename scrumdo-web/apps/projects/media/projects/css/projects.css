@@ -594,7 +594,7 @@ h1 a {
 }
 
 .iteration_history {
-	height: 140px;
+	height: 160px;
 	width: 100%;
 }
 
@@ -605,14 +605,14 @@ h1 a {
 	
 }
 .iteration_history_summary {
-	height: 140px;		
+	height: 160px;		
 	width: 27%;	
 	float:left;left:5px;
 }
 
 .history_burndown {
 	width:70%;
-	height:140px;
+	height:160px;
 	float: right;
 	float:right;right:5px;
 }

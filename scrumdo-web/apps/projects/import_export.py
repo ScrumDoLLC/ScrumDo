@@ -93,7 +93,7 @@ def exportProject( project ):
 
     # Create the iteration sheet (it gets filled in below the tags sheet)
     iteration_ws = w.add_sheet("Iterations")
-    for idx,header in enumerate( [("Iteration",150),("Start",100),("End",100),("Stories",50),("Stories Claimed",60),("Points",50),("Points Claimed",60) ] ):
+    for idx,header in enumerate( [("Iteration",150),("Start",100),("End",100),("Stories",50),("Stories Claimed",60),("Points",50),("Points Claimed",60),("Starting Points", 60), ("Max Points",60) ] ):
         iteration_ws.write(0,idx,header[0],heading_xf)
         iteration_ws.col(idx).width = 37*header[1]
 
@@ -134,6 +134,8 @@ def exportProject( project ):
         iteration_ws.write(itIdx+1, 4, len(completed_stories) )
         iteration_ws.write(itIdx+1, 5, reduce( lambda total,story: total+story.points_value(), iteration_stories, 0 ) )
         iteration_ws.write(itIdx+1, 6, reduce( lambda total,story: total+story.points_value(), completed_stories, 0 ) )
+        iteration_ws.write(itIdx+1, 7, iteration.starting_points()  )
+        iteration_ws.write(itIdx+1, 8, iteration.max_points() )
         ws = w.add_sheet( cleanWorksheetName(iteration.name) )
 
         for idx,header in enumerate(headers):

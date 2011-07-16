@@ -18,8 +18,13 @@
         {% if iteration.start_date %}<i>{{iteration.start_date|date:"M d, Y"}} - {{iteration.end_date|date:"M d, Y"}}</i>{% endif %}
         <div class="iteration_history_points">
           <h1>{{iteration.completed_points|floatformat}}</h1>
-          Points Completed
+          Points Completed<br/>		  
         </div>
+		<div style="padding-left: 20px; color: #444">
+		{% if iteration.starting_points %}<br/><b>{{iteration.starting_points}}</b> Starting Points{% endif %}
+		{% if iteration.max_points %}<br/><b>{{iteration.max_points}}</b> Max Points{% endif %}		
+		</div>
+
       </div>
     
       <div class="history_burndown" id="iterationBurndown_{{iteration.id}}" ></div>

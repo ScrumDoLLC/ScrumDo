@@ -238,6 +238,19 @@ class Iteration( models.Model):
 
     def completed_points(self) :
         return sum( map( lambda story: (story.points_value() if story.status==Story.STATUS_DONE else 0), self.stories.all() ) )
+        
+    def max_points(self):
+        logs = self.points_log.all()
+        if len(logs) == 0:
+            return None
+        return reduce(lambda x,y: max(x,y.points_total), logs, 0 )
+        
+    def starting_points(self):
+        for p in self.points_log.all():
+            if p.date == self.start_date:
+                return p.points_total
+        return None
+        
 
     def daysLeft(self):
         try:
