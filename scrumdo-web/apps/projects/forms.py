@@ -97,7 +97,7 @@ class AddStoryForm( forms.ModelForm ):
         
         if project.categories:
             choices = [(c.strip(),c.strip()) for c in project.categories.split(",")]
-            choices.insert(0,("",""))
+            choices.insert(0,("","----------"))
             self.fields["category"] = forms.ChoiceField(choices=choices, required=False)
         self.fields["assignee"].required = False
         self.fields["extra_1"].required = False

@@ -25,7 +25,10 @@
 		   </tr>
 
           {% if project.categories %}
-          <tr><td>Category:&nbsp;</td><td>{{add_story_form.category}}  {{add_story_form.category.errors}} </td></tr>
+          <tr><td>Category:&nbsp;</td><td>{{add_story_form.category}}  {{add_story_form.category.errors}} 
+			<a class="add_category_link" href="#">Add Category</a>
+			<input type="text" name="category_name" class="category_name" style="display:none">
+		  </td></tr>
           {% endif %}
           
           {% if project.use_extra_1 %}

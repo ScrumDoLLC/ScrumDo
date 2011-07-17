@@ -23,7 +23,10 @@
       {% endif %}
       <!-- <tr><td>Backlog&nbsp;Position:&nbsp;</td><td>{{form.general_rank}}  {{form.general_rank.errors}} </td></tr> -->
       {% if project.categories %}
-      <tr><td>Category:&nbsp;</td><td>{{form.category}}  {{form.category.errors}} </td></tr>
+      <tr><td>Category:&nbsp;</td><td>{{form.category}}  {{form.category.errors}} 
+		&nbsp;<a class="add_category_link" href="#">Add Category</a>
+		<input type="text" name="category_name" class="category_name" style="display:none">
+	  </td></tr>
       {% endif %}
 
 	  <tr><td>Epic:&nbsp;</td><td>{{form.epic}}  {{form.epic.errors}} </td></tr>
@@ -135,6 +138,15 @@
         {% endfor %}
         ""
       ];
+
+    $(".add_category_link").click(function(){
+        $("#story_area #id_category").hide();
+        $("#story_area .add_category_link").hide();
+        $("#story_area .category_name").show();
+        $("#story_area .category_name").focus();
+        return false;
+    });
+
       
       var all_tags = project_tags; //scrumdo_special_tags.concat( project_tags );
 

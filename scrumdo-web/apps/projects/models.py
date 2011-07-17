@@ -104,7 +104,7 @@ class Project(Group):
     iterations_left = models.PositiveIntegerField( null=True )
     organization = models.ForeignKey(Organization,related_name="projects", null=True, blank=True)
     category = models.CharField( max_length=25, blank=True, null=True, default="")
-    categories = models.CharField(max_length=256, blank=True, null=True)
+    categories = models.CharField(max_length=512, blank=True, null=True)
     token = models.CharField(max_length=7, default=lambda: "".join(random.sample(string.lowercase + string.digits, 7)))
 
     class Meta:

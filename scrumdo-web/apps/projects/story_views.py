@@ -403,7 +403,24 @@ def story(request, group_slug, story_id):
         form = StoryForm( project, request.POST, project, instance=story) # A form bound to the POST data
 
         if form.is_valid(): # All validation rules pass
-            story = form.save()
+            story = form.save(commit=False)
+            
+            if request.POST.get("category_name") != "":
+                category_name = request.POST.get("category_name")
+                category_name = category_name.replace(",","").strip()
+                category_name = category_name[:25]
+                if not category_name in project.getCategoryList():
+                    project.categories = "%s, %s" % (project.categories, category_name)
+                    if len(project.categories) <= 512:
+                        project.save()
+                    else:
+                        request.user.message_set.create(message="Too many categories")
+                        
+                    
+                story.category = category_name
+                
+            story.save()
+            
             diffs = utils.model_differences(old_story, story.__dict__, dicts=True)
             activities = 0
             if diffs.has_key("points"):
@@ -637,6 +654,21 @@ def _handleAddStoryInternal( form , project, request):
     except:
         general_rank = 2 # bottom
 
+
+
+    if request.POST.get("category_name") != "":
+        category_name = request.POST.get("category_name")
+        category_name = category_name.replace(",","").strip()
+        category_name = category_name[:25]
+        if not category_name in project.getCategoryList():            
+            project.categories = "%s, %s" % (project.categories, category_name)
+            if len(project.categories) <= 512:
+                project.save()
+            else:
+                request.user.message_set.create(message="Too many categories")                        
+        story.category = category_name
+        
+
     story.rank = _calculate_rank( story.iteration, general_rank )
     logger.info("New Story %s" % story.summary)
     story.save()
@@ -655,7 +687,7 @@ def handleAddStory( request , project ):
     if request.method == "POST" and request.POST.get("action") == "addStory":
         form = AddStoryForm(project, request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
-            _handleAddStoryInternal( form , project, request)
+            story = _handleAddStoryInternal( form , project, request)
         else:
             return form
     return AddStoryForm( project )

@@ -205,11 +205,7 @@ def project_admin( request, group_slug ):
         if request.POST.get("action") == "updateProject":
             form = ProjectOptionsForm( request.POST, instance=project)
             if form.is_valid(): # All validation rules pass
-                story = form.save( commit=False )
-                story.local_id = project.stories.count() + 1
-                story.project = project
-                story.creator = request.user
-                story.save()
+                form.save()
                 request.user.message_set.create(message="Project options Saved.")
                 return HttpResponseRedirect(reverse("project_detail",kwargs={'group_slug':project.slug}))
         if request.POST.get("action") == "moveToOrganization":
@@ -587,6 +583,17 @@ def export_project(request, group_slug):
     # else:
     #     form = ExportProjectForm()
     # return render_to_response("projects/project_export_options.html", { "project":project, "form":form }, context_instance=RequestContext(request))
+
+# @login_required
+# def add_category(request, group_slug):
+#     project = get_object_or_404(Project, slug=group_slug)
+#     read_access_or_403(project, request.user )    
+#     name = request.POST.get("category_name")
+#     name = name.replace(",","").strip()
+#     if not name in project.getCategoryList():
+#         project.categories = "%s, %s" % (project.categories, name)
+#         project.save()
+#     return HttpResponse(name)
 
 def _organizationOrNone(project):
     try:

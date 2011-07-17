@@ -273,4 +273,11 @@ $(document).ready(function() {
         var iteration_id = $(this).attr("iteration_id");
         moveCurrentlyOpenStoryToIteration(iteration_id);
     });
+    $(".add_category_link").click(function(){
+        $("#id_category").hide();
+        $(".add_category_link").hide();
+        $(".category_name").show();
+        $(".category_name").focus();
+        return false;
+    });
 });
