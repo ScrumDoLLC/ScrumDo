@@ -378,7 +378,10 @@ def story_block(request, story_id):
     story = get_object_or_404( Story, id=story_id )
     read_access_or_403( story.project, request.user )
     organization = _organizationOrNone( story.project )
-    return render_to_response("stories/single_block_story.html", {
+    template = "stories/single_block_story.html"
+    if request.GET.get("story_type") == "scrumboard":
+        template = "stories/single_scrum_board_story.html"
+    return render_to_response(template, {
         "story": story,
         "return_type": "block",
         "project": story.project,
@@ -420,6 +423,13 @@ def story(request, group_slug, story_id):
             return render_to_response("stories/single_mini_story.html", {
                 "story": story,
                 "return_type": return_type,
+              }, context_instance=RequestContext(request))
+        if( request.POST['return_type'] == 'scrumboard'):
+            return render_to_response("stories/single_scrum_board_story.html", {
+                "story": story,
+                "return_type": return_type,
+                "project": story.project,
+                "organization": organization
               }, context_instance=RequestContext(request))
         if( request.POST['return_type'] == 'block'):
             return render_to_response("stories/single_block_story.html", {

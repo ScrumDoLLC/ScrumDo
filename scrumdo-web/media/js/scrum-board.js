@@ -2,7 +2,7 @@ story_size = 3;
 
 $(document).ready( function() {
     reloadAllColumns();
-    $("body").bind("storyEdited", reloadAllColumns );
+
 	$("body").bind("storyListChanged", reloadAllColumns );
     
     $( ".scrum_board_list" ).sortable({
@@ -44,6 +44,8 @@ function setSmallStories()
     $(".story_footer").hide();
     $(".story_detail").hide();
     $(".scrum_board_story_block").css("min-height","25px");
+    $(".task_section").hide();
+    $(".tasks_link").hide();
     story_size = 1;
 }
 
@@ -52,6 +54,8 @@ function setMedStories()
     $(".story_footer").show();
     $(".story_detail").hide();
     $(".scrum_board_story_block").css("min-height","25px");
+    $(".task_section").hide();
+    $(".tasks_link").hide();    
     story_size = 2;
 }
 
@@ -60,6 +64,7 @@ function setBigStories()
     $(".story_footer").show();
     $(".story_detail").show();    
     $(".scrum_board_story_block").css("min-height","110px")
+    $(".tasks_link").show();    
     story_size = 3;
 }
 
@@ -110,7 +115,8 @@ function loadColumn( column_div, story_type )
     success: function(responseText){            
             $( column_div ).html(responseText); 
             setStorySize();             
-            resizeColumns();              
+            resizeColumns();    
+            setUpStoryLinks();          
          } // end success function
     });
 }

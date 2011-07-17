@@ -7,6 +7,7 @@
 {% load tasks_tags %}
 {% load avatar_tags %}
 {% load markup %}
+{% load tasks_tags %}
 
 <li class="scrum_board_story_block" story_id="{{story.id}}" id="story_{{story.id}}" rank="{{ story.rank }}" >
   <div class="scrum_board_gripper"></div>
@@ -15,7 +16,7 @@
 
 
   <span class="storyIcons">
-    <a onclick="openOverlay( '/projects/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=block' ); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=block"><img title="Edit Story" src="{{ STATIC_URL }}pinax/images/silk/icons/pencil.png" /></a>
+    <a onclick="openOverlay( '/projects/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=scrumboard' ); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=scrumboard"><img title="Edit Story" src="{{ STATIC_URL }}pinax/images/silk/icons/pencil.png" /></a>
     <a class="hoverDetails" onclick="jQuery.facebox({ ajax: '/projects/project/{{story.project.slug}}/story/{{story.id}}/pretty'}, 'pretty_print'); return false;" href="/projects/project/{{story.project.slug}}/story/{{story.id}}/pretty"><img title="Quick View" src="{{STATIC_URL}}pinax/images/silk/icons/magnifier.png" /></a>
   </span>
     
@@ -30,7 +31,9 @@
   
     
 
-
+  {% if story.project.use_tasks %}
+    <a class="tasks_link" onClick="showTasksForStory({{story.id}}); return false;" href="#">{% task_counts story %} Tasks</a> 
+  {% endif %}
 
 <div class="story_footer">
   {% if story.project.use_assignee and story.assignee %}
@@ -57,8 +60,9 @@
    {% endif %}
   {% endfor %}
 
-
-
+  {% if story.project.use_tasks %}
+    {% include "stories/tasks_section.html" %}
+  {% endif %}
 
   {% include "stories/single_extra.html" %}
 

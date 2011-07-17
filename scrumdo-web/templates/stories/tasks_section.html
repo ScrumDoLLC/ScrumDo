@@ -9,7 +9,7 @@
     <div class="add_task">
       <form class="tasks_add_task_form">
         <input type="hidden" name="story_id" value="{{story.id}}">
-        <input class="task_summary_input" name="summary" style="width:500px;" type="text">
+        <input class="task_summary_input" name="summary" style="width:70%" type="text">
         <select style="width:100px" name="assignee">
           <option value="-1">Nobody</option>
           {% for user in story.project.all_members %}

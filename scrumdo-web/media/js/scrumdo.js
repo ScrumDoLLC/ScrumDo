@@ -1,4 +1,5 @@
 scrumdo_special_tags = [ ];
+story_template_type = 'block';
 
 
 function setupAutoClose( divID )
@@ -119,6 +120,7 @@ function reloadStory( story_id , display_comments, display_tasks)
     $.ajax({
 	    url: "/projects/story/" + story_id,
 		type: "GET",
+		data: {story_type:story_template_type},
 		success: function(responseText) {
     		$("#story_" + story_id).replaceWith(responseText);    		
     		$("#story_" + story_id).trigger("storyEdited");
@@ -138,11 +140,7 @@ function reloadStory( story_id , display_comments, display_tasks)
 function setUpStoryLinks() 
 {
        
-    $(".tasks_task").mouseenter(function() {      
-      $(this).find(".task_controls").css("visibility","visible");
-    }).mouseleave(function() {
-      $(this).find(".task_controls").css("visibility","hidden");
-    });
+
 
     // Set up the move-iteration button
     $(".moveIterationIcon").unbind("click");

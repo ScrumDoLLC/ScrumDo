@@ -653,6 +653,10 @@ h1 a {
 	margin-right: 0;
 }
 
+.tasks_task:hover .task_controls {
+    visibility: visible;
+}
+
 .task_controls img {
 	vertical-align: middle;
 }
@@ -662,10 +666,17 @@ h1 a {
 	vertical-align: middle;
 }
 
-div.add_task {
+.story_block div.add_task {
 	margin-left: 43px;
 }
 
+.scrum_board_story_block div.add_task {
+	margin-left: 3px;
+}
+
+.tasks_link {
+    text-decoration: none;
+}
 .story_footer {	
 	width: 100%;
 	margin-top: 4px;
