@@ -36,6 +36,7 @@ from projects.models import Project
 import organizations.signals as signals
 import organizations.import_export as import_export
 
+import re
 import logging
 
 logger = logging.getLogger(__name__)
@@ -150,6 +151,20 @@ def handle_organization_create( form , request, projects):
     signals.organization_created.send( sender=request, organization=organization )
 
     request.user.message_set.create(message="Organization Created.")
+    
+    try:
+        # Store where this user came from via the google analytics tracking cookie.  Example values:
+        # 183024036.1310791887.2.2.utmcsr=freshmeat.net|utmccn=(referral)|utmcmd=referral|utmcct=/projects/scrumdo; 
+        # 183024036.1310842365.1.2.utmcsr=google|utmccn=(organic)|utmcmd=organic|utmctr=scrumdo%20harvest
+        # 183024036.1311098060.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)
+        cookie = request.COOKIES.get("__utmz")
+        source = re.search("utmcsr=([^|]+)",cookie).group(1)
+        mode = re.search("utmcmd=([^|]+)",cookie).group(1)
+        organization.source = "%s / %s" % (source, mode)
+        organization.save()        
+    except:
+        organization.source = ""
+        
 
     for project in projects:
         if request.POST.get("move_project_%d" % project.id):
