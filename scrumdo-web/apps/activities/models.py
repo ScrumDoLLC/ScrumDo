@@ -131,6 +131,10 @@ class Activity(InheritanceCastModel):
             return self.pointschangeactivity
         except:
             pass
+        try:
+            return self.textactivity
+        except:
+            pass
         return self
 
     @staticmethod
@@ -140,6 +144,14 @@ class Activity(InheritanceCastModel):
         date_30days_Agoago = today + mdiff
         Activity.objects.filter(created__lte=date_30days_Agoago).delete()
 
+class TextActivity(Activity):
+    "A generic text-based activity item"
+    text = models.TextField()
+    @staticmethod
+    def activity_handler(sender, **kwargs):
+        action = ActivityAction.objects.get(name="wrote")
+        act = TextActivity( text=sender.render_text(), user=sender.creator, action=action, project=sender.project )
+        act.save()
 
 class StoryActivity(Activity):
     story = models.ForeignKey("projects.Story", related_name="StoryActivities")
