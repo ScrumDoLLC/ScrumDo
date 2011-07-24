@@ -1018,4 +1018,6 @@ h1 a {
 	color: #777;
 }
 
-
+.scrum_log_entry a {
+    text-decoration: none;
+}
