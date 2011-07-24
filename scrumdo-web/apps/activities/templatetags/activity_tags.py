@@ -2,6 +2,8 @@ from django import template
 from django.core.urlresolvers import reverse
 from django.utils.safestring import mark_safe
 from django.utils.html import escape
+from django.http import HttpResponseRedirect, HttpResponse
+from django.template.loader import render_to_string
 
 
 from activities.models import Activity, StoryActivity, IterationActivity, DeletedActivity, CommentActivity, PointsChangeActivity
@@ -34,6 +36,13 @@ def smart_truncate(content, length=100, suffix='...'):
         return content
     else:
         return ' '.join(content[:length+1].split(' ')[0:-1]) + suffix
+
+@register.simple_tag
+def render_activity(activity):
+    if hasattr(activity,"render_to_string"):
+        return activity.render_to_string()
+    return render_to_string("activities/single_activity.html", 
+                              {"act":activity} )
 
 @register.filter
 def subscription_checkbox(project , subscription_list):

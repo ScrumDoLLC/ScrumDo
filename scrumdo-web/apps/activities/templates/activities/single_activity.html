@@ -1,0 +1,5 @@
+{% load avatar_tags %}
+{% load activity_tags %}
+{% avatar act.user 16 %} {{ act.user.username }}
+<span class="action">{{  act|activity_action }}</span> {{ act|activity_object }}
+{{ act|activity_context }}, <abbr>about {{ act.created|timesince }} ago</abbr>

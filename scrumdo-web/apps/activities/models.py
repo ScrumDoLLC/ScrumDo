@@ -147,6 +147,8 @@ class Activity(InheritanceCastModel):
 class TextActivity(Activity):
     "A generic text-based activity item"
     text = models.TextField()
+    def render_to_string(self):
+        return self.text
     @staticmethod
     def activity_handler(sender, instance, **kwargs):
         action = ActivityAction.objects.get(name="wrote")

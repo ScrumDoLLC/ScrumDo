@@ -13,36 +13,49 @@
 {% else %}
   {% for act in activities %}
    <div class="activity">
-     
+	
+       {# TODO: This is getting a little out of hand... #}
        {% ifequal act.action.name "worked on" %}
        {% silk "script_add" %}
-       {% endifequal %}
+       {% else %}
        {% ifequal act.action.name "changed status" %}
        {% silk "script_add" %}
-       {% endifequal %}
+	   {% else %}
        {% ifequal act.action.name "created" %}
        {% silk "script_add" %}
-       {% endifequal %}
+       {% else %}
        {% ifequal act.action.name "edited" %}
        {% silk "script_edit" %}
-       {% endifequal %}
+       {% else %}
        {% ifequal act.action.name "deleted" %}
        {% silk "script_delete" %}
-       {% endifequal %}
+	   {% else %}
        {% ifequal act.action.name "reordered" %}
        {% silk "script_go" %}
-       {% endifequal %}
+       {% else %}
        {% ifequal act.action.name "commented" %}
-       {% silk "script_palette" %}
-       {% endifequal %}
+       {% silk "script_palette" %}       
+	   {% else %}
        {% ifequal act.action.name "changed point value" %}
-       {% silk "script_code_red" %}
+       {% silk "script_code_red" %}       
+	   {% else %}
+       {% ifequal act.action.name "changed point value" %}
+       {% silk "script_code_red" %}       
+  	   {% else %}
+       {% silk "script" %}
        {% endifequal %}
+       {% endifequal %}
+	   {% endifequal %}
+       {% endifequal %}	
+       {% endifequal %}
+       {% endifequal %}
+       {% endifequal %}
+       {% endifequal %}
+       {% endifequal %}
+
      
      <div class="activity_body">
-     {% avatar act.user 16 %} {{ act.user.username }}
-     <span class="action">{{  act|activity_action }}</span> {{ act|activity_object }}
-     {{ act|activity_context }}, <abbr>about {{ act.created|timesince }} ago</abbr>
+		{% render_activity act %}
      </div>
 </div><!--activity-->
 
