@@ -13,7 +13,7 @@
 {% load wiki_tags %}
 {% load theme_tags %}
 {% load iteration_tags %}
-{% load activity_log_tags %}
+{% load scrum_log_tags %}
 
 {% block head_title %}{{ project.name }}{% endblock %}
     
@@ -69,7 +69,7 @@
     {% endif %}
 
 
-	{% activity_log project %}
+	{% scrum_log project %}
 	
 {% endblock %}
 
