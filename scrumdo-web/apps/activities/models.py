@@ -148,9 +148,9 @@ class TextActivity(Activity):
     "A generic text-based activity item"
     text = models.TextField()
     @staticmethod
-    def activity_handler(sender, **kwargs):
+    def activity_handler(sender, instance, **kwargs):
         action = ActivityAction.objects.get(name="wrote")
-        act = TextActivity( text=sender.render_text(), user=sender.creator, action=action, project=sender.project )
+        act = TextActivity( text=instance.render_text(), user=instance.creator, action=action, project=instance.project )
         act.save()
 
 class StoryActivity(Activity):

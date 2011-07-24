@@ -296,7 +296,7 @@
     padding-left: 10px;
 }
 
-.story_form {
+.story_form, #scrum_log_form_div {
     border: 1px solid #e1e1e1;
     background: #fafafa;
     margin: 10px;
@@ -369,7 +369,7 @@
     width: 94%;
 }
 
-.story_form #add_button {
+.story_form #add_button, .big_grey_button {
     width: 25%;
     height: 25px;
     background-color: #e8e8e8;	
@@ -940,3 +940,82 @@ h1 a {
 #id_start_date, #id_end_date {
     z-index: 2001;
 }
+
+
+#scrum_log_form {
+	margin-left: 9px;
+
+}
+
+#scrum_log_form textarea {
+	width: 70%;
+	height: 40px;
+	vertical-align: middle;
+}
+
+#scrum_log_form .ui-button {
+	opacity: 0.1;
+	background-color: #fff;
+	border: none;
+	padding: 0px;
+	margin: 0px;
+	margin-right:  5px;
+}
+#scrum_log_form .ui-button-text {
+	margin: 0px;
+	padding: 0px;
+	background-color: #fff;
+}
+#scrum_log_form .ui-state-hover {
+	opacity: 0.4;
+}
+#scrum_log_form .ui-state-active {
+	opacity: 1;
+}
+
+.scrum_log_entry {
+	margin-left: 30px;
+	border-bottom: 1px solid #e3e3e3;
+	padding-bottom: 3px;
+	margin-bottom: 3px;
+}
+
+.scrum_log_flag {
+	float: left;
+	margin-left: -20px;
+}
+
+.scrum_log_header img {
+	vertical-align: middle;
+}
+.scrum_log_header {
+	float: left;
+	margin-right: 10px;
+	margin-top: -3px;
+	font-weight: bold;
+}
+
+.delete_log_entry {
+	text-decoration: none;
+	float: right;
+	background-color: #fafafa;
+	color: #aaa;
+	padding: 3px;
+	margin-top: -3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	width: 10px;
+	height: 10px;
+	text-align: center;
+	font-size: 8px;
+}
+
+.scrum_log_date {
+	font-weight: normal;
+	font-style: italic;
+	font-size: 11px;
+	color: #777;
+}
+
+

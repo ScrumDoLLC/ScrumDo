@@ -657,7 +657,7 @@ def _handleAddStoryInternal( form , project, request):
 
 
     if request.POST.get("category_name") != "":
-        category_name = request.POST.get("category_name")
+        category_name = request.POST.get("category_name","")
         category_name = category_name.replace(",","").strip()
         category_name = category_name[:25]
         if not category_name in project.getCategoryList():            
