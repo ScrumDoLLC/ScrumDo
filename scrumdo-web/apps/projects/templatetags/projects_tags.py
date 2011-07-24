@@ -143,7 +143,7 @@ def link_stories(value, project):
         try:
             local_id = value.group(1)
             story = Story.objects.get( project=project, local_id=int(local_id) )
-            return "<a class='storyLink' onclick=\"jQuery.facebox({ ajax: '/projects/project/%s/story/%d?return_type=block'}); return false;\" >%s</a>" % (project.slug, story.id, value.group(0))
+            return "<a class='storyLink' onclick=\"openOverlay( '/projects/project/%s/story/%d?return_type=block' ); return false;\" >%s</a>" % (project.slug, story.id, value.group(0))
         except:
             return value.group(0)
 
