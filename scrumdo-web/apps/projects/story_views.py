@@ -406,18 +406,21 @@ def story(request, group_slug, story_id):
             story = form.save(commit=False)
             
             if request.POST.get("category_name") != "":
-                category_name = request.POST.get("category_name")
-                category_name = category_name.replace(",","").strip()
-                category_name = category_name[:25]
-                if not category_name in project.getCategoryList():
-                    project.categories = "%s, %s" % (project.categories, category_name)
-                    if len(project.categories) <= 512:
-                        project.save()
-                    else:
-                        request.user.message_set.create(message="Too many categories")
+                try:
+                    category_name = request.POST.get("category_name")
+                    category_name = category_name.replace(",","").strip()
+                    category_name = category_name[:25]
+                    if not category_name in project.getCategoryList():
+                        project.categories = "%s, %s" % (project.categories, category_name)
+                        if len(project.categories) <= 512:
+                            project.save()
+                        else:
+                            request.user.message_set.create(message="Too many categories")
                         
                     
-                story.category = category_name
+                    story.category = category_name
+                except:
+                    pass # no category to use
                 
             story.save()
             
