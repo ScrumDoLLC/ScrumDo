@@ -35,7 +35,7 @@ class Plugin( ScrumdoProjectExtra ):
 
     def getDescription(self):
         "Returns a user-friendly description of this extra.  This text will be passed through a Markdown filter when displayed to the user."
-        return "Create ScrumdDo stories for any open GitHub issue.  Push ScrumDo stories to GitHub issues."
+        return "Create ScrumDo stories for any open GitHub issue.  Push ScrumDo stories to GitHub issues."
 
     def doProjectConfiguration( self, request, project ):
         """Handles a request to do configuration for the github_issues extra.
