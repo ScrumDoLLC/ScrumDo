@@ -30,7 +30,7 @@ from django.template.defaultfilters import stringfilter
 import re
 register = template.Library()
 
-urlfinder = re.compile('(http:\/\/[^\s<>]+)')
+urlfinder = re.compile('((?:https|http):\/\/[^\s<>]+)')
 import logging
 
 logger = logging.getLogger(__name__)

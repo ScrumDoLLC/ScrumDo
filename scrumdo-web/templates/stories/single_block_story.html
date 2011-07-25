@@ -31,11 +31,11 @@
 
 
     
-  <h1 class="formatted_story_text"><span class="story_number" style="color:#cccccc;">#{{story.local_id}}</span>
-	 {{ story.summary|markdown|link_stories:story.project|safe }}</h1>
+  <h1 class="formatted_story_text"><span class="story_number" style="color:#555555;">#{{story.local_id}}</span>
+	 {{ story.summary|markdown|urlify2|link_stories:story.project|safe }}</h1>
 
   <span class="formatted_story_text story_detail">
-  {{ story.detail|markdown|link_stories:story.project|safe }}
+  {{ story.detail|markdown|urlify2|link_stories:story.project|safe }}
   </span>
   
     
