@@ -65,7 +65,7 @@ class GithubRequest(object):
         else:
             post_data = {}
         post_data.update(extra_post_data)
-        return urlencode(post_data)
+        return urlencode(dict([k, v.encode('utf-8')] for k, v in post_data.items()))
 
     def get(self, *path_components):
         path_components = filter(None, path_components)
