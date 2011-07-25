@@ -612,6 +612,7 @@ def _getStoriesNoTextSearch( iteration, order_by, tags_search, category, only_as
 
     return (has_next, stories)
 
+@login_required
 def ajax_add_story( request, group_slug):
     project = get_object_or_404(Project, slug=group_slug)
 
