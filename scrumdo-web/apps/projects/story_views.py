@@ -419,8 +419,7 @@ def story(request, group_slug, story_id):
                             request.user.message_set.create(message="Too many categories")
                     story.category = category_name
                 except:
-                    pass
-                
+                    pass # no category to use
                 
             story.save()
             
