@@ -157,10 +157,21 @@ def handle_organization_create( form , request, projects):
         # 183024036.1310791887.2.2.utmcsr=freshmeat.net|utmccn=(referral)|utmcmd=referral|utmcct=/projects/scrumdo; 
         # 183024036.1310842365.1.2.utmcsr=google|utmccn=(organic)|utmcmd=organic|utmctr=scrumdo%20harvest
         # 183024036.1311098060.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)
+        # Adwords:
+        # 37276784.1312040997.1.1.utmgclid=CPCFncq1qaoCFYne4AodhCvMWw|utmccn=(not%20set)|utmcmd=(not%20set)|utmctr=scrum
+        
         cookie = request.COOKIES.get("__utmz")
-        source = re.search("utmcsr=([^|]+)",cookie).group(1)
-        mode = re.search("utmcmd=([^|]+)",cookie).group(1)
-        organization.source = "%s / %s" % (source, mode)
+        if re.search("utmgclid", cookie) == None:
+            # Referrer based source
+            source = re.search("utmcsr=([^|]+)",cookie).group(1)
+            mode = re.search("utmcmd=([^|]+)",cookie).group(1)
+            organization.source = "%s / %s" % (source, mode)
+        else:
+            # Adwords based source?
+            source = re.search("utmgclid=([^|]+)",cookie).group(1)
+            mode = re.search("utmctr=([^|]+)",cookie).group(1)
+            organization.source = "Adwords / %s / %s" % (source, mode)
+                
         organization.save()        
     except:
         organization.source = ""
