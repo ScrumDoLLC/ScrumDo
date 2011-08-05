@@ -428,7 +428,10 @@ def _importSingleRow( row, iteration, user):
 
 
 def _importExcelIteration(iteration, file, user):
-    workbook = open_workbook(file_contents=file.read())
+    try:
+        workbook = open_workbook(file_contents=file.read())
+    except:
+        workbook = open_workbook(file_contents=file.read(), encoding_override="cp1252")
     sheet = workbook.sheets()[0]
     count = 0
     headers = _getHeaders( iteration.project )
