@@ -4,7 +4,7 @@ from django.utils.safestring import mark_safe
 from django.utils.html import escape
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template.loader import render_to_string
-
+from django.utils.html import escape
 
 from activities.models import Activity, StoryActivity, IterationActivity, DeletedActivity, CommentActivity, PointsChangeActivity
 
@@ -28,7 +28,7 @@ def iteration_link(iteration, project):
 def story_link(s, project):
     url = iteration_uri(s.iteration, project)
     summary = escape(smart_truncate(s.summary,length=40))
-    return "<a title='%s' href='%s#story_%s'> #%d %s</a>" % (s.summary,url, s.id, s.local_id, summary )
+    return "<a title='%s' href='%s#story_%s'> #%d %s</a>" % (escape(s.summary),url, s.id, s.local_id, summary )
 
 
 def smart_truncate(content, length=100, suffix='...'):
