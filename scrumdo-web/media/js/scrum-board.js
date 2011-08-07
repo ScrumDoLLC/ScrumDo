@@ -126,12 +126,12 @@ function resizeColumns()
     var target = Math.max( $("#board_todo_column ul").innerHeight(), 
                            $("#board_doing_column ul").innerHeight(), 
                            $("#board_done_column ul").innerHeight(), 
-                           $("#board_reviewing_column ul").innerHeight(), 800);
+                           $("#board_reviewing_column ul").innerHeight(), 1000);
 
-    $("#board_todo_column ul").css("min-height", target);
-    $("#board_doing_column ul").css("min-height", target);
-    $("#board_done_column ul").css("min-height", target);
-    $("#board_reviewing_column ul").css("min-height", target);
+    $("#board_todo_column ul.scrum_board_list").css("min-height", target);
+    $("#board_doing_column ul.scrum_board_list").css("min-height", target);
+    $("#board_done_column ul.scrum_board_list").css("min-height", target);
+    $("#board_reviewing_column ul.scrum_board_list").css("min-height", target);
 }
 
 function loadTodo()
