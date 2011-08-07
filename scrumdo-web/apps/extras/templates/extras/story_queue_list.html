@@ -1,0 +1,28 @@
+{% load markup %}
+{% load extras_tags %}
+{% load theme_tags %}
+
+
+{% for story in stories %}
+ <tr class="story_queue_entry formatted_story_text gripper_{% ifequal story.status 1 %}todo{% endifequal %}{% ifequal story.status 3 %}reviewing{% endifequal %}{% ifequal story.status 2 %}doing{% endifequal %}{% ifequal story.status 4 %}done{% endifequal %}">
+	<td class="gripper_todo">
+		<input type="checkbox" class="story_queue_selector" story_id="{{story.id}}"> 
+	</td>	
+	<td class="story_queue_body">
+	{% if story.archived %}<span style="float:left;color:#777777;margin-right:6px">(Ignored)</span>{% endif %}
+	{{story.summary|markdown}}
+	{% if story.detail %}{{story.detail|markdown}}<br/>{% endif %}     
+    {% if story.extra_1 %}{{story.extra_1}}<br/>{% endif %}
+    {% if story.extra_2 %}{{story.extra_2}}<br/>{% endif %}
+    {% if story.extra_3 %}{{story.extra_3}}<br/>{% endif %}  
+	</td>   
+	<td class="story_queue_date">
+		{{story.imported_on|date:"Y-m-d"}}
+	</td>
+    <td class="story_queue_source"><a href="{{story.external_url}}">{{story.extra_slug|extra_name}}</a></td>	
+ </tr>
+{% endfor %}
+
+<script type="text/javascript" charset="utf-8">
+	setPageNumbers({{page_num}},{{total_pages}});	
+</script>

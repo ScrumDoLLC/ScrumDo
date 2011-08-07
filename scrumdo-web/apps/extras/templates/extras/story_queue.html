@@ -18,25 +18,40 @@
 {% block body %}
   <h1>Story Queue</h1>
   <p>These are the stories available from external sources that you configured through the <a href="{% url project_extras_url project.slug %}">Extras</a> page.  Import them into your
-     project by clicking the green "Import Story" button.</p>
+     project by checking the appropriate stories and clicking the "Import" button.</p>
   
-  <ul>
-  {# TODO (Useability): We should probably add:   #}
-  {#     Pagination, sorting, filtering           #}
-  {#     Ability to permanently ignore some imported stories.  #}
-  
-  {% for story in project.story_queue.all %}
-    <li class="story_block gripper_{% ifequal story.status 1 %}todo{% endifequal %}{% ifequal story.status 3 %}reviewing{% endifequal %}{% ifequal story.status 2 %}doing{% endifequal %}{% ifequal story.status 4 %}done{% endifequal %}">
-      <div class="pointsBox">{{ story.points }}</div>
-      <h1>{{story.summary}}</h1>
-      {% if story.detail %}{{story.detail}}<br/>{% endif %}     
-      {% if story.extra_1 %}{{story.extra_1}}<br/>{% endif %}
-      {% if story.extra_2 %}{{story.extra_2}}<br/>{% endif %}
-      {% if story.extra_3 %}{{story.extra_3}}<br/>{% endif %}      
-      <div style="background-color:#dddddd; padding:8px; margin-top:5px;"><a href="{% url import_story_url project.slug story.id%}" class="green button">Import Story</a> <a href="{{story.external_url}}">{{story.external_url}}</a></div>
-    </li>    
-  {% endfor %}
-  </ul>
+  <span style="float:right"><input type="checkbox" id="view_ignored"><label for="view_ignored">View Ignored Stories</label></span>
+  <table id="story_queue_toolbar">
+	<tr>
+		<td>
+			<input type="checkbox" class="select_all_checkbox" story_id="{{story.id}}"> 
+			<span id="selected_count">0 stories selected</span>
+		</td>
+		<td>
+		
+			<button id="import_story_button" class="button blue">Import</button>  
+			<button id="ignore_story_button" class="button">Ignore</button> 
+			</td>
+			<td class="page_options">			 
+				 <button id="prev_button" class="button">&lt;</button> <button id="next_button" class="button">&gt;</button>
+				 <span id="page_numbers"></span>
+			</td>
+		</td>
+	</tr>
+  </table>
+
+  <table id="story_queue_list">
+
+  </table>
+	<script type="text/javascript" charset="utf-8">
+		var STORY_QUEUE_URL = "{% url queued_stories_url_no_page project.slug %}";
+		var IMPORT_STORY_URL = "{% url import_stories_url project.slug %}";
+		var IGNORE_STORY_URL = "{% url ignore_stories_url project.slug %}";
+		var iteration_list_url = "{% url iteration_list project.slug %}";
+	</script>
+
+	<script src="{{ STATIC_URL }}js/story-queue.js" type="text/javascript"></script>  		
+	
 {% endblock %}
 
 

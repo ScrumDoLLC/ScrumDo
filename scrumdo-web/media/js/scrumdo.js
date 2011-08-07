@@ -264,6 +264,28 @@ function closeOverlay()
 }
 
 
+/**
+ * Updates the right hand side panel with number of stories in the iterations and the stats 
+ * for this iteration.
+ **/
+function updatePanel()
+ {
+    $.ajax({
+        url: iteration_list_url,
+        type: "GET",
+        success: function(responseText) {
+            $("#iteration_list").html(responseText);
+        }
+    });
+    $.ajax({
+        url: iteration_stats_url,
+        type: "GET",
+        success: function(responseText) {
+            $("#iteration_stats").html(responseText);
+        }
+    });
+}
+
 $(document).ready(function() {
     $("body").bind("storyListChanged", setUpStoryLinks );
     $('body').bind("epicEdited", setUpStoryLinks );    

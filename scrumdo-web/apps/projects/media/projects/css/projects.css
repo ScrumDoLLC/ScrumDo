@@ -276,6 +276,16 @@
 .button.small:active { padding: 4px 7px 2px; background-position: 0 top; }
 .button.large { font-size: 125%; padding: 7px 12px; }
 .button.large:active { padding: 8px 12px 6px; background-position: 0 top; }
+.button.disabled { 
+    opacity: 0.6; background-color:#dddddd; color: #888 
+    -moz-box-shadow: 0px 0px 0px #7efdff;
+    -webkit-box-shadow: 0px 0px 0px #7efdff;
+}
+
+.button.disabled:hover {
+    -moz-box-shadow: 0px 0px 0px #7efdff;
+    -webkit-box-shadow: 0px 0px 0px #7efdff;
+}
 
 .storyLink {
   color: #0000EA;

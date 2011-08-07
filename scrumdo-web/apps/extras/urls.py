@@ -11,6 +11,10 @@ urlpatterns = patterns('extras.views',
 
 
     url(r'^(?P<project_slug>[-\w]+)$', "project_extras", name="project_extras_url"),
-    url(r'^queue/(?P<project_slug>[-\w]+)/import/(?P<queue_id>[-\w]+)$', "import_story", name="import_story_url"),
+    url(r'^queue/(?P<project_slug>[-\w]+)/import$', "import_stories", name="import_stories_url"),
+    url(r'^queue/(?P<project_slug>[-\w]+)/ignore$', "ignore_stories", name="ignore_stories_url"),
+    url(r'^queue/(?P<project_slug>[-\w]+)/stories/$', "queued_stories", name="queued_stories_url_no_page", kwargs={"page":1}),        
+    url(r'^queue/(?P<project_slug>[-\w]+)/stories/(?P<page>[0-9]+)$', "queued_stories", name="queued_stories_url"),        
     url(r'^queue/(?P<project_slug>[-\w]+)$', "story_queue", name="story_queue_url"),
+    
 )

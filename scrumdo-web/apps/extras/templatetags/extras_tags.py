@@ -8,6 +8,11 @@ from extras.manager import manager as extras_manager
 
 register = template.Library()
 
+@register.filter(name='extra_name')
+def extra_name( slug ):
+    extra = extras_manager.getExtra( slug )
+    return extra.getName()
+
 @register.inclusion_tag('extras/extras_buttons.html')
 def extra_buttons(extra_slug, projectOrIteration):
     if hasattr(projectOrIteration,"project"):

@@ -5,6 +5,7 @@ import time
 from django.core.urlresolvers import reverse
 from projects.models import Project, Iteration, Story, Task, STATUS_CHOICES
 
+import json
 
 # Determines which extras are active for which projects.
 # The configuration stores a json object of configuration options to make storing that sort of
@@ -37,6 +38,8 @@ class StoryQueue( models.Model ):
     extra_2 = models.TextField( blank=True , null=True)
     extra_3 = models.TextField( blank=True , null=True)
     external_extra = models.CharField( max_length=512 , blank=True, null=True )
+    archived = models.BooleanField( default=False )
+        
 
 
 class SyncronizationQueue( models.Model ):
