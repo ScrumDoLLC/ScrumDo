@@ -1,5 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+from django.core.urlresolvers import reverse
+
 from tastypie import fields
 from tastypie.resources import ModelResource
 from tastypie.validation import Validation, FormValidation
