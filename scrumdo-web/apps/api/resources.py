@@ -47,7 +47,7 @@ class UserResource(ModelResource):
 
     def dehydrate(self, bundle):
      # get ALL the users projects (including those discovered through teams), and set the projects to the uri's for those.
-        bundle.data['projects'] = map(lambda p: reverse("api_dispatch_detail", kwargs={'resource_name':"project", 'pk': p.id, "api_name": self.api_name}), ProjectMember.getProjectsForUser(User.objects.get(username=bundle.data["username"])))
+        bundle.data['projects'] = map(lambda p: reverse("api_dispatch_detail", kwargs={'resource_name':"project", 'pk': p.id, "api_name": self._meta.api_name}), ProjectMember.getProjectsForUser(User.objects.get(username=bundle.data["username"])))
         return bundle
 
 class OrganizationResource(ModelResource):
