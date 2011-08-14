@@ -1,0 +1,92 @@
+{% extends "projects/base.html" %}
+{% load i18n %}
+{% load uni_form %}
+{% load avatar_tags %}
+{% load threadedcommentstags %}
+{% load pagination_tags %}
+{% load extra_tagging_tags %}
+{% load projects_tags %}
+{% load group_tags %}
+{% load topics_tags %}
+{% load wiki_tags %}
+{% load theme_tags %}
+{% load iteration_tags %}
+
+{% block head_title %}{{ project.name }}{% endblock %}
+
+{% block breadcrumbs %}
+  {% if project.organization %}
+     <a href="{% url organization_detail project.organization.slug %}">{{ project.organization.name }}</a> /
+  {% else %}
+     {{ project.creator.username }} /
+  {% endif %}
+  <a href="{% url project_detail project.slug %}">{{ project.name }}</a> /
+  Search
+{% endblock %}
+
+
+{% block body %}
+<img id="loadingIcon" src="{{ STATIC_URL }}images/ajax-loader.gif">
+<h1>Search</h1>
+<form action="{% url search_project project.slug %}">
+  <input value="{{search_terms}}" type="text" name="q" style="width:530px;font-size:14px;vertical-align:middle" id="bigSearchProjectField"> 
+  <button class="button blue">Search &nbsp;&nbsp;&nbsp;<img style="vertical-align:middle" src="{{STATIC_URL}}pinax/images/silk/icons/magnifier.png"/></button>
+</form>
+
+<br/>
+
+<div>
+	
+	
+
+	 {{ search_results.count }} stories Found<br/><br/>
+	
+	{% autopaginate search_results 50 %}
+	{% for result in search_results %}
+	  {% with result.object as story %}
+	    {% include "stories/single_block_story.html" %}  
+	  {% endwith %}
+	{% endfor %}
+	
+</div>
+
+{% paginate %}
+
+
+
+<div id="subIterationList" style="display:none">
+  {% for subiteration in project.iterations.all %}
+    {% ifnotequal subiteration iteration %}
+    
+      <div class="subIteration" iteration_id="{{subiteration.id}}">{% iteration_icon subiteration %} {{subiteration.name}}</div>
+    {% endifnotequal %}
+  {% endfor %}
+</div>
+
+<script type="text/javascript" charset="utf-8">
+	$(document).ready(function(){
+		$("body").trigger("storyListChanged"); 
+		$("#bigSearchProjectField").focus();
+	});
+	
+	
+	function moveCurrentlyOpenStoryToIteration(iteration_id)
+	 {
+	    $("#loadingIcon").show();
+	    $.ajax({
+	        url: "/projects/project/{{project.slug}}/story/" + current_story_popup + "/reorder",
+	        data: ({
+	            action: "move_iteration",
+	            iteration: iteration_id
+	        }),
+	        type: "POST",
+	        success: function() {
+	            $("#loadingIcon").hide();         
+				reloadStory(current_story_popup, false, false);		   
+
+	        }
+	    });	
+	}
+</script>
+
+{% endblock %}

@@ -29,6 +29,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponse
 from django.core import serializers
 
+from haystack.query import SearchQuerySet
+
 from util import reduce_burndown_data
 
 import json
@@ -131,6 +133,27 @@ def remove_user( request, group_slug ):
     membership = project.members.get( user__id=user_id )
     membership.delete()
     return HttpResponse("ok")
+
+@login_required
+def search_project(request, group_slug):
+    project = get_object_or_404( Project, slug=group_slug )
+    search_terms = request.GET.get("q","")
+    read_access_or_403(project, request.user )
+    if search_terms == "":
+        search_results = SearchQuerySet().filter(project_id=project.id).models(Story).order_by("rank").load_all()
+    else:
+        search_results = SearchQuerySet().filter(project_id=project.id).filter(content=search_terms).models(Story).order_by("rank").load_all()
+    organization = _organizationOrNone(project)
+    return render_to_response("projects/search_results.html", 
+                              {
+                                "project":project,
+                                "search_terms":search_terms,
+                                "organization":organization,
+                                "search_results":search_results
+                              },
+                              context_instance=RequestContext(request))
+
+    
 
 @login_required
 def epics(request, group_slug):

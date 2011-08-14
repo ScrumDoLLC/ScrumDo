@@ -1,6 +1,7 @@
 
 
 $(document).ready(function () {
+    
 	$(".box a").tipTip({"delay":100, "defaultPosition":"left"});
 	$(".box span").tipTip({"delay":100, "defaultPosition":"left"});
 	/* get the height of the taller column and set them both to have that height. 

@@ -881,9 +881,12 @@ h1 a {
   opacity: 1;
 }
 
+.formatted_story_text pre {    
+	overflow: hidden;
+}
 
 .formatted_story_text p {
-	margin: 0px;	
+	margin: 0px;		
 }
 .formatted_story_text .story_number {
 	float: left;
@@ -1030,4 +1033,12 @@ h1 a {
 
 .scrum_log_entry a {
     text-decoration: none;
+}
+
+#mini_search_button {
+	border-style: none;
+	background-color: #fff;
+	cursor: pointer;
+	padding: 0px;
+	margin: 0px;
 }

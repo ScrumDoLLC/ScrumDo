@@ -44,6 +44,8 @@ urlpatterns = patterns('projects.views',
     url(r'^project/(?P<group_slug>[-\w]+)/export$', 'export_project', name="export_project"),
     url(r'^project/(?P<group_slug>[-\w]+)/epics$', 'epics', name="epics"),
     url(r'^project/(?P<group_slug>[-\w]+)/iteration_list$', 'iteration_list', name="iteration_list"),
+    url(r'^project/(?P<group_slug>[-\w]+)/search$', 'search_project', name="search_project"),
+    
 
     # url(r'^project/(?P<group_slug>[-\w]+)/burnup_chart.png$', 'burnup_chart', name="burnup_chart"),
 
