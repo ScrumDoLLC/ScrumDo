@@ -71,3 +71,17 @@ body {
 #story_details #general-rank-cell li {
     display: inline-block;
 }
+
+.block_story_body {
+    margin-top: 0px;
+}
+
+#side_search_box {
+   height: 32px;  
+   overflow: hidden;
+}
+
+.button {
+    vertical-align: bottom;
+    behavior: url(/site_media/static/css/PIE.htc);
+}

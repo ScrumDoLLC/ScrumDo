@@ -30,7 +30,7 @@
 <h1>Search</h1>
 <form action="{% url search_project project.slug %}">
   <input value="{{search_terms}}" type="text" name="q" style="width:530px;font-size:14px;vertical-align:middle" id="bigSearchProjectField"> 
-  <button class="button blue">Search &nbsp;&nbsp;&nbsp;<img style="vertical-align:middle" src="{{STATIC_URL}}pinax/images/silk/icons/magnifier.png"/></button>
+  <button type="submit" class="button blue">Search &nbsp;&nbsp;&nbsp;<img style="vertical-align:middle" src="{{STATIC_URL}}pinax/images/silk/icons/magnifier.png"/></button>
 </form>
 
 <br/>

@@ -155,7 +155,7 @@
 
 .storyIcons {
   float: right;
-  margin-top: 4px;
+  margin-top: 5px;
   opacity: 0.1;
 }
 
@@ -886,7 +886,7 @@ h1 a {
 }
 
 .formatted_story_text p {
-	margin: 0px;		
+	margin: 0px;
 }
 .formatted_story_text .story_number {
 	float: left;

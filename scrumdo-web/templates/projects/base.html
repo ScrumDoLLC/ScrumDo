@@ -69,12 +69,9 @@
 
     <div class="box">
       <div class="box-title">Search</div>
-      <div class="box-content">
+      <div class="box-content" id="side_search_box">
 		<form action="{% url search_project project.slug %}">
-		<input type="text" name="q" style="width:130px;font-size:10px;vertical-align:middle" id="searchProjectField"> 
-		<button id="mini_search_button"><img style="vertical-align:middle" src="{{STATIC_URL}}pinax/images/silk/icons/magnifier.png"/></button>
-		</form>
-	  </div>
+		<input type="text" name="q" style="width:130px;font-size:10px;vertical-align:middle" id="searchProjectField"><button type="submit" id="mini_search_button"><img style="vertical-align:middle" src="{{STATIC_URL}}pinax/images/silk/icons/magnifier.png"/></button></form></div>
 	</div>
 
 
