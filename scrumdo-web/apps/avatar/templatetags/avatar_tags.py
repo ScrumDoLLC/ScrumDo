@@ -34,7 +34,7 @@ def avatar_url(user, size=80):
             params = {'s': str(size)}
             if AVATAR_GRAVATAR_DEFAULT:
                 params['d'] = AVATAR_GRAVATAR_DEFAULT
-            return "http://www.gravatar.com/avatar/%s/?%s" % (
+            return "https://secure.gravatar.com/avatar/%s/?%s" % (
                 md5_constructor(user.email).hexdigest(),
                 urllib.urlencode(params))
         else:
