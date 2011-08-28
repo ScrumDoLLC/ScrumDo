@@ -8,11 +8,29 @@
 
 <div style="width:800px">
 <h2>#{{story.local_id}} {{story.summary|link_stories:story.project|urlify2|safe }}</h2>
-{{story.detail|default_if_none:""|markdown|link_stories:story.project|urlify2|safe }}<br/>
-{{story.extra_1|default_if_none:""|markdown|link_stories:story.project|urlify2|safe }}<br/>
-{{story.extra_2|default_if_none:""|markdown|link_stories:story.project|urlify2|safe }}<br/>
-{{story.extra_3|default_if_none:""|markdown|link_stories:story.project|urlify2|safe }}<br/>
-{{story.assignee|default_if_none:""}}<br/>
+
+{% if story.detail %}
+ {{story.detail|markdown|link_stories:story.project|urlify2|safe }}<br/>
+{% endif %}
+
+{% if story.extra_1 %}
+ <h3>{{story.project.extra_1_label}}</h3>
+ {{story.extra_1|markdown|link_stories:story.project|urlify2|safe }}<br/>
+{% endif %}
+
+{% if story.extra_2 %}
+ <h3>{{story.project.extra_2_label}}</h3>
+ {{story.extra_2|markdown|link_stories:story.project|urlify2|safe }}<br/>
+{% endif %}
+
+{% if story.extra_2 %}
+ <h3>{{story.project.extra_2_label}}</h3>
+ {{story.extra_3|markdown|link_stories:story.project|urlify2|safe }}<br/>
+{% endif %}
+
+{% if story.assignee %}
+Assignee: <b>{{story.assignee|default_if_none:""}}</b><br/><br/>
+{% endif %}
 
 {% for task in story.tasks.all %}
  <div id="task_{{task.id}}" class="tasks_task"> 
