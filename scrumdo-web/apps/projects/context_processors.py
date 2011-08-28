@@ -18,10 +18,28 @@
 
 from django.conf import settings # import the settings file
 
+import logging
 
-def projects_constants(context):
+logger = logging.getLogger(__name__)
+
+def projects_constants(request):
+
+    # AWS Does it this way:
+    forwarded_ssl = ('HTTP_X_FORWARDED_SSL' in request.META) 
+    
+    # Other proxy's do it this way:
+    if 'HTTP_X_FORWARDED_PROTO' in request.META:
+        forwarded_ssl = (request.META['HTTP_X_FORWARDED_PROTO'] == 'https')
+                    
+    # is_secure for direct ssl request
+    if request.is_secure() or forwarded_ssl:
+        static_url = settings.SSL_STATIC_URL
+    else:
+        static_url = settings.STATIC_URL
+
     # return the value you want as a dictionnary. you may add multiple values in there.
     return {'GOOGLE_ANALYTICS': settings.GOOGLE_ANALYTICS,
             'GOOGLE_ANALYTICS_ACCOUNT': settings.GOOGLE_ANALYTICS_ACCOUNT ,
             'BASE_URL': settings.BASE_URL,
-            'SUPPORT_URL': settings.SUPPORT_URL }
+            'SUPPORT_URL': settings.SUPPORT_URL,
+            'STATIC_URL':static_url }

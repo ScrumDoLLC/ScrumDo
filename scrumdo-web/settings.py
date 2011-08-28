@@ -89,6 +89,7 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT, 'site_media', 'static')
 # URL that handles the static files like app media.
 # Example: "http://media.lawrence.com"
 STATIC_URL = '/site_media/static/'
+SSL_STATIC_URL = '/site_media/static/'
 
 # Additional directories which hold static files
 STATICFILES_DIRS = (
@@ -140,9 +141,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.debug",
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
-    "django.core.context_processors.request",
-    "projects.context_processors.projects_constants",
+    "django.core.context_processors.request",    
     "pinax.core.context_processors.pinax_settings",
+    "projects.context_processors.projects_constants",
     "announcements.context_processors.site_wide_announcements",
     "account.context_processors.openid",
     "account.context_processors.account",

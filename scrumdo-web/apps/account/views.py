@@ -43,6 +43,7 @@ def login(request, form_class=LoginForm, template_name="account/login.html",
     ctx = {
         "form": form,
         "url_required": url_required,
+        "success_url": success_url
     }
     ctx.update(extra_context)
     return render_to_response(template_name, ctx,
