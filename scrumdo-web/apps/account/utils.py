@@ -22,10 +22,8 @@ def get_default_redirect(request, redirect_field_name="next",
     redirect_to = request.REQUEST.get(redirect_field_name)
     
     
-    logger.debug("preREDIRECT TO: %s" % redirect_to)
     
     # light security check -- make sure redirect_to isn't garabage.
     if (not redirect_to) or ("://" in redirect_to) or (" " in redirect_to):
         redirect_to = default_redirect_to
-    logger.debug("REDIRECT TO: %s" % redirect_to)
     return redirect_to
