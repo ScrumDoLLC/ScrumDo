@@ -10,12 +10,18 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.db import models
 
+from projects.limits import personal_ssl_access
+
 from account.utils import get_default_redirect
 from account.models import OtherServiceInfo
 from account.forms import SignupForm, AddEmailForm, LoginForm, \
     ChangePasswordForm, SetPasswordForm, ResetPasswordForm, \
     ChangeTimezoneForm, ChangeLanguageForm, TwitterForm, ResetPasswordKeyForm
 from emailconfirmation.models import EmailAddress, EmailConfirmation
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 association_model = models.get_model('django_openid', 'Association')
 if association_model is not None:
@@ -37,6 +43,15 @@ def login(request, form_class=LoginForm, template_name="account/login.html",
                         user=form.user, openid=openid.openid
                     )
                 success_url = openid_success_url or success_url
+                
+            # Redirect to http or https based on account
+            if personal_ssl_access.increaseAllowed(user=form.user):
+                success_url = "%s%s" % (settings.SSL_BASE_URL, success_url)
+                logger.debug("Subscriber %s" % success_url)
+            else:
+                success_url = "%s%s" % (settings.BASE_URL, success_url)                
+                logger.debug("NonSubscriber %s" % success_url)
+                    
             return HttpResponseRedirect(success_url)
     else:
         form = form_class()

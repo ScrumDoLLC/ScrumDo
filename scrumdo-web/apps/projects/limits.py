@@ -30,6 +30,7 @@ personal_user_limit         = Limit( providing_args=["user","userToAdd"] )
 personal_storage_limit      = Limit( providing_args=["user"] )
 personal_extra_limit        = Limit( providing_args=["project"] )
 personal_email_limit        = Limit( providing_args=["project"] )
+personal_ssl_access         = Limit( providing_args=["user"] )
 
 # Limits related to an organization:
 org_project_limit      = Limit( providing_args=["organization"] )
