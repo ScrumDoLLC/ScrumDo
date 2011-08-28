@@ -15,7 +15,7 @@ class ExampleExtra( ScrumdoProjectExtra ):
         return "example"
 
     def getLogo(self):
-        return settings.STATIC_URL + "extras/example-logo.png"
+        return settings.SSL_STATIC_URL + "extras/example-logo.png"
 
 
     def getDescription(self):

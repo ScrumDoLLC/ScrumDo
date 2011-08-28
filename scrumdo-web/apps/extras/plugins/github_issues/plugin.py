@@ -27,7 +27,7 @@ class Plugin( ScrumdoProjectExtra ):
         return "GitHub Issues"
 
     def getLogo(self):
-        return settings.STATIC_URL + "extras/github-logo.png"
+        return settings.SSL_STATIC_URL + "extras/github-logo.png"
 
     def getSlug(self):
         "Returns a version of the name consisting of only letters, numbers, or dashes"

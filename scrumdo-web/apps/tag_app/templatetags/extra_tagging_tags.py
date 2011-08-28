@@ -9,7 +9,7 @@ def show_tags_for(obj, group=None):
         "obj": obj,
         "group": group,
         "MEDIA_URL": settings.MEDIA_URL,
-        "STATIC_URL": settings.STATIC_URL,
+        "STATIC_URL": settings.SSL_STATIC_URL,
     }
 
 @register.inclusion_tag("tag_app/tag_count_list.html")
