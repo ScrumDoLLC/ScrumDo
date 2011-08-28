@@ -410,10 +410,10 @@ def story(request, group_slug, story_id):
                 try:
                     category_name = request.POST.get("category_name")
                     category_name = category_name.replace(",","").strip()
-                    category_name = category_name[:25]
+                    category_name = category_name[:50]
                     if not category_name in project.getCategoryList():
                         project.categories = "%s, %s" % (project.categories, category_name)
-                        if len(project.categories) <= 512:
+                        if len(project.categories) <= 1024:
                             project.save()
                         else:
                             request.user.message_set.create(message="Too many categories")
@@ -662,10 +662,10 @@ def _handleAddStoryInternal( form , project, request):
     if request.POST.get("category_name") != "":
         category_name = request.POST.get("category_name","")
         category_name = category_name.replace(",","").strip()
-        category_name = category_name[:25]
+        category_name = category_name[:50]
         if not category_name in project.getCategoryList():            
             project.categories = "%s, %s" % (project.categories, category_name)
-            if len(project.categories) <= 512:
+            if len(project.categories) <= 1024:
                 project.save()
             else:
                 request.user.message_set.create(message="Too many categories")                        
