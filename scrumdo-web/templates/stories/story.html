@@ -1,4 +1,4 @@
-{% load i18n %}{% load comments_tag %}{% load theme_tags %}{% load projects_tags %}<div id="story_area" >
+{% load i18n %}{% load comments_tag %}{% load projects_tags %}<div id="story_area" >
 
 <form id="story_detail_form" class="uniForm" method="POST" action="{% url story_form group_slug=project.slug story_id=story.id %}" style="width: 100%">
    {{ form.non_field_errors }}

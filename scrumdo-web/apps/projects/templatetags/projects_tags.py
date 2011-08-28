@@ -24,6 +24,7 @@ from projects.access import has_write_access, has_admin_access, has_read_access
 from projects.util import reduce_burndown_data
 from projects.limits import personal_email_limit, org_email_limit
 from django.template.defaultfilters import stringfilter
+from django.conf import settings
 
 
 
@@ -34,6 +35,13 @@ urlfinder = re.compile('((?:https|http):\/\/[^\s<>]+)')
 import logging
 
 logger = logging.getLogger(__name__)
+
+
+
+@register.simple_tag
+def silk(name):
+    return """<img src="%spinax/images/silk/icons/%s.png" />""" % (settings.SSL_STATIC_URL, name)
+
 
 @register.filter("google_chart_url")
 def google_chart_url(iteration_or_project):
