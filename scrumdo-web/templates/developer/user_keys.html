@@ -6,9 +6,10 @@
 
 {% block body %}
 
-<h3>All your current keys:</h3>
+<h3>API Access Keys</h3>
+<p>These are keys that authenticate you to ScrumDo via applications that are using the ScrumDo API. If you no longer wish to be authenticated with a given application, you can delete the corresponding key at any time (if you do this, you will probably be prompted to log in the next time you use the application).</p>
 {% for key in keys %}
-<p>{{key.developer_key.application_name}} - {{key.key}} - <form method=post><input type="hidden" value="{{key.id}}" name="key_id"></input><input type=submit value="Delete"></input></form></p>
+Application Name: {{key.developer_key.application_name}} - Key: {{key.key}} - <form method=post style="width: 50px; display: inline"><input type="hidden" value="{{key.id}}" name="key_id"></input><button type=submit>Delete</button></form><br/>
 
 {% endfor %}
 

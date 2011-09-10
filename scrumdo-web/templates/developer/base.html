@@ -18,9 +18,6 @@
     <div class="box-content">
       <a href="{% url developer_home %}">My Developer Keys</a>
     </div>
-    <div class="box-content">
-      <a href="{% url developer_apply %}">Apply For A Developer Key</a>
-    </div>
     {% for page_url, page_name in pages %}
     <div class="box-content{% ifequal page_url this.0 %} active{% endifequal %}" >
       <a href="{% url developer_docs_page name page_url %}">{{ page_name }}</a>

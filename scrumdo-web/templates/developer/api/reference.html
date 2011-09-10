@@ -3,43 +3,71 @@
   /api/v1/user/self?user_key=06909df452564210a7cef5811132a53ba3a7a31a&user_name=test&format=json</p>
 
 <h2 alt="Non-Resource Calls">Non-Resource Calls</h2>
-<p>uri: login - parameters: developer_key (string), username (string), password (string). <br>
-  returns - {"key": "USER_KEY"}<br><br>
+<p><strong>uri:</strong> login - parameters: developer_key (string), username (string), password (string). <br>
+  <strong>returns:</strong> {"key": "USER_KEY"}<br>
+  <strong>example:</strong> /api/v1/login?developer_key=cdab296a0...62c83954d6f6&username=test&password=test<br><br>
+  
   This method is used to authenticate a user with an application. The user will enter their credentials at which point an api call can be made by the application to receive a unique token for that user. This key can be used indefinitely, but should be checked either periodically or in case of error with <em>is_key_valid</em> because a user can invalidate the key at any point, at which point the user would need to be re-authenticated and a new key issued.
    </p>
    
    <hr/>
    
-<p>uri: is_key_valid - parameters: user_key (string).<br>
-  returns - {"valid": BOOLEAN}<br><br>
+<p><strong>uri:</strong> is_key_valid - parameters: user_key (string).<br>
+  <strong>returns:</strong> {"valid": BOOLEAN}<br>
+  <strong>example:</strong> /api/v1/is_key_valid?user_key=06909df452564210a7cef5811132a53ba3a7a31a<br><br>
   This method is used to check if a previously issued user key is still valid. While there is no timeout, a user can invalidate a key at any point.</p>
 
 <h2 alt="User">User</h2>
-<p>uri: user/self - parameters: user_key (string), user_name (string).<br>
-  returns - {"first_name": "STRING", "last_login": "TIMESTAMP", "last_name": "STRING", "projects": [LIST OF "PROJECT_RESOURCE_URI"], "resource_uri": "/api/v1/user/USER_ID/", "teams": [LIST OF "TEAM_RESOURCE_URI"], "username": "STRING"}<br><br>
+<p><strong>uri:</strong> user/self - parameters: user_key (string), user_name (string).<br>
+  <strong>returns:</strong> {"first_name": "STRING", "last_login": "TIMESTAMP", "last_name": "STRING", "projects": [LIST OF "PROJECT_RESOURCE_URI"], "resource_uri": "/api/v1/user/USER_ID/", "teams": [LIST OF "TEAM_RESOURCE_URI"], "username": "STRING", "assigned_stories": [LIST OF "STORY_RESOURCE_URI"], "tasks": [LIST OF "TASK_RESOURCE_URI"]}<br>
+  <strong>example:</strong> /api/v1/user/self?user_key=06909df452564210a7cef5811132a53ba3a7a31a&username=test <br><br>
   This method is the entry point into the API. It gives back information and projects / teams for the user identified by the user_key/user_name in the parameters. This is a special method in that it will always return the current user.</p>
   
   <hr/>
   
-<p>uri: user/<em>USER_ID</em> - parameters: user_key (string), user_name (string).<br>
-  returns - same format as user/self, but for the user specified by USER_ID</p>
+<p><strong>uri:</strong> user/<em>USER_ID</em> - parameters: user_key (string), user_name (string).<br>
+  <strong>returns:</strong> same format as user/self, but for the user specified by USER_ID<br>
+  <strong>example:</strong> /api/v1/user/1?user_key=06909df452564210a7cef5811132a53ba3a7a31a&username=test <br><br>
+  </p>
   
 <h2 alt="Project">Project</h2>
-<p>uri: project/<em>PROJECT_ID</em> - parameters: user_key (string), user_name (string).<br>
-  returns: {"iterations": [LIST OF "ITERATION_RESOURCE_URI"], "members": [LIST OF "USER_RESOURCE_URI"], "organization": null OR "ORGANIZATION_RESOURCE_URI", "resource_uri": "/api/v1/project/PROJECT_ID/", "slug": "STRING", "teams": [LIST OF "TEAM_RESOURCE_URI"]}</p>
+<p><strong>uri:</strong> project/<em>PROJECT_ID</em> - parameters: user_key (string), user_name (string).<br>
+  <strong>returns:</strong> {"iterations": [LIST OF "ITERATION_RESOURCE_URI"], "members": [LIST OF "USER_RESOURCE_URI"], "organization": null OR "ORGANIZATION_RESOURCE_URI", "resource_uri": "/api/v1/project/PROJECT_ID/", "slug": "STRING", "teams": [LIST OF "TEAM_RESOURCE_URI"], "epics": [LIST OF "EPIC_RESOURCE_URI"]}<br>
+  <strong>example:</strong> /api/v1/project/1?user_key=06909df452564210a7cef5811132a53ba3a7a31a&username=test <br><br>
+  </p>
   
 <h2 alt="Iteration">Iteration</h2>
-<p>uri: iteration/<em>ITERATION_ID</em> - parameters: user_key (string), user_name (string).<br>
-  returns: {"default_iteration": BOOLEAN, "detail": "STRING", "end_date": null OR TIMESTAMP, "id": "ITERATION_ID", "include_in_velocity": BOOLEAN, "locked": BOOLEAN, "name": "STRING", "project": "PROJECT_RESOURCE_URI", "resource_uri": "/api/v1/iteration/ITERATION_ID/", "start_date": null OR TIMESTAMP, "stories": [LIST OF "STORY_RESOURCE_URI"]}</p>
+<p><strong>uri:</strong> iteration/<em>ITERATION_ID</em> - parameters: user_key (string), user_name (string).<br>
+  <strong>returns:</strong> {"default_iteration": BOOLEAN, "detail": "STRING", "end_date": null OR TIMESTAMP, "id": "ITERATION_ID", "include_in_velocity": BOOLEAN, "locked": BOOLEAN, "name": "STRING", "project": "PROJECT_RESOURCE_URI", "resource_uri": "/api/v1/iteration/ITERATION_ID/", "start_date": null OR TIMESTAMP, "stories": [LIST OF "STORY_RESOURCE_URI"]}<br>
+  <strong>example:</strong> /api/v1/iteration/1?user_key=06909df452564210a7cef5811132a53ba3a7a31a&username=test <br><br>
+  </p>
+
+<h2 alt="Epic">Epic</h2>
+<p><strong>uri:</strong> epic/<em>EPIC_ID</em> - parameters: user_key (string), user_name (string).<br>
+  <strong>returns:</strong> {"archived": BOOLEAN, "detail": "STRING", "id": "EPIC_ID", "order": INTEGER, "parent": "EPIC_RESOURCE_URI" or null, "points": "STRING", "project": "PROJECT_RESOURCE_URI", "resource_uri": "EPIC_RESOURCE_URI", "status": 1 or 2 or 3 or 4, "stories": [LIST OF "STORY_RESOURCE_URI"], "summary": "STRING"}<br>
+  <strong>example:</strong> /api/v1/epic/1?user_key=06909df452564210a7cef5811132a53ba3a7a31a&username=test <br><br>
+  </p>
 
 <h2 alt="Story">Story</h2>
-<p>uri: story/<em>STORY_ID</em> - parameters: user_key (string), user_name (string).<br>
-  returns: {"created": "TIMESTAMP", "creator": "USER_RESOURCE_URI", "detail": "STRING", "extra_1": "STRING", "extra_2": "STRING", "extra_3": "STRING", "id": "STORY_ID", "iteration": "ITERATION_RESOURCE_URI", "local_id": INTEGER, "modified": "TIMESTAMP", "points": "?" OR "NUMBER", "project": "PROJECT_RESOURCE_URI", "rank": INTEGER, "resource_uri": "/api/v1/story/STORY_ID/", "status": 1 or 2 or 3 or 4, "summary": "STRING"}
+<p><strong>uri:</strong> story/<em>STORY_ID</em> - parameters: user_key (string), user_name (string).<br>
+  <strong>returns:</strong> {"created": "TIMESTAMP", "creator": "USER_RESOURCE_URI", "detail": "STRING", "extra_1": "STRING", "extra_2": "STRING", "extra_3": "STRING", "id": "STORY_ID", "iteration": "ITERATION_RESOURCE_URI", "local_id": INTEGER, "modified": "TIMESTAMP", "points": "?" OR "NUMBER", "project": "PROJECT_RESOURCE_URI", "rank": INTEGER, "resource_uri": "/api/v1/story/STORY_ID/", "status": 1 or 2 or 3 or 4, "summary": "STRING", "epic": "EPIC_RESOURCE_URI" or null, "tasks": [LIST OF "TASK_RESOURCE_URI"]}<br>
+  <strong>example:</strong> /api/v1/story/1?user_key=06909df452564210a7cef5811132a53ba3a7a31a&username=test <br><br>
+</p>
+
+<h2 alt="Task">Task</h2>
+<p><strong>uri:</strong> task/<em>TASK_ID</em> - parameters: user_key (string), user_name (string).<br>
+  <strong>returns:</strong> {"assignee": "USER_RESOURCE_URI", "complete": BOOLEAN, "id": "TASK_ID", "order": integer, "resource_uri": "TASK_RESOURCE_URI", "story": "STORY_RESOURCE_URI", "summary": "STRING"}<br>
+  <strong>example:</strong> /api/v1/task/1?user_key=06909df452564210a7cef5811132a53ba3a7a31a&username=test <br><br>
+  </p>  
   
 <h2 alt="Organization">Organization</h2>
-<p>uri: organization/<em>ORGANIZATION_ID</em> - parameters: user_key (string), user_name (string).<br>
-  returns: {"created": "TIMESTAMP", "description": "STRING", "id": "ORGANIZATION_ID", "name": "STRING", "projects": [LIST OF "PROJECT_RESOURCE_URI"], "resource_uri": "/api/v1/organization/ORGANIZATION_ID/", "slug": "STRING", "teams": [LIST OF "TEAM_RESOURCE_URI"]}
+<p><strong>uri:</strong> organization/<em>ORGANIZATION_ID</em> - parameters: user_key (string), user_name (string).<br>
+  <strong>returns:</strong> {"created": "TIMESTAMP", "description": "STRING", "id": "ORGANIZATION_ID", "name": "STRING", "projects": [LIST OF "PROJECT_RESOURCE_URI"], "resource_uri": "/api/v1/organization/ORGANIZATION_ID/", "slug": "STRING", "teams": [LIST OF "TEAM_RESOURCE_URI"]}<br>
+  <strong>example:</strong> /api/v1/organization/1?user_key=06909df452564210a7cef5811132a53ba3a7a31a&username=test <br><br>
+  </p>
 
 <h2 alt="Team">Team</h2>
-<p>uri: team/<em>TEAM_ID</em> - parameters: user_key (string), user_name (string).<br>
-  returns: {"access_type": "admin" OR "read/write" OR "read", "id": "TEAM_ID", "members": [LIST OF "USER_RESOURCE_URI"], "name": "STRING", "organization": "ORGANIZATION_RESOURCE_URI", "projects": [LIST OF "PROJECT_RESOURCE_URI"], "resource_uri": "/api/v1/team/TEAM_ID/"}
+<p><strong>uri:</strong> team/<em>TEAM_ID</em> - parameters: user_key (string), user_name (string).<br>
+  <strong>returns:</strong> {"access_type": "admin" OR "read/write" OR "read", "id": "TEAM_ID", "members": [LIST OF "USER_RESOURCE_URI"], "name": "STRING", "organization": "ORGANIZATION_RESOURCE_URI", "projects": [LIST OF "PROJECT_RESOURCE_URI"], "resource_uri": "/api/v1/team/TEAM_ID/"}<br>
+  <strong>example:</strong> /api/v1/team/1?user_key=06909df452564210a7cef5811132a53ba3a7a31a&username=test <br><br>
+  </p>

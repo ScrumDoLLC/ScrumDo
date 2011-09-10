@@ -7,12 +7,13 @@ from tastypie.resources import ModelResource
 from tastypie.validation import Validation, FormValidation
 
 from django.conf.urls.defaults import *
+from django.core.urlresolvers import reverse
 
 
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 
-from projects.models import Project,ProjectMember,Story,Iteration
+from projects.models import Project,ProjectMember,Story,Iteration,Epic,Task
 from organizations.models import Organization, Team
 from threadedcomments.models import ThreadedComment
 from activities.models import Activity, ActivityAction
@@ -28,6 +29,7 @@ class UserResource(ModelResource):
     teams = fields.ToManyField('api.resources.TeamResource', 'teams')
     projects = fields.ToManyField('api.resources.ProjectResource', 'user_projects')
     assigned_stories = fields.ToManyField('api.resources.StoryResource', 'assigned_stories', null=True)
+    tasks = fields.ToManyField('api.resources.TaskResource','assigned_tasks')
 
     class Meta:
         queryset = User.objects.all()
@@ -91,6 +93,8 @@ class StoryResource(ModelResource):
     iteration = fields.ToOneField('api.resources.IterationResource', 'iteration')
     project = fields.ToOneField('api.resources.ProjectResource', 'project')
     creator = fields.ToOneField('api.resources.UserResource', 'creator')
+    tasks = fields.ToManyField('api.resources.TaskResource','tasks')
+    epic = fields.ToOneField('api.resources.EpicResource','epic',null=True)
 
     class Meta:
         queryset = Story.objects.all()
@@ -106,6 +110,35 @@ class StoryResource(ModelResource):
         # cr = CommentResource()
         # bundle.data['comments'] = map(lambda c: cr.get_resource_uri(c), cr.obj_get_list(content_object__exact=bundle.obj))
         return bundle
+
+class TaskResource(ModelResource):
+    story = fields.ToOneField('api.resources.StoryResource', 'story')
+    assignee = fields.ToOneField('api.resources.UserResource', 'assignee')
+    
+    class Meta:
+        queryset = Task.objects.all()
+        fields = ['id', 'summary','complete','order']
+        list_allowed_methods = []
+        authentication = ScrumDoAuthentication()
+        authorization = ScrumDoAuthorization(
+          lambda u: Q(story__project__teams__in = u.teams.all())|Q(story__project__member_users__in = [u]),
+          lambda u: Q(story__project__teams__in = u.teams.filter(Q(access_type="read/write")|Q(access_type="admin")))|Q(story__project__member_users__in = [u]))
+
+
+
+class EpicResource(ModelResource):
+    project = fields.ToOneField('api.resources.ProjectResource', 'project')
+    parent = fields.ToOneField('api.resources.EpicResource', 'parent', null=True)
+    stories = fields.ToManyField('api.resources.StoryResource','stories')
+    
+    class Meta:
+        queryset = Epic.objects.all()
+        fields = ['id', 'summary','detail','points','project_id', 'parent_id', 'status','order','archived']
+        list_allowed_methods = []
+        authentication = ScrumDoAuthentication()
+        authorization = ScrumDoAuthorization(
+          lambda u: Q(project__teams__in = u.teams.all())|Q(project__member_users__in = [u]),
+          lambda u: Q(project__teams__in = u.teams.filter(Q(access_type="read/write")|Q(access_type="admin")))|Q(project__member_users__in = [u]))
 
 
 class IterationResource(ModelResource):
@@ -123,6 +156,7 @@ class IterationResource(ModelResource):
 
 class ProjectResource(ModelResource):
     iterations = fields.ToManyField('api.resources.IterationResource', 'iterations')
+    epics = fields.ToManyField('api.resources.EpicResource', 'epics')
     teams = fields.ToManyField('api.resources.TeamResource', 'teams')
     organization = fields.ToOneField(OrganizationResource, 'organization', null=True, full=True)
     member_users = fields.ToManyField('api.resources.UserResource', 'member_users')
@@ -131,7 +165,7 @@ class ProjectResource(ModelResource):
     class Meta:
         queryset = Project.objects.all()
         fields = ['slug', 'creator_id','organization_id','velocity','iterations_left']
-        list_allowed_methods = []
+        # list_allowed_methods = []
         authentication = ScrumDoAuthentication()
         authorization = ScrumDoAuthorization(
            lambda u: Q(teams__in = u.teams.all())|Q(member_users__in = [u]),

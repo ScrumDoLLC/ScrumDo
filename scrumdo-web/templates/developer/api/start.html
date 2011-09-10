@@ -1,5 +1,5 @@
 <h2 alt="Overview">Overview</h2>
-<p>The ScrumDo API is accessible at http://www.scrumdo.com/api/v1/. It is powered by <a href="https://github.com/toastdriven/django-tastypie">Tastypie</a>, a Django library for writing REST APIs with Django applications. There is no public data exposed, so all API calls need to be made with authentication keys for a specific user, and will only be able to view data that the user has access to.</p>
+<p>The ScrumDo API is accessible at http://www.scrumdo.com/api/v1/. It is powered by <a href="https://github.com/toastdriven/django-tastypie">Tastypie</a>, a Django library for writing REST APIs with Django applications. There is <strong>no public data</strong> exposed, so all API calls need to be made with <strong>authentication keys for a specific user</strong>, and will only be able to view data that the user has access to.</p>
 
 <h2 alt="Keys Overview">Keys Overview</h2>
 <p>All calls to the API require authentication keys. As a developer, you will need a developer key, which should be kept secret and should be unique to your application (so if you are building more than one application, get more than one key). You can apply for a key by clicking on the link at the top of the bar on the right. This developer key is only used in one call to the API - /api/v1/login. You will use your developer key and user credentials to authenticate against the API and be given a unique User Key. This key is matched with your developer key, but it is persistent - as long as the user does not revoke it (which they can from their account on ScrumDo), you can use this key to perform actions for the user indefinitely. It is this key, along with the user's name, that you will need to use in every other API call. You can check if a user's key is still valid by making a call to /api/v1/is_key_valid?user_key=..., which will return, if you are using JSON, {"valid": true} or {"valid": false}</p>
@@ -9,3 +9,8 @@
 
 <h2 alt="Serialization Format">Serialization Format</h2>
 <p>The API currently only has support for JSON, but tastypie supports many different serialization formats so let us know if you would really like something else. However, if you make a request with an Accept header that specifies XML, the API will tell you that XML is not available, so you need to manually append a format=json parameter to your request. This should only be an issue when trying it out from things like web browsers, but might be something to keep in mind.</p>
+
+<h2 alt="What Next">What Next</h2>
+<p>
+  To start using the API, click on My Developer Keys, sign up for a key, and then head to the API Reference section. The top has the calls for logging in, and the rest shows all the resources that are accessible via the API, and the formats that the data will be returned as. The other sections entitled "Permissions", "Traversing Data", and "Updating and Deleting" provide additional background info, most of which may be unnecessary for people familiar with APIs (and especially if familiar with Tastypie).
+</p>

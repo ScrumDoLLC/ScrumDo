@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 from tastypie.api import Api
-from api.resources import OrganizationResource, TeamResource, ProjectResource, StoryResource, IterationResource, UserResource, ActivityResource #, CommentResource
+from api.resources import OrganizationResource, TeamResource, ProjectResource, StoryResource, TaskResource, EpicResource, IterationResource, UserResource, ActivityResource #, CommentResource
 
 class ScrumDoApi(Api):
     def override_urls(self):
@@ -13,6 +13,8 @@ v1_api.register(OrganizationResource())
 v1_api.register(TeamResource())
 v1_api.register(ProjectResource())
 v1_api.register(StoryResource())
+v1_api.register(TaskResource())
+v1_api.register(EpicResource())
 # v1_api.register(CommentResource())
 v1_api.register(IterationResource())
 v1_api.register(UserResource())

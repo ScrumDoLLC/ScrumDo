@@ -27,6 +27,7 @@ def apply(request):
         if form.is_valid(): # All validation rules pass
             dev_key = form.save( commit=False )
             dev_key.developer = request.user
+            dev_key.approved = True
             dev_key.save()
             request.user.message_set.create(message="Created developer key.")
             return HttpResponseRedirect(reverse("developer_home"))
