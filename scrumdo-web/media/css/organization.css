@@ -3,7 +3,7 @@
 }
 
 .projects-box, .teams-box {
-    width: 298px;
+    width: 400px;
     margin-top: 20px;
 }
 
@@ -70,7 +70,6 @@
 
 #side .box .box-top .title {
     z-index: 1;
-    height: 
 }
 #side .box .box-top .settings {
     text-align: right;
@@ -82,4 +81,14 @@
 .memberDeleteButton {
   float: right;
   margin-top: 1px;
+}
+
+body.projects #side {
+    top: 60px;
+    right: 170px;
+}
+
+#side .projects-box {
+    width: 210px;
+    margin-top: 20px;
 }
