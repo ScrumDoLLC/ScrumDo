@@ -56,6 +56,7 @@ install_requires = get_requirements(
         ['requirements.txt']
     ],
     extras = [
+        'django-timezones==0.2.dev1',
         'Django==1.1.4',
         'Pillow',
         'Pinax==0.7.3'
