@@ -1,3 +1,6 @@
 pinax-env
 pinax-env.old
 *.pyc
+*.egg-info
+scrumdo_web
+dist
