@@ -312,7 +312,7 @@ def reorderStory( story, before_id, after_id, iteration, field_name="rank"):
     try:
         if diff > 1:
             # It fits between them
-            logger.debug(round(diff/2) )
+            # logger.debug(round(diff/2) )
             story.__dict__[field_name] = round(diff/2) + story_rank_before
             logger.debug("Reordering fit %d %d %d" % (story_rank_before, story.__dict__[field_name], story_rank_after) )
             return
@@ -673,7 +673,7 @@ def _handleAddStoryInternal( form , project, request):
         
 
     story.rank = _calculate_rank( story.iteration, general_rank )
-    logger.info("New Story %s" % story.summary)
+    # logger.info("New Story %s" % story.summary)
     story.save()
     if story.points_value() > 0:
         onDemandCalculateVelocity( project )
