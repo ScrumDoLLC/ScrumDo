@@ -164,7 +164,7 @@ class ProjectResource(ModelResource):
 
     class Meta:
         queryset = Project.objects.all()
-        fields = ['slug', 'creator_id','organization_id','velocity','iterations_left']
+        fields = ['name', 'slug', 'creator_id','organization_id','velocity','iterations_left','get_num_stories']
         # list_allowed_methods = []
         authentication = ScrumDoAuthentication()
         authorization = ScrumDoAuthorization(
@@ -181,11 +181,15 @@ class ActivityResource(ModelResource):
     def obj_get_list(self, request=None, **kwargs):
         """ overriding """
         return Activity.getActivitiesForUser(request.user)
-
-    creator = fields.ToOneField('api.resources.UserResource', 'user', full=True)
-    project = fields.ToOneField('api.resources.ProjectResource', 'project', full=True)
-    action = fields.ToOneField('api.resources.ActivityActionResource', 'action', full=True)
+       
+    line = fields.CharField(readonly=True)
+    #creator = fields.ToOneField('api.resources.UserResource', 'user', full=True)
+    #project = fields.ToOneField('api.resources.ProjectResource', 'project', full=True)
+    #action = fields.ToOneField('api.resources.ActivityActionResource', 'action', full=True)
 
     class Meta:
         queryset = Activity.objects.all()
         authentication = ScrumDoAuthentication()
+    
+    def dehydrate_line(self, bundle):
+        return bundle.obj.getPrettyActivityString()

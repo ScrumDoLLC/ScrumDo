@@ -57,6 +57,41 @@ class Activity(InheritanceCastModel):
         except:
             pass
         return ""
+        
+    def getPrettyActivityString(self):
+        try:
+            if self.storyactivity.status is None:
+                return self.user.username + " created a story in iteration '" +\
+                    self.storyactivity.story.iteration.name +\
+                    "' in project '" + self.project.name + "'"
+            else:
+                return self.user.username + " changed the status of story #%s" % (self.storyactivity.story.local_id)
+        except:
+            pass
+        try:
+            if self.iterationactivity.iteration.name is not None:
+                return self.user.username + " created iteration '" + self.iterationactivity.iteration.name + "' in project '" + self.project.name + "'"
+        except:
+            pass
+        try:
+            if self.deletedactivity is not None:
+                return self.user.username + " deleted something"
+        except:
+            pass
+        try:
+            if self.commentactivity is not None:
+                line = self.user.username + " commented on "
+                try:
+                    return line + "story #" + self.commentactivity.story.local_id
+                except:
+                    pass
+                try:
+                    return line + "iteration " + self.commentactivity.iteration.name
+                except:
+                    pass
+        except:
+            pass
+        return ""
 
 
     # Returns all activities for user
