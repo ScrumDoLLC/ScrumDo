@@ -2,3 +2,6 @@ pinax-env
 pinax-env.old
 *.pyc
 django-piston/
+*.egg-info
+scrumdo_web
+dist
