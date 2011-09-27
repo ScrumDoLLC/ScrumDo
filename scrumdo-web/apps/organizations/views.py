@@ -147,9 +147,7 @@ def handle_organization_create( form , request, projects):
 
     member_team = Team(organization = organization, name="Members", access_type="write")
     member_team.save()
-
-    signals.organization_created.send( sender=request, organization=organization )
-
+    
     request.user.message_set.create(message="Organization Created.")
     
     try:
@@ -176,6 +174,7 @@ def handle_organization_create( form , request, projects):
     except:
         organization.source = ""
         
+    signals.organization_created.send( sender=request, organization=organization )    
 
     for project in projects:
         if request.POST.get("move_project_%d" % project.id):
