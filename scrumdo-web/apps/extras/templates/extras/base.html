@@ -19,7 +19,7 @@
      <a href="{% url organization_detail project.organization.slug %}">{{ project.organization.name }}</a> /
   {% endif %}
   <a href="{% url project_detail project.slug %}">{{ project.name }}</a> /
-  Project Extras
+  <a href="{% url project_extras_url project.slug %}">Project Extras</a>
 {% endblock %}
 
 {% block body %}

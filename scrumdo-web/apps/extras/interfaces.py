@@ -78,8 +78,10 @@ class ScrumdoProjectExtra( ScrumdoExtra ):
             invoke for this extra. Example: ('Syncronize','/blah/blah/syncronize','') """
         return []
 
-    def doProjectdoProjectConfiguration( self, request, project ):
-        """ Should return a django style response that handles any configuration that this extra may need. """
+    def doProjectdoProjectConfiguration( self, request, project, stage=""):
+        """ Should return a django style response that handles any configuration that this extra may need. 
+            Stage is an optional parameter that you can use for multi step configuration sequences.  It's
+            taken from the last bit of the URL /extras/extra-slug/project-slug/configure/STAGE """
         raise NotImplementedError("ScrumdoProjectExtra subclasses must implement doProjectConfiguration()")
 
     def initialSync( self, project):

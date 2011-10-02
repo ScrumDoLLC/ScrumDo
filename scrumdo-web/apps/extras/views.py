@@ -151,12 +151,12 @@ def disable_extra( request, project_slug, extra_slug):
     return HttpResponseRedirect(reverse("project_extras_url",kwargs={'project_slug':project_slug}))
 
 @login_required
-def configure_extra( request, project_slug, extra_slug):
+def configure_extra( request, project_slug, extra_slug, stage=""):
     project = get_object_or_404( Project, slug=project_slug )
     admin_access_or_403(project, request.user )
     extra = manager.getExtra( extra_slug )
     if extra != None:
-        return extra.doProjectConfiguration(request, project)
+        return extra.doProjectConfiguration(request, project, stage)
     return HttpResponseRedirect(reverse("project_extras_url",kwargs={'project_slug':project_slug}))
 
 @login_required

@@ -37,7 +37,7 @@ class Plugin( ScrumdoProjectExtra ):
         "Returns a user-friendly description of this extra.  This text will be passed through a Markdown filter when displayed to the user."
         return "Create ScrumDo stories for any open GitHub issue.  Push ScrumDo stories to GitHub issues."
 
-    def doProjectConfiguration( self, request, project ):
+    def doProjectConfiguration( self, request, project, stage=""):
         """Handles a request to do configuration for the github_issues extra.
            This displays a form asking for credentials / repository information,
            then saves that with the saveConfiguration() api in ScrumdoProjectExtra base

@@ -23,7 +23,7 @@ class ExampleExtra( ScrumdoProjectExtra ):
         return "This Extra demonstrates the bare minimal required to get a ScrumDo Project based extra working."
 
 
-    def doProjectConfiguration( self, request, project ):
+    def doProjectConfiguration( self, request, project, stage=""):
         "Should return a django style response that handles any configuration that this extra may need."
         return render_to_response("extras/example/configure.html", {
             "extra":self,

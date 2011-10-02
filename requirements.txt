@@ -10,3 +10,4 @@ mysql-python
 pil
 Werkzeug
 markdown==2.0.3
+suds
