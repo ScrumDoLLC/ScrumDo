@@ -23,6 +23,12 @@ class ExtrasManager:
 
     def queueSyncAction( self, extra_slug, project, action, **kwargs):
         logger.debug("Queuing a syncronization action %d, %s, %s" % (action,project.slug,extra_slug))
+        
+        existing = SyncronizationQueue.objects.filter(project=project, extra_slug=extra_slug, action=action, story=kwargs.get("story",None), task=kwargs.get("task",None))
+        if existing.count() > 0:
+            logger.debug("Skipping this duplicate sync action")
+            return
+        
         queueObject = SyncronizationQueue( project=project, extra_slug=extra_slug, action=action)
         queueObject.story = kwargs.get("story",None)
         queueObject.task = kwargs.get("task",None)
