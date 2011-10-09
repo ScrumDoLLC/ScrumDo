@@ -26,6 +26,10 @@ def extra_buttons(extra_slug, projectOrIteration):
     return {'extra':extra, 'project':project, 'actions':extra.getExtraActions(project, iteration=iteration)}
 
 
+@register.inclusion_tag('extras/extras_story_buttons.html')
+def extra_story_buttons(extra_slug, story):
+    extra = extras_manager.getExtra( extra_slug )
+    return {'extra':extra, 'actions':extra.getExtraStoryActions(story.project, story)}
 
 
 @register.tag(name='ifloaded')

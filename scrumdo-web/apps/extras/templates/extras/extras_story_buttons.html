@@ -1,0 +1,5 @@
+{% load theme_tags %}
+
+{% for action in actions %}
+  <a style="margin-left:10px" title="{{extra.getName}}" href="{{action.1}}" class="button">{% silk action.2 %} {{action.0}}</a><br/>
+{% endfor %}

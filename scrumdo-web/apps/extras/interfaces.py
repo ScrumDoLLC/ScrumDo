@@ -77,6 +77,11 @@ class ScrumdoProjectExtra( ScrumdoExtra ):
         """ Should return a list of tupples with a label, url, and silk icon that represent actions that a user can manually
             invoke for this extra. Example: ('Syncronize','/blah/blah/syncronize','') """
         return []
+    
+    def getExtraStoryActions(self, project, story):
+        """ Should return a list of tupples with a label, url, silk icon, that represent actions that a user can manually
+            invoke for this extra on a story. Example: ('Syncronize','/blah/blah/syncronize','') """
+        return []
 
     def doProjectdoProjectConfiguration( self, request, project, stage=""):
         """ Should return a django style response that handles any configuration that this extra may need. 
@@ -141,3 +146,13 @@ class ScrumdoProjectExtra( ScrumdoExtra ):
 
     def taskStatusChange(self, project, task):
         pass
+    
+
+
+
+
+
+
+    
+    
+    

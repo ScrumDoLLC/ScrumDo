@@ -1,4 +1,4 @@
-{% load i18n %}{% load comments_tag %}{% load projects_tags %}<div id="story_area" >
+{% load extras_tags %}{% load i18n %}{% load comments_tag %}{% load projects_tags %}<div id="story_area" >
 
 <form id="story_detail_form" class="uniForm" method="POST" action="{% url story_form group_slug=project.slug story_id=story.id %}" style="width: 100%">
    {{ form.non_field_errors }}
@@ -58,6 +58,12 @@
    
 
  </form>
+ <hr />
+ <div style="width:100%; text-align:center; padding-top: 20px">
+ {% for extra_mapping in story.project.extras.all %}
+   {% extra_story_buttons extra_mapping.extra_slug story %}
+ {% endfor %}
+ </div>
  
  {% locked story %}
    <div style="background-color:#ffaaaa ; text-align: center; min-height:32px;">
