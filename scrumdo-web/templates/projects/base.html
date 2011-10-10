@@ -159,7 +159,7 @@
 
 
         {% if project.story_queue.count %}
-          	<span title="Stories improted from external systems go here so you can choose to import them or not">{% silk "plugin_add" %} <a href="{% url story_queue_url project.slug %}">Queued Stories: <b>{{project.story_queue.count}}</b></a></span> <br/>
+          	<span title="Stories imported from external systems go here so you can choose to import them or not">{% silk "plugin_add" %} <a href="{% url story_queue_url project.slug %}">Queued Stories: <b>{{project.story_queue.count}}</b></a></span> <br/>
           	<hr class="light-rule"/>
         {% endif %}
 

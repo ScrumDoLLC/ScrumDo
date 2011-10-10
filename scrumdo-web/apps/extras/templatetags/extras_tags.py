@@ -8,6 +8,10 @@ from extras.manager import manager as extras_manager
 
 register = template.Library()
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 @register.filter(name='extra_name')
 def extra_name( slug ):
     extra = extras_manager.getExtra( slug )
@@ -21,8 +25,8 @@ def extra_buttons(extra_slug, projectOrIteration):
     else:
         project = projectOrIteration
         iteration = None
-
     extra = extras_manager.getExtra( extra_slug )
+
     return {'extra':extra, 'project':project, 'actions':extra.getExtraActions(project, iteration=iteration)}
 
 
