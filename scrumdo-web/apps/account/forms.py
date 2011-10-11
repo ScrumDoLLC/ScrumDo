@@ -23,6 +23,9 @@ from account.models import PasswordReset
 
 
 alnum_re = re.compile(r'^\w+$')
+import logging
+
+logger = logging.getLogger(__name__)
 
 class LoginForm(forms.Form):
 
@@ -258,6 +261,7 @@ class ResetPasswordForm(forms.Form):
 
     def save(self):
         for user in User.objects.filter(email__iexact=self.cleaned_data["email"]):
+
             temp_key = sha_constructor("%s%s%s" % (
                 settings.SECRET_KEY,
                 user.email,
@@ -278,6 +282,7 @@ class ResetPasswordForm(forms.Form):
                 "temp_key": temp_key,
                 "domain": domain,
             })
+
             send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email], priority="high")
         return self.cleaned_data["email"]
 
