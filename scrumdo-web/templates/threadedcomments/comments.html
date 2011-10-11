@@ -4,7 +4,6 @@
 {% load avatar_tags %}
 {% load projects_tags %}
 {% get_threaded_comment_tree for object as responses %}
-{% autopaginate responses %}
 
 <div class="comment_section" >
   <h2 style="margin-left:-40px">Comments</h2>
@@ -34,7 +33,7 @@
           </li>
       {% endfor %}
   </ul>
-  {% paginate %}
+
   {% if user.is_authenticated %}
   <div>
     <div class="commentForm" >
