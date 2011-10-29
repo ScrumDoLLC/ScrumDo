@@ -26,7 +26,7 @@ from projects.models import Project
 # bridge = ContentBridge(Project, 'projects')
 
 urlpatterns = patterns('projects.views',
-    url(r'^$', 'projects', name="project_list"),
+    # url(r'^$', 'projects', name="project_list"),
     url(r'^create/$', 'create', name="project_create"),
     url(r'^your_projects/$', 'your_projects', name="your_projects"),
     url(r'^project/(?P<group_slug>[-\w]+)/$', 'project', name="project_detail"),
