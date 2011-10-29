@@ -736,3 +736,4 @@ def ajax_add_epic(request, group_slug):
             epic = form.save()
             onDemandCalculateVelocity(project)
             return HttpResponse(epic.id)
+    return HttpResponse("")
