@@ -73,7 +73,7 @@ def google_chart_url(iteration_or_project):
 
         # If we don't have enough points to draw a chart, bail.
         if len(total_points) <= 1:
-            return "cht=lxy&chs=1x1"
+            return "http://chart.googleapis.com/chart?cht=lxy&chs=1x1"
 
         # Remove redundant data in chart data.
         total_points = reduce_burndown_data(total_points)
@@ -101,7 +101,7 @@ def google_chart_url(iteration_or_project):
         #logger.debug(data)
         return data
     except:
-        return "cht=lxy&chs=1x1"
+        return "http://chart.googleapis.com/chart?cht=lxy&chs=1x1"
 
 
 def _googleChartValue(val, min_val, max_val):
