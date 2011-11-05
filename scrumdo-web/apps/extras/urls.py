@@ -6,7 +6,7 @@ urlpatterns = patterns('extras.views',
     url(r'^(?P<extra_slug>[-\w]+)/(?P<project_slug>[-\w]+)/hook$', "project_extra_callback", name="projct_extra_callback_url"),
     url(r'^(?P<extra_slug>[-\w]+)/(?P<project_slug>[-\w]+)/enable$', "enable_extra", name="enable_extra_url"),
     url(r'^(?P<extra_slug>[-\w]+)/(?P<project_slug>[-\w]+)/disable$', "disable_extra", name="disable_extra_url"),
-    url(r'^(?P<extra_slug>[-\w]+)/(?P<project_slug>[-\w]+)/configure$', "configure_extra", name="configure_extra_url"),    
+    url(r'^(?P<extra_slug>[-\w]*)/(?P<project_slug>[-\w]*)/configure$', "configure_extra", name="configure_extra_url"),    
     url(r'^(?P<extra_slug>[-\w]+)/(?P<project_slug>[-\w]+)/configure/(?P<stage>[-\w]+)$', "configure_extra", name="configure_extra_with_stage"),
     url(r'^(?P<extra_slug>[-\w]+)/(?P<project_slug>[-\w]+)/sync$', "syncronize_extra", name="syncronize_extra_url"),
 
