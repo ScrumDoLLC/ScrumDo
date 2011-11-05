@@ -202,6 +202,7 @@ INSTALLED_APPS = (
     'developer',
     'haystack',
 
+
    # 'debug_toolbar',
 )
 

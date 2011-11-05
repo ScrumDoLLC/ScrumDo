@@ -266,7 +266,7 @@ p.what_next {
   -moz-box-shadow:0 0 18px rgba(0,0,0,0.4);
   box-shadow:0 0 18px rgba(0,0,0,0.4);
   
-  behavior: url(/site_media/static/css/PIE.htc);
+  behavior: url(https://scrumdo-cdn.s3.amazonaws.com/PIE.htc);
 }
 
 #facebox .content {

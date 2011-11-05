@@ -31,3 +31,13 @@
 .featureBox {
 	display: inline;
 }
+
+#homepage_testimonials{
+    display: inline;
+    width: 230px;
+}
+
+#homepage_thumbnail_grid {
+    display: inline;
+    width: 600px;
+}

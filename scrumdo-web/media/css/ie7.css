@@ -83,5 +83,5 @@ body {
 
 .button {
     vertical-align: bottom;
-    behavior: url(/site_media/static/css/PIE.htc);
+    behavior: url(https://scrumdo-cdn.s3.amazonaws.com/PIE.htc);
 }

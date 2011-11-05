@@ -149,8 +149,9 @@
 
       // support for rel="facebox.inline_popup" syntax, to add a class
       // also supports deprecated "facebox[.inline_popup]" syntax
-      var klass = this.rel.match(/facebox\[?\.(\w+)\]?/)
-      if (klass) klass = klass[1]
+      var klass = "";
+      // this.rel.match(/facebox\[?\.(\w+)\]?/)
+      // if (klass) klass = klass[1]
 
       fillFaceboxFromHref(this.href, klass)
       return false

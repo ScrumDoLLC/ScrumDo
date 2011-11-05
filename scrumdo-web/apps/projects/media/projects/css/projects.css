@@ -119,7 +119,7 @@
     -o-border-radius: 6px;
     -khtml-border-radius: 6px;
     
-    behavior: url(/site_media/static/css/PIE.htc);
+    behavior: url(https://scrumdo-cdn.s3.amazonaws.com/PIE.htc);
 	border: 1px solid #e7e7e7;
 	font-size: 11px;
 }
@@ -317,7 +317,7 @@
     -moz-border-radius: 3px;
     -o-border-radius: 3px;
     -khtml-border-radius: 3px;    
-    behavior: url(/site_media/static/css/PIE.htc);
+    behavior: url(https://scrumdo-cdn.s3.amazonaws.com/PIE.htc);
 }
 
 
@@ -653,7 +653,7 @@ h1 a {
     -o-border-radius: 4px;
     -khtml-border-radius: 4px;
     
-    behavior: url(/site_media/static/css/PIE.htc);	
+    behavior: url(https://scrumdo-cdn.s3.amazonaws.com/PIE.htc);	
 
 }
 .task_controls {
