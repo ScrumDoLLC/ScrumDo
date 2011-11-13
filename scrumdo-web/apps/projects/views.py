@@ -78,7 +78,10 @@ WHERE projects_projectmember.project_id = projects_project.id
 
 
 # The homepage of the site...
-# For logged in users, this includes the list of projects & organizations they are a member of.
+# For logged in users:
+#   If they have a single organization, it redirects them there.
+#   If they have multiple organizations, it prompts to select one
+#   If they have no organization, it suggests they create one or ask to join one.
 def home( request ):
     my_projects = [];
     member_projects = [];
@@ -87,32 +90,12 @@ def home( request ):
 
     if request.user.is_authenticated():
         organizations = Organization.getOrganizationsForUser(request.user)
+        if len(organizations) == 1:
+            return HttpResponseRedirect(organizations[0].get_absolute_url())
 
-        assigned_stories = Story.getAssignedStories(request.user)
-
-
-        memberships = ProjectMember.objects.filter( user=request.user )
-        for membership in memberships:
-            try:
-
-                if( membership.project.creator_id == request.user.id):
-                    my_projects.append(membership.project)
-                else:
-                    member_projects.append( membership.project )
-            except:
-                pass
-
-        num_projects = len(member_projects) + len(filter(lambda p: p.organization == None, my_projects))
-        blank_state = True if (num_projects + len(organizations)) == 0 else False
         return render_to_response("homepage.html", {
-           "my_projects":my_projects,
            "my_organizations": organizations,
-           "assigned_stories": assigned_stories,
-           "return_type" : "queue", # for the queue mini stories
-           "member_projects":member_projects,
-           "num_projects":num_projects,
-           "now": datetime.datetime.now(),
-           "blank_state" : blank_state
+           "now": datetime.datetime.now()
           }, context_instance=RequestContext(request))
     else:
         return render_to_response("unauthenticated_homepage.html", context_instance=RequestContext(request))

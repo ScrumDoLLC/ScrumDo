@@ -105,7 +105,7 @@
 	<div id="body_holder">
 	    {% block panel %}
 	    {% endblock %}
-          <div id="body">
+          <div id="body" class="{% block body_div_class %}{% endblock %}">
             <div class="breadcrumbs">{% block breadcrumbs %}{% endblock %}</div>
             {% block add_story %}
           	{% endblock %}

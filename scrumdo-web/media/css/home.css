@@ -175,3 +175,55 @@
 	text-decoration: none;
 	color: #222;
 }
+
+.organization_list li {
+	margin-bottom: 12px;
+	
+}
+.organization_picker {
+	min-height: 60px;
+	text-align: center;
+   border-top: 1px solid #ebebeb;
+   background: #d6d6d6;
+   background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#c2c2c2));
+   background: -webkit-linear-gradient(top, #f2f2f2, #c2c2c2);
+   background: -moz-linear-gradient(top, #f2f2f2, #c2c2c2);
+   background: -ms-linear-gradient(top, #f2f2f2, #c2c2c2);
+   background: -o-linear-gradient(top, #f2f2f2, #c2c2c2);
+   padding: 17.5px 35px;
+   -webkit-border-radius: 15px;
+   -moz-border-radius: 15px;
+   border-radius: 15px;
+   -webkit-box-shadow: rgba(0,0,0,0.5) 1px 1px 3px;
+   -moz-box-shadow: rgba(0,0,0,0.5) 1px 1px 3px;
+   box-shadow: rgba(0,0,0,0.5) 1px 1px 3px;
+   text-shadow: rgba(0,0,0,1) 0px 0px 2px;
+   color: #ffffff;
+   
+   font-weight: bold;
+   text-decoration: none;
+   vertical-align: middle;
+}
+.organization_picker a {
+	color: #ffffff;
+	text-decoration: none;
+	font-size: 22px;
+}
+
+.organization_picker:hover {
+   border-top-color: #cbe3ff;
+   background: #cbe3ff;
+
+   }
+.organization_picker:active {
+   border-top-color: #1b435e;
+   background: #1b435e;
+   }
+
+.organization_list {
+	width: 350px;
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: 0px;
+	list-style: none;
+}

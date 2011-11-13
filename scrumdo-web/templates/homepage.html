@@ -14,182 +14,31 @@
 {% endblock %}
 
 {% block body %}
+<br/><br/><br/>
 
-<div id="side">
-  <div id="projects-box" class="box">
-    <div class="box-top">
-      <div class="title">
-	Projects 
-	<span class="subtitle">({{ num_projects }})</span>      
-	<a title="Projects are used to organize your work.">{% silk "help" %}</a>
-      </div>
-      <div class="buttons">
-	<a title="Add New Project" href="{% url project_create %}">{% silk "add" %}</a>
-      </div><!--buttons-->
-    </div><!--box-top-->
-    
-    
-    
-    {% if my_projects %}
-    <div class="box-heading">
-      Your Projects
-    </div><!--box-heading-->
-    {% endif %}
-    <div class="box-content">
-        <div id="your-projects">
-        	{% for project in my_projects %}  
-        	  {% ifequal None project.organization %}
-
-          	  <div class="projectfeed">
-          	    <a title="Subscribe to project activity." target="_blank" href="/feeds/project/{{ project.pk }}/{{ project.token }}">{% silk "feed" %}</a>
-          	  </div><!--projectfeed-->
-
-        	  <div class="project {% if not project.active %}disabled_project{% endif %}">
-          	  <a href="{% url project_detail project.slug %}">{% silk "database_table" %} {{project.name}}</a> 
-        	    <div class="subtitle">{{ project.get_num_iterations }} iteration{{ project.get_num_iterations|pluralize }}, {{ project.get_num_stories }} stor{{ project.get_num_stories|pluralize:"y,ies" }}</div>
-        	  </div><!--project-->
-        	{% endifequal %}
-      	{% endfor %}
-      </div><!--your-projects-->
-    
-      
-      
-      
-    </div><!--box-content-->
-    {% if member_projects %}    
-    <div class="box-heading">
-      Other Projects
-    </div><!--box-heading-->
-    <div class="box-content">
-      <div id="other-projects">
-	{% for project in member_projects %}  
-
-      <div class="projectfeed">
-	      <a title="Subscribe to project activity." target="_blank" href="/feeds/project/{{ project.pk }}/{{ project.token }}">{% silk "feed" %}</a>
-      </div><!--projectfeed-->
-
-	<div class="project {% if not project.active %}disabled_project{% endif %}">
-          {% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a> 
-	  <div class="subtitle">{{ project.get_num_iterations }} iteration{{ project.get_num_iterations|pluralize }}, {{ project.get_num_stories }} stor{{ project.get_num_stories|pluralize:"y,ies" }}, created by {{ project.creator.username }}.</div>
-	</div><!--project-->
-	{% endfor %}
-      </div><!--other-projects-->
-    </div><!--box-content-->
-      {% endif %}
-    
-  </div><!--projects-box-->
-
-  <div id="organizations-box" class="box">
-    <div class="box-top">
-      <div class="title">
-	Organizations
-	<span class="subtitle">({{ my_organizations|length }})</span>	
-      </div>
-      <div class="buttons">
-	      <a title="Add New Organization" href="{% url organization_create %}">{% silk "add" %}</a>
-      </div><!--buttons-->
-    </div><!--box-top-->
-    {% for org in my_organizations %}  
-    <div class="box-heading">
-      {% silk "building" %} <a href="{% url organization_detail org.slug %}">{{org.name}}</a> - {{org.teams.count}} Team{{ org.teams.count|pluralize }}
-
-    </div><!--box-heading-->
-    <div class="box-content">
-      {% for project in org.projectsByCategory %}
-        {% canread project %}
-      
-      
-        {% ifchanged project.category %}
-          {% if project.category %}
-            {% if project.active %}
-              <div class="project_category_header"><h1>{% silk "folder" %} {{project.category}}</h1></div>
-            {% endif %}
-          {% endif %}
-        {% endifchanged %}
-        {% ifchanged project.active %}
-          {% if not project.active %}
-            <div class="project_category_header"><h1>{% silk "folder" %} Archived</h1></div>
-          {% endif %}
-        {% endifchanged %}
-                
-          <div class="projectfeed">
-      	      <a title="Subscribe to project activity." target="_blank" href="/feeds/project/{{ project.pk }}/{{ project.token }}">{% silk "feed" %}</a>
-          </div>
-          <div class="project {% if not project.active %}disabled_project{% endif %}">
-  	        {% silk "database_table" %} <a href="{% url project_detail project.slug %}">{{project.name}}</a> 
-  	        <div class="subtitle">{{ project.get_num_iterations }} iteration{{ project.get_num_iterations|pluralize }}, {{ project.get_num_stories }} stor{{ project.get_num_stories|pluralize:"y,ies" }}</div>
-          </div>
-          
-        {% endcanread %}
-      {% endfor %}
-    </div><!--box-content-->
-    {% endfor %}
-    
-  </div><!--organizations-box-->
-
-</div><!--side-->    
-
-
-
-{% if blank_state %}
-
-<div class="empty_state_box">
-  <h1>Welcome to ScrumDo!</h1>
-
-  <a href="{% url project_create %}"><h2>{% silk "add" %} Create a new project</h2></a>
-  <p>A project is where you create and track your user stories.  You can add it to an organization later if you just want to get started.</p>
-
-  <a href="{% url organization_create %}"><h2>{% silk "add" %} Create a new organization</h2></a>
-  <p>An organization lets you group people into teams and give them access to projects.</p>
-  
-  <h2>{% silk "database_table" %} Work on a project already created</h2></a>
-  <p>Your username is <b>{{user.username}}</b> {% silk "user_suit" %}.  Tell that to the owner of the project you wish to work on so they can add you to it.</p>
-  
-  
-  <b>Tip:</b> Later, you can create a project or organization by clicking the {% silk "add" %} icons on your dashboard page.
+<div id="pick_org_graphic">
+  <img src="{{STATIC_URL}}images/mascot/male_mascot_pick_one.png"><br/>
+  Please pick your organization.
 </div>
+<ul class="organization_list">
 
-{% endif %}
 
 
-{% if assigned_stories %}
-    <div id="queue">
-      <div id="queue-box" >
-        
-        <div class="box-top">
-          <div class="title">
-            Your Stories
-    	      <a title="The stories assigned to you and in the current iteration of a project.">{% silk "help" %}</a>
-          </div><!--title-->
-        </div><!--box-top-->
-    
-        <br/>
-        {% for project,stories in assigned_stories %}
-          <a class="story_queue_project_title" href="{% url project_detail project.slug %}">{% silk "database_table" %} {{ project.name }}</a>
-          <ul class="story_queue_list">
-          {% for story in stories %}        
-            {% include "stories/single_queue_story.html" %}        
-          {% endfor %}
-          </ul>
-        {% endfor %}
 
-        
-      </div><!--queue-box-->
-    </div><!--queue-->
-{% endif %}
-    
-<div class="newsfeed">
-  
-  <div class="box-top">
-    <div class="title">
-      News Feed 
-    </div><!--title-->
-  </div><!--box-top-->
-  <p>
-    <div id="feedContent">      
-      <div id="loadingIcon" style="vertical-align:middle"><img style="vertical-align:middle" src="{{ STATIC_URL }}images/ajax-loader.gif"> Loading...</div>
-    </div>
-</div><!--newsfeed-->
+{% for organization in my_organizations %}     
+  <li>
+	<div class="organization_picker">
+ 	  <a href="{{organization.get_absolute_url}}">{{organization.name}}</a><br/>
+	  {{organization.projects.count}} Project{{organization.projects.count|pluralize}} - 
+ 	  {{organization.teams.count}} Team{{organization.teams.count|pluralize}}
+	</div>
+  </li>
+{% endfor %}
+
+
+  <li style="text-align:center; margin-top:20px"><a title="Add New Organization" href="{% url organization_create %}">Create New Organization</a></li>
+</ul>
+
 
 
 <script type="text/javascript" src="{{ STATIC_URL }}js/home.js"></script>

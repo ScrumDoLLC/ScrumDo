@@ -548,3 +548,11 @@ h2.page-divider {
 	margin-top: 20px;
 }
 
+#pick_org_graphic {
+	font: 20px "Lucida Grande", Lucida, Verdana, sans-serif;
+	text-align: center;
+	width: 200px;
+	position: relative;
+	float: right;
+}
+
