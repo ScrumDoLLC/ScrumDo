@@ -1,6 +1,21 @@
 scrumdo_special_tags = [ ];
 story_template_type = 'block';
 
+function setupFavoriteLinks()
+{
+    $(".favorite_link img").css("opacity","0.2");
+    $(".favorite_link img").hover(
+        	 function()
+        	 {
+        	     $(this).css("opacity","1")
+        	 },
+        	 function()
+        	 {
+        	     $(this).css("opacity","0.2")
+        	 }
+	);
+
+}
 
 function setupAutoClose( divID )
 {  
@@ -287,6 +302,7 @@ function updatePanel()
 }
 
 $(document).ready(function() {
+    setupFavoriteLinks();
     $("body").bind("storyListChanged", setUpStoryLinks );
     $('body').bind("epicEdited", setUpStoryLinks );    
     $('body').bind("storyEdited", setUpStoryLinks );    

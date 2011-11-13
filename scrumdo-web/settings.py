@@ -201,8 +201,7 @@ INSTALLED_APPS = (
     'api',
     'developer',
     'haystack',
-
-
+    'favorites'
    # 'debug_toolbar',
 )
 
