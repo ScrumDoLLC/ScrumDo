@@ -104,7 +104,7 @@ def organization(request, organization_slug):
                 members.append("#%d %s (Project %s)" % (member_count, member.user, project.name))
                 member_count+=1
 
-    return render_to_response("organizations/organization.html", {
+    return render_to_response("organizations/organization_projects.html", {
         "organization": organization,
         "organization_teams": teams,
         "organizations": organizations,
