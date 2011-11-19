@@ -19,15 +19,18 @@ def extra_name( slug ):
 
 @register.inclusion_tag('extras/extras_buttons.html')
 def extra_buttons(extra_slug, projectOrIteration):
-    if hasattr(projectOrIteration,"project"):
-        project = projectOrIteration.project
-        iteration = projectOrIteration
-    else:
-        project = projectOrIteration
-        iteration = None
-    extra = extras_manager.getExtra( extra_slug )
+    try:
+        if hasattr(projectOrIteration,"project"):
+            project = projectOrIteration.project
+            iteration = projectOrIteration
+        else:
+            project = projectOrIteration
+            iteration = None
+        extra = extras_manager.getExtra( extra_slug )
 
-    return {'extra':extra, 'project':project, 'actions':extra.getExtraActions(project, iteration=iteration)}
+        return {'extra':extra, 'project':project, 'actions':extra.getExtraActions(project, iteration=iteration)}
+    except:
+        return {}
 
 
 @register.inclusion_tag('extras/extras_story_buttons.html')
