@@ -373,6 +373,8 @@
 
 .story_form #id_summary {
     width: 70%;
+    vertical-align: middle;
+    margin-top: -2px;
 }
 
 .story_form #id_detail {

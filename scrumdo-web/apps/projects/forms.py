@@ -81,7 +81,7 @@ class AddStoryForm( forms.ModelForm ):
         super(AddStoryForm, self).__init__(*args, **kwargs)
         self.fields["points"].choices = project.getPointScale()
         self.fields["points"].widget = forms.RadioSelect(choices=project.getPointScale())
-        self.fields["summary"].widget = forms.TextInput()
+        self.fields["summary"].widget = forms.widgets.Textarea(attrs={'rows':1, 'cols':50})
         self.fields["summary"].widget.size = 200
         members = project.all_member_choices()
         members.insert(0,("","---------"))
@@ -161,7 +161,7 @@ class StoryForm( forms.ModelForm ):
         super(StoryForm, self).__init__(*args, **kwargs)
         self.fields["points"].choices = project.getPointScale()
         self.fields["points"].widget = forms.RadioSelect(choices=project.getPointScale())
-        self.fields["summary"].widget = forms.TextInput()
+        self.fields["summary"].widget = forms.widgets.Textarea(attrs={'rows':1, 'cols':50})
         self.fields["summary"].widget.size = 200
         members = project.all_member_choices()
         members.insert(0,("","---------"))
