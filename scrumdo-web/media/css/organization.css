@@ -1,3 +1,5 @@
+/* @override http://localhost:8000/site_media/static/css/organization.css */
+
 .organization-description {
     text-indent: 10px;
 }
@@ -91,4 +93,48 @@ body.projects #side {
 #side .projects-box {
     width: 210px;
     margin-top: 20px;
+}
+
+.teams-list {
+	list-style: none;	
+	margin: 0px;
+	padding: 0px;
+	border-bottom: 1px solid #dedede;
+}
+
+.teams-list li {
+	padding: 5px;
+	border: 1px solid #dedede;
+	border-bottom-style: none;
+}
+
+.teams-list li a {
+	text-decoration: none;
+	color: #000000;
+}
+
+.teams-list li a:hover {
+	color: #2d499f;
+	text-decoration: underline;
+}
+
+.member-avatar {
+	float: left;
+	margin-right: 5px;
+	margin-bottom: 5px;
+}
+.team-member-box-email {
+	width: 100%;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+.team-member-box {
+	display: inline-block;
+	width: 160px;
+	height: 80px;
+	border: 1px solid #e8e8e8;
+	overflow: hidden;
+	margin: 5px;
+	word-wrap: break-word;
+	vertical-align: top;
 }

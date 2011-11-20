@@ -1,0 +1,9 @@
+Hello,
+
+Someone has just invited you to the ScrumDo team {{ invite.team.name }} in the {{ invite.team.organization.name }} organization.  Please follow the link below to accept.
+
+http://www.scrumdo.com/organization/accept/{{invite.key}}
+
+Thank you!
+The ScrumDo Staff
+

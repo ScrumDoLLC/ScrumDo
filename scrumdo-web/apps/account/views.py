@@ -67,8 +67,11 @@ def login(request, form_class=LoginForm, template_name="account/login.html",
 
 def signup(request, form_class=SignupForm,
         template_name="account/signup.html", success_url=None):
-    if success_url is None:
-        success_url = get_default_redirect(request)
+
+
+    success_url = get_default_redirect(request, default_redirect_to=success_url)
+        
+        
     if request.method == "POST":
         form = form_class(request.POST)
         if form.is_valid():
@@ -80,15 +83,12 @@ def signup(request, form_class=SignupForm,
             else:
                 user = authenticate(username=username, password=password)
                 auth_login(request, user)
-                request.user.message_set.create(
-                    message=_("Successfully logged in as %(username)s.") % {
-                    'username': user.username
-                })
                 return HttpResponseRedirect(success_url)
     else:
         form = form_class()
     return render_to_response(template_name, {
         "form": form,
+        "success_url":success_url
     }, context_instance=RequestContext(request))
 
 @login_required

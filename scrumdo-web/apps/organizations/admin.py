@@ -17,7 +17,7 @@
 
 
 from django.contrib import admin
-from organizations.models import Organization, Team
+from organizations.models import *
 import settings
 
 if not "subscription" in settings.INSTALLED_APPS:
@@ -28,3 +28,4 @@ class TeamAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 admin.site.register(Team , TeamAdmin)
+admin.site.register(TeamInvite)

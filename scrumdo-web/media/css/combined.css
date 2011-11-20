@@ -896,4 +896,23 @@ div.footer {
 	margin-right: 10px;
 }
 
+.two-column-wrapper {
+	width: 770px;
+	padding: 0px;
+	margin: 0px;
+	
+}
+
+.two-column-left {
+	float: left;
+	width: 220px;
+	vertical-align: top;	
+}
+
+.two-column-right {
+    padding-left: 15px;
+	float: right;
+	width: 535px;
+	vertical-align: top;
+}
 

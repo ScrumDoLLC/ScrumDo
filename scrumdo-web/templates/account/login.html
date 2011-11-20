@@ -19,7 +19,7 @@
     {% else %}
         {% ifsetting ACCOUNT_OPEN_SIGNUP %}
         {% url acct_signup as signup_url %}
-        <p>{% blocktrans %}Don't have an account? <a href="{{ signup_url }}">Sign up</a>!{% endblocktrans %}</p>
+        <p>{% blocktrans %}Don't have an account? <a href="{{ signup_url }}?next={{success_url}}">Sign up</a>!{% endblocktrans %}</p>
         {% endifsetting %}
     {% endif %}
     

@@ -37,6 +37,13 @@ urlpatterns = patterns('organizations.views',
 
 
 urlpatterns += patterns('organizations.team_views',
-   url(r'^(?P<organization_slug>[-\w]+)/team/create$', 'team_create', name="team_create"),
-   url(r'^(?P<organization_slug>[-\w]+)/team/(?P<team_id>[0-9]+)/delete$', 'team_delete', name="team_delete"),
+   url(r'^(?P<organization_slug>[-\w]+)/team/(?P<team_id>[0-9]+)/remove/(?P<member_id>[0-9]+)$', 'team_remove_member', name="team_remove_member"),
+   url(r'^(?P<organization_slug>[-\w]+)/team/(?P<team_id>[0-9]+)$', 'team_detail', name="team_detail"),
+   url(r'^(?P<organization_slug>[-\w]+)/teams$', 'team_summary', name="team_summary"),
+   url(r'^(?P<organization_slug>[-\w]+)/team/create$', 'team_create', name="team_create"),  
+   url(r'^(?P<organization_slug>[-\w]+)/team/(?P<team_id>[0-9]+)/invite$', 'team_invite', name="team_invite"),   
+   url(r'^(?P<organization_slug>[-\w]+)/team/(?P<team_id>[0-9]+)/delete$', 'team_delete', name="team_delete"),   
+   url(r'^accept/(?P<key>[-\w]+)$', 'team_invite_accept', name="team_invite_accept"),   
+   
 )
+# http://www.scrumdo.com/organization/accept/bSg2iEct

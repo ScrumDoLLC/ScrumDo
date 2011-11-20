@@ -41,6 +41,9 @@ class Team(models.Model):
     name = models.CharField( max_length=65 )
     access_type = models.CharField( max_length=25 , default="read", choices=ACCESS_CHOICES)
 
+    class Meta:
+        ordering = ["name"]
+
     def access_description(self):
         access = [ entry[1] for entry in Team.ACCESS_CHOICES if entry[0]==self.access_type ]
         if len(access) == 1:
@@ -49,6 +52,13 @@ class Team(models.Model):
 
     def __unicode__(self):
         return "[%s] %s" % (self.organization.name, self.name)
+
+
+class TeamInvite(models.Model):
+    email_address = models.CharField(max_length=60)
+    team = models.ForeignKey(Team, related_name="invites")
+    key = models.CharField(max_length=8)
+
 
 # Was going to make these pinax groups, but didn't want to bring over the slug based urls for teams, and turns out organizations don't
 # actually have members if we go the team route.
