@@ -371,6 +371,10 @@
 	border: none;
 }
 
+.story_form select {
+    width: 400px;
+}
+
 .story_form #id_summary {
     width: 70%;
     vertical-align: middle;

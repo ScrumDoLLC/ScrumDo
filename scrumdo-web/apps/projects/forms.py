@@ -90,7 +90,7 @@ class AddStoryForm( forms.ModelForm ):
         self.fields["extra_2"].widget = forms.widgets.Textarea(attrs={'rows':3, 'cols':50})
         self.fields["extra_3"].widget = forms.widgets.Textarea(attrs={'rows':3, 'cols':50})
         
-        epics = [ (epic.id, "#E%d %s" % (epic.local_id, epic.summary) ) for epic in project.epics.all().order_by("local_id") ]
+        epics = [ (epic.id, ("#E%d %s" % (epic.local_id, epic.summary))[:150] ) for epic in project.epics.all().order_by("local_id") ]
         epics.insert(0,("","----------") )
         self.fields["epic"].choices=epics
         self.fields["epic"].required = False
@@ -119,7 +119,7 @@ class EpicForm( forms.ModelForm ):
         self.fields["summary"].widget = forms.TextInput()
         self.fields["summary"].widget.attrs['size'] = 60
         
-        epics = [ (epic.id, "#E%d %s" % (epic.local_id, epic.summary) ) for epic in project.epics.all().order_by("local_id") ]
+        epics = [ (epic.id, ("#E%d %s" % (epic.local_id, epic.summary)[:150]) ) for epic in project.epics.all().order_by("local_id") ]
         epics.insert(0,("","----------") )
         self.fields["parent"].choices=epics
         self.fields["parent"].required = False        
