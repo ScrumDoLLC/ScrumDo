@@ -31,6 +31,7 @@ from django.forms.fields import email_re
 import random
 import string
 
+from projects.models import Project
 from organizations.forms import *
 from organizations.models import *
 from pinax.core.utils import get_send_mail
@@ -42,6 +43,21 @@ send_mail = get_send_mail()
 def _isAdmin( user, organization ):
     return Organization.objects.filter( teams__members = user , teams__access_type="admin", teams__organization=organization).count() > 0
 
+def team_add_project(request, organization_slug, team_id ):
+    organization = get_object_or_404(Organization, slug=organization_slug)    
+    if not organization.hasAdminAccess( request.user ):
+        raise PermissionDenied()
+    team = get_object_or_404(Team, id=team_id)
+    if team.organization != organization:
+        raise PermissionDenied() # Shenanigans
+    project_id = request.POST.get("project")
+    project = get_object_or_404(Project, id=project_id)    
+    if project.organization != organization:
+        raise PermissionDenied() # Shenanigans
+    team.projects.add(project)
+    return team_detail(request, organization_slug, team_id)
+    
+    
 @login_required
 def team_invite_accept(request, key):
     invite = get_object_or_404(TeamInvite, key=key)
@@ -152,7 +168,7 @@ def team_create(request, organization_slug):
             team.save()
 
             request.user.message_set.create(message="Team Created.")
-            return HttpResponseRedirect(reverse("organization_detail",  kwargs={'organization_slug':organization.slug}))
+            return HttpResponseRedirect(reverse("team_summary",  kwargs={'organization_slug':organization.slug}))
     else:
         form = TeamForm()
 
