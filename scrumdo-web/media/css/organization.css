@@ -108,12 +108,12 @@ body.projects #side {
 	border-bottom-style: none;
 }
 
-.teams-list li a {
+.team-project-list a, .teams-list li a {
 	text-decoration: none;
 	color: #000000;
 }
 
-.teams-list li a:hover {
+.team-project-list a:hover, .teams-list li a:hover {
 	color: #2d499f;
 	text-decoration: underline;
 }
@@ -137,4 +137,39 @@ body.projects #side {
 	margin: 5px;
 	word-wrap: break-word;
 	vertical-align: top;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	
+}
+
+.team-project-list {
+	padding: 0px;
+}
+
+.team-project-list li img {
+	float: right;
+}
+.team-project-list li {
+	display: inline-block;
+	width: 155px;
+	height: 40px;
+	border: 1px solid #e8e8e8;
+	overflow: hidden;
+	margin: 5px;
+	word-wrap: break-word;
+	vertical-align: top;	
+	padding: 3px;	
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+
+.selected-team {
+	background-color: #28a3d4;
+	color: #ffffff;
+}
+
+.selected-team .team_link {
+	color: #fff;
 }

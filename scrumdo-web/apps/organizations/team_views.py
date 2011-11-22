@@ -43,6 +43,7 @@ send_mail = get_send_mail()
 def _isAdmin( user, organization ):
     return Organization.objects.filter( teams__members = user , teams__access_type="admin", teams__organization=organization).count() > 0
 
+@login_required
 def team_add_project(request, organization_slug, team_id ):
     organization = get_object_or_404(Organization, slug=organization_slug)    
     if not organization.hasAdminAccess( request.user ):
@@ -66,6 +67,7 @@ def team_invite_accept(request, key):
     invite.delete()
     return HttpResponseRedirect(reverse("organization_detail", kwargs={"organization_slug":team.organization.slug} ))
     
+@login_required
 def team_invite(request, organization_slug, team_id ):
     organization = get_object_or_404(Organization, slug=organization_slug)    
     if not organization.hasAdminAccess( request.user ):
@@ -98,10 +100,23 @@ def team_invite(request, organization_slug, team_id ):
 
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [userinput])
         
-        return team_detail(request, organization_slug, team_id)
+    return team_detail(request, organization_slug, team_id)
         
-    pass
 
+
+@login_required
+def team_remove_project(request, organization_slug, team_id, project_id):
+    organization = get_object_or_404(Organization, slug=organization_slug)    
+    if not organization.hasAdminAccess( request.user ):
+        raise PermissionDenied()
+    team = get_object_or_404(Team, id=team_id)
+    if team.organization != organization:
+        raise PermissionDenied() # Shenanigans!
+    project = Project.objects.get(id=project_id) 
+    team.projects.remove(project)
+    return HttpResponse("OK")
+
+@login_required    
 def team_remove_member(request, organization_slug, team_id, member_id):
     organization = get_object_or_404(Organization, slug=organization_slug)    
     if not organization.hasAdminAccess( request.user ):
@@ -118,7 +133,7 @@ def team_remove_member(request, organization_slug, team_id, member_id):
         team.save()
     return HttpResponse("OK")
     
-
+@login_required   
 def team_summary(request, organization_slug):
     organization = get_object_or_404(Organization, slug=organization_slug)    
     if not organization.hasAdminAccess( request.user ):
@@ -130,6 +145,7 @@ def team_summary(request, organization_slug):
         "organizations": organizations,
       }, context_instance=RequestContext(request))
 
+@login_required   
 def team_detail(request, organization_slug, team_id):
     organization = get_object_or_404(Organization, slug=organization_slug)    
     if not organization.hasAdminAccess( request.user ):
@@ -147,6 +163,7 @@ def team_detail(request, organization_slug, team_id):
         "organizations": organizations,
       }, context_instance=RequestContext(request))
 
+@login_required   
 def team_delete(request, organization_slug, team_id):
     organization = get_object_or_404(Organization, slug=organization_slug)
     if not organization.hasAdminAccess( request.user ):
@@ -157,6 +174,7 @@ def team_delete(request, organization_slug, team_id):
     team.delete()
     return HttpResponse("Deleted")
 
+@login_required   
 def team_create(request, organization_slug):
     organization = get_object_or_404(Organization, slug=organization_slug)
 

@@ -900,7 +900,7 @@ div.footer {
 	width: 770px;
 	padding: 0px;
 	margin: 0px;
-	
+	min-height:450px;
 }
 
 .two-column-left {

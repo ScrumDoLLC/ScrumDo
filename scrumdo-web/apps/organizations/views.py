@@ -42,6 +42,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 @login_required
+def organization_dashboard(request, organization_slug):
+    pass
+    
+@login_required
 def organization(request, organization_slug):
     organization = get_object_or_404(Organization, slug=organization_slug)
     organizations = Organization.getOrganizationsForUser( request.user )
