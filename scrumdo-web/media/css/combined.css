@@ -897,7 +897,7 @@ div.footer {
 }
 
 .two-column-wrapper {
-	width: 770px;
+	width: 835px;
 	padding: 0px;
 	margin: 0px;
 	min-height:450px;
@@ -912,7 +912,14 @@ div.footer {
 .two-column-right {
     padding-left: 15px;
 	float: right;
-	width: 535px;
+	width: 600px;
 	vertical-align: top;
 }
 
+.column-narrow {
+    width: 220px;
+}
+
+.column-wide {
+	width: 600px;    
+}

@@ -374,18 +374,21 @@ class Story( models.Model ):
     activity_signal.connect(StoryActivity.activity_handler)
 
     @staticmethod
-    def getAssignedStories(user):
+    def getAssignedStories(user, organization):
         projects = ProjectMember.getProjectsForUser(user)
         assigned_stories = []
         for project in projects:
-            if project.active and project.use_assignee:
+            if project.active and project.organization==organization:
                 project_stories = []
                 iterations = project.get_current_iterations()
                 for iteration in iterations:
-                    project_stories = project_stories + list(Story.objects.filter(iteration=iteration, assignee=user).exclude(status=4))
+                    project_stories = project_stories + list(iteration.stories.filter(assignee=user).exclude(status=4))
+                    project_stories = project_stories + list(iteration.stories.filter(tasks__assignee=user).exclude(status=4))
                 if len(project_stories) > 0:
-                    assigned_stories = assigned_stories + [(project, project_stories)]
+                    assigned_stories = assigned_stories + [(project, list(set(project_stories)) )]
         return assigned_stories
+    
+
 
     def story_tags_full(self):
         "Helper function to return queryset of taggings with the tag object preloaded"

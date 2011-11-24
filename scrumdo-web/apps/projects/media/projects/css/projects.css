@@ -166,6 +166,9 @@
   opacity: 0.1;
 }
 
+.story_queue_story_list_item:hover .storyIcons {
+    opacity: 1;
+}
 
 .story_small:hover .storyIcons {
     opacity: 1;

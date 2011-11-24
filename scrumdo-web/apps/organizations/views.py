@@ -48,6 +48,8 @@ def organization_dashboard(request, organization_slug):
     
     favorite_projects = Favorite.objects.filter(user=request.user, project__organization=organization)
     favorite_projects = [fav.project for fav in favorite_projects]
+    
+    stories = Story.getAssignedStories(request.user, organization)
 
     if not organization.hasReadAccess( request.user ):
         raise PermissionDenied()
@@ -55,7 +57,8 @@ def organization_dashboard(request, organization_slug):
     return render_to_response("organizations/organization_dashboard.html", {
         "organization": organization,
         "organizations": organizations,
-        "favorite_projects": favorite_projects
+        "favorite_projects": favorite_projects,
+        "your_stories": stories
         # "members": members,
         # "projects": projects
       }, context_instance=RequestContext(request))

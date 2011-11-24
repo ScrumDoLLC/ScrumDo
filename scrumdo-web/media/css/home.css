@@ -128,12 +128,7 @@
     font-weight: bold
 }
 
-.story_queue_list {
-	margin-top: 3px;
-	padding-left: 23px;
-	margin-bottom: 0px;
-	
-}
+
 
 .newsfeed .activity abbr {
     color: #b0b0b0;
@@ -158,23 +153,7 @@
 	padding-right: 0px;
 }
 
-.story_queue_story_list_item {
-    padding: 3px;
-    margin: 0px 0px 5px;
-    padding-left: 10px;
-    list-style-type: none;
-    border-bottom: 1px solid #e1e1e1;
-    border-top: 1px solid #e1e1e1;
-    border-right: 1px solid #e1e1e1;
-    min-height: 18px;
-    position: relative;    	
-    width: 95%;
-}
 
-.story_queue_story_list_item a {
-	text-decoration: none;
-	color: #222;
-}
 
 .organization_list li {
 	margin-bottom: 12px;
