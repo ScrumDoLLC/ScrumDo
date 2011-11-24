@@ -319,3 +319,9 @@ $(document).ready(function() {
         return false;
     });
 });
+
+
+// $.ajaxError(function(event, xhr, ajaxOptions, thrownError) 
+// {
+//   // TODO!
+// }); 

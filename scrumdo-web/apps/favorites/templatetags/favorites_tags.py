@@ -33,6 +33,5 @@ logger = logging.getLogger(__name__)
 @register.inclusion_tag("favorites/favorite_snippet.html", takes_context=True)
 def favorite(context, target):
     fav_type = Favorite.getTargetType(target)
-    fav = Favorite.getFavorite( context['request'].user, target )
-    
+    fav = Favorite.getFavorite( context['request'].user, target )    
     return {'fav_type':fav_type, 'favorite':fav, 'target':target, 'STATIC_URL':settings.SSL_STATIC_URL}

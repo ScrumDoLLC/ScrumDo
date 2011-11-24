@@ -1,4 +1,4 @@
-<a class="favorite_link" href="#" add_url="{% url add_favorite fav_type target.id %}" remove_url="{% url remove_favorite fav_type target.id %}" >
+<a class="favorite_link" {% if favorite %}favorite="true"{% endif %} href="#" add_url="{% url add_favorite fav_type target.id %}" remove_url="{% url remove_favorite fav_type target.id %}" >
 {% if favorite %}
 <img src="{{STATIC_URL}}images/favorite_on.png">
 {% else %}

@@ -32,7 +32,7 @@ from organizations.forms import *
 from organizations.models import *
 
 from projects.models import Project
-
+from favorites.models import *
 import organizations.signals as signals
 import organizations.import_export as import_export
 
@@ -43,7 +43,22 @@ logger = logging.getLogger(__name__)
 
 @login_required
 def organization_dashboard(request, organization_slug):
-    pass
+    organization = get_object_or_404(Organization, slug=organization_slug)
+    organizations = Organization.getOrganizationsForUser( request.user )
+    
+    favorite_projects = Favorite.objects.filter(user=request.user, project__organization=organization)
+    favorite_projects = [fav.project for fav in favorite_projects]
+
+    if not organization.hasReadAccess( request.user ):
+        raise PermissionDenied()
+    
+    return render_to_response("organizations/organization_dashboard.html", {
+        "organization": organization,
+        "organizations": organizations,
+        "favorite_projects": favorite_projects
+        # "members": members,
+        # "projects": projects
+      }, context_instance=RequestContext(request))
     
 @login_required
 def organization(request, organization_slug):
