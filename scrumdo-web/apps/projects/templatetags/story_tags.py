@@ -22,6 +22,7 @@ from django.utils.safestring import mark_safe
 import re
 register = template.Library()
 
+
 @register.filter
 def show_points(story):
     points = story.getPointsLabel()

@@ -19,8 +19,8 @@
 import django.dispatch
 
 # Signal dispatched when a story is edited. (Not including status changes, see next signal)
-# user = who did it, story = the story that changed.
-story_updated = django.dispatch.Signal(providing_args=["story","user"])
+# user = who did it, story = the story that changed, diffs=dict of what fields changed
+story_updated = django.dispatch.Signal(providing_args=["story","user","diffs"])
 
 # Signal dispatched when a story's status is changed.
 # user = who did it, story = the story that changed.
