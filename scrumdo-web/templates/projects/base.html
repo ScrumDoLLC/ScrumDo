@@ -11,13 +11,15 @@
 {% block body_div_class %}sideBar{% endblock %}
 
 {% block breadcrumbs %}
-  {% if project.organization %}
-     <a href="{% url organization_detail project.organization.slug %}">{{ project.organization.name }}</a> /
-     {{ project.name }}
-  {% else %}
-     {{ project.creator.username }} /
-     {{ project.name }}
-  {% endif %}  
+  {% if project %}
+	  {% if project.organization %}
+	     <a href="{% url organization_detail project.organization.slug %}">{{ project.organization.name }}</a> /
+	     {{ project.name }}
+	  {% else %}
+	     {{ project.creator.username }} /
+	     {{ project.name }}
+	  {% endif %}  
+  {% endif %}
 {% endblock %}
 
 {% block panel %}
