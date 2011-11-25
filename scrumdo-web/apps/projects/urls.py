@@ -70,6 +70,7 @@ urlpatterns += patterns('projects.iteration_views',
 
 
 urlpatterns += patterns('projects.story_views',
+    url(r'^story_permalink/(?P<story_id>[0-9]+)$', 'story_permalink', name="story_permalink"),
     url(r'^project/(?P<group_slug>[-\w]+)/stories/$', 'stories', name="stories"),
     url(r'^project/(?P<group_slug>[-\w]+)/stories/createAsync$', 'ajax_add_story', name="ajax_add_story"),
     url(r'^project/(?P<group_slug>[-\w]+)/epics/createAsync$', 'ajax_add_epic', name="ajax_add_epic"),
@@ -89,7 +90,7 @@ urlpatterns += patterns('projects.story_views',
     url(r'^project/(?P<group_slug>[-\w]+)/story/(?P<story_id>[0-9]+)/delete', 'delete_story', name="delete_story"),    
     url(r'^project/(?P<group_slug>[-\w]+)/epic/(?P<epic_id>[0-9]+)/reorder', 'reorder_epic'),
     url(r'^story/(?P<story_id>[0-9]+)', 'story_block', name="story_block"),
-    url(r'^project/(?P<group_slug>[-\w]+)/story/(?P<story_id>[0-9]+)', 'story', name="story_form"),
+    url(r'^project/(?P<group_slug>[-\w]+)/story/(?P<story_id>[0-9]+)', 'story_edit', name="story_form"),
     url(r'^project/(?P<group_slug>[-\w]+)/mini_story/(?P<story_id>[0-9]+)', 'mini_story'),
 )
 

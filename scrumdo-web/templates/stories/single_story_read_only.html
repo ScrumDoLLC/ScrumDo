@@ -71,3 +71,5 @@ Assignee: <b>{{story.assignee|default_if_none:""}}</b><br/><br/>
     {% endfor %}
 </ul>
 </div>
+<br/>
+<a href="{{story.get_absolute_url}}">{% silk "link" %} Story Permalink</a>

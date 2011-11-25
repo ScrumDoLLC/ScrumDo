@@ -46,6 +46,14 @@ import projects.signals as signals
 
 logger = logging.getLogger(__name__)
 
+
+@login_required
+def story_permalink(request, story_id):
+    "A permalink for a story.  No matter where it goes this should work"
+    story = get_object_or_404( Story, id=story_id )
+    read_access_or_403(story.project,request.user)
+    return HttpResponseRedirect( "%s#story_%d" % (reverse("iteration", kwargs={'group_slug':story.project.slug,'iteration_id':story.iteration.id}),story.id) )
+        
 # View called via ajax on the iteration or iteration planning pages.  Meant to set the status of
 # a story, and then return an html snippet that can be replaced on the page with the new status
 @login_required
@@ -392,7 +400,7 @@ def story_block(request, story_id):
 # a facebox popup.
 # One place it's used is on the iteration page when you click the magnifying glass for a story.
 @login_required
-def story(request, group_slug, story_id):
+def story_edit(request, group_slug, story_id):
     story = get_object_or_404( Story, id=story_id )
     project = get_object_or_404( Project, slug=group_slug )
     return_type = request.GET.get("return_type","mini")
