@@ -46,6 +46,9 @@ STATUS_DONE = 4
 STATUS_CHOICES = ( (1, "TODO"), (2, "In Progress"),  (3, "Reviewing"), (4, "Done")   )
 STATUS_REVERSE = {"TODO":STATUS_TODO, "Doing":STATUS_DOING, "In Progress":STATUS_DOING,  "Reviewing":STATUS_REVIEWING,  "Done":STATUS_DONE }
 
+import logging
+
+logger = logging.getLogger(__name__)
 
 class SiteStats( models.Model ):
     user_count = models.IntegerField()
@@ -375,15 +378,15 @@ class Story( models.Model ):
 
     @staticmethod
     def getAssignedStories(user, organization):
-        projects = ProjectMember.getProjectsForUser(user)
+        projects = ProjectMember.getProjectsForUser(user,organization=organization)
         assigned_stories = []
         for project in projects:
             if project.active and project.organization==organization:
                 project_stories = []
                 iterations = project.get_current_iterations()
                 for iteration in iterations:
-                    project_stories = project_stories + list(iteration.stories.filter(assignee=user).exclude(status=4))
-                    project_stories = project_stories + list(iteration.stories.filter(tasks__assignee=user).exclude(status=4))
+                    project_stories = project_stories + list(iteration.stories.filter(assignee=user).exclude(status=4).select_related())
+                    project_stories = project_stories + list(iteration.stories.filter(tasks__assignee=user).exclude(status=4).select_related())
                 if len(project_stories) > 0:
                     assigned_stories = assigned_stories + [(project, list(set(project_stories)) )]
         return assigned_stories
@@ -540,10 +543,17 @@ class ProjectMember(models.Model):
         return "ProjectMember: %s " % self.user.username
 
     @staticmethod
-    def getProjectsForUser(user):
+    def getProjectsForUser(user, organization=None):
         """ This gets all a user's projects, including ones they have access to via teams. """
-        user_projects = [pm.project for pm in ProjectMember.objects.filter(user=user).select_related()]
-        team_projects = [team.projects.all() for team in Team.objects.filter(members=user)]
+        query = ProjectMember.objects.filter(user=user)
+        if organization:
+            query = query.filter(project__organization=organization)
+        user_projects = [pm.project for pm in query.select_related()]
+        
+        team_query = Team.objects.filter(members=user)
+        if organization:
+            team_query = team_query.filter(organization=organization)
+        team_projects = [team.projects.select_related('organization') for team in team_query]
         for project_list in team_projects:
             user_projects = user_projects + list(project_list)
         return list(set(user_projects))

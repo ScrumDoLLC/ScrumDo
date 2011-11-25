@@ -43,19 +43,19 @@ logger = logging.getLogger(__name__)
 
 @login_required
 def organization_dashboard(request, organization_slug):
-    organization = get_object_or_404(Organization, slug=organization_slug)
+    organization = Organization.objects.filter(slug=organization_slug).select_related('subscription')[0]
     
     if organization.projects.count() == 0:
         return HttpResponseRedirect( reverse("organization_projects",kwargs={"organization_slug":organization_slug}))
     
     organizations = Organization.getOrganizationsForUser( request.user )
     
-    favorite_projects = Favorite.objects.filter(user=request.user, project__organization=organization)
+    favorite_projects = Favorite.objects.filter(user=request.user, project__organization=organization).select_related('project')
     favorite_projects = [fav.project for fav in favorite_projects]
     
     stories = Story.getAssignedStories(request.user, organization)
 
-    news_items = NewsItem.objects.filter(project__organization=organization)
+    news_items = NewsItem.objects.filter(project__organization=organization).select_related('user')
 
     if not organization.hasReadAccess( request.user ):
         raise PermissionDenied()
