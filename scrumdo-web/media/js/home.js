@@ -47,17 +47,6 @@ var loadItems = function() {
 };
 
 
-
-function like(activity_id) {
-    $.ajax({
-	    url: "/activities/like/"+activity_id,
-		data:{},
-		success: function(html){
-		$("#"+activity_id+"like").html(html);  
-	    }
-	});
-
-}
 function loadNewsFeed()
 {
     $("#loadingIcon").show();
@@ -79,29 +68,10 @@ function loadNewsFeed()
 }
     
 
-function activateLinks () {
-    /*    $(".commentLink").click( function() 
-			     {                    
-				 $(this).parent().children(".commentForm").show();
-				 $(this).hide();
-				 return false;
-			     } );
-
-    $(".commentForm form").ajaxForm(function () 
-				    { loadNewsFeed(); activateLinks();});
-
-    $(".responses form").ajaxForm(function () {
-	    loadNewsFeed(); activateLinks();});
-
-    */}
-
-
 $(document).ready(function() {
 	$(window).bind('scroll', loadOnScroll);
 	activateLinks();	
     });
-
-
 
 $(document).ready(function () {
 	$(".box-heading li a").hover(function() {

@@ -1,14 +1,17 @@
 from django.db import models
+from django.template.loader import render_to_string
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import  User
 from django.core.cache import cache
-
+import sys, traceback
 from itertools import groupby
 
 from threadedcomments.models import ThreadedComment
 from activities.utils import allinstances, instanceof
 from scrumdo_model_utils.models import InheritanceCastModel
+
+import projects.signals as signals
 
 import datetime
 import traceback
@@ -22,6 +25,60 @@ class ProjectEmailSubscription(models.Model):
     user = models.ForeignKey(User,related_name="email_subscriptions")
     def __unicode__(self):
         return "Subscription: %s %s" % (self.user, self.project)
+
+class NewsItem(models.Model):
+    created = models.DateTimeField(_('created'), default=datetime.datetime.now)
+    user = models.ForeignKey(User,related_name="newsItems", null=True, blank=True)
+    project = models.ForeignKey("projects.Project", related_name="newsItems", null=True, blank=True)
+    text = models.TextField()
+    icon = models.CharField(max_length=24)
+    class Meta:
+        ordering = [ '-created' ]
+
+
+
+def onStoryCreated(sender, **kwargs):
+    try:
+        story = kwargs["story"]
+        user = kwargs["user"]
+        item = NewsItem(user=user, project=story.iteration.project, icon="script_add" )
+        item.text = render_to_string("activities/new_story.txt", {'user':user,'story':story} )
+        item.save()
+    except:
+        logger.error("Could not create news item")
+        traceback.print_exc(file=sys.stdout)    
+signals.story_created.connect( onStoryCreated , dispatch_uid="newsfeed_signal_hookup")
+
+
+def onStoryUpdated(sender, **kwargs):
+    try:
+        story = kwargs["story"]
+        user = kwargs["user"]
+        diffs = kwargs["diffs"]
+        item = NewsItem(user=user, project=story.iteration.project, icon="script_edit" )
+        item.text = render_to_string("activities/edited_story.txt", {'user':user,'story':story,'diffs':diffs} )
+        item.save()
+    except:
+        logger.error("Could not create news item")
+        traceback.print_exc(file=sys.stdout)
+signals.story_updated.connect( onStoryUpdated , dispatch_uid="newsfeed_signal_hookup")
+
+
+def onStoryStatusChanged(sender, **kwargs):
+    try:
+        story = kwargs["story"]
+        user = kwargs["user"]
+        item = NewsItem(user=user, project=story.iteration.project, icon="script_code" )
+        item.text = render_to_string("activities/status_change_story.txt", {'user':user,'story':story} )
+        item.save()
+    except:
+        logger.error("Could not create news item")
+        traceback.print_exc(file=sys.stdout)    
+signals.story_status_changed.connect( onStoryStatusChanged , dispatch_uid="newsfeed_signal_hookup")
+
+
+
+
 
 
 class ActivityAction(models.Model):

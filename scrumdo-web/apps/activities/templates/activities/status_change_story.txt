@@ -1,0 +1,3 @@
+{% load markup %}{% load projects_tags %}
+marked story <a href="{{story.get_absolute_url}}">#{{story.local_id}}</a> <i>{{story.summary|truncatewords:25}}</i> as
+<b>{{story.statusText}}</b>

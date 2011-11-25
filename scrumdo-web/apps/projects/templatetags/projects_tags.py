@@ -97,8 +97,8 @@ def _google_chart(iteration_or_project, project_size="550x120", iteration_size="
         try:
             end_date_s = iteration_or_project.end_date.strftime('%Y-%m-%d')
             end_date = int(datetime.combine(iteration_or_project.end_date, time()).strftime("%s")) * 1000
-            logger.debug("!!!!")
-            logger.debug(end_date)
+            # logger.debug("!!!!")
+            # logger.debug(end_date)
         except:        
             traceback.print_exc()
             end_date_s = date.fromtimestamp( end_date/1000 ).strftime('%Y-%m-%d')

@@ -222,6 +222,7 @@ def reorder_story( request, group_slug, story_id):
     project = get_object_or_404( Project, slug=group_slug )
     write_access_or_403(project,request.user)
     if request.method == 'POST':
+        old_story = story.__dict__.copy()
         rank = 0
         target_iteration = request.POST.get("iteration","")
 
@@ -246,8 +247,8 @@ def reorder_story( request, group_slug, story_id):
 
         story.iteration = iteration
         story.save()
-
-        signals.story_updated.send( sender=request, story=story, user=request.user )
+        diffs = utils.model_differences(old_story, story.__dict__, dicts=True)
+        signals.story_updated.send( sender=request, story=story, user=request.user, diffs=diffs )
         return HttpResponse("OK")
     return  HttpResponse("Fail")
 
@@ -433,16 +434,16 @@ def story_edit(request, group_slug, story_id):
             
             diffs = utils.model_differences(old_story, story.__dict__, dicts=True)
             activities = 0
-            if diffs.has_key("points"):
-                story.activity_signal.send(sender=story, user=request.user, story=story, pointschange=True, action="changed point value", project=project, old=diffs['points'][0], new=diffs['points'][1])
-                activities = activities + 1
-            # to do other stories based on specific changes, simply add more if clauses like the one above
+            # if diffs.has_key("points"):
+            #     story.activity_signal.send(sender=story, user=request.user, story=story, pointschange=True, action="changed point value", project=project, old=diffs['points'][0], new=diffs['points'][1])
+            #     activities = activities + 1
+            # # to do other stories based on specific changes, simply add more if clauses like the one above
+            # 
+            # if len(diffs) > activities:
+            #     # this means that we have not accounted for all the changes above, so add a generic story edited activity
+            #     story.activity_signal.send(sender=story, user=request.user, story=story, action="edited", project=project)
 
-            if len(diffs) > activities:
-                # this means that we have not accounted for all the changes above, so add a generic story edited activity
-                story.activity_signal.send(sender=story, user=request.user, story=story, action="edited", project=project)
-
-            signals.story_updated.send( sender=request, story=story, user=request.user )
+            signals.story_updated.send( sender=request, story=story, diffs=diffs, user=request.user )
             onDemandCalculateVelocity( project )
 
         organization = _organizationOrNone( project )

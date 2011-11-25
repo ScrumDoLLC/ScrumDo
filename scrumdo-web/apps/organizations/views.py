@@ -30,7 +30,7 @@ from django.core.exceptions import PermissionDenied
 
 from organizations.forms import *
 from organizations.models import *
-
+from activities.models import NewsItem
 from projects.models import Project
 from favorites.models import *
 import organizations.signals as signals
@@ -55,6 +55,8 @@ def organization_dashboard(request, organization_slug):
     
     stories = Story.getAssignedStories(request.user, organization)
 
+    news_items = NewsItem.objects.filter(project__organization=organization)
+
     if not organization.hasReadAccess( request.user ):
         raise PermissionDenied()
     
@@ -62,7 +64,8 @@ def organization_dashboard(request, organization_slug):
         "organization": organization,
         "organizations": organizations,
         "favorite_projects": favorite_projects,
-        "your_stories": stories
+        "your_stories": stories,
+        "news_items":news_items
         # "members": members,
         # "projects": projects
       }, context_instance=RequestContext(request))
