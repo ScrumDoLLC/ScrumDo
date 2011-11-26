@@ -36,46 +36,63 @@ class NewsItem(models.Model):
         ordering = [ '-created' ]
 
 
+def _createStoryNewsItem(icon, template, **kwargs):
+    try:
+        story = kwargs["story"]
+        user = kwargs["user"]
+        diffs = kwargs.get("diffs",None)
+        item = NewsItem(user=user, project=story.iteration.project, icon=icon )
+        item.text = render_to_string("activities/%s" % template, {'user':user,'story':story, 'diffs':diffs} )
+        item.save()
+    except:
+        logger.error("Could not create news item")
+        traceback.print_exc(file=sys.stdout)    
+
+def _createTaskNewsItem(icon, template, **kwargs):
+    try:
+        task = kwargs["task"]
+        user = kwargs["user"]
+        diffs = kwargs.get("diffs",None)
+        item = NewsItem(user=user, project=task.story.iteration.project, icon=icon )
+        item.text = render_to_string("activities/%s" % template, {'user':user,'task':task, 'diffs':diffs} )
+        item.save()
+    except:
+        logger.error("Could not create news item")
+        traceback.print_exc(file=sys.stdout)    
+
 
 def onStoryCreated(sender, **kwargs):
-    try:
-        story = kwargs["story"]
-        user = kwargs["user"]
-        item = NewsItem(user=user, project=story.iteration.project, icon="script_add" )
-        item.text = render_to_string("activities/new_story.txt", {'user':user,'story':story} )
-        item.save()
-    except:
-        logger.error("Could not create news item")
-        traceback.print_exc(file=sys.stdout)    
+    _createStoryNewsItem("script_add","new_story.txt", **kwargs)
 signals.story_created.connect( onStoryCreated , dispatch_uid="newsfeed_signal_hookup")
 
-
 def onStoryUpdated(sender, **kwargs):
-    try:
-        story = kwargs["story"]
-        user = kwargs["user"]
-        diffs = kwargs["diffs"]
-        item = NewsItem(user=user, project=story.iteration.project, icon="script_edit" )
-        item.text = render_to_string("activities/edited_story.txt", {'user':user,'story':story,'diffs':diffs} )
-        item.save()
-    except:
-        logger.error("Could not create news item")
-        traceback.print_exc(file=sys.stdout)
+    _createStoryNewsItem("script_edit","edited_story.txt", **kwargs)
 signals.story_updated.connect( onStoryUpdated , dispatch_uid="newsfeed_signal_hookup")
 
-
 def onStoryStatusChanged(sender, **kwargs):
-    try:
-        story = kwargs["story"]
-        user = kwargs["user"]
-        item = NewsItem(user=user, project=story.iteration.project, icon="script_code" )
-        item.text = render_to_string("activities/status_change_story.txt", {'user':user,'story':story} )
-        item.save()
-    except:
-        logger.error("Could not create news item")
-        traceback.print_exc(file=sys.stdout)    
+    _createStoryNewsItem("script_code","status_change_story.txt", **kwargs)     
 signals.story_status_changed.connect( onStoryStatusChanged , dispatch_uid="newsfeed_signal_hookup")
 
+def onStoryDeleted(sender, **kwargs):
+    _createStoryNewsItem("script_delete","delete_story.txt", **kwargs)         
+   
+signals.story_deleted.connect( onStoryDeleted , dispatch_uid="newsfeed_signal_hookup")
+
+def onTaskCreated(sender, **kwargs):
+    _createTaskNewsItem('drive_add', 'new_task.txt', **kwargs)
+signals.task_created.connect( onTaskCreated , dispatch_uid="newsfeed_signal_hookup")
+
+def onTaskStatusChange(sender, **kwargs):
+    _createTaskNewsItem('drive_go', 'status_change_task.txt', **kwargs)    
+signals.task_status_changed.connect( onTaskStatusChange , dispatch_uid="newsfeed_signal_hookup")
+
+def onTaskUpdated(sender, **kwargs):
+    _createTaskNewsItem('drive_edit', 'edited_task.txt', **kwargs)    
+signals.task_updated.connect( onTaskUpdated , dispatch_uid="newsfeed_signal_hookup")
+
+def onTaskDeleted(sender, **kwargs):
+    _createTaskNewsItem('drive_delete', 'delete_task.txt', **kwargs)    
+signals.task_deleted.connect( onTaskDeleted , dispatch_uid="newsfeed_signal_hookup")
 
 
 

@@ -59,12 +59,12 @@ h2 {
     position: relative;
 }
 
-#body {
+.body_with_sidebar {
     margin: 0 auto;
     padding: 10px;
     padding-top: 0px;
     padding-right: 210px;
-    max-width: 840px;
+    max-width: 100%;
 }
 
 #footer {

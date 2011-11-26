@@ -1,5 +1,5 @@
 {% load markup %}{% load projects_tags %}
-created story <a href="{{story.get_absolute_url}}">#{{story.local_id}}</a> in <a href="{% url iteration story.iteration.project.slug story.iteration.id %}">{{story.iteration.name}}</a>. <i>{{story.summary|markdown|link_stories:story.project|urlify2|safe}}</i> 
+created story <a href="{{story.get_absolute_url}}">#{{story.local_id}}</a> in <a href="{% url iteration story.iteration.project.slug story.iteration.id %}">{{story.project.name}} / {{story.iteration.name}}</a>. <i>{{story.summary|markdown|link_stories:story.project|urlify2|safe}}</i> 
 {% if story.assignee %}
 Assigned to <b>{{story.assignee|default_if_none:""}}</b>. 
 {% endif %}

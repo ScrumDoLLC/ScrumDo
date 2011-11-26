@@ -182,7 +182,7 @@ body.projects #side {
     border-bottom: 1px solid #e1e1e1;
     border-top: 1px solid #e1e1e1;
     border-right: 1px solid #e1e1e1;
-    min-height: 18px;
+    min-height: 35px;
     position: relative;    	
     width: 95%;
 }
