@@ -41,7 +41,7 @@ logger = logging.getLogger(__name__)
 
 @register.simple_tag
 def silk(name):
-    return """<img src="%spinax/images/silk/icons/%s.png" />""" % (settings.SSL_STATIC_URL, name)
+    return """<img class="silk_icon" src="%spinax/images/silk/icons/%s.png" />""" % (settings.SSL_STATIC_URL, name)
 
 
 @register.filter("google_chart_url")

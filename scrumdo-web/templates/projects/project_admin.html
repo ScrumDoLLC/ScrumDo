@@ -43,7 +43,7 @@
       	 {% endfor %}
       	 
      	  </ul>
-     	  <a class="manage-team-link {% if team.members.count|gt:5 %}hidden-team-member{% endif %}" href="{% url organization_detail project.organization.slug%}#team_popup_{{team.id}}">{% silk "group" %} Manage Team</a>
+     	  
       </div>
       
     {% endfor %}
@@ -61,24 +61,26 @@
 	  {% endfor %}
 
     {% if project.organization %}
-      <a href="#" class="show-invite-box-link">Invite Users</a>    
-    {% endif %}
-    <div class="invite-user-box" {% if project.organization %}style="display:none"{% endif %}>
-      <h3>Invite User</h3>
-      {{ adduser_form.non_field_errors }}
-      {{adduser_form.recipient.errors}}
-      <form id="add-member" method="POST" action="" class="uniForm">
-        <fieldset class="inlineLabels">
+      <a href="{% url team_summary project.organization.slug %}" class="button blue">{% silk 'lock' %} Manage Access</a>    
+    {% else %}
+	    <div class="invite-user-box" {% if project.organization %}style="display:none"{% endif %}>
+	      <h3>Invite User</h3>
+	      {{ adduser_form.non_field_errors }}
+	      {{adduser_form.recipient.errors}}
+	      <form id="add-member" method="POST" action="" class="uniForm">
+	        <fieldset class="inlineLabels">
         
-            ScrumDo Username: {{ adduser_form.recipient }}
-            <input type="hidden" name="action" value="add" /> 
-            <button class="primaryAction button" type="submit" >Invite User</button><br/><br/>
-            {% if project.organization %}
-            <b>Tip:</b> <i>This project is part of an organization, you might want to go to the <a href="{% url organization_detail project.organization.slug %}">organization options</a> to add/remove people to/from teams instead of directly to the project.</i>
-            {% endif %}
-        </fieldset>
-      </form>
-    </div>
+	            ScrumDo Username: {{ adduser_form.recipient }}
+	            <input type="hidden" name="action" value="add" /> 
+	            <button class="primaryAction button" type="submit" >Invite User</button><br/><br/>
+	            {% if project.organization %}
+	            <b>Tip:</b> <i>This project is part of an organization, you might want to go to the <a href="{% url organization_detail project.organization.slug %}">organization options</a> to add/remove people to/from teams instead of directly to the project.</i>
+	            {% endif %}
+	        </fieldset>
+	      </form>
+	    </div>
+
+    {% endif %}
 
   
   <form method="POST" action="" class="uniForm">
@@ -141,7 +143,7 @@
       
       <div class="form_block">
       
-          <div class="buttonHolder"><button class="primaryAction" type="submit" >Save Project</button></div>
+          <div class="buttonHolder"><button class="primaryAction" type="submit" >{% silk 'disk' %} Save Project</button></div>
       </div>
       
   </form>
@@ -152,7 +154,7 @@
     <p>Archived projects don't count towards your quotas, but you can no longer edit them.</p>     
      <form   method="POST" action="" class="uniForm">       
       <div class="form_block">     
-         <div  class="buttonHolder"><button id="archiveFormButton" class="primaryAction" type="submit" >Archive Project</button></div>
+         <div  class="buttonHolder"><button id="archiveFormButton" class="primaryAction" type="submit" >{% silk 'compress' %} Archive Project</button></div>
       </div>
       <input type="hidden" name="action" value="archiveProject">
      </form>
@@ -201,7 +203,7 @@
         </fieldset>
     
        <div class="form_block">     
-          <div class="buttonHolder"><button class="primaryAction" type="submit" >Remove From Organization</button></div>
+          <div class="buttonHolder"><button class="primaryAction" type="submit" >{% silk 'building_delete' %} Remove From Organization</button></div>
        </div>
        <input type="hidden" name="action" value="removeFromOrganization">
       </form>

@@ -223,6 +223,10 @@
 	margin: 0px 15px 0px 0px;
 }
 
+.primaryAction img.silk_icon, .button img.silk_icon {
+	margin-right: 10px;
+	margin-left: -15px;
+}
 .button {
 	display: inline-block;
 	zoom: 1; /* zoom and *display = ie7 hack for display:inline-block */
@@ -1294,4 +1298,8 @@ h1 a {
 	cursor: pointer;
 	padding: 0px;
 	margin: 0px;
+}
+
+.silk_icon {
+	vertical-align: text-bottom;
 }

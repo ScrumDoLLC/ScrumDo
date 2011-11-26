@@ -59,6 +59,16 @@ h2 {
     position: relative;
 }
 
+.narrow_body_with_sidebar {
+    margin: 0 auto;
+    padding: 10px;
+    padding-top: 0px;
+    padding-right: 210px;
+    width: 840px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .body_with_sidebar {
     margin: 0 auto;
     padding: 10px;
@@ -505,18 +515,44 @@ table.email_list td {
                             -o-border-radius: 4px;
                             -khtml-border-radius: 4px;
                           }
-      .uniForm .buttonHolder .primaryAction{ padding: 10px 22px; line-height: 1; background: #254a86; border: 1px solid #163362; font-size: 12px; font-weight: bold; color: #fff;
-                                             /* CSS3 */
-                                             border-radius: 4px;
-                                             -webkit-border-radius: 4px;
-                                             -moz-border-radius: 4px;
-                                             -o-border-radius: 4px;
-                                             -khtml-border-radius: 4px;
-                                             box-shadow: 1px 1px 0 #fff;
-                                             -webkit-box-shadow: 1px 1px 0 #fff;
-                                             -moz-box-shadow: 1px 1px 0 #fff;
-                                             text-shadow: -1px -1px 0 rgba(0,0,0,.25);
+      .uniForm .buttonHolder .primaryAction {  	display: inline-block;
+                                              	zoom: 1; /* zoom and *display = ie7 hack for display:inline-block */
+                                              	*display: inline;
+                                              	vertical-align: baseline;
+                                              	margin: 0 2px;
+                                              	outline: none;
+                                              	cursor: pointer;
+                                              	text-align: center;
+                                              	text-decoration: none;
+                                              	font: 14px/100% Arial, Helvetica, sans-serif;
+                                              	padding: .5em 2em .55em;
+                                              	text-shadow: 0 1px 1px rgba(0,0,0,.3);
+                                              	-webkit-border-radius: .5em; 
+                                              	-moz-border-radius: .5em;
+                                              	border-radius: .5em;
+                                              	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+                                              	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+                                              	box-shadow: 0 1px 2px rgba(0,0,0,.2);
+                                               	color: #d9eef7;
+                                               	border: solid 1px #0076a3;
+                                               	background: #0095cd;
+                                               	background: -webkit-gradient(linear, left top, left bottom, from(#00adee), to(#0078a5));
+                                               	background: -moz-linear-gradient(top,  #00adee,  #0078a5);
+                                               	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#00adee', endColorstr='#0078a5');
                                            }
+                  
+       .uniForm .buttonHolder .primaryAction:hover {
+                                           	background: #007ead;
+                                           	background: -webkit-gradient(linear, left top, left bottom, from(#0095cc), to(#00678e));
+                                           	background: -moz-linear-gradient(top,  #0095cc,  #00678e);
+                                           	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0095cc', endColorstr='#00678e');
+                                           }
+        .uniForm .buttonHolder .primaryAction:active {
+                                           	color: #80bed6;
+                                           	background: -webkit-gradient(linear, left top, left bottom, from(#0078a5), to(#00adee));
+                                           	background: -moz-linear-gradient(top,  #0078a5,  #00adee);
+                                           	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0078a5', endColorstr='#00adee');
+                                           }                                           
       .uniForm .buttonHolder .primaryAction:active{ position: relative; top: 1px; }
       .uniForm .secondaryAction { text-align: left; }
       .uniForm .secondaryAction { text-decoration:none; background: transparent; border: none; color: #777; margin: 1.25em 0 0 0; padding: 0; }
