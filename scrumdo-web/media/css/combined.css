@@ -42,6 +42,20 @@ td {
     border: 0;
     padding: 0;
 }
+
+table.file_table {
+    border-collapse: collapse;
+    border-spacing: 3px;
+    
+    font-size: inherit;
+    
+}
+table.file_table td {
+    margin: 0;
+    border: solid 1px #C6C6C6;
+    padding: 3px;    
+}
+
 h1 {
     font-weight: normal;
     margin: 0;

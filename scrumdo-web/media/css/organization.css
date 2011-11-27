@@ -197,3 +197,21 @@ body.projects #side {
 	padding-left: 23px;
 	margin-bottom: 0px;	
 }
+
+.dashboard-project {
+	background-color: #f6f6f6;
+	padding: 5px;
+	margin-bottom: 4px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	border: 1px solid #e5e5e5;
+	line-height: 1.4em;
+}
+
+
+.dashboard-project a {
+	color: #000;
+	text-decoration: none;
+}
+

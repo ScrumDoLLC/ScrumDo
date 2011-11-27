@@ -301,6 +301,33 @@ function updatePanel()
     });
 }
 
+function setupNewsItemMoreLinks() {
+    $(".news-item-more-link").each(function(){
+        var link = this;
+
+        $(this).parent().find(".news-body").each(function(){
+            var height = $(this).height();
+            // alert(height);
+            if( height > 90)
+            {
+                $(this).css("height","60px");
+            }
+            else
+            {
+                // The item fits, so don't show the link
+                $(link).hide();
+            }
+        });
+    });
+    
+    $(".news-item-more-link").click(function(){
+        $(this).parent().find(".news-body").css("height","");
+        $(this).hide();
+        return false;
+    });
+    
+}
+
 $(document).ready(function() {
     setupFavoriteLinks();
     $("body").bind("storyListChanged", setUpStoryLinks );
