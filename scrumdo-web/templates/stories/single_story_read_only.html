@@ -8,6 +8,10 @@
 <div style="width:800px">
 <h2>#{{story.local_id}} {{story.summary|link_stories:story.project|urlify2|safe }}</h2>
 
+{% if story.assignee %}
+Assignee: <b>{{story.assignee|default_if_none:""}}</b><br/><br/>
+{% endif %}
+
 {% if story.detail %}
  {{story.detail|markdown|link_stories:story.project|urlify2|safe }}<br/>
 {% endif %}
@@ -27,15 +31,21 @@
  {{story.extra_3|markdown|link_stories:story.project|urlify2|safe }}<br/>
 {% endif %}
 
-{% if story.assignee %}
-Assignee: <b>{{story.assignee|default_if_none:""}}</b><br/><br/>
-{% endif %}
 
+
+
+{% if story.tasks.count %}
+<h3>Tasks</h3>
+<ul>
 {% for task in story.tasks.all %}
+<li>
  <div id="task_{{task.id}}" class="tasks_task"> 
 	<span style="{% if task.complete %}text-decoration: line-through;{% endif %}"> {{task.summary}} <b><i>{{task.assignee|default_if_none:""}}</i></b></span>
 </div>
+</li>
 {% endfor %}
+</ul>
+{% endif %}
 
 {% if story.epic %}
   <div class="tagsBox">{% silk "chart_organisation" %} <a href="{% url epics story.project.slug %}" title="{{story.epic.full_name}}">{{story.epic.short_name}}</a></div>
@@ -54,7 +64,10 @@ Assignee: <b>{{story.assignee|default_if_none:""}}</b><br/><br/>
 
 
 
+
 {% get_threaded_comment_tree for story as responses %}
+{% if responses %}
+<h3>Comments</h3>
 
 <ul class="responses">
     {% for response in responses %}
@@ -70,6 +83,7 @@ Assignee: <b>{{story.assignee|default_if_none:""}}</b><br/><br/>
         </li>
     {% endfor %}
 </ul>
+{% endif %}
 </div>
 <br/>
 <a href="{{story.get_absolute_url}}">{% silk "link" %} Story Permalink</a>
