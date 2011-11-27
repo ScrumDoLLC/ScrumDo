@@ -44,7 +44,7 @@ def cleanWorksheetName( name ):
     tmp = tmp[:31]
     return tmp
 
-def export_organization( organization ):
+def export_organization( organization, project_ids=None):
     response = HttpResponse( mimetype="Application/vnd.ms-excel")
     response['Content-Disposition'] = 'attachment; filename=organization.xls'
     w = xlwt.Workbook(encoding='utf8')
@@ -75,6 +75,10 @@ def export_organization( organization ):
     iterations_row = 1
     iteration_tags_row = 1
     for project in organization.projects.filter(active=True):
+        if project_ids:
+            if project.id not in project_ids:
+                continue
+        
         story_headers = _getHeaders( project )
         project_ws = w.add_sheet( cleanWorksheetName(project.name) )
 

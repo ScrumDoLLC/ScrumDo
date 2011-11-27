@@ -44,7 +44,7 @@ logger = logging.getLogger(__name__)
 @login_required
 def organization_dashboard(request, organization_slug):
     organization = Organization.objects.filter(slug=organization_slug).select_related('subscription')[0]
-    
+        
     if organization.projects.count() == 0:
         return HttpResponseRedirect( reverse("organization_projects",kwargs={"organization_slug":organization_slug}))
     
@@ -256,11 +256,29 @@ def team_debug(request):
         "admin_orgs":admin_orgs,
       }, context_instance=RequestContext(request))
 
+@login_required
 def export_organization(request, organization_slug):
     organization = get_object_or_404(Organization, slug=organization_slug)
     if not organization.hasReadAccess( request.user ):
         raise PermissionDenied()
-    return import_export.export_organization( organization )
+
+    organizations = Organization.getOrganizationsForUser( request.user )
+
+    if request.method == "POST":
+        projects = []
+        for key, value in request.POST.iteritems():
+            m = re.match("proj_([0-9]+)",key)
+            if m and value:
+                projects.append(int(m.group(1)) )
+        logger.debug(projects)
+        return import_export.export_organization( organization, project_ids=projects)
+
+
+    return render_to_response("organizations/organization_export.html", {
+        "organization":organization,
+        "organizations":organizations,
+      }, context_instance=RequestContext(request))
+    
 
 
 @login_required

@@ -1,17 +1,34 @@
-{% extends "organizations/base.html" %}
+{% extends "organizations/commercial_org_base.html" %}
 
 {% load i18n %}
-{% load uni_form %}
 {% load humanize %}
-{% load pagination_tags %}
-{% load order_by %}
+{% load projects_tags %}
 {% load extra_tagging_tags %}
+{% load uni_form %}
+{% load avatar_tags %}
+{% load pagination_tags %}
+{% load extras_tags %}
+{% load organizations_tags %}
+{% load favorites_tags %}
+
+{% block head_title %}{{organization.name}}{% endblock %}
 
 
 
-{% block head_title %}{% blocktrans %}Create Organization{% endblocktrans %}{% endblock %}
+{% block org_body %}
 
-{% block body %}
+
+
+
+
+<div id="organization-body-holder">
+	{% include "organizations/organization_menu.html" %}
+
+	<div id="organization-menu">
+		<a href="{% url organization_dashboard organization.slug %}"><img class="rollover" src="{{STATIC_URL}}images/organization/dashboard_button.png"></a><a href="{% url organization_projects organization.slug %}"><img class="rollover"  src="{{STATIC_URL}}images/organization/projects_button.png"></a>{% isorgadmin organization %}<a href="{% url team_summary organization.slug %}"><img class="rollover" src="{{STATIC_URL}}images/organization/teams_button.png"></a><a href="{% url subscription_options organization.slug %}"><img class="rollover" src="{{STATIC_URL}}images/organization/subscription_button.png"></a>{% endisorgadmin %}<a href="{% url organization_files organization.slug %}"><img class="rollover" src="{{STATIC_URL}}images/organization/files_button.png"></a><a href="{% url export_organization organization.slug %}"><img class="rollover" src="{{STATIC_URL}}images/organization/export_button.png"></a>
+	</div>
+
+
     <h1>{% trans "Create Team" %}</h1>
     
     <p>{% trans "A <b>team</b> is a group people that have access to projects." %}</p>
