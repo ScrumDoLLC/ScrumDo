@@ -1,9 +1,9 @@
 {% load markup %}{% load projects_tags %}
-modified story <a href="{{story.get_absolute_url}}">#{{story.local_id}}</a> <i>{{story.summary|truncatewords:25}}</i> 
+modified story <a href="{{story.get_absolute_url}}">#{{story.local_id}}</a> <i>{{story.summary}}</i> 
 <ul>
 {% for fieldname,values in diffs.items %}
 	<li>
-		{{fieldname|capfirst}}: {{values.0|truncatewords:25}} -&gt; {{values.1|truncatewords:25}}
+		{{fieldname|capfirst}}: {{values.0}} -&gt; {{values.1}}
 	</li>
 {% endfor %}
 </ul>

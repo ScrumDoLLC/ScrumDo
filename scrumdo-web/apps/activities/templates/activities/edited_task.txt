@@ -1,5 +1,5 @@
 {% load markup %}{% load projects_tags %}
 {% with task.story as story %}
-modified task {% if task.assignee %}<i>{{task.assignee}}</i>{% endif %} - {{task.summary}}
+modified task {{task.summary}} {% if task.assignee %}<i>{{task.assignee}}</i>{% endif %}
 in story <a href="{{story.get_absolute_url}}">#{{story.local_id}}</a> in <a href="{% url iteration story.iteration.project.slug story.iteration.id %}">{{story.iteration.name}}</a>. 
 {% endwith %}
