@@ -91,19 +91,6 @@ h2 {
     max-width: 100%;
 }
 
-#footer {
-    color: #999; /* footer text colour */
-    margin: 50px auto;
-    padding: 10px;
-    clear: both;
-    width: 800px;
-}
-#footer a, #footer a:visited {
-    color: #444; /* footer link colour */
-}
-#footer a:hover {
-    color: #777; /* footer link hover colour */
-}
 
 .alpha_warning {
 	padding: 5px;
@@ -869,10 +856,22 @@ table.topics .comment_stats {
 
 
 div.footer {
+	background-color: #333;
     text-align: center;
-    height:60px;   /* Height of the footer */
+    height:260px;   /* Height of the footer */
+    width: 100%;
+    color: #fff;
+    padding-top: 35px;
+    background: url(../images/homepage/top_background.png) repeat-x;
+}
+div.footer a {
+	color: #3ab9ee;
+	text-decoration: none;
 }
 
+div.footer a:hover {
+	text-decoration: underline;
+}
 
 .no_organization_warning {
 	width: 70%;

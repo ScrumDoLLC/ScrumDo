@@ -55,8 +55,8 @@ def organization_dashboard(request, organization_slug):
     
     stories = Story.getAssignedStories(request.user, organization)
 
-    news_items = NewsItem.objects.filter(project__organization=organization).select_related('user')
-
+    news_items = NewsItem.objects.filter(project__organization=organization)
+    news_items = news_items.select_related('user')
     if not organization.hasReadAccess( request.user ):
         raise PermissionDenied()
     

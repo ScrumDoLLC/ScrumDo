@@ -4,9 +4,10 @@
 */
 
 #tabhead {
-	background-color: #000;	
-	background: -webkit-gradient(linear, left top, left bottom, from(#111), to(#333));/* for webkit browsers */
-	background: -moz-linear-gradient(top,  #111,  #333);/* for firefox 3.6+ */
+	background-color: #1e1e1e;	
+	background: -webkit-gradient(linear, left top, left bottom, from(#464646), to(#1e1e1e));/* for webkit browsers */
+	background: -moz-linear-gradient(top,  #464646,  #1e1e1e);/* for firefox 3.6+ */
+
    	height: 40px;
    	padding-left: 15px;
    	padding-top: 10px;
@@ -556,3 +557,13 @@ h2.page-divider {
 	float: right;
 }
 
+#footer-table {
+	margin-left: auto;
+	margin-right: auto;
+	width: 900px;
+}
+
+#footer-table td {
+    width: 33%;
+	text-align: left;
+}

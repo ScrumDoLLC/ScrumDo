@@ -1,4 +1,4 @@
-{% extends "site_base.html" %}
+{% extends "base.html" %}
 
 {% load projects_tags %}
 {% load avatar_tags %}
@@ -21,10 +21,6 @@
   Please pick your organization.
 </div>
 <ul class="organization_list">
-
-
-
-
 {% for organization in my_organizations %}     
   <li>
 	<div class="organization_picker">
@@ -34,8 +30,6 @@
 	</div>
   </li>
 {% endfor %}
-
-
   <li style="text-align:center; margin-top:20px"><a title="Add New Organization" href="{% url organization_create %}">Create New Organization</a></li>
 </ul>
 

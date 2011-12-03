@@ -101,30 +101,32 @@
 
 
         
-        {% block body_outer %}
-	<div id="body_holder">
-	    {% block panel %}
-	    {% endblock %}
-          <div id="body" class="{% block body_div_class %}body_with_sidebar{% endblock %}">
-            <div class="breadcrumbs">{% block breadcrumbs %}{% endblock %}</div>
-            {% block add_story %}
-          	{% endblock %}
-            {% if messages %}
-            <ul id="messages">
-              {% for message in messages %}
-              <li id="message_{{ forloop.counter }}"><a href="#" onclick="$('#message_{{ forloop.counter }}').fadeOut(); return false;"><small>{% trans "clear" %}</small></a> {{ message }}</li>
-              {% endfor %}
-            </ul>
-            {% endif %}
+
+		<div id="body_holder">
+		    {% block panel %}
+		    {% endblock %}
+	          <div id="body" class="{% block body_div_class %}body_with_sidebar{% endblock %}">
+	            <div class="breadcrumbs">{% block breadcrumbs %}{% endblock %}</div>
+	            {% block add_story %}
+	          	{% endblock %}
+	            {% if messages %}
+	            <ul id="messages">
+	              {% for message in messages %}
+	              <li id="message_{{ forloop.counter }}"><a href="#" onclick="$('#message_{{ forloop.counter }}').fadeOut(); return false;"><small>{% trans "clear" %}</small></a> {{ message }}</li>
+	              {% endfor %}
+	            </ul>
+	            {% endif %}
             
-            {% block body %}
-            {% endblock %}
+	            {% block body %}
+	            {% endblock %}
             
-          </div>
-	</div>
-        {% endblock %}
-        
-        <div id="footer">{% block footer %}{% endblock %}</div>
+	          </div>
+		</div>
+
+        <div style="clear:both;height: 20px;"></div>
+        <div id="footer" class="footer">
+			<br/>Copyright ScrumDo LLC     {% trans "&copy; 2011 " %} <br/>ScrumDo is registered trademark of ScrumDo, LLC.<br/>
+		</div>
         
         
         <script src="{{ STATIC_URL }}pinax/js/base.js" type="text/javascript"></script>
@@ -167,7 +169,6 @@
 
     
 	</script>
-
 
 
         {% block extra_body_base %}
