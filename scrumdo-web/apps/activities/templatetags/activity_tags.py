@@ -8,6 +8,8 @@ from django.utils.html import escape
 
 from activities.models import Activity, StoryActivity, IterationActivity, DeletedActivity, CommentActivity, PointsChangeActivity
 
+import string
+
 register = template.Library()
 
 def iteration_name(iteration):
@@ -43,6 +45,10 @@ def render_activity(activity):
         return activity.render_to_string()
     return render_to_string("activities/single_activity.html", 
                               {"act":activity} )
+
+@register.filter
+def absolute_url(value):    
+    return string.replace(value,'href="/','href="http://www.scrumdo.com/')
 
 @register.filter
 def subscription_checkbox(project , subscription_list):

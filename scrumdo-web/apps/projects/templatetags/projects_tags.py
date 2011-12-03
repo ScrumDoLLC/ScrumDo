@@ -99,8 +99,7 @@ def _google_chart(iteration_or_project, project_size="550x120", iteration_size="
             end_date = int(datetime.combine(iteration_or_project.end_date, time()).strftime("%s")) * 1000
             # logger.debug("!!!!")
             # logger.debug(end_date)
-        except:        
-            traceback.print_exc()
+        except:                    
             end_date_s = date.fromtimestamp( end_date/1000 ).strftime('%Y-%m-%d')
 
         
@@ -123,7 +122,7 @@ def _google_chart(iteration_or_project, project_size="550x120", iteration_size="
             title_snippet = ""
         
         # Put it all together in google chart format.  (Docs: http://code.google.com/apis/chart/)
-        data = "http://chart.googleapis.com/chart?%schf=bg,s,%s&chxr=0,0,%d&cht=lxy&chs=%s&chd=s:%s,%s,%s,%s&chxt=%s,x&chxs=0,%s,8,0,lt&chxl=1:|%s|%s&chco=9ED147,30B6EB&chm=B,eef5fb,1,0,0|B,99CBB0,0,0,0" % ( title_snippet, bg_color, max_val,size,"".join(claimed_dates), "".join(claimed_values), "".join(total_dates), "".join(total_values), label_axis, start_date_s, end_date_s, axis_color )
+        data = "http://chart.googleapis.com/chart?%schf=bg,s,%s&chxr=0,0,%d&cht=lxy&chs=%s&chd=s:%s,%s,%s,%s&chxt=%s,x&chxs=0,%s,8,0,lt&chxl=1:|%s|%s&chco=9ED147,30B6EB&chm=B,eef5fb,1,0,0|B,99CBB0,0,0,0" % ( title_snippet, bg_color, max_val,size,"".join(claimed_dates), "".join(claimed_values), "".join(total_dates), "".join(total_values), label_axis, axis_color, start_date_s, end_date_s )
         #logger.debug(data)
         return data
     except:

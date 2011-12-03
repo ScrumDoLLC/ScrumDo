@@ -3,7 +3,7 @@ from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
 from django.template import loader, Context
 from django.conf import settings
-from activities.models import Activity, StoryActivity
+from activities.models import NewsItem
 
 from mailer import send_mail
 from django.core.mail import EmailMultiAlternatives
@@ -39,17 +39,10 @@ class Command(BaseCommand):
             mdiff = datetime.timedelta(hours=-24)
             daterange = today + mdiff
             stories = {}
-            activities = Activity.objects.filter( project=sub.project, created__gte=daterange).order_by("-created")
-            for act in activities:
-                act = act.mergeChildren()
-                if hasattr(act,"story"):
-                    if act.story.id in stories:
-                        stories[act.story.id]["activities"].append(act)
-                    else:
-                        stories[act.story.id] = {"story":act.story, "activities":[act] }
+            news_items = NewsItem.objects.filter( project=sub.project, created__gte=daterange).order_by("-created")
 
             template = loader.get_template('activities/digest_project.html')
-            context = Context( {"project":sub.project , "stories":stories, "domain":domain, 'email_address':email_address,"support_email":settings.CONTACT_EMAIL} )
+            context = Context( {"project":sub.project , "news_items":news_items, "domain":domain, 'email_address':email_address,"support_email":settings.CONTACT_EMAIL} )
             body = "%s %s" % (body, template.render(context))
 
         template = loader.get_template('activities/digest_footer.html')
