@@ -58,7 +58,7 @@ from projects.models import Project, ProjectMember, Iteration, Story
 from projects.forms import *
 from projects.import_export import exportProject
 from organizations.models import Organization
-from activities.models import Activity, StoryActivity, IterationActivity
+
 import datetime
 
 from story_views import handleAddStory

@@ -3,7 +3,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.syndication.feeds import Feed
 from django.shortcuts import get_object_or_404
 from projects.models import Project, ProjectMember, Iteration, Story
-from activities.models import Activity, StoryActivity, IterationActivity
+from activities.models import NewsItem
 
 import activities.feedgenerator as feedgenerator
 

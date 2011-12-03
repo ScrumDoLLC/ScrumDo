@@ -1,0 +1,3 @@
+{% load markup %}{% load projects_tags %}
+commented on story <a href="{{story.get_absolute_url}}">#{{story.local_id}}</a> in <a href="{% url iteration story.iteration.project.slug story.iteration.id %}">{{story.project.name}} / {{story.iteration.name}}</a>. <br/>
+<i>{{item.comment}}</i>

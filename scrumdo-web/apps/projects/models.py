@@ -36,7 +36,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 
 from organizations.models import Organization, Team
-from activities.models import Activity, StoryActivity, IterationActivity
+
 import django.dispatch
 
 STATUS_TODO = 1
@@ -227,9 +227,6 @@ class Iteration( models.Model):
     points_log = generic.GenericRelation( PointsLog )
     locked = models.BooleanField( default=False )
 
-    activity_signal = django.dispatch.Signal(providing_args=["user","action","project"])
-    activity_signal.connect(IterationActivity.activity_handler)
-
     include_in_velocity = models.BooleanField(_('include_in_velocity'), default=True)
 
     def isCurrent(self):
@@ -373,8 +370,6 @@ class Story( models.Model ):
 
     tags_to_delete = []
     tags_to_add = []
-    activity_signal = django.dispatch.Signal(providing_args=["user","action", "project", "story"])
-    activity_signal.connect(StoryActivity.activity_handler)
 
     @staticmethod
     def getAssignedStories(user, organization):

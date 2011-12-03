@@ -108,6 +108,24 @@ def onScrumLogPosted(sender, instance, signal, *args, **kwargs):
 models.signals.post_save.connect(onScrumLogPosted, sender=ScrumLog)
 
 
+def onCommentPosted(sender, **kwargs):
+    t_comment = kwargs['instance']
+    from projects.models import Story
+    # check if this is a comment on a story, the only kind we know how to deal with, and that its a new comment.
+    if t_comment.content_type.id == ContentType.objects.get_for_model(Story).id and kwargs['created']:
+        try:
+            story = Story.objects.get(id=t_comment.object_id)        
+            item = NewsItem(user=t_comment.user, project=story.iteration.project, icon="comment_add" )            
+            item.text = render_to_string("activities/comment_on_story.txt", {'story':story,'item':t_comment} )
+            item.save()
+        except:
+            logger.error("Could not create news item")
+            traceback.print_exc(file=sys.stdout)
+                    
+
+models.signals.post_save.connect(onCommentPosted, sender=ThreadedComment)
+
+
 
 
 class ActivityAction(models.Model):
@@ -265,76 +283,76 @@ class Activity(InheritanceCastModel):
         date_30days_Agoago = today + mdiff
         Activity.objects.filter(created__lte=date_30days_Agoago).delete()
 
-class TextActivity(Activity):
-    "A generic text-based activity item"
-    text = models.TextField()
-    def render_to_string(self):
-        return self.text
-    @staticmethod
-    def activity_handler(sender, instance, **kwargs):
-        action = ActivityAction.objects.get(name="wrote")
-        act = TextActivity( text=instance.render_text(), user=instance.creator, action=action, project=instance.project )
-        act.save()
+# class TextActivity(Activity):
+#     "A generic text-based activity item"
+#     text = models.TextField()
+#     def render_to_string(self):
+#         return self.text
+#     @staticmethod
+#     def activity_handler(sender, instance, **kwargs):
+#         action = ActivityAction.objects.get(name="wrote")
+#         act = TextActivity( text=instance.render_text(), user=instance.creator, action=action, project=instance.project )
+#         act.save()
 
-class StoryActivity(Activity):
-    story = models.ForeignKey("projects.Story", related_name="StoryActivities")
-    # if it is a change status, record what it was changed to
-    status = models.CharField("status", max_length=20, null=True)
+# class StoryActivity(Activity):
+#     story = models.ForeignKey("projects.Story", related_name="StoryActivities")
+#     # if it is a change status, record what it was changed to
+#     status = models.CharField("status", max_length=20, null=True)
+# 
+#     def get_absolute_url(self):
+#         return (self.story.iteration.get_absolute_url() + "#story_" + str(self.story.id))
+# 
+#     @staticmethod
+#     def activity_handler(sender, **kwargs):
+#         if "pointschange" in kwargs:
+#             # this is a pointschanged activity
+#             return PointsChangeActivity.activity_handler(sender, **kwargs)
+#         status = None
+#         if "status" in kwargs:
+#             status = kwargs['status']
+#         action = ActivityAction.objects.get(name=kwargs['action'])
+#         story = sender
+#         if action.name == "deleted":
+#             # we want to create a DeletedActivity with the name of the story
+#             story_name = sender.summary
+#             storyActivity = DeletedActivity(user=kwargs['user'],action=action,name=story_name, project=kwargs['project'])
+#         else:
+#             storyActivity = StoryActivity(user=kwargs['user'],action=action,story=story, project=kwargs['project'], status=status)
+#         storyActivity.save()
 
-    def get_absolute_url(self):
-        return (self.story.iteration.get_absolute_url() + "#story_" + str(self.story.id))
 
-    @staticmethod
-    def activity_handler(sender, **kwargs):
-        if "pointschange" in kwargs:
-            # this is a pointschanged activity
-            return PointsChangeActivity.activity_handler(sender, **kwargs)
-        status = None
-        if "status" in kwargs:
-            status = kwargs['status']
-        action = ActivityAction.objects.get(name=kwargs['action'])
-        story = sender
-        if action.name == "deleted":
-            # we want to create a DeletedActivity with the name of the story
-            story_name = sender.summary
-            storyActivity = DeletedActivity(user=kwargs['user'],action=action,name=story_name, project=kwargs['project'])
-        else:
-            storyActivity = StoryActivity(user=kwargs['user'],action=action,story=story, project=kwargs['project'], status=status)
-        storyActivity.save()
+# class CommentActivity(Activity):
+#     story = models.ForeignKey("projects.Story", related_name="StoryCommentActivities")
+#     comment = models.TextField()
+# 
+#     def get_absolute_url(self):
+#         return (self.story.iteration.get_absolute_url() + "#story_" + str(self.story.id))
+# 
+#     @staticmethod
+#     def activity_handler(sender, **kwargs):
+#         action = ActivityAction.objects.get(name="commented")
+#         t_comment = kwargs['instance']
+#         from projects.models import Story
+#         # check if this is a comment on a story, the only kind we know how to deal with, and that its a new comment.
+#         if t_comment.content_type.id == ContentType.objects.get_for_model(Story).id and kwargs['created']:
+#             story = Story.objects.get(id=t_comment.object_id)
+#             commentActivity = CommentActivity(user=t_comment.user,action=action,story=story,project=story.project,comment=t_comment.comment)
+#             commentActivity.save()
+# 
+# models.signals.post_save.connect(CommentActivity.activity_handler, sender=ThreadedComment)
 
-
-class CommentActivity(Activity):
-    story = models.ForeignKey("projects.Story", related_name="StoryCommentActivities")
-    comment = models.TextField()
-
-    def get_absolute_url(self):
-        return (self.story.iteration.get_absolute_url() + "#story_" + str(self.story.id))
-
-    @staticmethod
-    def activity_handler(sender, **kwargs):
-        action = ActivityAction.objects.get(name="commented")
-        t_comment = kwargs['instance']
-        from projects.models import Story
-        # check if this is a comment on a story, the only kind we know how to deal with, and that its a new comment.
-        if t_comment.content_type.id == ContentType.objects.get_for_model(Story).id and kwargs['created']:
-            story = Story.objects.get(id=t_comment.object_id)
-            commentActivity = CommentActivity(user=t_comment.user,action=action,story=story,project=story.project,comment=t_comment.comment)
-            commentActivity.save()
-
-models.signals.post_save.connect(CommentActivity.activity_handler, sender=ThreadedComment)
-
-class PointsChangeActivity(Activity):
-    story = models.ForeignKey("projects.Story", related_name="StoryPointsChangeActivities")
-    old = models.CharField('points', max_length=3)
-    new = models.CharField('points', max_length=3)
-
-    def get_absolute_url(self):
-        return (self.story.iteration.get_absolute_url() + "#story_" + str(self.story.id))
-
-    @staticmethod
-    def activity_handler(sender, **kwargs):
-        pointsChangeActivity = PointsChangeActivity(user=kwargs['user'],action=ActivityAction.objects.get(name=kwargs['action']),story=kwargs['story'], project=kwargs['project'], old=kwargs['old'], new=kwargs['new'])
-        pointsChangeActivity.save()
+# class PointsChangeActivity(Activity):
+#     story = models.ForeignKey("projects.Story", related_name="StoryPointsChangeActivities")
+#     old = models.CharField('points', max_length=3)
+#     new = models.CharField('points', max_length=3)
+# 
+#     def get_absolute_url(self):
+#         return (self.story.iteration.get_absolute_url() + "#story_" + str(self.story.id))
+# 
+#     @staticmethod
+#     def activity_handler(sender, **kwargs):
+#         pointsChangeActivity = PointsChangeActivity(user=kwargs['user'],action=ActivityAction.objects.get(name=kwargs['action']),story=kwargs['story'], project=kwargs['project'], old=kwargs['old'], new=kwargs['new'])
+#         pointsChangeActivity.save()
 
 
 class IterationActivity(Activity):
