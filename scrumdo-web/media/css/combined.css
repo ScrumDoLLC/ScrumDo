@@ -16,15 +16,21 @@
 
 html, body, .body_holder {
     height: 100%;
-    min-width: 960px;
+    min-width: 960px;    
 }
 body {
-    background-color: #FFF;
+    background-color: #2b2d2e;
     margin: 0;
     color: #333;
     font-family: "Helvetica Neue", Arial, sans-serif;
     font-size: 10pt;
 }
+
+#body_holder {
+	background-color: #fff;
+	min-height: 600px;
+}
+
 img {
     border: 0;
 }
