@@ -16,7 +16,6 @@ from django.db.models import Q
 from projects.models import Project,ProjectMember,Story,Iteration,Epic,Task
 from organizations.models import Organization, Team
 from threadedcomments.models import ThreadedComment
-from activities.models import Activity, ActivityAction
 
 from projects.access import has_read_access, has_write_access
 
@@ -171,25 +170,25 @@ class ProjectResource(ModelResource):
            lambda u: Q(teams__in = u.teams.all())|Q(member_users__in = [u]),
            lambda u: Q(teams__in = u.teams.filter(Q(access_type="read/write")|Q(access_type="admin")))|Q(member_users__in = [u]))
 
-class ActivityActionResource(ModelResource):
-
-    class Meta:
-        queryset = ActivityAction.objects.all()
-        fields = ['name']
-
-class ActivityResource(ModelResource):
-    def obj_get_list(self, request=None, **kwargs):
-        """ overriding """
-        return Activity.getActivitiesForUser(request.user)
-       
-    line = fields.CharField(readonly=True)
-    #creator = fields.ToOneField('api.resources.UserResource', 'user', full=True)
-    #project = fields.ToOneField('api.resources.ProjectResource', 'project', full=True)
-    #action = fields.ToOneField('api.resources.ActivityActionResource', 'action', full=True)
-
-    class Meta:
-        queryset = Activity.objects.all()
-        authentication = ScrumDoAuthentication()
-    
-    def dehydrate_line(self, bundle):
-        return bundle.obj.getPrettyActivityString()
+# class ActivityActionResource(ModelResource):
+# 
+#     class Meta:
+#         queryset = ActivityAction.objects.all()
+#         fields = ['name']
+# 
+# class ActivityResource(ModelResource):
+#     def obj_get_list(self, request=None, **kwargs):
+#         """ overriding """
+#         return Activity.getActivitiesForUser(request.user)
+#        
+#     line = fields.CharField(readonly=True)
+#     #creator = fields.ToOneField('api.resources.UserResource', 'user', full=True)
+#     #project = fields.ToOneField('api.resources.ProjectResource', 'project', full=True)
+#     #action = fields.ToOneField('api.resources.ActivityActionResource', 'action', full=True)
+# 
+#     class Meta:
+#         queryset = Activity.objects.all()
+#         authentication = ScrumDoAuthentication()
+#     
+#     def dehydrate_line(self, bundle):
+#         return bundle.obj.getPrettyActivityString()

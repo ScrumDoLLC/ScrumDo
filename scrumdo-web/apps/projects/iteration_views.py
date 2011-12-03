@@ -37,7 +37,6 @@ from projects.forms import *
 from projects.access import *
 import projects.import_export as import_export
 
-from activities.models import ActivityAction
 from story_views import handleAddStory
 
 import logging

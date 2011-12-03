@@ -10,6 +10,7 @@ from itertools import groupby
 from threadedcomments.models import ThreadedComment
 from activities.utils import allinstances, instanceof
 from scrumdo_model_utils.models import InheritanceCastModel
+from scrum_log.models import ScrumLog
 
 import projects.signals as signals
 
@@ -94,6 +95,17 @@ def onTaskDeleted(sender, **kwargs):
     _createTaskNewsItem('drive_delete', 'delete_task.txt', **kwargs)    
 signals.task_deleted.connect( onTaskDeleted , dispatch_uid="newsfeed_signal_hookup")
 
+
+def onScrumLogPosted(sender, instance, signal, *args, **kwargs):
+    try:        
+        item = NewsItem(user=instance.creator, project=instance.project, icon="group" )
+        item.text = render_to_string("activities/scrumLog.txt", {'item':instance} )
+        item.save()
+    except:
+        logger.error("Could not create news item")
+        traceback.print_exc(file=sys.stdout)
+        
+models.signals.post_save.connect(onScrumLogPosted, sender=ScrumLog)
 
 
 
