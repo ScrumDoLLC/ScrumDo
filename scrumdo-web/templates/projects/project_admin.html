@@ -162,7 +162,7 @@
   
      {% if organizations %}
          <h2 class="page-divider">Move to organization</h2>
-         <p>You can move this project into one of your organizations.</p>     
+         <p>You can move this project into one of your other organizations.</p>     
          <form  method="POST" action="" class="uniForm">       
            <fieldset class="inlineLabels">
                    <div class="ctrlHolder">
@@ -188,7 +188,7 @@
      {% endif %}
 
 
-     {% if project.organization %}
+     <!-- {% if project.organization %}
      <h2 class="page-divider">Remove from organization</h2>
       <p>You can remove this project from your organization.</p>     
       <form  method="POST" action="" class="uniForm">       
@@ -209,7 +209,7 @@
       </form>
       <br/>
 
-     {% endif %}
+     {% endif %} -->
 
       <br/>
         <p>{% silk "delete" %} <a href="#" onclick="$('#delete_project_form').toggle(); return false;">{% trans "Delete project" %}</a><p>

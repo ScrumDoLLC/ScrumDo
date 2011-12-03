@@ -84,6 +84,12 @@ class Organization(models.Model):
     def getAdminOrganizationsForUser( user ):
         return Organization.objects.filter( teams__access_type="admin", teams__members = user ).distinct().order_by("name")
 
+    def getOwnersGroup(self):
+        teams = self.teams.filter( access_type="admin" )
+        if len(teams) > 0:
+            return teams[0]
+        return None
+
     def projectsByCategory(self):
         return self.projects.all().order_by('-active','category','name')
 

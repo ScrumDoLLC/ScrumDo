@@ -216,18 +216,25 @@ def project_admin( request, group_slug ):
                 return HttpResponseRedirect(reverse("project_detail",kwargs={'group_slug':project.slug}))
         if request.POST.get("action") == "moveToOrganization":
             organization = get_object_or_404( Organization, id=request.POST.get("organization_id",""))
-            project.organization = organization
-            project.save()
-            request.user.message_set.create(message="Project added to organization")
-            return HttpResponseRedirect(reverse("organization_detail",kwargs={'organization_slug':organization.slug}))
-        if request.POST.get("action") == "removeFromOrganization":
-            if request.POST.get("remove") == "on":
+            if project.organization:
                 for team in project.organization.teams.all():
                     if project in team.projects.all():
-                        team.projects.remove(project)
-                project.organization = None
-                project.save()
-                request.user.message_set.create(message="Project removed from organization")
+                        team.projects.remove(project)                
+            project.organization = organization
+            project.save()
+            owners = organization.getOwnersGroup()
+            if owners:
+                owners.projects.add(project)
+            request.user.message_set.create(message="Project moved to organization")
+            return HttpResponseRedirect(reverse("organization_detail",kwargs={'organization_slug':organization.slug}))
+        # if request.POST.get("action") == "removeFromOrganization":
+        #     if request.POST.get("remove") == "on":
+        #         for team in project.organization.teams.all():
+        #             if project in team.projects.all():
+        #                 team.projects.remove(project)
+        #         project.organization = None
+        #         project.save()
+        #         request.user.message_set.create(message="Project removed from organization")
         if request.POST.get("action") == "add":
             write_access_or_403(project, request.user )
             adduser_form = AddUserForm(request.POST, project=project, user=request.user)
@@ -243,10 +250,8 @@ def project_admin( request, group_slug ):
 
 
 
-    if project.organization:
-        organizations = None
-    else:
-        organizations = Organization.getAdminOrganizationsForUser(request.user)
+
+    organizations = Organization.getAdminOrganizationsForUser(request.user)
 
     return render_to_response("projects/project_admin.html", {
         "project": project,
