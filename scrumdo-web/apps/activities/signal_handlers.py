@@ -133,7 +133,10 @@ signals.iteration_deleted.connect( onIterationDeleted , dispatch_uid="newsfeed_s
 
 def onScrumLogPosted(sender, instance, signal, *args, **kwargs):
     try:        
-        item = NewsItem(user=instance.creator, project=instance.project, icon="group" )
+        icon = "group"
+        if instance.flagged:
+            icon = "flag_red"
+        item = NewsItem(user=instance.creator, project=instance.project, icon=icon )
         item.text = render_to_string("activities/scrumLog.txt", {'item':instance} )
         item.save()
     except:

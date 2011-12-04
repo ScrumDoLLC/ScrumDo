@@ -1,2 +1,2 @@
 {% load markup %}{% load projects_tags %}
-wrote {{item.message}}
+wrote {{item.message}} in <a href="{% url project_detail item.project.slug %}">{{ item.project.name }}</a>
