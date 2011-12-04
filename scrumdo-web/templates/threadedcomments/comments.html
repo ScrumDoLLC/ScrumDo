@@ -40,7 +40,7 @@
         <form obj_id="{{object.id}}" action="{% get_comment_url object %}" method="POST">
             <table>
                 <tr><td><textarea id="id_comment" rows="3" cols="60" name="comment"></textarea></td></tr>
-                <tr><td><input class="button" type="submit" value="{% trans "Post Comment" %}" /></td></tr>
+                <tr><td><input class="blue button" type="submit" value="{% trans "Post Comment" %}" /></td></tr>
             </table>
             <input type="hidden" name="next" value="{{ request.path }}" />
         </form>

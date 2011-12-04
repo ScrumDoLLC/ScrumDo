@@ -1,5 +1,6 @@
 {% extends "projects/base.html" %}
 
+{% load activity_tags %}
 {% load i18n %}
 {% load uni_form %}
 {% load avatar_tags %}
@@ -16,7 +17,7 @@
 
 {% block head_title %}{{ project.name }}{% endblock %}
     
-
+{% block body_div_class %}narrow_body_with_sidebar{% endblock %}
 
 
 {% block add_story %}
@@ -67,6 +68,9 @@
         <img src="{{ STATIC_URL }}images/burndown.png" />
     {% endif %}
 
+	<h1>News feed</h1>
+
+	{% news_feed %}
 
 	{% scrum_log project %}
 	
@@ -98,7 +102,7 @@
         }
     
         $(document).ready(function() {
-                  
+                setupNewsItemMoreLinks();
                 var options = {
                    colors: ["#2292ff", "#ADD75C"],
                    xaxis: { minTickSize: [1, "day"] , mode: "time", timeformat: "%m/%d/%y" },
