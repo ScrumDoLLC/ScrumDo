@@ -23,8 +23,8 @@ def news_feed(context):
     request = context["request"]
     if "organization" in context:
         organization = context["organization"]
-        news_items = NewsItem.objects.filter(project__organization=organization,project__teams__members=user) 
-        
+        # NOTE: We need to watch this query to make sure it performs ok.
+        news_items = NewsItem.objects.filter(project__organization=organization, project__teams__members=user)         
     else:
         project = context["project"]
         if access.has_read_access(project,user):
