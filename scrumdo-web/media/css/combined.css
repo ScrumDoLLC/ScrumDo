@@ -117,6 +117,25 @@ h2 {
 	border-style: none;
 	text-align: center;
 }
+
+
+.ajax-error {
+	background-color: #993333;
+	font-weight: bold;
+	color: #fff;
+	font-size: 14px;
+	padding: 6px;
+	border-style: none;
+	text-align: center;
+	position: fixed;    
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	min-height: 35px;
+	z-index: 5000;
+	display: none;
+}
+
 /* CLEARS */
 
 .clearboth {

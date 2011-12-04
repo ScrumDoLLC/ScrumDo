@@ -345,6 +345,18 @@ $(document).ready(function() {
         $(".category_name").focus();
         return false;
     });
+    
+    $("body").ajaxError(function(request, status, error) {
+		var errorMsg = "";
+		if(request.responseText) {
+			errorMsg = request.responseText.substr(0,100);
+		}
+		$(".ajax-error").html("There was an error handling that request.<br/>" + errorMsg )
+		$(".ajax-error").slideDown(400);
+		
+		setTimeout('$(".ajax-error").slideUp(400);',3000);		
+	});
+    
 });
 
 
