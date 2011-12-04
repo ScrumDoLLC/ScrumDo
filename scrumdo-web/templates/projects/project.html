@@ -68,11 +68,17 @@
         <img src="{{ STATIC_URL }}images/burndown.png" />
     {% endif %}
 
-	<h1>News feed</h1>
-
-	{% news_feed %}
-
-	{% scrum_log project %}
+	<div id="news_feed">
+  	  <h1>News feed</h1>
+	  <a id="view_scrum_log_link" href="#">View Scrum Log</a>
+	  {% news_feed %}
+	</div>
+	
+	<div id="scrum_log" style="display:none">
+  	  <h1>Scrum Log</h1>
+	  <a id="view_news_feed_link" href="#">View News Feed</a>
+	  {% scrum_log project %}
+	</div>
 	
 {% endblock %}
 
@@ -102,6 +108,18 @@
         }
     
         $(document).ready(function() {
+	
+				$("#view_scrum_log_link").click(function(){
+					$("#scrum_log").show();
+					$("#news_feed").hide();
+					return false;
+				});
+				$("#view_news_feed_link").click(function(){
+					$("#scrum_log").hide();
+					$("#news_feed").show();
+					return false;
+				});
+	
                 setupNewsItemMoreLinks();
                 var options = {
                    colors: ["#2292ff", "#ADD75C"],
