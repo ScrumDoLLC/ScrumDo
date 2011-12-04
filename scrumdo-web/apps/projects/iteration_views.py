@@ -31,7 +31,7 @@ from django.core.exceptions import PermissionDenied
 import datetime
 
 from projects.calculation import onDemandCalculateVelocity
-
+import projects.signals as signals
 from projects.models import Project, ProjectMember, Iteration, Story
 from projects.forms import *
 from projects.access import *
@@ -129,7 +129,8 @@ def iteration_create(request, group_slug=None):
             iteration.project = project
             iteration.save()
             action = "created"
-            iteration.activity_signal.send(sender=iteration, user=request.user, action=action, project=project)
+            signals.iteration_created.send(user=request.user, iteration=iteration, sender=request)
+            # iteration.activity_signal.send(sender=iteration, user=request.user, action=action, project=project)
             request.user.message_set.create(message="Iteration created.")
             return HttpResponseRedirect( reverse('project_detail', kwargs={'group_slug':project.slug}) ) # Redirect after POST
 
@@ -152,12 +153,11 @@ def delete_iteration( request, group_slug, iteration_id ):
 
     if request.method == "POST":
         write_access_or_403(iteration.project,request.user)
-        # dont think this signal exists.
-        # signals.iteration_deleted.send( sender=request, iteration=iteration, user=request.user )
         stories = Story.objects.filter(iteration = iteration)
-        if not stories:
+        if not stories:            
+            # iteration.activity_signal.send(sender=Iteration, news=request.user.username + " deleted\"" +iteration.name + "\" in project\"" +iteration.project.name, user=request.user,action="deleted" ,object=iteration.name, story = None, context=iteration.project.slug)
+            signals.iteration_deleted.send(user=request.user, iteration=iteration, sender=request)
             iteration.delete()
-            iteration.activity_signal.send(sender=Iteration, news=request.user.username + " deleted\"" +iteration.name + "\" in project\"" +iteration.project.name, user=request.user,action="deleted" ,object=iteration.name, story = None, context=iteration.project.slug)
             request.user.message_set.create(message="Iteration deleted.")
             return HttpResponseRedirect( reverse('project_detail', kwargs={'group_slug':iteration.project.slug}) ) # Redirect after POST, to the only logical place
         else:

@@ -65,8 +65,8 @@ def set_story_status( request, group_slug, story_id, status):
         story.status = status;
         story.save();
         signals.story_status_changed.send( sender=request, story=story, user=request.user )
-        statuses = [None, "TODO", "In Progress", "Reviewing", "Done"]
-        story.activity_signal.send(sender=story, user=request.user, story=story, action="changed status", status=statuses[status], project=story.project)
+        # statuses = [None, "TODO", "In Progress", "Reviewing", "Done"]
+        # story.activity_signal.send(sender=story, user=request.user, story=story, action="changed status", status=statuses[status], project=story.project)
         onDemandCalculateVelocity( story.project )
 
     organization = _organizationOrNone( story.project )
@@ -114,7 +114,7 @@ def delete_story( request, group_slug, story_id ):
         story = get_object_or_404( Story, id=story_id )
         write_access_or_403(story.project,request.user)
         signals.story_deleted.send( sender=request, story=story, user=request.user )
-        story.activity_signal.send(sender=story, user=request.user, story=story, action="deleted", project=story.project)
+        # story.activity_signal.send(sender=story, user=request.user, story=story, action="deleted", project=story.project)
         story.sync_queue.clear()
         story.delete()
         onDemandCalculateVelocity( story.project )
@@ -138,8 +138,8 @@ def scrum_board( request, group_slug, story_id):
         reorderStory( story, request.POST.get("before"), request.POST.get("after"), story.iteration, field_name="board_rank")
         if story.status != target_status:
             story.status = target_status
-            story.save()
-            story.activity_signal.send(sender=story, user=request.user, story=story, action="changed status", status=story.statusText(), project=story.project)
+            story.save()            
+            signals.story_status_changed.send( sender=request, story=story, user=request.user)            
             onDemandCalculateVelocity( story.project )
         else:
             story.save()
@@ -223,6 +223,7 @@ def reorder_story( request, group_slug, story_id):
     write_access_or_403(project,request.user)
     if request.method == 'POST':
         old_story = story.__dict__.copy()
+        
         rank = 0
         target_iteration = request.POST.get("iteration","")
 
@@ -232,8 +233,11 @@ def reorder_story( request, group_slug, story_id):
             iteration = story.iteration
 
         if request.POST.get("action","") == "reorder" :
-            reorderStory( story, request.POST.get("before"), request.POST.get("after"), iteration)
-            story.activity_signal.send(sender=story, user=request.user, story=story, action="reordered", project=project)
+            old_story = story.__dict__.copy()
+            reorderStory( story, request.POST.get("before"), request.POST.get("after"), iteration)            
+            diffs = utils.model_differences(old_story, story.__dict__, dicts=True)
+            signals.story_updated.send( sender=request, story=story, user=request.user, diffs=diffs )            
+            # story.activity_signal.send(sender=story, user=request.user, story=story, action="reordered", project=project)
 
         if request.POST.get("epic","-1") != "-1":
             epic_id = request.POST.get("epic")
@@ -248,7 +252,7 @@ def reorder_story( request, group_slug, story_id):
         story.iteration = iteration
         story.save()
         diffs = utils.model_differences(old_story, story.__dict__, dicts=True)
-        signals.story_updated.send( sender=request, story=story, user=request.user, diffs=diffs )
+
         return HttpResponse("OK")
     return  HttpResponse("Fail")
 
@@ -434,14 +438,6 @@ def story_edit(request, group_slug, story_id):
             
             diffs = utils.model_differences(old_story, story.__dict__, dicts=True)
             activities = 0
-            # if diffs.has_key("points"):
-            #     story.activity_signal.send(sender=story, user=request.user, story=story, pointschange=True, action="changed point value", project=project, old=diffs['points'][0], new=diffs['points'][1])
-            #     activities = activities + 1
-            # # to do other stories based on specific changes, simply add more if clauses like the one above
-            # 
-            # if len(diffs) > activities:
-            #     # this means that we have not accounted for all the changes above, so add a generic story edited activity
-            #     story.activity_signal.send(sender=story, user=request.user, story=story, action="edited", project=project)
 
             signals.story_updated.send( sender=request, story=story, diffs=diffs, user=request.user )
             onDemandCalculateVelocity( project )
@@ -687,7 +683,7 @@ def _handleAddStoryInternal( form , project, request):
     if story.points_value() > 0:
         onDemandCalculateVelocity( project )
     signals.story_created.send( sender=request, story=story, user=request.user )
-    story.activity_signal.send(sender=story, user=request.user, story=story, action="created", project=project)
+    # story.activity_signal.send(sender=story, user=request.user, story=story, action="created", project=project)
     request.user.message_set.create(message="Story #%d created." % story.local_id )
     return story
 

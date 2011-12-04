@@ -46,3 +46,9 @@ task_updated = django.dispatch.Signal(providing_args=["task","user"])
 # Signal dispatched when a task is deleted.
 # Note: it's already been deleted when this is dispatched.
 task_deleted = django.dispatch.Signal(providing_args=["task","user"])
+
+# Dispatched when an iteration is created.
+iteration_created = django.dispatch.Signal(providing_args=["iteration","user"])
+
+# Dispatched when an iteration is deleted.
+iteration_deleted = django.dispatch.Signal(providing_args=["iteration","user"])

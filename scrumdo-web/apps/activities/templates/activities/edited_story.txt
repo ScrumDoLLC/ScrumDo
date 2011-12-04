@@ -1,9 +1,9 @@
 {% load markup %}{% load projects_tags %}
-modified story <a href="{{story.get_absolute_url}}">#{{story.local_id}}</a> <i>{{story.summary}}</i> 
+modified story <a href="{{story.get_absolute_url}}">#{{story.local_id}}</a> <i>{{story.summary}}</i> in <a href="{% url iteration story.iteration.project.slug story.iteration.id %}">{{story.project.name}} / {{story.iteration.name}}</a>
 <ul>
 {% for fieldname,values in diffs.items %}
 	<li>
-		{{fieldname|capfirst}}: {{values.0}} -&gt; {{values.1}}
+		{{values}}
 	</li>
 {% endfor %}
 </ul>

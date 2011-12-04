@@ -3,17 +3,17 @@ story_template_type = 'block';
 
 function setupFavoriteLinks()
 {
-    $(".favorite_link img").css("opacity","0.2");
-    $(".favorite_link img").hover(
-        	 function()
-        	 {
-        	     $(this).css("opacity","1")
-        	 },
-        	 function()
-        	 {
-        	     $(this).css("opacity","0.2")
-        	 }
-	);
+    // $(".favorite_link img").css("opacity","0.2");
+    //    $(".favorite_link img").hover(
+    //           function()
+    //           {
+    //               $(this).css("opacity","1")
+    //           },
+    //           function()
+    //           {
+    //               $(this).css("opacity","0.2")
+    //           }
+    //  );
 
 }
 

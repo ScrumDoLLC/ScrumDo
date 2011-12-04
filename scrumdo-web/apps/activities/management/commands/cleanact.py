@@ -2,7 +2,7 @@
 from optparse import make_option
 import datetime
 from  django.core.management.base import BaseCommand
-from activities.models import Activity
+from activities.models import NewsItem
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
@@ -19,4 +19,4 @@ class Command(BaseCommand):
 
     def purge(self, *app_labels, **options):
         print 'Purging Activities'
-        Activity.purgeOld(14)
+        NewsItem.purgeOld(365)

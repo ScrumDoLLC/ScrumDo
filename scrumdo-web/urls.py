@@ -34,7 +34,7 @@ if settings.ACCOUNT_OPEN_SIGNUP:
 else:
     signup_view = "signup_codes.views.signup"
 
-feeds = {
+feeds = {    
     'project':feeds.ProjectStories,
     'current':feeds.ProjectCurrentStories,
     'iteration':feeds.ProjectIterationStories,

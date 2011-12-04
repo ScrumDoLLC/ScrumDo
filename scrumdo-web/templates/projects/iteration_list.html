@@ -5,6 +5,6 @@
 {% for iteration in project.iterations.all %}
 <div class="box-content">
   {% iteration_name iteration %}{% if iteration.stories.count %} <span class="subtitle">({{iteration.stories.count}})</span>{% endif %}
-  <div class="feed"><a title="Feed of activity in {{ iteration.name }}." target="_blank" href="/feeds/iteration/{{ project.pk }}/{{ project.token }}/{{ iteration.pk }}">{% silk "feed" %}</a></div>
+  
 </div><!--box-content-->
 {% endfor %}
