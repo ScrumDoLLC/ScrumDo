@@ -328,6 +328,17 @@ function setupNewsItemMoreLinks() {
     
 }
 
+function onAjaxError(request, status, error) {
+    var errorMsg = "";
+	if(request.responseText) {
+		errorMsg = request.responseText.substr(0,100);
+	}
+	$(".ajax-error").html("There was an error handling that request.<br/>" + errorMsg )
+	$(".ajax-error").slideDown(400);
+	
+	setTimeout('$(".ajax-error").slideUp(400);',3000);
+}
+
 $(document).ready(function() {
     setupFavoriteLinks();
     $("body").bind("storyListChanged", setUpStoryLinks );
@@ -346,16 +357,23 @@ $(document).ready(function() {
         return false;
     });
     
-    $("body").ajaxError(function(request, status, error) {
-		var errorMsg = "";
-		if(request.responseText) {
-			errorMsg = request.responseText.substr(0,100);
-		}
-		$(".ajax-error").html("There was an error handling that request.<br/>" + errorMsg )
-		$(".ajax-error").slideDown(400);
+    var page_unloading = false;
+    
+    $(document).ajaxError(function(request, status, error) {
+
+        if( page_unloading ) {
+            return;
+        }
+        globalErrorHandler = function() { onAjaxError(request, status, error); };
+        setTimeout("globalErrorHandler()",2000); // The 2 second delay is a hack to make this not happen when a user navigates away from a page during a request.
 		
-		setTimeout('$(".ajax-error").slideUp(400);',3000);		
 	});
+	
+	$(window).unload(function() {
+      page_unloading = true;
+      $(".ajax-error").hide();
+      $(document).unbind('ajaxError');
+    });
     
 });
 
