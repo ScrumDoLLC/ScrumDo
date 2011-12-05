@@ -64,10 +64,44 @@
 <p><strong>uri:</strong> organization/<em>ORGANIZATION_ID</em> - parameters: user_key (string), user_name (string).<br>
   <strong>returns:</strong> {"created": "TIMESTAMP", "description": "STRING", "id": "ORGANIZATION_ID", "name": "STRING", "projects": [LIST OF "PROJECT_RESOURCE_URI"], "resource_uri": "/api/v1/organization/ORGANIZATION_ID/", "slug": "STRING", "teams": [LIST OF "TEAM_RESOURCE_URI"]}<br>
   <strong>example:</strong> /api/v1/organization/1?user_key=06909df452564210a7cef5811132a53ba3a7a31a&username=test <br><br>
-  </p>
+</p>
 
 <h2 alt="Team">Team</h2>
 <p><strong>uri:</strong> team/<em>TEAM_ID</em> - parameters: user_key (string), user_name (string).<br>
   <strong>returns:</strong> {"access_type": "admin" OR "read/write" OR "read", "id": "TEAM_ID", "members": [LIST OF "USER_RESOURCE_URI"], "name": "STRING", "organization": "ORGANIZATION_RESOURCE_URI", "projects": [LIST OF "PROJECT_RESOURCE_URI"], "resource_uri": "/api/v1/team/TEAM_ID/"}<br>
   <strong>example:</strong> /api/v1/team/1?user_key=06909df452564210a7cef5811132a53ba3a7a31a&username=test <br><br>
-  </p>
+</p>
+
+<h2 alt="News">News Feed</h2>
+<p>Retrieves the news feed for the currently logged in user.</p>
+<p><strong>uri:</strong> news - parameters: user_key (string), user_name (string).<br>
+  <strong>returns:</strong>
+<pre>
+	{
+	    "meta": {
+	        "limit": 20, 
+	        "offset": 0, 
+	        "total_count": 2
+	    }, 
+	    "objects": [
+		{
+		    &quot;created&quot;: &quot;2011-12-04T08:59:15&quot;, 
+		    &quot;icon&quot;: &quot;http://www.scrumdo.com/site_media/static/images/script_code.png&quot;, 
+		    &quot;resource_uri&quot;: &quot;/api/v1/news/21/&quot;, 
+		    &quot;text&quot;: &quot;marked story &lt;b&gt;In Progress&lt;/b&gt; - &lt;a href=\&quot;http://www.scrumdo.com/projects/story_permalink/967\&quot;&gt;#66&lt;/a&gt; &lt;i&gt;As a user, 
+		    I want to get emails whenever things I care about change.&lt;/i&gt;\n\n&quot;, 
+		    &quot;user&quot;: &quot;mhughes&quot;
+		}, 
+		{
+		    &quot;created&quot;: &quot;2011-12-04T08:59:13&quot;, 
+		    &quot;icon&quot;: &quot;http://www.scrumdo.com/site_media/static/images/script_code.png&quot;, 
+		    &quot;resource_uri&quot;: &quot;/api/v1/news/20/&quot;, 
+		    &quot;text&quot;: &quot;marked story &lt;b&gt;Reviewing&lt;/b&gt; - &lt;a href=\&quot;http://www.scrumdo.com/projects/story_permalink/64774\&quot;&gt;#194&lt;/a&gt; &lt;i&gt;As an 
+		    organization Admin, I want a better interface.&lt;/i&gt;\n\n&quot;, 
+		    &quot;user&quot;: &quot;mhughes&quot;
+		} ]
+	}
+</pre>
+<br>
+  <strong>example:</strong> /api/v1/news?user_key=06909df452564210a7cef5811132a53ba3a7a31a&username=test <br><br>
+</p>

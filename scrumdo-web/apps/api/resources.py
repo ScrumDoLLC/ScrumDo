@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.core.urlresolvers import reverse
 
+from django.conf import settings
+
 from tastypie import fields
 from tastypie.resources import ModelResource
 from tastypie.validation import Validation, FormValidation
@@ -12,7 +14,8 @@ from django.core.urlresolvers import reverse
 
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
-
+from activities.templatetags.activity_tags import absolute_url
+from activities.models import NewsItem
 from projects.models import Project,ProjectMember,Story,Iteration,Epic,Task
 from organizations.models import Organization, Team
 from threadedcomments.models import ThreadedComment
@@ -170,12 +173,27 @@ class ProjectResource(ModelResource):
            lambda u: Q(teams__in = u.teams.all())|Q(member_users__in = [u]),
            lambda u: Q(teams__in = u.teams.filter(Q(access_type="read/write")|Q(access_type="admin")))|Q(member_users__in = [u]))
 
-# class ActivityActionResource(ModelResource):
-# 
-#     class Meta:
-#         queryset = ActivityAction.objects.all()
-#         fields = ['name']
-# 
+
+class NewsItemResource(ModelResource):
+    user = fields.CharField(attribute='user')
+    def obj_get_list(self, request=None, **kwargs):
+        """ overriding """
+        return NewsItem.objects.filter(project__teams__members=request.user)
+    def dehydrate_text(self, bundle):        
+        return absolute_url(bundle.obj.text)[1:]
+    def dehydrate_user(self, bundle):
+        return str(bundle.obj.user)
+    def dehydrate_icon(self, bundle):
+        if "http" == settings.STATIC_URL[:4]:
+            return "%simages/%s.png" % (settings.STATIC_URL,bundle.obj.icon)
+        else:
+            return "%s%simages/%s.png" % (settings.BASE_URL,settings.STATIC_URL,bundle.obj.icon)
+    class Meta:
+        fields=['created','text','icon','user']
+        resource_name = "news"
+        queryset = NewsItem.objects.all()
+        authentication = ScrumDoAuthentication()
+    
 # class ActivityResource(ModelResource):
 #     def obj_get_list(self, request=None, **kwargs):
 #         """ overriding """
