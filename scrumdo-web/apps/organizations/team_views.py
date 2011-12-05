@@ -46,7 +46,7 @@ def _isAdmin( user, organization ):
 @login_required
 def team_add_project(request, organization_slug, team_id ):
     organization = get_object_or_404(Organization, slug=organization_slug)    
-    if not organization.hasAdminAccess( request.user ):
+    if not organization.hasStaffAccess( request.user ):
         raise PermissionDenied()
     team = get_object_or_404(Team, id=team_id)
     if team.organization != organization:
@@ -70,7 +70,7 @@ def team_invite_accept(request, key):
 @login_required
 def team_invite(request, organization_slug, team_id ):
     organization = get_object_or_404(Organization, slug=organization_slug)    
-    if not organization.hasAdminAccess( request.user ):
+    if not organization.hasStaffAccess( request.user ):
         raise PermissionDenied()
     team = get_object_or_404(Team, id=team_id)
     if team.organization != organization:
@@ -107,7 +107,7 @@ def team_invite(request, organization_slug, team_id ):
 @login_required
 def team_remove_project(request, organization_slug, team_id, project_id):
     organization = get_object_or_404(Organization, slug=organization_slug)    
-    if not organization.hasAdminAccess( request.user ):
+    if not organization.hasStaffAccess( request.user ):
         raise PermissionDenied()
     team = get_object_or_404(Team, id=team_id)
     if team.organization != organization:
@@ -119,15 +119,15 @@ def team_remove_project(request, organization_slug, team_id, project_id):
 @login_required    
 def team_remove_member(request, organization_slug, team_id, member_id):
     organization = get_object_or_404(Organization, slug=organization_slug)    
-    if not organization.hasAdminAccess( request.user ):
+    if not organization.hasStaffAccess( request.user ):
         raise PermissionDenied()
     team = get_object_or_404(Team, id=team_id)
     if team.organization != organization:
         raise PermissionDenied() # Shenanigans!
     
     user = User.objects.filter(id=member_id)[0]
-    if user == request.user and team.access_type=="admin":
-        return HttpResponse("Can't remove yourself from the team admin group.")
+    if user == request.user and team.access_type=="staff":
+        return HttpResponse("Can't remove yourself from the staff group.")
     else:
         team.members.remove(user);
         team.save()
@@ -136,21 +136,26 @@ def team_remove_member(request, organization_slug, team_id, member_id):
 @login_required   
 def team_summary(request, organization_slug):
     organization = get_object_or_404(Organization, slug=organization_slug)    
-    if not organization.hasAdminAccess( request.user ):
-        raise PermissionDenied()
     organizations = Organization.getOrganizationsForUser( request.user )
+    if organization.hasStaffAccess(request.user):
+        teams = organization.teams.all().order_by("name")
+    else:
+        teams = organization.teams.filter(members=request.user).order_by("name")
 
     return render_to_response("organizations/organization_teams.html", {
         "organization": organization,
         "organizations": organizations,
+        "teams": teams
       }, context_instance=RequestContext(request))
 
 @login_required   
 def team_detail(request, organization_slug, team_id):
     organization = get_object_or_404(Organization, slug=organization_slug)    
-    if not organization.hasAdminAccess( request.user ):
-        raise PermissionDenied()
     team = get_object_or_404(Team, id=team_id)
+    
+    if not (organization.hasStaffAccess( request.user ) or team.hasMember(request.user) ):
+        raise PermissionDenied()
+    
 
     if team.organization != organization:
         raise PermissionDenied() # Shenanigans!
@@ -166,7 +171,7 @@ def team_detail(request, organization_slug, team_id):
 @login_required   
 def team_delete(request, organization_slug, team_id):
     organization = get_object_or_404(Organization, slug=organization_slug)
-    if not organization.hasAdminAccess( request.user ):
+    if not organization.hasStaffAccess( request.user ):
         raise PermissionDenied()
     team = get_object_or_404(Team, id=team_id)
     if team.organization != organization:

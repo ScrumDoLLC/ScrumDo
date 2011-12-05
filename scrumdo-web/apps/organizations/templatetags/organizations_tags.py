@@ -26,10 +26,10 @@ register = template.Library()
 
 
 
-@register.tag(name="isorgadmin")
-def isorgadmin( parser, token):
+@register.tag(name="isorgstaff")
+def isorgstaff( parser, token):
     tag_name, organization = token.split_contents()
-    nodelist = parser.parse(('endisorgadmin',))
+    nodelist = parser.parse(('endisorgstaff',))
     parser.delete_first_token()
     return IsAdminNode(nodelist, organization)
 
@@ -38,8 +38,29 @@ class IsAdminNode(template.Node):
         self.nodelist = nodelist
         self.organization = organization
     def render(self, context):
-        if context[self.organization].hasAdminAccess(context["request"].user):
+        if context[self.organization].hasStaffAccess(context["request"].user):
             output = self.nodelist.render(context)
             return output
         else:
             return ""
+
+
+
+@register.tag(name="teammember")
+def teammember( parser, token):
+    tag_name, team = token.split_contents()
+    nodelist = parser.parse(('endteammember',))
+    parser.delete_first_token()
+    return IsAdminNode(nodelist, team)
+
+class IsTeamMemberNode(template.Node):
+    def __init__(self, nodelist, team):
+        self.nodelist = nodelist
+        self.team = team
+    def render(self, context):
+        if context[self.team].hasMember( context["request"].user ):
+            output = self.nodelist.render(context)
+            return output
+        else:
+            return ""
+            

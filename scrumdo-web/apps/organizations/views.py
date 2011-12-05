@@ -85,7 +85,7 @@ def organization_projects(request, organization_slug):
     # this used to live in team_views.py, but since the individual teams pages
     # have been consolodated, this post is now from the organization overview page
     if request.method == "POST":
-        if not organization.hasAdminAccess( request.user ):
+        if not organization.hasStaffAccess( request.user ):
             raise PermissionDenied()
         action = request.POST.get("action")
         team_id = request.POST.get("team_id")
@@ -117,21 +117,22 @@ def organization_projects(request, organization_slug):
     members = []
     users = []
     member_count = 1
-    for team in organization.teams.all():
-        for user in team.members.all():
-            if not user in users:
-                users.append(user)
-                members.append("#%d %s (Team %s)" % (member_count,  user, team.name))
-                member_count+=1
+
+    # for team in organization.teams.all():
+    #     for user in team.members.all():
+    #         if not user in users:                
+    #             users.append(user)
+    #             members.append("#%d %s (Team %s)" % (member_count,  user, team.name))
+    #             member_count+=1
 
     projects = organization.projects.all().order_by("-active","category","name")
 
-    for project in projects:
-        for member in project.members.all():
-            if (not member.user in users) and (member.user != project.creator):
-                users.append(member.user)
-                members.append("#%d %s (Project %s)" % (member_count, member.user, project.name))
-                member_count+=1
+    # for project in projects:
+    #     for member in project.members.all():
+    #         if (not member.user in users) and (member.user != project.creator):
+    #             users.append(member.user)
+    #             members.append("#%d %s (Project %s)" % (member_count, member.user, project.name))
+    #             member_count+=1
 
     return render_to_response("organizations/organization_projects.html", {
         "organization": organization,
@@ -284,7 +285,7 @@ def export_organization(request, organization_slug):
 @login_required
 def delete_organization(request, organization_slug):
     organization = get_object_or_404(Organization, slug=organization_slug)
-    if not organization.hasAdminAccess( request.user ):
+    if not organization.hasStaffAccess( request.user ):
         raise PermissionDenied()
     signals.organization_deleted.send( sender=request, organization=organization )
     for project in organization.projects.all():

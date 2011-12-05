@@ -32,7 +32,8 @@ class Team(models.Model):
     ACCESS_CHOICES = [
         ('read', 'Read Only'),
         ('write', 'Read / Write'),
-        ('admin', 'Administrator') ]
+        ('admin', 'Administrator'),
+        ('staff', 'Staff Member'),]
     members = models.ManyToManyField(User, verbose_name=_('members'), related_name="teams")
     projects = models.ManyToManyField("projects.Project", verbose_name=_('projects'), related_name="teams")
 
@@ -43,13 +44,16 @@ class Team(models.Model):
 
     class Meta:
         ordering = ["name"]
-
+    
     def access_description(self):
         access = [ entry[1] for entry in Team.ACCESS_CHOICES if entry[0]==self.access_type ]
         if len(access) == 1:
             return access[0]
         return "Read Only"
 
+    def hasMember(self, user):
+        return self.members.filter(id=user.id).count() > 0
+        
     def __unicode__(self):
         return "[%s] %s" % (self.organization.name, self.name)
 
@@ -93,12 +97,12 @@ class Organization(models.Model):
     def projectsByCategory(self):
         return self.projects.all().order_by('-active','category','name')
 
-    def hasAdminAccess( self, user ):
+    def hasStaffAccess( self, user ):
         if user.is_staff:
             return True
         if self.creator == user:
             return True
-        return (self.teams.filter( access_type="admin", members=user ).count() > 0)
+        return (self.teams.filter( access_type="staff", members=user ).count() > 0)
 
     def hasReadAccess( self, user ):
         if user.is_staff:

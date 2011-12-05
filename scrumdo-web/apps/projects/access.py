@@ -23,7 +23,7 @@ from django.core.exceptions import PermissionDenied
 
 from django.core.cache import cache
 
-CACHE_PERMISSION_SECONDS = 30
+CACHE_PERMISSION_SECONDS = 15
 
 def admin_access_or_403(project,user, ignore_active=False):
     if not has_admin_access(project, user, ignore_active=ignore_active):
@@ -37,19 +37,14 @@ def write_access_or_403(project,user):
     if not has_write_access(project, user):
         raise PermissionDenied()
 
-def has_admin_access( project, user , ignore_active=False):
+def has_staff_access(organization, user):
     try:
-        if not ignore_active:
-            if not project.active:
-                return False
-
-        if user.is_staff:
-            return True
-        if project.creator == user: return True
-        key = cache_key(project, user, "admin")
+        # if user.is_staff:
+        #     return True
+        key = cache_key(organization, user, "staff")
         cached_value = cache.get(key)
         if cached_value == None:
-            access = Organization.objects.filter( teams__members = user , teams__access_type="admin", teams__projects=project).count() > 0
+            access = organization.teams.filter(access_type="staff",members = user).count() > 0
             cache.set(key, access, CACHE_PERMISSION_SECONDS)
             return access
         else:
@@ -57,6 +52,30 @@ def has_admin_access( project, user , ignore_active=False):
     except:
         return False
 
+def has_admin_access( project, user , ignore_active=False):
+    try:
+        if not ignore_active:
+            if not project.active:
+                return False
+        key = cache_key(project, user, "admin")
+        cached_value = cache.get(key)
+        if cached_value == None:
+            access = real_has_admin_access(project,user)
+            cache.set(key, access, CACHE_PERMISSION_SECONDS)
+            return access
+        else:
+            return cached_value
+    except:
+        return False
+
+def real_has_admin_access(project, user):
+    if user.is_staff:
+        return True
+    if project.creator == user: 
+        return True
+    if has_staff_access(project.organization, user):
+        return True    
+    return Organization.objects.filter( teams__members = user , teams__access_type="admin", teams__projects=project).count() > 0            
 
 def has_write_access( project, user ):
     try:
