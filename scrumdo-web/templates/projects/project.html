@@ -83,6 +83,7 @@
 {% endblock %}
 
 {% block extra_body %}
+	<script type="text/javascript" src="{{STATIC_URL}}js/jquery.cookie.js"></script>
     <script type="text/javascript">
     
         function updateStoryList() // occurs when the add story ajax form is successful.
@@ -109,18 +110,30 @@
     
         $(document).ready(function() {
 	
+				
 				$("#view_scrum_log_link").click(function(){
 					$("#scrum_log").show();
 					$("#news_feed").hide();
+					$.cookie("default_proj_view", "scrum_log");
 					return false;
 				});
 				$("#view_news_feed_link").click(function(){
 					$("#scrum_log").hide();
 					$("#news_feed").show();
+					$.cookie("default_proj_view", "news_feed");
 					return false;
 				});
+				
+				// Make the view sticky across pageviews...
+				if ($.cookie("default_proj_view") == "scrum_log")
+			    { 
+					$("#scrum_log").show();
+					$("#news_feed").hide();
+			    }
+
 	
                 setupNewsItemMoreLinks();
+
                 var options = {
                    colors: ["#2292ff", "#ADD75C"],
                    xaxis: { minTickSize: [1, "day"] , mode: "time", timeformat: "%m/%d/%y" },
@@ -128,14 +141,13 @@
                    legend: {    position: "nw" },
                    series: { lines: {   show: true , fill:true  }, 
                              points: { radius:5, show: true, fill: true} 
-                               }                   
+                           }                   
                 };
-				
-				
-				$("body").bind("storyListChanged", updateStoryList );
-       
+				       
                 generateBurnDown( "#overallBurndown", "{{project.slug}}" , null , 0);
-                 
+                
+				$("body").bind("storyListChanged", updateStoryList ); 
+				
                {% for iteration in project.get_current_iterations %}
                  generateBurnDown( "#iterationBurndown_{{iteration.id}}", "{{project.slug}}" , "{{iteration.id}}" , 0.25);
                {% endfor %}
