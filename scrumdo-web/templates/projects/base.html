@@ -145,18 +145,14 @@
     {% endif %}
     <div class="box">
       <div class="box-title">        
-	{% if iterationinfo %}All {% endif %}Iterations
+	Iterations
 	{% canwrite project %}
 	<a title="Add New Iteration" href="{% url iteration_create project.slug %}">{% silk "add" %}</a>   
 	{% endcanwrite %} 
  	
   </div><!--box-title-->
     <div id="iteration_list">
-    {% if all %}
-    {% include "projects/iteration_list_all.html" %}
-    {% else %}
-    {% include "projects/iteration_list.html" %}
-    {% endif %}
+    	{% show_iterations project %}
     </div>
   </div><!--box-->
   {% endif %}

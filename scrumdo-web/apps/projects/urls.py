@@ -44,6 +44,7 @@ urlpatterns = patterns('projects.views',
     url(r'^project/(?P<group_slug>[-\w]+)/export$', 'export_project', name="export_project"),
     url(r'^project/(?P<group_slug>[-\w]+)/epics$', 'epics', name="epics"),
     url(r'^project/(?P<group_slug>[-\w]+)/iteration_list$', 'iteration_list', name="iteration_list"),
+    url(r'^project/(?P<group_slug>[-\w]+)/all_iterations$', 'all_iterations', name="all_iterations"),
     url(r'^project/(?P<group_slug>[-\w]+)/search$', 'search_project', name="search_project"),
     
 

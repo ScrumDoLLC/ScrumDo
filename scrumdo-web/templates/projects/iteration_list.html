@@ -2,14 +2,15 @@
 {% load projects_tags %}
 
 
-{% for iteration in project.get_iterations %}
+{% for iteration in iterations %}
 <div class="box-content">
   {% iteration_name iteration %}{% if iteration.stories.count %} <span class="subtitle">({{iteration.stories.count}})</span>{% endif %}
   
 </div><!--box-content-->
 {% endfor %}
-{% if project.show_more %}
+
+{% if show_more %}
 <div class="box-content">
- <a href="{% url project_detail project.slug %}?more=true">More Iterations...</a>
+ <a href="{% url all_iterations project.slug %}">More Iterations...</a>
 </div>
 {% endif %}

@@ -182,7 +182,13 @@ def _flattenEpics(epics):
           epic.leaf=True
     yield 'out'
 
-
+@login_required
+def all_iterations(request, group_slug):
+    project = get_object_or_404( Project, slug=group_slug )
+    read_access_or_403(project, request.user)
+    iterations = project.iterations.all()
+    return render_to_response("projects/all_iterations.html", {"iterations":iterations, "project":project}, context_instance=RequestContext(request))
+    
 @login_required
 def activate( request, group_slug ):
     project = get_object_or_404( Project, slug=group_slug )
@@ -195,7 +201,7 @@ def activate( request, group_slug ):
 def iteration_list(request, group_slug):
     project = get_object_or_404( Project, slug=group_slug )
     admin_access_or_403(project, request.user, ignore_active=True)
-    return render_to_response("projects/iteration_list.html", {"project":project}, context_instance=RequestContext(request))
+    return render_to_response("projects/iteration_list_ajax.html", {"project":project}, context_instance=RequestContext(request))
 
 
 # The project admin page, this is where you can change the title, description, etc. of a project.
@@ -484,10 +490,6 @@ def your_projects(request, template_name="projects/your_projects.html"):
 @login_required
 def project(request, group_slug=None, form_class=ProjectUpdateForm, adduser_form_class=AddUserForm,
         template_name="projects/project.html"):
-    if 'more' in request.GET.keys():
-        more = True
-    else:
-        more = False
     project = get_object_or_404(Project, slug=group_slug)
     read_access_or_403(project, request.user )
     if not request.user.is_authenticated():
@@ -514,7 +516,6 @@ def project(request, group_slug=None, form_class=ProjectUpdateForm, adduser_form
         "group": project, # @@@ this should be the only context var for the project
         "is_member": is_member,
         "current_view":"project_page",
-        "all": more,
     }, context_instance=RequestContext(request))
 
 # @login_required

@@ -17,7 +17,8 @@
 
 
 from django import template
-from datetime import date, time, datetime
+from datetime import date, time, datetime, timedelta
+
 from projects.forms import ProjectForm
 from projects.models import Story
 from projects.access import has_write_access, has_admin_access, has_read_access
@@ -25,8 +26,10 @@ from projects.util import reduce_burndown_data
 from projects.limits import personal_email_limit, org_email_limit
 from django.template.defaultfilters import stringfilter
 from django.conf import settings
+from django.db import models
 import traceback
 import urllib
+
 
 
 import re
@@ -184,6 +187,28 @@ def link_stories(value, project):
 
 link_stories.is_safe=True
 register.filter('link_stories', link_stories)
+
+
+
+@register.inclusion_tag("projects/iteration_list.html", takes_context=True)
+def show_iterations(context, project):        
+    request = context['request']
+    show_more = False
+    if (project.iterations.count() <= 15) or (request.GET.get("more","false")=="true"):
+        # If less than 15 iterations, show them all
+        iterations = project.iterations.all()
+    else:
+        # If too many, be selective
+        show_more = True
+        iterations = project.iterations.filter(  models.Q(default_iteration = True) |  # We always show the backlog.
+                                        models.Q(start_date = None) | models.Q( end_date = None) | # And we show iterations without dates on either end
+                                        models.Q(end_date__gt = datetime.today() - timedelta(days=30), end_date__lte = datetime.today()) | # We show past iterations within 30 days
+                                        models.Q(start_date__gte = datetime.today(), start_date__lt =  datetime.today() + timedelta(days=30)) | # and future iterations within 30 days
+                                        models.Q(start_date__lte = datetime.today(), end_date__gte =  datetime.today() ) # And current iterations too
+                                        )
+    return {'iterations':iterations, 'show_more':show_more, 'project':project, 'request':context['request']}
+    
+
 
 
 @register.inclusion_tag("projects/project_item.html", takes_context=True)
