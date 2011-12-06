@@ -12,6 +12,9 @@
     {% ifloaded subscription %}     
       <link rel="stylesheet" href="{{ STATIC_URL }}css/subscription.css" />
     {% endifloaded %}
+    {% ifloaded affiliates %}     
+      <link rel="stylesheet" href="{{ STATIC_URL }}css/affiliates.css" />
+    {% endifloaded %}
     {% block extra_head %}{% endblock %}
     
     <link rel="stylesheet" media="print" href="{{ STATIC_URL }}css/print.css" />    

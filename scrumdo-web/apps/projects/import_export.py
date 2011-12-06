@@ -35,15 +35,15 @@ logger = logging.getLogger(__name__)
 
 ezxf = xlwt.easyxf
 
-def exportIteration(iteration, format ):
+def exportIteration(iteration, format, file_name=None ):
     """ Exports an iteration, format should be xls, xml or csv. """
     logger.info("Exporting iteration %s %d" % (iteration.project.slug, iteration.id) )
     if format.lower() == "xls" :
-        return _exportExcel( iteration )
+        return _exportExcel( iteration, file_name )
     elif format.lower() == "xml":
-        return _exportXML( iteration )
+        return _exportXML( iteration, file_name )
     else:
-        return _exportCSV( iteration )
+        return _exportCSV( iteration, file_name )
 
 
 def importIteration(iteration, file , user):
@@ -64,9 +64,11 @@ def importIteration(iteration, file , user):
         return _importCSVIteration(iteration, file, user)
 
 
-def exportProject( project ):
+def exportProject( project, file_name=None ):
+    if not file_name:
+        file_name = "project"
     response = HttpResponse( mimetype="Application/vnd.ms-excel")
-    response['Content-Disposition'] = 'attachment; filename=project.xls'
+    response['Content-Disposition'] = 'attachment; filename=%s.xls'%file_name 
     stories = project.stories.all().order_by("iteration","rank")
     w = xlwt.Workbook(encoding='utf8')
     ws = w.add_sheet( "All Stories" )
@@ -236,10 +238,12 @@ def _getHeaders( project ):
     return headers
 
 
-def _exportExcel( iteration ):
+def _exportExcel( iteration, file_name=None ):
     """ Exports the stories in an iteration as an excel sheet. """
+    if not file_name:
+        file_name = "iteration"
     response = HttpResponse( mimetype="Application/vnd.ms-excel")
-    response['Content-Disposition'] = 'attachment; filename=iteration.xls'
+    response['Content-Disposition'] = 'attachment; filename=%s.xls'%file_name
     stories = iteration.stories.all().order_by("rank")
     w = xlwt.Workbook()
     ws = w.add_sheet('Iteration Export')
@@ -265,8 +269,10 @@ def _exportExcel( iteration ):
 
 
 
-def _exportXML( iteration ):
+def _exportXML( iteration, file_name=None  ):
     """ Exports the stories in an iteration as XML """
+    if not file_name:
+        file_name = "iteration"
     stories = iteration.stories.all().order_by("rank")
     doc = Document()
     iteration_node = doc.createElement("iteration")
@@ -286,16 +292,18 @@ def _exportXML( iteration ):
             #      We should generally recommend people stick to excel or CSV files.
 
     response = HttpResponse(doc.toprettyxml(indent="  "), mimetype="text/xml")
-    response['Content-Disposition'] = 'attachment; filename=iteration.xml'
+    response['Content-Disposition'] = 'attachment; filename=%s.xml'%file_name
     return response
 
 def _toXMLNodeName( name ):
     return re.sub('[^a-zA-Z0-9_-]',"",name.replace(" ","_").lower())
 
-def _exportCSV( iteration ):
+def _exportCSV( iteration, file_name=None ):
     """ Exports the stories in an iteration as CSV """
+    if not file_name:
+        file_name = "iteration"
     response =  HttpResponse( mimetype="text/csv")
-    response['Content-Disposition'] = 'attachment; filename=iteration.csv'
+    response['Content-Disposition'] = 'attachment; filename=%s.csv'%file_name
     stories = iteration.stories.all().order_by("rank")
 
     writer = UnicodeWriter(response)

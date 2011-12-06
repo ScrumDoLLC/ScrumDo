@@ -16,8 +16,12 @@ logger = logging.getLogger(__name__)
 def user_activities(request, page):
     # get all the user's projects
     activities = Activity.getActivitiesForUser(request.user)
-
-    paginator = Paginator(activities, 40)
+    if int(page) == 0:
+        paginator = Paginator(activities, 5)
+        page = 1
+    else:
+        activities = activities[5:]
+        paginator = Paginator(activities, 40)
     try:
         page_obj = paginator.page(page)
     except EmptyPage:
@@ -27,6 +31,7 @@ def user_activities(request, page):
     return render_to_response("activities/activity_list.html", {
       "activities": page_obj.object_list,
       "activities_page":page_obj,
+      "page":page,
       }, context_instance=RequestContext(request))
 
 @login_required

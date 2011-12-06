@@ -2,20 +2,23 @@
 // http://www.palewire.com/posts/2010/11/07/django-recipe-twitter-style-infinite-scroll/
 
 // Scroll globals
-var pageNum = 0;
+var pageNum = -1;
 var hasNextPage = true
 var baseUrl = '/activities/user/';
 
 
 // loadOnScroll handler
-var loadOnScroll = function() {
-    // If the current scroll position is past out cutoff point...
-    if ($(window).scrollTop() > $(document).height() - ($(window).height()*3)) {
-        // temporarily unhook the scroll event watcher so we don't call a bunch of times in a row
-        $(window).unbind();
-        // execute the load function below that will visit the JSON feed and stuff data into the HTML
-        loadItems();
+var loadOnClick = function() {
+    
+    $("#moreactivity").unbind('click');
+    $("#moreactivity").remove()
+    if(pageNum == 1){
+        $("#moreactivity").remove()
+        var e = $("<div id='moreactivity'><a href='#'>Load More...</a></div>");
+        $('#feedContent').append(e);
     }
+    loadItems();
+    
 };
 
 var loadItems = function() {
@@ -40,7 +43,7 @@ var loadItems = function() {
 	    },
 		complete: function(html, textStatus){
 		// Turn the scroll monitor back on
-		$(window).bind('scroll', loadOnScroll);
+		$("#moreactivity").bind('click', loadOnClick);
 		activateLinks();
 	    }
 	});
@@ -69,7 +72,6 @@ function loadNewsFeed()
 		    data:{},
 		    success: function(html){
 		    $("#feedContent").append(html);
-		    $(window).bind('scroll', loadOnScroll);
 		    activateLinks();
 		}
 	    });
@@ -97,7 +99,6 @@ function activateLinks () {
 
 
 $(document).ready(function() {
-	$(window).bind('scroll', loadOnScroll);
 	activateLinks();	
     });
 

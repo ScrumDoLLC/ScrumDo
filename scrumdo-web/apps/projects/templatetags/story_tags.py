@@ -29,3 +29,10 @@ def show_points(story):
         return mark_safe("&infin;")
     else:
         return mark_safe(points)
+
+@register.simple_tag
+def summary_view( story, user):
+    if story.assignee != user:    
+        return '<div class="project disabled_project">#%d %s  %s</div>'%(story.local_id, story.summary, story.detail)
+    else:
+        return '#%d %s  %s'%(story.local_id, story.summary, story.detail)

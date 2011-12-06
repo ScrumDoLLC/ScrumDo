@@ -1,16 +1,19 @@
 {% load i18n %}
 {% load projects_tags %}
 {% load story_tags %}
+{% load tasks_tags %}
 {% load avatar_tags %}
 
 <li class="story_queue_story_list_item gripper_{% ifequal story.status 1 %}todo{% endifequal %}{% ifequal story.status 2 %}doing{% endifequal %}{% ifequal story.status 3 %}reviewing{% endifequal %}{% ifequal story.status 4 %}done{% endifequal %}" story_id="{{story.id}}" id="story_{{story.id}}" rank="{{ story.rank }}" >
 
 
   <a href="{% url iteration story.project.slug story.iteration.id %}#story_{{ story.id }}">
+  
   {% filter truncatewords:"43" %}
-    #{{story.local_id}} {{ story.summary}}
-     {{ story.detail }}
+    {% summary_view story user%}
+  {%my_tasks story user%}
   {% endfilter %} 
+  
   </a>
 
 </li>  

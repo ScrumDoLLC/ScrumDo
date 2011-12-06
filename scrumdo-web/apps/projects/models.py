@@ -16,7 +16,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 import time
 from tagging.fields import TagField
 from tagging.models import Tag
@@ -38,6 +38,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from organizations.models import Organization, Team
 from activities.models import Activity, StoryActivity, IterationActivity
 import django.dispatch
+import projects.signals as signals
 
 STATUS_TODO = 1
 STATUS_DOING = 2
@@ -180,7 +181,7 @@ class Project(Group):
     def get_current_iterations(self):
         if self.current_iterations == None:
             today = date.today
-            self.current_iterations = self.iterations.filter( start_date__lte=today, end_date__gte=today)
+            self.current_iterations = self.iterations.all()
         return self.current_iterations
 
     def get_absolute_url(self):
@@ -211,6 +212,20 @@ class Project(Group):
             if len([t for t in tags if t.name==tag.name]) == 0: #remove duplicates
                 tags.append(tag) 
         return tags
+        
+    def get_iterations(self):
+        if self.get_num_iterations < 15:
+            return self.iterations.all()
+        else:
+            return self.iterations.filter(models.Q(default_iteration = True) | models.Q(start_date = None,  end_date = None) | \
+            models.Q(start_date__lt = datetime.today() + timedelta(days=30), end_date__lt = datetime.today()) | \
+            models.Q(start_date__lt = datetime.today(), end_date__lt =  datetime.today() + timedelta(days=30)))
+            
+    def get_iterations_all(self):
+        return self.iterations.all()
+            
+    def show_more(self):
+        return self.get_num_iterations() > 15
     
 
 
@@ -383,8 +398,13 @@ class Story( models.Model ):
                 iterations = project.get_current_iterations()
                 for iteration in iterations:
                     project_stories = project_stories + list(Story.objects.filter(iteration=iteration, assignee=user).exclude(status=4))
+                tasks = Task.objects.filter(assignee=user, story__project=project)
+                
+                for t in tasks:                    
+                    if t.story not in project_stories:
+                        project_stories.append(t.story)
                 if len(project_stories) > 0:
-                    assigned_stories = assigned_stories + [(project, project_stories)]
+                    assigned_stories = assigned_stories + [(project, project_stories)]                
         return assigned_stories
 
     def story_tags_full(self):
