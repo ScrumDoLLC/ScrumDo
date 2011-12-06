@@ -26,6 +26,7 @@ from projects.forms import StoryForm
 
 from auth import ScrumDoAuthentication, ScrumDoAuthorization
 from api.models import DeveloperApiKey, UserApiKey
+import projects.signals as signals
 
 class UserResource(ModelResource):
     teams = fields.ToManyField('api.resources.TeamResource', 'teams')
@@ -60,7 +61,7 @@ class OrganizationResource(ModelResource):
 
     class Meta:
         queryset = Organization.objects.all()
-        list_allowed_methods = []
+        list_allowed_methods = ['get', 'post', 'put', 'delete']
         authentication = ScrumDoAuthentication()
         authorization = ScrumDoAuthorization(
            lambda u: Q(id__in = u.teams.all().values('organization__id').distinct()),
@@ -74,7 +75,7 @@ class TeamResource(ModelResource):
 
     class Meta:
         queryset = Team.objects.all()
-        list_allowed_methods = []
+        list_allowed_methods = ['get', 'post', 'put', 'delete']
         authentication = ScrumDoAuthentication()
         authorization = ScrumDoAuthorization(
           lambda u: Q(organization__id__in = u.teams.all().values('organization__id').distinct()),
@@ -97,11 +98,12 @@ class StoryResource(ModelResource):
     creator = fields.ToOneField('api.resources.UserResource', 'creator')
     tasks = fields.ToManyField('api.resources.TaskResource','tasks')
     epic = fields.ToOneField('api.resources.EpicResource','epic',null=True)
+    assignee = fields.ToOneField('api.resources.UserResource','assignee',null=True)
 
     class Meta:
         queryset = Story.objects.all()
-        fields = ['id', 'summary','detail','assignee_id','points', 'iteration_id','project_id', 'status','extra_1','extra_2','extra_3']
-        list_allowed_methods = []
+        fields = ['id', 'summary','detail','assignee_id','points', 'iteration_id','project_id', 'status','extra_1','extra_2','extra_3', 'local_id','assignee', 'rank']
+        list_allowed_methods = ['get', 'post', 'put', 'delete']
         authentication = ScrumDoAuthentication()
         authorization = ScrumDoAuthorization(
           lambda u: Q(project__teams__in = u.teams.all())|Q(project__member_users__in = [u]),
@@ -112,6 +114,27 @@ class StoryResource(ModelResource):
         # cr = CommentResource()
         # bundle.data['comments'] = map(lambda c: cr.get_resource_uri(c), cr.obj_get_list(content_object__exact=bundle.obj))
         return bundle
+        
+    def obj_create(self, bundle, request=None, **kwargs):
+        res = super(StoryResource, self).obj_create(bundle, request)
+        if "pk" in kwargs.keys():
+            signals.story_updated.send( sender=request, story=res.obj, user=request.user )
+        else:
+            signals.story_created.send( sender=request, story=res.obj, user=request.user )
+        return res
+        
+    def obj_delete(self, request=None, **kwargs):
+        story = Story.objects.get(pk=kwargs["pk"])
+        signals.story_deleted.send( sender=request, story=story, user=request.user )
+        super(StoryResource, self).obj_delete(request, pk=kwargs["pk"])
+            
+    def obj_update(self, bundle, request=None, **kwargs):
+        res = super(StoryResource, self).obj_update(bundle, request)
+        signals.task_updated.send( sender=request, story=res.obj, user=request.user )
+        return res
+            
+        
+        
 
 class TaskResource(ModelResource):
     story = fields.ToOneField('api.resources.StoryResource', 'story')
@@ -120,11 +143,29 @@ class TaskResource(ModelResource):
     class Meta:
         queryset = Task.objects.all()
         fields = ['id', 'summary','complete','order']
-        list_allowed_methods = []
+        list_allowed_methods = ['get', 'post', 'put', 'delete']
         authentication = ScrumDoAuthentication()
         authorization = ScrumDoAuthorization(
           lambda u: Q(story__project__teams__in = u.teams.all())|Q(story__project__member_users__in = [u]),
           lambda u: Q(story__project__teams__in = u.teams.filter(Q(access_type="read/write")|Q(access_type="admin")))|Q(story__project__member_users__in = [u]))
+        
+    def obj_create(self, bundle, request=None, **kwargs):
+        res = super(TaskResource, self).obj_create(bundle, request)
+        if "pk" in kwargs.keys():
+            signals.task_updated.send( sender=request, task=res.obj, user=request.user )
+        else:
+            signals.task_created.send( sender=request, task=res.obj, user=request.user )
+        return res
+        
+    def obj_delete(self, request=None, **kwargs):
+        task = Task.objects.get(pk=kwargs["pk"])
+        signals.task_deleted.send( sender=request, task=task, user=request.user )
+        super(TaskResource, self).obj_delete(request, pk=kwargs["pk"])
+            
+    def obj_update(self, bundle, request=None, **kwargs):
+        res = super(TaskResource, self).obj_update(bundle, request)
+        signals.task_updated.send( sender=request, task=res.obj, user=request.user )
+        return res
 
 
 
@@ -135,8 +176,8 @@ class EpicResource(ModelResource):
     
     class Meta:
         queryset = Epic.objects.all()
-        fields = ['id', 'summary','detail','points','project_id', 'parent_id', 'status','order','archived']
-        list_allowed_methods = []
+        fields = ['id', 'summary','detail','points','project_id', 'parent_id', 'status','order','archived', 'local_id']
+        list_allowed_methods = ['get', 'post', 'put', 'delete']
         authentication = ScrumDoAuthentication()
         authorization = ScrumDoAuthorization(
           lambda u: Q(project__teams__in = u.teams.all())|Q(project__member_users__in = [u]),
@@ -150,11 +191,26 @@ class IterationResource(ModelResource):
     class Meta:
         queryset = Iteration.objects.all()
         fields = ['id','name', 'start_date','end_date','project_id']
-        list_allowed_methods = []
+        list_allowed_methods = ['get', 'post', 'put', 'delete']
         authentication = ScrumDoAuthentication()
         authorization = ScrumDoAuthorization(
           lambda u: Q(project__teams__in = u.teams.all())|Q(project__member_users__in = [u]),
           lambda u: Q(project__teams__in = u.teams.filter(Q(access_type="read/write")|Q(access_type="admin")))|Q(project__member_users__in = [u]))
+        
+    def obj_create(self, bundle, request=None, **kwargs):
+        res = super(IterationResource, self).obj_create(bundle, request)
+        if "pk" in kwargs.keys():
+            signals.iteration_updated.send( sender=request, iteration=res.obj, user=request.user )
+        else:
+            signals.iteration_created.send( sender=request, iteration=res.obj, user=request.user )
+        return res
+        
+    def obj_delete(self, request=None, **kwargs):
+        iteration = Iteration.objects.get(pk=kwargs["pk"])
+        signals.iteration_deleted.send( sender=request, iteration=iteration, user=request.user )
+        super(IterationResource, self).obj_delete(request, pk=kwargs["pk"])
+            
+    
 
 class ProjectResource(ModelResource):
     iterations = fields.ToManyField('api.resources.IterationResource', 'iterations')
@@ -167,7 +223,7 @@ class ProjectResource(ModelResource):
     class Meta:
         queryset = Project.objects.all()
         fields = ['name', 'slug', 'creator_id','organization_id','velocity','iterations_left','get_num_stories']
-        # list_allowed_methods = []
+        list_allowed_methods = ['get', 'post', 'put', 'delete']
         authentication = ScrumDoAuthentication()
         authorization = ScrumDoAuthorization(
            lambda u: Q(teams__in = u.teams.all())|Q(member_users__in = [u]),
