@@ -43,7 +43,8 @@ logger = logging.getLogger(__name__)
 
 @login_required
 def organization_dashboard(request, organization_slug):
-    organization = Organization.objects.filter(slug=organization_slug).select_related('subscription')[0]
+    organization = get_object_or_404(Organization, slug=organization_slug)
+    # Organization.objects.filter(slug=organization_slug).select_related('subscription')[0]
         
     if organization.projects.count() == 0:
         return HttpResponseRedirect( reverse("organization_projects",kwargs={"organization_slug":organization_slug}))
@@ -65,7 +66,8 @@ def organization_dashboard(request, organization_slug):
         "organizations": organizations,
         "favorite_projects": favorite_projects,
         "your_stories": stories,
-        "news_items":news_items
+        "news_items":news_items,
+        "return_type":"queue"
         # "members": members,
         # "projects": projects
       }, context_instance=RequestContext(request))

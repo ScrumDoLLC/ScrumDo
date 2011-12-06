@@ -189,7 +189,10 @@ body.projects #side {
 
 .story_queue_story_list_item a {
 	text-decoration: none;
-	color: #222;
+}
+
+.story_queue_story_list_item a:hover {
+	text-decoration: underline;
 }
 
 .story_queue_list {

@@ -465,6 +465,8 @@ def story_edit(request, group_slug, story_id):
         if( request.POST['return_type'] == 'queue'):
             return render_to_response("stories/single_queue_story.html", {
                 "story": story,
+                'project': story.project,
+                "organization": organization,
                 "return_type": return_type,
               }, context_instance=RequestContext(request))
 
