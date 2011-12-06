@@ -25,9 +25,9 @@
   
   {% filter truncatewords:"43" %}
 	<a href="{% url story_permalink story.id %}">#{{story.local_id}}</a>
-    {% summary_view story user %}
-    {% my_tasks story user %}
+    {% summary_view story user %}    
   {% endfilter %} 
+  {% my_tasks story user %}
   
   </a>
 
