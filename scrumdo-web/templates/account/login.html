@@ -6,6 +6,8 @@
 
 {% block head_title %}{% trans "Login" %}{% endblock %}
 
+{% block body_div_class %}narrow_body_with_sidebar{% endblock %}
+
 {% block body %}
     
     {% if openid and not user.is_authenticated %}

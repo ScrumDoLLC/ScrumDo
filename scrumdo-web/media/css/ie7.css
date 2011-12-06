@@ -51,7 +51,7 @@ body {
     display: inline;    
 }
 
-.activity_body, .inline-block, .project-member, .organization-plan-box, .organization-box, .meter, .organization-popup-column, .organization-popup-column-header, .organization-column-footer, .usage_column_box {
+.subscription-options-usage, .team-project-list li, .team-member-box, .organization-project, .activity_body, .inline-block, .project-member, .organization-plan-box, .organization-box,  .organization-popup-column, .organization-popup-column-header, .organization-column-footer, .usage_column_box {
      display: inline;    
 }
 
@@ -81,7 +81,8 @@ body {
    overflow: hidden;
 }
 
+
 .button {
     vertical-align: bottom;
-    behavior: url(/site_media/static/css/PIE.htc);
+
 }
