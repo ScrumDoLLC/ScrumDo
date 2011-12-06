@@ -37,6 +37,7 @@ import json
 import datetime
 import math
 import logging
+import time
 
 from projects.calculation import onDemandCalculateVelocity
 from projects.limits import org_project_limit, personal_project_limit
@@ -268,12 +269,35 @@ def iteration_burndown(request, group_slug, iteration_id):
     project = get_object_or_404( Project, slug=group_slug )
     read_access_or_403(project, request.user )
     iteration = get_object_or_404( Iteration, id=iteration_id )
+    if iteration.start_date:
+        start_date_timestamp = int((time.mktime(iteration.start_date.timetuple()) - time.timezone)*1000)
+    if iteration.end_date:
+        end_date_timestamp = int((time.mktime(iteration.end_date.timetuple()) - time.timezone)*1000)
+    has_startdate_data = False
+    has_enddate_data = False
+    highest_total_points = 0
+    last_total_points = 0
+
     total_points = [];
     claimed_points = [];
 
     for log in iteration.points_log.all():
+        
+        if iteration.start_date:
+            if log.timestamp() != start_date_timestamp and not has_startdate_data :
+                total_points.append( [start_date_timestamp, 0])
+                claimed_points.append( [start_date_timestamp, 0])
+        has_startdate_data = True
+        last_total_points = log.points_total
+        if iteration.end_date:
+            if log.timestamp() == end_date_timestamp :
+                has_enddate_data = True
+        if highest_total_points < log.points_total:
+            highest_total_points = log.points_total
         total_points.append( [log.timestamp(), log.points_total] );
         claimed_points.append( [log.timestamp(), log.points_claimed] );
+    if not has_enddate_data and iteration.end_date:
+        total_points.append( [end_date_timestamp, highest_total_points])
 
     total_stats = { "label":"Total Points", "data":reduce_burndown_data(total_points)}
     claimed_stats = { "label":"Claimed Points", "data":reduce_burndown_data(claimed_points)}
@@ -460,6 +484,10 @@ def your_projects(request, template_name="projects/your_projects.html"):
 @login_required
 def project(request, group_slug=None, form_class=ProjectUpdateForm, adduser_form_class=AddUserForm,
         template_name="projects/project.html"):
+    if 'more' in request.GET.keys():
+        more = True
+    else:
+        more = False
     project = get_object_or_404(Project, slug=group_slug)
     read_access_or_403(project, request.user )
     if not request.user.is_authenticated():
@@ -485,7 +513,8 @@ def project(request, group_slug=None, form_class=ProjectUpdateForm, adduser_form
         "project": project,
         "group": project, # @@@ this should be the only context var for the project
         "is_member": is_member,
-        "current_view":"project_page"
+        "current_view":"project_page",
+        "all": more,
     }, context_instance=RequestContext(request))
 
 # @login_required
@@ -584,16 +613,16 @@ def record_prediction(predictions, stories,iteration_number,start_date,iteration
 def export_project(request, group_slug):
     project = get_object_or_404(Project, slug=group_slug)
     read_access_or_403(project, request.user )
-    return exportProject( project )
-    # if request.method == "POST":
-    #     form = ExportProjectForm( request.POST )
-    #     if form.is_valid():
-    #         return exportProject( project, form.cleaned_data["format"])
-    #     else:
-    #         return HttpResponseRedirect(reverse("project_detail",kwargs={'group_slug':project.slug}))
-    # else:
-    #     form = ExportProjectForm()
-    # return render_to_response("projects/project_export_options.html", { "project":project, "form":form }, context_instance=RequestContext(request))
+    #return exportProject( project )
+    if request.method == "POST":
+        form = ExportProjectForm( request.POST )
+        if form.is_valid():
+            return exportProject( project, form.cleaned_data["file_name"])
+        else:
+            return HttpResponseRedirect(reverse("project_detail",kwargs={'group_slug':project.slug}))
+    else:
+        form = ExportProjectForm(initial={'file_name':u'project'})
+    return render_to_response("projects/project_export_options.html", { "project":project, "form":form }, context_instance=RequestContext(request))
 
 # @login_required
 # def add_category(request, group_slug):

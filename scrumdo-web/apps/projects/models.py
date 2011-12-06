@@ -16,7 +16,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 import time
 from tagging.fields import TagField
 from tagging.models import Tag
@@ -38,6 +38,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from organizations.models import Organization, Team
 
 import django.dispatch
+import projects.signals as signals
 
 STATUS_TODO = 1
 STATUS_DOING = 2
@@ -214,6 +215,20 @@ class Project(Group):
             if len([t for t in tags if t.name==tag.name]) == 0: #remove duplicates
                 tags.append(tag) 
         return tags
+        
+    def get_iterations(self):
+        if self.get_num_iterations < 15:
+            return self.iterations.all()
+        else:
+            return self.iterations.filter(models.Q(default_iteration = True) | models.Q(start_date = None,  end_date = None) | \
+            models.Q(start_date__lt = datetime.today() + timedelta(days=30), end_date__lt = datetime.today()) | \
+            models.Q(start_date__lt = datetime.today(), end_date__lt =  datetime.today() + timedelta(days=30)))
+            
+    def get_iterations_all(self):
+        return self.iterations.all()
+            
+    def show_more(self):
+        return self.get_num_iterations() > 15
     
 
 

@@ -31,3 +31,15 @@ def task_counts( story):
         return "%d" % (total_tasks)
     else:
         return ""
+
+@register.simple_tag
+def my_tasks( story, user):
+    total_tasks = story.tasks.filter(assignee=user)
+    return_str = [""]
+    if len(total_tasks) > 0:
+        return_str.append("<ul>")
+        for t in total_tasks:
+            return_str.append("<li>%s</li>"%t.summary)
+        return_str.append("</ul>")
+    return "".join(return_str)
+            

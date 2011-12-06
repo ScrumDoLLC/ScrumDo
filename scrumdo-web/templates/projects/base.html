@@ -102,7 +102,7 @@
  	  <a href="{% url play_poker project.slug %}">{% silk "application_view_tile" %} Planning Poker</a><br/>
  	  {% endcanwrite %}
 	{% endifloaded %}
-	<a href="{% url export_project project.slug %}">{% silk "lorry" %} Export Project</a><br/>
+	<a rel="facebox" href="{% url export_project project.slug %}">{% silk "lorry" %} Export Project</a><br/>
 	<!-- <span title="Coming Soon: Easily size stories.">{% silk "time" %} Sizing</span><br/> -->
 	{% isadmin project %}                  
  	 <a title="{% trans "Third party plugins and extra functionality." %}" href="{% url project_extras_url project.slug %}" >{% silk "plugin" %} Extras</a><br/>
@@ -152,7 +152,11 @@
  	
   </div><!--box-title-->
     <div id="iteration_list">
+    {% if all %}
+    {% include "projects/iteration_list_all.html" %}
+    {% else %}
     {% include "projects/iteration_list.html" %}
+    {% endif %}
     </div>
   </div><!--box-->
   {% endif %}

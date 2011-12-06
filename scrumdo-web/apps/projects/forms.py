@@ -246,9 +246,11 @@ class UnlockForm(forms.Form):
 class ExportForm(forms.Form):
     format = forms.ChoiceField(choices=(("xls","Excel"),("csv","Comma Seperated Value (CSV)"),("xml","XML") ) )
     lock_iteration = forms.BooleanField( required=False, help_text = _("Locking the iteration prevents anyone from editing any stories in it until the iteration is unlocked.") )
+    file_name = forms.CharField( required=False, help_text = _("Name of the file when saved to disk.") )
 
 class ExportProjectForm(forms.Form):
-    format = forms.ChoiceField(initial="sheet", choices=(("sheet","Export each iteration as a seperate sheet."),("combined","Export one combined sheet.") ) , widget=forms.RadioSelect() )
+    #format = forms.ChoiceField(initial="sheet", choices=(("sheet","Export each iteration as a seperate sheet."),("combined","Export one combined sheet.") ) , widget=forms.RadioSelect() )
+    file_name = forms.CharField( required=False, help_text = _("Name of the file when saved to disk.") )
 
 
 

@@ -1,29 +1,19 @@
 {% load i18n %}
 {% load projects_tags %}
 {% load story_tags %}
+{% load tasks_tags %}
 {% load avatar_tags %}
 
 <li class="story_queue_story_list_item gripper_{% ifequal story.status 1 %}todo{% endifequal %}{% ifequal story.status 2 %}doing{% endifequal %}{% ifequal story.status 3 %}reviewing{% endifequal %}{% ifequal story.status 4 %}done{% endifequal %}" story_id="{{story.id}}" id="story_{{story.id}}" rank="{{ story.rank }}" >
 
-  <div class="pointsBox">{{ story|show_points }}</div>
-  <div class="todoButtons todoButtons_block" id="todoButtons_{{story.id}}">
-    {% with "block" as return_type %}
-      {% include "stories/todobuttons.html" %}
-    {% endwith %}
-  </div>
 
-  <span class="storyIcons">
-    <a class="hoverDetails" onclick="jQuery.facebox({ ajax: '/projects/project/{{story.project.slug}}/story/{{story.id}}/pretty'}, 'pretty_print'); return false;" href="/projects/project/{{story.project.slug}}/story/{{story.id}}/pretty"><img title="Quick View" src="{{STATIC_URL}}pinax/images/silk/icons/magnifier.png" /></a>
-	  {% canwrite project %}
-	      <a onclick="setupAutoClose('#todoButtons_{{story.id}}'); jQuery('#todoButtons_{{story.id}}').show();  return false;" href="#"><img title="Set Status" src="{{ STATIC_URL }}pinax/images/silk/icons/tag_red.png" /></a>
-	      <a onclick="openOverlay( '/projects/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=block' ); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=block"><img title="Edit Story" src="{{ STATIC_URL }}pinax/images/silk/icons/pencil.png" /></a>
-	  {% endcanwrite %}  
-  </span>
-  <a href="{% url iteration story.project.slug story.iteration.id %}#story_{{ story.id }}">	
-	  {% filter truncatewords:"43" %}
-	    #{{story.local_id}} {{ story.summary}}
-	     {{ story.detail }}
-	  {% endfilter %} 
+  <a href="{% url iteration story.project.slug story.iteration.id %}#story_{{ story.id }}">
+  
+  {% filter truncatewords:"43" %}
+    {% summary_view story user%}
+  {%my_tasks story user%}
+  {% endfilter %} 
+  
   </a>
 
 </li>  

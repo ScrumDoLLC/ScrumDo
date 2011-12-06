@@ -1,8 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
-
-from activities.models import *
 from projects.models import ProjectMember, Project
 from organizations.models import Organization
 from django.shortcuts import render_to_response, get_object_or_404
