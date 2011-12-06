@@ -567,3 +567,7 @@ h2.page-divider {
     width: 33%;
 	text-align: left;
 }
+
+.struck_out {
+    text-decoration: line-through;
+}

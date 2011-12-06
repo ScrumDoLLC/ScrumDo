@@ -39,7 +39,8 @@ def my_tasks( story, user):
     if len(total_tasks) > 0:
         return_str.append("<ul>")
         for t in total_tasks:
-            return_str.append("<li>%s</li>"%t.summary)
+            css_class = "struck_out" if t.complete else ""
+            return_str.append("<li class='%s'>%s</li>" % (css_class,t.summary) )
         return_str.append("</ul>")
     return "".join(return_str)
             
