@@ -110,8 +110,8 @@ def organization_projects(request, organization_slug):
             team.save()
         elif action == "removeUser":
             user = User.objects.filter(id=request.POST.get("user_id"))[0]
-            if user == request.user and team.access_type=="admin":
-                request.user.message_set.create(message="Can't remove yourself from the team admin group.")
+            if user == request.user and team.access_type=="staff":
+                request.user.message_set.create(message="Can't remove yourself from the staff group.")
             else:
                 team.members.remove(user);
                 team.save()
@@ -172,13 +172,14 @@ def handle_organization_create( form , request, projects):
     organization.creator = request.user
     organization.save()
 
-    default_team = Team(organization = organization, name="Owners", access_type="admin")
-    default_team.save()
-
-    default_team.members.add(request.user)
 
     member_team = Team(organization = organization, name="Members", access_type="write")
     member_team.save()
+    
+    staff_team = Team(organization = organization, name="Staff", access_type="staff")
+    staff_team.save()
+    staff_team.members.add(request.user)
+    
     
     request.user.message_set.create(message="Organization Created.")
     
@@ -211,8 +212,8 @@ def handle_organization_create( form , request, projects):
     for project in projects:
         if request.POST.get("move_project_%d" % project.id):
             _move_project_to_organization(project, organization, member_team)
-            default_team.projects.add( project )
-    default_team.save()
+            # member_team.projects.add( project )
+
     return organization
 
 @login_required
