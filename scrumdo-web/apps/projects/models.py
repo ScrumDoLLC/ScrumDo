@@ -217,12 +217,15 @@ class Project(Group):
         return tags
         
     def get_iterations(self):
-        if self.get_num_iterations < 15:
+        if self.get_num_iterations <= 15:
             return self.iterations.all()
         else:
-            return self.iterations.filter(models.Q(default_iteration = True) | models.Q(start_date = None,  end_date = None) | \
-            models.Q(start_date__lt = datetime.today() + timedelta(days=30), end_date__lt = datetime.today()) | \
-            models.Q(start_date__lt = datetime.today(), end_date__lt =  datetime.today() + timedelta(days=30)))
+            return self.iterations.filter(  models.Q(default_iteration = True) |  # We always show the backlog.
+                                            models.Q(start_date = None) | models.Q( end_date = None) | # And we show iterations without dates on either end
+                                            models.Q(end_date__gt = datetime.today() - timedelta(days=30), end_date__lte = datetime.today()) | # We show past iterations within 30 days
+                                            models.Q(start_date__gte = datetime.today(), start_date__lt =  datetime.today() + timedelta(days=30)) | # and future iterations within 30 days
+                                            models.Q(start_date__lte = datetime.today(), end_date__gte =  datetime.today() ) # And current iterations too
+                                            )
             
     def get_iterations_all(self):
         return self.iterations.all()
