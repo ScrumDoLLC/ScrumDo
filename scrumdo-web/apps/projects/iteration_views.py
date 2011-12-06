@@ -242,12 +242,13 @@ def iteration_export(request, group_slug, iteration_id):
         if form.is_valid():
             format = form.cleaned_data["format"]
             lock = form.cleaned_data["lock_iteration"]
+            file_name = form.cleaned_data["file_name"]
             if lock:
                 iteration.locked = True
                 iteration.save()
-            return import_export.exportIteration(iteration, format)
+            return import_export.exportIteration(iteration, format, file_name)
     else:
-        form = ExportForm()
+        form = ExportForm(initial={'file_name':u'iteration'})
 
     return render_to_response('projects/export_options.html', { 'project':project, 'iteration':iteration, 'form': form,  }, context_instance=RequestContext(request))
 
