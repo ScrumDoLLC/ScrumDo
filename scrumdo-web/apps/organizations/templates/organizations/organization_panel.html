@@ -15,12 +15,6 @@
     <div class="box-title">
       Tools
     </div><!--box-title-->
-    <div class="box-content">
-      <a href="{% url project_create  %}?org={{organization.id}}">{% silk "database_table" %} New Project</a>
-    </div><!--box-content-->
-    <div class="box-content">
-      <a href="{% url team_create organization.slug %}">{% silk "group" %} New Team</a>
-    </div><!--box-content-->
     {% endif %}
     <div class="box-title">
       {% if organization %}Other {% endif %}Organizations

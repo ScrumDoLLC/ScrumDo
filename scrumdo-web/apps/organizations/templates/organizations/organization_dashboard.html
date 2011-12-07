@@ -17,7 +17,8 @@
 {% block body %}
 
 
-
+	<h1>{{organization.name}}</h1>
+	
 	<div id="organization-menu">
 		<a href="{% url organization_dashboard organization.slug %}"><img src="{{STATIC_URL}}images/organization/sel_dashboard_button.png"></a><a href="{% url organization_projects organization.slug %}"><img class="rollover"  src="{{STATIC_URL}}images/organization/projects_button.png"></a><a href="{% url team_summary organization.slug %}"><img class="rollover" src="{{STATIC_URL}}images/organization/teams_button.png"></a><a href="{% url export_organization organization.slug %}"><img class="rollover" src="{{STATIC_URL}}images/organization/export_button.png"></a>
 	</div>
