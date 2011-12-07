@@ -178,6 +178,7 @@ INSTALLED_APPS = (
     'django_markup',
     'django_filters',
     'staticfiles',
+    'notification',
 #    'tastypie',
 
     # internal (for now)
