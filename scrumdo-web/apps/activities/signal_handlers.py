@@ -9,7 +9,11 @@ from itertools import groupby
 from threadedcomments.models import ThreadedComment
 from activities.utils import allinstances, instanceof
 from scrumdo_model_utils.models import InheritanceCastModel
-from scrum_log.models import ScrumLog
+try:
+    from scrum_log.models import ScrumLog
+    HAS_SCRUMLOG = True
+except ImportError:
+    HAS_SCRUMLOG = False
 from activities.models import *
 import projects.signals as signals
 
@@ -131,18 +135,20 @@ def onIterationDeleted(sender, **kwargs):
     _createIterationNewsItem("calendar_delete", "activities/delete_iteration.html", **kwargs)
 signals.iteration_deleted.connect( onIterationDeleted , dispatch_uid="newsfeed_signal_hookup")
 
-def onScrumLogPosted(sender, instance, signal, *args, **kwargs):
-    try:        
-        icon = "group"
-        if instance.flagged:
-            icon = "flag_red"
-        item = NewsItem(user=instance.creator, project=instance.project, icon=icon )
-        item.text = render_to_string("activities/scrumLog.txt", {'item':instance} )
-        item.save()
-    except:
-        logger.error("Could not create news item")
-        traceback.print_exc(file=sys.stdout)
-models.signals.post_save.connect(onScrumLogPosted, sender=ScrumLog)
+
+if HAS_SCRUMLOG:
+    def onScrumLogPosted(sender, instance, signal, *args, **kwargs):
+        try:        
+            icon = "group"
+            if instance.flagged:
+                icon = "flag_red"
+            item = NewsItem(user=instance.creator, project=instance.project, icon=icon )
+            item.text = render_to_string("activities/scrumLog.txt", {'item':instance} )
+            item.save()
+        except:
+            logger.error("Could not create news item")
+            traceback.print_exc(file=sys.stdout)
+    models.signals.post_save.connect(onScrumLogPosted, sender=ScrumLog)
 
 
 def onCommentPosted(sender, **kwargs):
