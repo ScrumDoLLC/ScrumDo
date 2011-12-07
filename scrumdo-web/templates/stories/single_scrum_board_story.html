@@ -15,7 +15,10 @@
 
 
   <span class="storyIcons">
-    <a onclick="openOverlay( '/projects/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=scrumboard' ); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=scrumboard"><img title="Edit Story" src="{{ STATIC_URL }}pinax/images/silk/icons/pencil.png" /></a>
+	{% canwrite project %}
+	  <a story_id="{{ story.id }}" class="moveIterationIcon"  href="#"><img title="Move To Another Iteration" src="{{ STATIC_URL }}pinax/images/silk/icons/page_white_go.png" /></a>
+      <a onclick="openOverlay( '/projects/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=scrumboard' ); return false;" href="/project/{{ story.project.slug }}/story/{{ story.id }}?return_type=scrumboard"><img title="Edit Story" src="{{ STATIC_URL }}pinax/images/silk/icons/pencil.png" /></a>
+    {% endcanwrite %}
     <a class="hoverDetails" onclick="jQuery.facebox({ ajax: '/projects/project/{{story.project.slug}}/story/{{story.id}}/pretty'}, 'pretty_print'); return false;" href="/projects/project/{{story.project.slug}}/story/{{story.id}}/pretty"><img title="Quick View" src="{{STATIC_URL}}pinax/images/silk/icons/magnifier.png" /></a>
   </span>
     

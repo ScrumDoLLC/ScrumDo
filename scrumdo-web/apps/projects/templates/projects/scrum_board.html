@@ -85,11 +85,38 @@
       <ul class="scrum_board_list" id="done"></ul>
     </div>
     
+    <div id="subIterationList" style="display:none">
+      {% for subiteration in project.iterations.all %}
+        {% ifnotequal subiteration iteration %}
+        
+          <div class="subIteration" iteration_id="{{subiteration.id}}">{% iteration_icon subiteration %} {{subiteration.name}}</div>
+        {% endifnotequal %}
+      {% endfor %}
+    </div>
 	<script src="{{ STATIC_URL }}js/tag-it.js" type="text/javascript"></script>      
     <script type="text/javascript" charset="utf-8">
       project_slug = "{{project.slug}}";
       iteration_id = "{{iteration.id}}";
 	  story_template_type='scrumboard';
+	
+	
+	function moveCurrentlyOpenStoryToIteration(iteration_id)
+	 {
+	    $("#loadingIcon").show();
+	    $.ajax({
+	        url: "/projects/project/" + project_slug + "/story/" + current_story_popup + "/reorder",
+	        data: ({
+	            action: "move_iteration",
+	            iteration: iteration_id
+	        }),
+	        type: "POST",
+	        success: function() {
+	            $("#loadingIcon").hide();
+	            $("#story_" + current_story_popup).hide(true);
+				$("body").trigger("storyListChanged"); 
+	        }
+	    });
+	}
     </script>
 {% endblock %}
 
