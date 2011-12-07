@@ -1,0 +1,20 @@
+
+{% load markup %}
+{% load projects_tags %}
+{% load activity_tags %}
+
+	<span class="scrum_log_header" style="font-weight:normal">		
+ 	<img src="{{entry.icon_url|safe}}" class="scrum_log_icon" width="16">
+	{% if entry.flagged %}
+	  {% silk "flag_red" %}
+
+	{% endif %}
+		{% ifequal entry.message_type 0 %}
+		  {{entry.creator}}
+		{% endifequal %}
+	</span>
+
+	<span class="formatted_story_text">
+   {{ entry.message|markdown|link_stories:project|safe }}  
+   in <a href="{% url project_detail entry.project.slug %}">{{entry.project.name}}</a> <abbr>about {{ entry.date|timesince }} ago</abbr>
+ </span>

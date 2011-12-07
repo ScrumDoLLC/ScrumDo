@@ -1,0 +1,42 @@
+
+{% load markup %}
+{% load projects_tags %}
+
+{% for entry in entries %}
+  <div class="scrum_log_entry" id="log_{{entry.id}}">
+	{% if entry.flagged %}
+	  <span class="scrum_log_flag">{% silk "flag_red" %}</span>
+	{% endif %}
+	{% ifequal entry.creator user %}
+      <a href="#" title="Delete this log entry." class="delete_log_entry" onClick="deleteLogEntry({{entry.id}});return false;">x</a>
+	{% else %}
+	  {% isadmin project %}
+ 	    <a href="#" title="Delete this log entry." class="delete_log_entry" onClick="deleteLogEntry({{entry.id}});return false;">x</a>
+	  {% endisadmin %}
+    {% endifequal %}
+	<span class="scrum_log_header">		
+    	<img src="{{entry.icon_url|safe}}" class="scrum_log_icon" width="16">
+		{% ifequal entry.message_type 0 %}
+		  {{entry.creator}}
+		{% endifequal %}
+		<span class="scrum_log_date">{{ entry.date }}</span>
+	</span>
+
+	<span class="formatted_story_text">
+      {{ entry.message|markdown|link_stories:project|safe }}  
+    </span>
+
+  </div>
+{% endfor %}
+
+<a href="#" class="show_more">Show More...</a>
+	
+<script type="text/javascript" charset="utf-8">
+
+$(".delete_log_entry").tipTip({"defaultPosition":"bottom","delay":100});
+$(".show_more").click(function(){
+	loadNextPage();
+	$(this).hide();
+	return false;
+});
+</script>

@@ -571,3 +571,116 @@ h2.page-divider {
 .struck_out {
     text-decoration: line-through;
 }
+
+
+
+.organiztion-team-popup {
+	width: 740px;
+	display: none;
+}
+
+.organization-popup-column {
+	width: 350px;
+	display: inline-block;
+	vertical-align: top;
+	min-height: 220px;
+	border: 1px solid #ddd;
+	padding: 5px;
+	border-right-style: none;
+	border-left-style: none;
+	border-bottom-style: none;
+}
+
+.organization-column-row {
+	min-height: 25px;
+	padding-top: 3px;
+	border-bottom: 1px solid #dcdcdc;
+}
+.organization-column-row:hover {
+	background-color: #e9faff;
+}
+.organization-column-row a {
+	text-decoration: none;
+	color: #000;
+}
+.organization-column-row img {
+	vertical-align: text-bottom;
+}
+
+.organization-popup-column-header {
+	width: 350px;
+	display: inline-block;
+	vertical-align: top;
+	padding: 5px;
+	font-size: 18px;
+}
+
+.organization-column-footer {
+	width: 350px;
+	display: inline-block;
+	vertical-align: top;
+	padding: 5px;
+	font-size: 18px;
+	background-color: #f3f3f3;
+	border: 1px solid #e6e6e6;
+
+	min-height: 35px;
+}
+.organization-column-footer select {
+	font-size: 16px;
+	width: 250px;
+}
+.organization-column-footer #id_recipient {
+	width: 220px;
+}
+
+
+.organization-project-link {
+	color: #000000;
+	text-decoration: none;
+}
+
+.organization-project-chart {
+	margin-left:10px; 
+	margin-top:5px;
+	position: absolute;
+	bottom: 5px;
+	left: 5px;
+}
+.organization-project {
+	position: relative;
+	display: inline-block;
+	width: 220px;
+	height: 100px;
+	background-color: #f6f6f6;
+	margin: 5px;
+	vertical-align: top;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	behavior: url(/site_media/static/css/PIE.htc);  text-align: left;
+	border: 1px solid #d5d5d5;
+	padding: 5px;
+}
+
+.organization-project h2 {
+	font-size: 14px;
+	font-weight: bold;
+
+	margin: 0px 0px 5px;
+	padding: 0px;
+}
+.organization-project a:hover {
+	text-decoration: underline;
+	color: #2c3dfe;
+}
+
+.organization-project .block_link {
+	display: block;
+	max-height: 38px;
+	color: #000;
+	margin: 0px;
+	padding: 0px;
+	overflow: hidden;
+	text-decoration: none;
+}

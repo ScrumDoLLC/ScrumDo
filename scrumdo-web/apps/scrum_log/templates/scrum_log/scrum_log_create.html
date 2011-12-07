@@ -1,0 +1,19 @@
+{% load projects_tags %}
+
+<div id="scrum_log_form_div">
+	<form method="POST" action="{% url add_scrum_log_ajax project.slug %}" id="scrum_log_form">
+		<input name="flagged" type="checkbox" id="flagged_button"><label title="Flag this log message as important." for="flagged_button">{% silk "flag_red" %}</label>
+		<input name="group" type="checkbox" id="group_button"><label title="Write a log for the team instead of for yourself." for="group_button">{% silk "group" %}</label>
+		<textarea name="message"></textarea>
+		<input style="width:100px" type="submit" value="Log It" class="big_grey_button">
+	</form>
+	
+</div>
+
+<script type="text/javascript" charset="utf-8">
+   $(document).ready(function(){
+	$("#flagged_button, #group_button").button();
+	$("#scrum_log_form label").tipTip({"defaultPosition":"bottom","delay":100});	
+	$( "#scrum_log_form" ).ajaxForm(function(){ reloadScrumLog(); $( "#scrum_log_form textarea" ).val(""); });
+	});
+</script>

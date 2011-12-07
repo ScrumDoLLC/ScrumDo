@@ -1,0 +1,94 @@
+{% extends "organizations/base.html" %}
+
+{% load i18n %}
+{% load humanize %}
+{% load projects_tags %}
+{% load extra_tagging_tags %}
+{% load avatar_tags %}
+{% load extras_tags %}
+{% load organizations_tags %}
+{% load favorites_tags %}
+
+{% block head_title %}{{organization.name}}{% endblock %}
+
+
+
+{% block body %}
+<div style="width:950px">
+	<h1>{{organization.name}}</h1>
+
+	<div id="organization-menu">
+		<a href="{% url organization_dashboard organization.slug %}"><img class="rollover" src="{{STATIC_URL}}images/organization/dashboard_button.png"></a><a href="{% url organization_projects organization.slug %}"><img src="{{STATIC_URL}}images/organization/sel_projects_button.png"></a><a href="{% url team_summary organization.slug %}"><img class="rollover" src="{{STATIC_URL}}images/organization/teams_button.png"></a><a href="{% url export_organization organization.slug %}"><img class="rollover" src="{{STATIC_URL}}images/organization/export_button.png"></a>
+	</div>
+	<br/>
+	{% isorgstaff organization %}
+	<a class="button green" style="text-decoration:none; vertical-align:middle" href="{% url project_create  %}?org={{organization.id}}">New Project</a><br/>
+	{% endisorgstaff %}
+	<br/>
+{% for project in projects %}
+  {% canread project %}
+	  {% ifchanged project.category %}
+	    {% if project.category %}
+	      {% if project.active %}
+	        <div class="projects-box-category"><b>{{project.category}}</b></div>
+	      {% endif %}
+	    {% endif %}
+	  {% endifchanged %}
+	  {% ifchanged project.active %}
+        {% if not project.active %}
+          <div class="projects-box-category"><b>Archived</b></div>
+        {% endif %}
+      {% endifchanged %}
+
+	
+		<div class="organization-project">
+		  <div class="watch_project_div" style="float:right; ">
+			{% favorite project %}
+  		  </div>
+		  <a class="block_link" href="{% url project_detail project.slug %}" class="organization-project-link">
+		  <h2>{{ project.name }}</h2>
+		  </a>
+		  {% if project.velocity %}
+		  <div style="float:right">
+		    Velocity: {{ project.velocity }} 
+		  </div>
+		  {% endif %}		  
+		
+		  Stor{{ project.stories.count|pluralize:"y,ies" }}: {{ project.stories.count }}
+		  
+		  {% if project.get_current_iterations %}
+			<a href="{% url iteration project.slug project.get_current_iterations.0.id %}">
+		  	<img title="{{project.get_current_iterations.0.name}}" class="organization-project-chart" src="{{project.get_current_iterations.0|tiny_google_chart_url}}">		
+			</a>
+		  {% endif %}
+		
+		</div>
+	
+  {% endcanread %}
+{% endfor %}
+
+</div>
+
+
+    <script type="text/javascript" charset="utf-8">
+      {% if GOOGLE_ANALYTICS %}     
+         _gaq.push(['_trackEvent',"ViewPage", "Organization"]); 
+      {% endif %}      
+	  $(document).ready(function(){
+	     $(".rollover").hover(
+		 function()
+		 {
+		  this.src = this.src.replace("organization/","organization/sel_");
+		 },
+		 function()
+		 {
+		  this.src = this.src.replace("sel_","");
+		 }
+		);
+	  });
+
+
+    </script>
+{% endblock %}
+
+

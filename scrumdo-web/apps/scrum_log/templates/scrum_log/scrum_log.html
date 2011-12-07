@@ -1,0 +1,45 @@
+{% include "scrum_log/scrum_log_create.html" %}
+
+<div id="scrum_log_entries">
+</div>
+
+<script type="text/javascript" charset="utf-8">
+	var next_page = 1;
+	function deleteLogEntry(id)
+	{
+		if( ! confirm("Delete this log entry?") ) { return; }
+		
+		$.ajax({
+			url: '/scrum_log/' + id + '/delete',
+            method: 'POST',
+            success: function(data) {
+				$("#log_" + id).slideUp();
+			}
+		});
+	}
+	function reloadScrumLog()
+	{
+		next_page = 1;
+		$("#scrum_log_entries").empty();
+		loadNextPage();
+	}
+	function loadNextPage()
+	{
+		loadPage(next_page);
+		next_page++;
+	}
+	function loadPage( page )
+	{
+		$.ajax({
+			url: '/scrum_log/{{project.slug}}/entries/' + page,
+            method: 'GET',
+            success: function(data) {
+				$("#scrum_log_entries").append(data);
+			}
+		});
+	}
+	
+	$(document).ready(function(){reloadScrumLog();});
+	
+	
+</script>

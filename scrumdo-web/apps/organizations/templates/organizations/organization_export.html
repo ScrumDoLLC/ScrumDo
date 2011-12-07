@@ -1,0 +1,106 @@
+{% extends "organizations/base.html" %}
+
+{% load i18n %}
+
+{% load humanize %}
+{% load projects_tags %}
+{% load extra_tagging_tags %}
+{% load avatar_tags %}
+{% load extras_tags %}
+{% load organizations_tags %}
+{% load favorites_tags %}
+
+
+{% block head_title %}{{organization.name}}{% endblock %}
+
+
+
+{% block body %}
+
+
+
+
+	<div id="organization-menu">		
+		<a href="{% url organization_dashboard organization.slug %}"><img class="rollover" src="{{STATIC_URL}}images/organization/dashboard_button.png"></a><a href="{% url organization_projects organization.slug %}"><img class="rollover" src="{{STATIC_URL}}images/organization/projects_button.png"></a><a href="{% url team_summary organization.slug %}"><img class="rollover" src="{{STATIC_URL}}images/organization/teams_button.png"></a><a href="{% url export_organization organization.slug %}"><img src="{{STATIC_URL}}images/organization/sel_export_button.png"></a>
+	</div>
+
+
+<h1>Export</h1>
+
+	<img style="float:right" src="{{STATIC_URL}}images/mascot/male_wrench.png">
+
+	
+	
+	<form action="" method="POST">
+		{% for project in organization.projects.all %}
+			{% if project.active %}
+				{% canread project %}
+				<input type="checkbox" name="proj_{{project.id}}" id="{{project.id}}" checked> <label for="{{project.id}}">{{project.name}}</label><br/>
+				{% endcanread %}
+			{% endif %}
+		{% endfor %}
+		<br/>
+		<a href="#" class="select_none">Select None</a> <a href="#" class="select_all">Select All</a>
+		<br/><br/>
+		<input type="submit" value="Download Export" class="button blue"> 
+		<br/><br/><br/><br/>
+	</form>
+	
+
+
+
+
+
+    <script type="text/javascript" charset="utf-8">
+      {% if GOOGLE_ANALYTICS %}     
+         _gaq.push(['_trackEvent',"ViewPage", "Organization"]); 
+      {% endif %}      
+	
+	  $(".select_none").click(function(){
+		 $("input[type='checkbox']").attr("checked","")
+		 return false;
+	   });
+	  $(".select_all").click(function(){
+		 $("input[type='checkbox']").attr("checked","true")
+		 return false;
+	   });
+	
+	  function openTeam(team_url, team_id) {
+		$("#team_detail_area").html("<h1>Loading...</h1>");
+		$(".selected-team").removeClass("selected-team");
+		$("#team_" + team_id).addClass("selected-team");
+		
+		$.ajax({
+			url: team_url,
+            method: 'GET',
+            success: function(data) {
+				$("#team_detail_area").html(data);			
+			}
+		});
+	  }
+
+
+	  $(document).ready(function(){		
+		
+		 $(".team_link").click( function(){
+			openTeam($(this).attr("href"),$(this).attr("team_id"))
+			return false;
+		 });
+		
+	     $(".rollover").hover(
+		 function()
+		 {
+		  this.src = this.src.replace("organization/","organization/sel_");
+		 },
+		 function()
+		 {
+		  this.src = this.src.replace("sel_","");
+		 }
+		);
+	  });
+
+
+    </script>
+{% endblock %}
+
+

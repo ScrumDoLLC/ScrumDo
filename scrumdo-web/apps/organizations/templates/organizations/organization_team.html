@@ -1,0 +1,144 @@
+{% load humanize %}
+{% load projects_tags %}
+{% load extra_tagging_tags %}
+{% load avatar_tags %}
+{% load extras_tags %}
+{% load organizations_tags %}
+{% load favorites_tags %}
+
+
+<h1>{{team.name}}</h1>
+
+
+{% for member in team.members.all %}
+
+<div class="team-member-box" id="team_member_{{member.id}}">
+	{% isorgstaff organization %}
+	  <a class="removeMember" href="{% url team_remove_member organization.slug team.id member.id %}" ><img class="memberDeleteButton" src="{{STATIC_URL}}pinax/images/silk/icons/delete.png" /></a>
+	{% endisorgstaff %}
+
+<span class="member-avatar">{% avatar member 40 %}</span>
+<b>{% if member.first_name %} {{member.first_name}} {% endif %}
+{% if member.last_name %} {{member.last_name}} <br/>{% endif %}</b>
+{{member.username}}
+
+  <div class="team-member-box-email">
+    <br/>{{member|probable_email}}
+  </div>
+	
+	<form action="#team_popup_{{team.id}}" method="POST" id="form_remove_user_{{team.id}}_{{member.id}}">                   
+                   <input type="hidden" name="action" value="removeUser">
+                   <input type="hidden" name="user_id" value="{{member.id}}">
+                   <input type="hidden" name="team_id" value="{{team.id}}">                   
+    </form>
+</div>
+{% endfor %}
+
+{% if team.invites.all %}
+<h3>Pending Invites:</h2>
+	{% for invite in team.invites.all %}
+	 {{invite.email_address}}<br/>
+	{% endfor %}
+{% endif %}
+
+{% isorgstaff organization %}
+	<h3>Add User</h3>
+	<form class="inviteForm" method="POST" action="{% url team_invite organization.slug team.id %}">
+		Username or Email Address: <input type="text" name="invitee"> <input type="submit" class="button green" value="Add User">
+	</form>
+{% endisorgstaff %}
+
+{% ifequal team.access_type "staff" %}
+	<h3>Grants STAFF access to this organization</h3>
+	<p>These users can create projects, invite members, and manage subscription options.  They have access to every project.</p>
+{% else %}
+	<h3>Grants {{ team.access_type }} access to:</h3>
+	<ul class="team-project-list">
+	{% for project in team.projects.all %}
+		<li>{% isorgstaff organization %}
+			  <a class="removeProject" href="{% url team_remove_project organization.slug team.id project.id %}" ><img class="projectDeleteButton" src="{{STATIC_URL}}pinax/images/silk/icons/delete.png" /></a>
+			{% endisorgstaff %}
+			<a href="{% url project_detail project.slug %}">{{project.name}}</a>
+		</li>
+	{% endfor %}
+	</ul>
+	{% isorgstaff organization %}
+		<form id="add_project_form" action="{% url team_add_project organization.slug team.id %}" method="POST">
+		      <select style="width:400px" name="project">
+				<option value="">Select a project...</option>
+		        {% for project in organization.projects.all %}
+					{% if not project.archived %}
+		        	  <option value="{{project.id}}">{{project.name}}</option>
+					{% endif %}
+		        {% endfor %}
+		      </select>
+		      <input class="button green" type="submit" value="Add Project">
+		</form>
+	{% endisorgstaff %}
+{% endifequal %}
+
+
+
+
+
+<script type="text/javascript" charset="utf-8">
+
+	$("#add_project_form").ajaxForm({
+		target: "#team_detail_area"
+	});
+	
+	$(".inviteForm").ajaxForm({
+		target: "#team_detail_area"
+	}); 
+	
+	$(".removeProject").click( function() {
+		url = $(this).attr("href");
+		member_box = $(this).parent();
+		var answer = confirm("Are you sure you want to remove this project? " );
+        if (answer)
+        {
+			$.ajax({
+				url: url,
+	            method: 'POST',
+	            success: function(data) {
+				    if( data == "OK") {
+					    $(member_box).hide(true);
+				    }
+					else
+					{
+						alert(data);
+					}
+				}
+			});
+        }
+		return false;
+	});
+	
+
+	$(".removeMember").click( function() {
+		url = $(this).attr("href");
+		member_box = $(this).parent();
+		var answer = confirm("Are you sure you want to remove this user? " );
+        if (answer)
+        {
+			$.ajax({
+				url: url,
+	            method: 'POST',
+	            success: function(data) {
+				    if( data == "OK") {
+					    $(member_box).hide(true);
+				    }
+					else
+					{
+						alert(data);
+					}
+				}
+			});
+        }
+		return false;
+	});
+	
+
+
+	
+</script>

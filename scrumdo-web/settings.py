@@ -202,6 +202,7 @@ INSTALLED_APPS = (
     'developer',
     'haystack',
     'favorites',
+    'scrum_log',
     # 'debug_toolbar',
 )
 

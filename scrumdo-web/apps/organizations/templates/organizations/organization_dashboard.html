@@ -1,0 +1,106 @@
+{% extends "organizations/base.html" %}
+
+{% load i18n %}
+{% load humanize %}
+{% load projects_tags %}
+{% load extra_tagging_tags %}
+{% load avatar_tags %}
+{% load activity_tags %}
+{% load extras_tags %}
+{% load organizations_tags %}
+{% load favorites_tags %}
+
+{% block head_title %}{{organization.name}}{% endblock %}
+
+
+
+{% block body %}
+
+
+
+	<div id="organization-menu">
+		<a href="{% url organization_dashboard organization.slug %}"><img src="{{STATIC_URL}}images/organization/sel_dashboard_button.png"></a><a href="{% url organization_projects organization.slug %}"><img class="rollover"  src="{{STATIC_URL}}images/organization/projects_button.png"></a><a href="{% url team_summary organization.slug %}"><img class="rollover" src="{{STATIC_URL}}images/organization/teams_button.png"></a><a href="{% url export_organization organization.slug %}"><img class="rollover" src="{{STATIC_URL}}images/organization/export_button.png"></a>
+	</div>
+	
+	<div class="two-column-wrapper">
+		<div class="two-column-left column-wide">
+			{% if your_stories %}
+				<h1>Your Stories</h1>
+				{% for project,stories in your_stories %}
+					<h2>{{project.name}}</h2>
+				
+					<ul class="story_queue_list">
+					{% for story in stories %}
+						{% include "stories/single_queue_story.html" %}
+					{% endfor %}
+					</ul>
+				{% endfor %}
+			{% endif %}
+			
+			
+			<h1>News feed</h1>
+			{% news_feed %}
+			
+		</div>
+		
+		<div class="two-column-right column-narrow">
+			<h1>Your Projects</h1>
+	         {% for project in favorite_projects %}
+				 {% canread project %}
+		         <div class="dashboard-project">
+				  <div class="watch_project_div" style="float:right; ">
+					{% favorite project %}
+		  		  </div>
+		    	    <a title="Go To Project" href="{% url project_detail project.slug %}"><b>{{project.name}}</b></a>
+					  {% with project.stories.count as story_count %}
+ 	          	        <div class="news-subtitle">
+							  {% if project.velocity %}
+							  <div style="float:right">
+							    Velocity: {{ project.velocity }} 
+							  </div>
+							  {% endif %}
+							{{ story_count }} stor{{ story_count|pluralize:"y,ies" }}
+						</div>
+		              {% endwith %}
+					{% for iteration in project.get_current_iterations %}
+						<a title="Go To Iteration" href="{% url iteration project.slug iteration.id %}"><img src="{{iteration|tiny_google_chart_url}}"></a>
+					{% endfor %}
+
+		         </div><!--project-->
+				 {% endcanread %}
+			 {% empty %}
+			  	Looks like you don't have any favorite projects.  You can find more projects in the "Projects" tab above.
+	         {% endfor %}			
+			  <span style="line-height:1.3em; font-size: 0.75em">
+				<p>Click the watch <img src="{{STATIC_URL}}images/favorite_off.png" class="silk_icon"> icon on projects to toggle whether or not they show up on this dashboard.</p>				
+			  </span>
+		</div>
+	</div>
+	
+
+
+    <script type="text/javascript" charset="utf-8">
+      {% if GOOGLE_ANALYTICS %}     
+         _gaq.push(['_trackEvent',"ViewPage", "Organization"]); 
+      {% endif %}      
+	  $(document).ready(function(){
+	     $(".rollover").hover(
+		 function()
+		 {
+		  this.src = this.src.replace("organization/","organization/sel_");
+		 },
+		 function()
+		 {
+		  this.src = this.src.replace("sel_","");
+		 }
+		);
+		
+		setupNewsItemMoreLinks();
+		
+	  });
+
+
+    </script>
+{% endblock %}
+
+
