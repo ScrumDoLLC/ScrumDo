@@ -52,7 +52,7 @@ def organization_dashboard(request, organization_slug):
     
     organizations = Organization.getOrganizationsForUser( request.user )
     
-    favorite_projects = Favorite.objects.filter(user=request.user, project__organization=organization).select_related('project')
+    favorite_projects = Favorite.objects.filter(user=request.user, project__organization=organization).select_related('project').order_by("-project__active","project__category","project__name")
     favorite_projects = [fav.project for fav in favorite_projects]
     
     stories = Story.getAssignedStories(request.user, organization)
