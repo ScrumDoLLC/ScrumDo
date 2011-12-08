@@ -34,7 +34,7 @@ urlpatterns = patterns('organizations.views',
     url(r'^(?P<organization_slug>[-\w]+)/edit$', 'organization_edit', name="organization_edit"),
     url(r'^(?P<organization_slug>[-\w]+)/export$', 'export_organization', name="export_organization"),
     url(r'^(?P<organization_slug>[-\w]+)/delete$', 'delete_organization', name="delete_organization"),
-
+    url(r'^(?P<organization_slug>[-\w]+)/favorite_all$', 'favorite_all', name="favorite_all"),
 )
 
 

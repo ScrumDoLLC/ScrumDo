@@ -33,6 +33,7 @@ from organizations.models import *
 from activities.models import NewsItem
 from projects.models import Project
 from favorites.models import *
+import projects.access as access
 import organizations.signals as signals
 import organizations.import_export as import_export
 
@@ -250,6 +251,14 @@ def _move_project_to_organization(project, organization, member_team):
     member_team.save()
     project.save()
 
+@login_required
+def favorite_all(request, organization_slug):
+    organization = get_object_or_404(Organization, slug=organization_slug)
+    for project in organization.projects.all():
+        if project.active and access.has_read_access(project, request.user):
+            Favorite.setFavorite( 1, project.id, request.user, True)
+    return HttpResponseRedirect( reverse("organization_detail",kwargs={"organization_slug":organization_slug}))
+    
 @login_required
 def team_debug(request):
     read_orgs = Organization.getOrganizationsForUser(request.user)
