@@ -159,9 +159,8 @@
 	margin-bottom: 12px;
 	
 }
-.organization_picker {
-	min-height: 60px;
-	text-align: center;
+.organization_picker {	
+   text-align: center;
    border-top: 1px solid #ebebeb;
    background: #d6d6d6;
    background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#c2c2c2));
@@ -169,7 +168,7 @@
    background: -moz-linear-gradient(top, #f2f2f2, #c2c2c2);
    background: -ms-linear-gradient(top, #f2f2f2, #c2c2c2);
    background: -o-linear-gradient(top, #f2f2f2, #c2c2c2);
-   padding: 17.5px 35px;
+   
    -webkit-border-radius: 15px;
    -moz-border-radius: 15px;
    border-radius: 15px;
@@ -183,10 +182,16 @@
    text-decoration: none;
    vertical-align: middle;
 }
+.organization_picker h1 {
+    margin: 0px;
+    font-size: 22px;
+}
 .organization_picker a {
+    display: block;
 	color: #ffffff;
 	text-decoration: none;
-	font-size: 22px;
+	min-height: 60px;
+	padding: 17px 35px;
 }
 
 .organization_picker:hover {

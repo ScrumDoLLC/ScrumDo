@@ -24,9 +24,10 @@
 {% for organization in my_organizations %}     
   <li>
 	<div class="organization_picker">
- 	  <a href="{{organization.get_absolute_url}}">{{organization.name}}</a><br/>
+ 	  <a href="{{organization.get_absolute_url}}"><h1>{{organization.name}}</h1>
 	  {{organization.projects.count}} Project{{organization.projects.count|pluralize}} - 
  	  {{organization.teams.count}} Team{{organization.teams.count|pluralize}}
+	  </a>
 	</div>
   </li>
 {% endfor %}
