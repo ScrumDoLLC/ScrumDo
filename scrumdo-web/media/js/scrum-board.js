@@ -68,6 +68,8 @@ function setBigStories()
     story_size = 3;
 }
 
+var last_story_sort = null;
+
 function onSortStory(event, ui)
 {
     var ind = ui.item.index();
@@ -83,11 +85,17 @@ function onSortStory(event, ui)
     {
         after = $(children[ind+1]).attr("story_id");
     }
-    
+    var story_id = $(ui.item).attr("story_id");
     var target_status = $(ui.item).parent().attr("id");
-    
+    var unique_key = story_id + target_status + before + after;
+    if( last_story_sort == unique_key )
+    {
+        // Hack... we're getting double entries here on some browsers.  Here's a quick check to avoid that.
+        return;
+    }
+    last_story_sort = unique_key;
     $.ajax({
-    	    url: "/projects/project/" + project_slug + "/story/" + $(ui.item).attr("story_id") + "/scrum_board",
+    	    url: "/projects/project/" + project_slug + "/story/" + story_id + "/scrum_board",
     		data:({ action:"reorder", before:before, after:after, iteration:iteration_id, status:target_status, rank_type:"board_rank" }),
     		type: "POST",
     		success: function() {    

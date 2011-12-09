@@ -134,6 +134,8 @@ def scrum_board( request, group_slug, story_id):
     story = get_object_or_404( Story, id=story_id )
     project = get_object_or_404( Project, slug=group_slug )
     if request.method == 'POST':
+        if request.POST.get("status",None) == None:
+            return HttpResponse("FAILED")
         target_status = status_map[request.POST.get("status")]
         reorderStory( story, request.POST.get("before"), request.POST.get("after"), story.iteration, field_name="board_rank")
         if story.status != target_status:
