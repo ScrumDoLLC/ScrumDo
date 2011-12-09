@@ -51,7 +51,7 @@ body {
     display: inline;    
 }
 
-.subscription-options-usage, .team-project-list li, .team-member-box, .organization-project, .activity_body, .inline-block, .project-member, .organization-plan-box, .organization-box,  .organization-popup-column, .organization-popup-column-header, .organization-column-footer, .usage_column_box {
+.what_missing_box li, .organization-menu-title, #organization-menu, .subscription-options-usage, .team-project-list li, .team-member-box, .organization-project, .activity_body, .inline-block, .project-member, .organization-plan-box, .organization-box,  .organization-popup-column, .organization-popup-column-header, .organization-column-footer, .usage_column_box {
      display: inline;    
 }
 
