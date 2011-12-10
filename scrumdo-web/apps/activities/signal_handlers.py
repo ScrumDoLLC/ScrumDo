@@ -96,7 +96,6 @@ def onStoryCreated(sender, **kwargs):
 signals.story_created.connect( onStoryCreated , dispatch_uid="newsfeed_signal_hookup")
 
 def onStoryUpdated(sender, **kwargs):
-    logger.error("STORY UPDATED CALLED")
     _createStoryNewsItem("script_edit","edited_story.txt", **kwargs)
 signals.story_updated.connect( onStoryUpdated , dispatch_uid="newsfeed_signal_hookup")
 

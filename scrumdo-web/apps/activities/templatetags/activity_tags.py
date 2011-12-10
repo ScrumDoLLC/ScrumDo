@@ -24,7 +24,7 @@ def news_feed(context):
     if "organization" in context:
         organization = context["organization"]
         # NOTE: We need to watch this query to make sure it performs ok.
-        news_items = NewsItem.objects.filter(project__organization=organization, project__teams__members=user)         
+        news_items = NewsItem.objects.filter(project__organization=organization, project__teams__members=user).distinct()
     else:
         project = context["project"]
         if access.has_read_access(project,user):
@@ -32,7 +32,7 @@ def news_feed(context):
         else:
             news_items = []
         
-    return {'news_items':news_items,"request":request}
+    return {'newsitems':news_items,"request":request}
     
 
 

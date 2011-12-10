@@ -2,9 +2,10 @@
 {% load projects_tags %}
 {% load avatar_tags %}
 
-{% autopaginate news_items 25 %}
+
+{% autopaginate newsitems 25 %}
 <ul class="news-list">
-{% for newsitem in news_items %}
+{% for newsitem in newsitems %}
 	<li class="news-item"><div class="news-icons">{% silk newsitem.icon %} {% if newsitem.user %}{% avatar newsitem.user 16 %}{% else %}<div style="width:50px"></div>{% endif %}</div> 
 		<div class="news-body">{{newsitem.created|timesince}} ago {% if newsitem.user %}{{newsitem.user}}{% else %}ScrumDo{% endif %} {{newsitem.text|safe}}</div>
 		<a class="news-item-more-link" href="#">More...</a>
