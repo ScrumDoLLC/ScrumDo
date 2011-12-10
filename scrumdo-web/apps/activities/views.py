@@ -5,6 +5,7 @@ from projects.models import ProjectMember, Project
 from organizations.models import Organization
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import Http404
+from activities.models import ProjectEmailSubscription
 
 import logging
 
