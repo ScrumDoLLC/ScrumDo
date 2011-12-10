@@ -35,9 +35,7 @@ else:
     signup_view = "signup_codes.views.signup"
 
 feeds = {    
-    'project':feeds.ProjectStories,
-    'current':feeds.ProjectCurrentStories,
-    'iteration':feeds.ProjectIterationStories,
+    'project':feeds.ProjectStories
 }
 
 
