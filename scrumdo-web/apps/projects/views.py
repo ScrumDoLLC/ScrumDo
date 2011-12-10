@@ -304,6 +304,13 @@ def iteration_burndown(request, group_slug, iteration_id):
         claimed_points.append( [log.timestamp(), log.points_claimed] );
     if not has_enddate_data and iteration.end_date:
         total_points.append( [end_date_timestamp, highest_total_points])
+        
+    if iteration.start_date:
+        total_points = filter(lambda x:x[0]>=start_date_timestamp, total_points)
+        claimed_points = filter(lambda x:x[0]>=start_date_timestamp, claimed_points)
+    if iteration.end_date:
+        total_points = filter(lambda x:x[0]<=end_date_timestamp, total_points)
+        claimed_points = filter(lambda x:x[0]<=end_date_timestamp, claimed_points)
 
     total_stats = { "label":"Total Points", "data":reduce_burndown_data(total_points)}
     claimed_stats = { "label":"Claimed Points", "data":reduce_burndown_data(claimed_points)}
