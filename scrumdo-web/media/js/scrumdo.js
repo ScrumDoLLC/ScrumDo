@@ -328,8 +328,16 @@ function setupNewsItemMoreLinks() {
     
 }
 
+var AJAX_CALL_ABORTED = false;
 function onAjaxError(request, status, error) {
     var errorMsg = "";
+
+    if( AJAX_CALL_ABORTED )
+    {
+        AJAX_CALL_ABORTED = false;
+        return;
+    }
+    
 	if(request.responseText) {
 		errorMsg = request.responseText.substr(0,100);
 	}
