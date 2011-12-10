@@ -416,7 +416,7 @@ def addProjectToOrganization( project, organization):
     logger.info("Adding project %s to organization %s" % (project.slug, organization.slug))
     project.organization = organization
     project.save()
-    admin_teams = organization.teams.filter(access_type="admin")
+    admin_teams = organization.teams.filter(access_type="staff")
     admin_team = admin_teams[0]
     if not admin_team:
     # This really shouldn't happen, there's no way to delete that default admin team.
