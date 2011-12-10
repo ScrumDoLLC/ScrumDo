@@ -7,6 +7,9 @@ function loadIteration(iterationID, page, query_string)
     if (last_load_iter_req)
     {
         // A load request is already pending, so stop it to avoid double loads.
+        last_load_iter_req.onreadystatechange = null;
+        last_load_iter_req.aborted = true;
+        AJAX_CALL_ABORTED = true;
         last_load_iter_req.abort();
     }
 
