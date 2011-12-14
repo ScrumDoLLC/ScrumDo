@@ -12,10 +12,7 @@ from django.db.models import get_app
 from django.core.exceptions import ImproperlyConfigured
 from django.conf import settings
 
-try:
-    notification = get_app('notification')
-except ImproperlyConfigured:
-    notification = None
+notification = None
 
 friends = False
 if 'friends' in settings.INSTALLED_APPS:
@@ -73,10 +70,6 @@ def change(request, extra_context={}, next_override=None):
             updated = True
             request.user.message_set.create(
                 message=_("Successfully updated your avatar."))
-        if updated and notification:
-            notification.send([request.user], "avatar_updated", {"user": request.user, "avatar": avatar})
-            if friends:
-                notification.send((x['friend'] for x in Friendship.objects.friends_for_user(request.user)), "avatar_friend_updated", {"user": request.user, "avatar": avatar})
         return HttpResponseRedirect(next_override or _get_next(request))
     return render_to_response(
         'avatar/change.html',
@@ -106,9 +99,6 @@ def delete(request, extra_context={}, next_override=None):
                     if unicode(a.id) not in ids:
                         a.primary = True
                         a.save()
-                        notification.send([request.user], "avatar_updated", {"user": request.user, "avatar": a})
-                        if friends:
-                            notification.send((x['friend'] for x in Friendship.objects.friends_for_user(request.user)), "avatar_friend_updated", {"user": request.user, "avatar": a})
                         break
             Avatar.objects.filter(id__in=ids).delete()
             request.user.message_set.create(
