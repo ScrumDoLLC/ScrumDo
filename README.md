@@ -1,4 +1,4 @@
-# Agile Story Management Web Site
+# Agile Story Management Awesome Web Site
 
 Visit [ScrumDo.com](http://www.ScrumDo.com) to use it.
 
