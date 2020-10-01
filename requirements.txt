@@ -1,3 +1,4 @@
+ScrumDo requirements :-
 boto
 django-tastypie
 hookbox
