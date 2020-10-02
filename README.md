@@ -1,8 +1,8 @@
-# Agile Story Management Web Site
+# Agile Best Story Management Web Sites
 
-Visit [ScrumDo.com](http://www.ScrumDo.com) to use it.
+Visit here [ScrumDo.com](http://www.ScrumDo.com) to use it.
 
-Visit [ScrumDo.org](http://www.ScrumDo.org) to start developing.
+Visit here [ScrumDo.org](http://www.ScrumDo.org) to start developing.
 
-Follow us on [twitter](http://twitter.com/#!/ScrumDo)
+Also follow us on here [twitter](http://twitter.com/#!/ScrumDo).
 
