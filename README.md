@@ -1,4 +1,4 @@
-# Agile Story Management Web Site
+# visit this website and follow me on twitter
 
 Visit [ScrumDo.com](http://www.ScrumDo.com) to use it.
 
